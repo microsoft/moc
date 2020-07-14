@@ -1,0 +1,48 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc-proto/rpc/common";
+
+package moc;
+
+enum Algorithm {
+	A_UNKNOWN = 0;
+	RSA15 = 1;
+	RSAOAEP = 2;
+	RSAOAEP256 = 3;
+	A256KW = 4;
+}
+
+enum KeyOperation {
+	ENCRYPT = 0;
+	DECRYPT = 1;
+	WRAPKEY = 2;
+	UNWRAPKEY = 3;
+}
+
+// https://docs.microsoft.com/en-us/rest/api/keyvault/createkey/createkey#jsonwebkeytype
+enum JsonWebKeyType {
+	EC = 0;
+	EC_HSM = 1;
+	RSA = 2;
+	RSA_HSM = 3;
+	OCT = 4;
+	AES = 5;
+}
+
+enum JsonWebKeyCurveName {
+	P_256 = 0;
+	P_256K = 1;
+	P_384 = 2;
+	P_521 = 3;
+}
+
+enum KeySize {
+	K_UNKNOWN = 0;
+	_256 = 1;
+	_2048 = 2;
+	_3072 = 3;
+	_4096 = 4;
+}
+

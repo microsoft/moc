@@ -1,0 +1,43 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: InstallSSHKey@0
+  inputs:
+    knownHostsEntry: '$(KNOWN_HOST)' 
+    sshPublicKey: '$(SSH_PUBLIC_KEY)'
+    sshKeySecureFile: 'azure-pipelines-ssh-key'
+- script: |
+    git config --global url.ssh://git@github.com/.insteadOf https://github.com/
+    (cd ~/ && curl -OL https://github.com/google/protobuf/releases/download/v3.11.4/protoc-3.11.4-linux-x86_64.zip)
+    unzip -o ~/protoc-3.11.4-linux-x86_64.zip -d ~/protoc3
+    sudo mv ~/protoc3/bin/* /usr/local/bin/
+    sudo rm -rf /usr/local/include/google
+    sudo mv ~/protoc3/include/* /usr/local/include/
+    rm -rf ~/protoc3
+    rm -f ~/protoc-3.11.4-linux-x86_64.zip
+    protoc --version
+    export GOPATH=$(go env GOPATH)
+    sudo mkdir -p $GOPATH/src
+    sudo chmod 777 $GOPATH
+    sudo chmod 777 $GOPATH/src
+    export PATH=$PATH:$GOPATH/bin
+    (cd $GOPATH/src && mkdir -p github.com/protocolbuffers && cd github.com/protocolbuffers && git clone https://github.com/protocolbuffers/protobuf.git)
+    make generate
+  displayName: 'Generate Protobuf'
+- script: |
+    git config --global url.ssh://git@github.com/.insteadOf https://github.com/
+    go version
+    make
+  displayName: 'Build'
+- script: |
+    make unittest
+  displayName: 'Unit Tests'

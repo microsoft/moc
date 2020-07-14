@@ -1,0 +1,28 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc-proto/rpc/cloudagent/admin";
+package moc.cloudagent.admin;
+
+service LogAgent {
+	rpc Get(LogRequest) returns (stream LogFileResponse) {}
+}
+
+enum GetLogType {
+     All   = 0;
+     Cloud = 1;
+     Node  = 2;
+}
+
+message LogRequest {
+	GetLogType type = 1;
+	string     location = 2;
+}
+
+message LogFileResponse {
+	bytes                       file     = 1;
+	bool                        done     = 2;
+	string                      error    = 3;
+	string                      filename = 4;
+}
