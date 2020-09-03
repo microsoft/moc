@@ -1,0 +1,29 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc-proto/rpc/common/admin";
+package moc.common.admin;
+
+import "google/protobuf/wrappers.proto";
+
+enum Operation {
+	BACKUP = 0;
+	RESTORE = 1;
+}
+
+message RecoveryRequest{
+	Operation OperationType = 1;
+	// Path to back to or restore from
+	string Path = 2;
+}
+
+message RecoveryResponse {
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+service RecoveryAgent {
+	rpc Invoke(RecoveryRequest) returns (RecoveryResponse) {}
+}
+

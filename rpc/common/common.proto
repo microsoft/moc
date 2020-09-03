@@ -1,0 +1,86 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc-proto/rpc/common";
+
+package moc;
+
+enum Operation {
+	GET = 0;
+	POST = 1;
+	DELETE = 2;
+	UPDATE = 3;
+}
+
+enum ProvisionState {
+	UNKNOWN = 0;
+	CREATING = 1;
+	CREATED = 2;
+	CREATE_FAILED = 3;
+	DELETING = 4;
+	DELETE_FAILED = 5;
+	DELETED = 6;
+	UPDATING = 7;
+	UPDATE_FAILED = 8;
+	UPDATED = 9;
+	PROVISIONING = 10;
+	PROVISIONED = 11;
+	PROVISION_FAILED = 12;
+	DEPROVISIONING = 13;
+	DEPROVISIONED = 14;
+	DEPROVISION_FAILED = 15;
+}
+
+enum HighAvailabilityState {
+	UNKNOWN_HA_STATE = 0;
+	STABLE = 1;
+	PENDING = 2;
+}
+
+enum HealthState {
+	NOTKNOWN = 0;
+	OK = 1;
+	WARNING = 2;
+	CRITICAL = 3;
+	// The entity went missing from the platform
+	MISSING = 4;
+	DEGRADED = 5;
+	// The entity went missing from the agent
+	NOTFOUND = 6;
+}
+
+message Error {
+	string Message = 1;
+	int32 Code = 2;
+}
+
+message ProvisionStatus {
+	ProvisionState currentState = 1;
+	ProvisionState previousState = 2;
+}
+
+message Health {
+	HealthState currentState = 1;
+	HealthState previousState = 2;
+}
+
+message Version {
+	string number = 1;
+}
+
+message Status {
+	Health health = 1;
+	ProvisionStatus provisioningStatus = 2;
+	Error lastError = 3;
+	Version version = 4;
+}
+
+message Entity {
+	bool IsPlaceholder = 1; // On a multi-node system, the entity (such as a VM) is created on a node where 
+							// IsPlacehoder is false. On all the other nodes, IsPlaceholder is set to true.
+							// When an entity moves among these nodes (such as when a VM migrates), the 
+							// IsPlacehoder property is updated accordingly on all the nodes.
+							// IsPlacehoder therefore defines where the entity (VM) is *not* located.
+							// This property is the exact inverse of the node agent's SystemOwned property.
+}

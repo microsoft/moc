@@ -1,0 +1,39 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc-proto/rpc/common/admin";
+package moc.common.admin;
+import "google/protobuf/wrappers.proto";
+
+message LogRotateRequest {
+	LogRotation logRotation = 1;
+}
+
+message LogRotateResponse {
+	bool Result = 1;
+	string Error = 2;
+}
+
+message LogRotation {
+	int32 minutes    = 1;
+	int32 size       = 2;
+	bool enableTime  = 3;
+	bool enableSize  = 4;
+	bool disableTime = 5;
+	bool disableSize = 6;
+	int32 limit      = 7;
+}
+
+message LogRequest {}
+
+message LogFileResponse {
+	bytes                       file  = 1;
+	google.protobuf.BoolValue   done  = 2;
+	string                      error = 3;
+}
+
+service LogAgent {
+	rpc Get(LogRequest) returns (stream LogFileResponse) {}
+	rpc Rotate(LogRotateRequest) returns (LogRotateResponse) {}
+}

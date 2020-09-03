@@ -1,0 +1,25 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc-proto/rpc/common";
+package moc;
+
+message Dns {
+	repeated string servers = 1;
+	string domain = 2;
+	repeated string search = 3;
+	repeated string options = 4;
+}
+
+enum Protocol {
+	All = 0;
+	Tcp = 1;
+	Udp = 2;
+}
+
+enum IPAllocationMethod {
+	Invalid = 0;
+	Dynamic = 1;
+	Static = 2;
+}
