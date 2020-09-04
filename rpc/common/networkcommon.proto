@@ -2,7 +2,7 @@
 // Licensed under the Apache v2.0 license.
 
 syntax = "proto3";
-option go_package = "github.com/microsoft/moc-proto/rpc/common";
+option go_package = "github.com/microsoft/moc/rpc/common";
 package moc;
 
 message Dns {

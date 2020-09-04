@@ -30,11 +30,7 @@ test:
 	GOOS=windows go build ./...
 
 unittest:
-	$(GOTEST) ./pkg/store
 	$(GOTEST) ./pkg/marshal
-	$(GOTEST) ./pkg/config
-	$(GOTEST) ./pkg/bittree
-	$(GOTEST) ./pkg/addressmanager
 
 generate: bootstrap
 	(cd rpc && ./gen_proto.sh)

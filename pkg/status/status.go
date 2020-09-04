@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/microsoft/moc-proto/pkg/marshal"
-	common "github.com/microsoft/moc-proto/rpc/common"
+	"github.com/microsoft/moc/pkg/marshal"
+	common "github.com/microsoft/moc/rpc/common"
 )
 
 // InitStatus

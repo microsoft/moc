@@ -13,7 +13,7 @@ import (
 	"net"
 	"time"
 
-	wssdnet "github.com/microsoft/moc-proto/pkg/net"
+	wssdnet "github.com/microsoft/moc/pkg/net"
 )
 
 // KeyPair holds the raw bytes for a certificate and key.
