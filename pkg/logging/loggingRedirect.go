@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	path "github.com/microsoft/moc-proto/pkg/path"
+	path "github.com/microsoft/moc/pkg/path"
 )
 
 var (

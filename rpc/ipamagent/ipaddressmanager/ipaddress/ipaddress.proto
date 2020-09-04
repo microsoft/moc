@@ -2,7 +2,7 @@
 // Licensed under the Apache v2.0 license.
 
 syntax = "proto3";
-option go_package = "github.com/microsoft/moc-proto/rpc/ipamagent";
+option go_package = "github.com/microsoft/moc/rpc/ipamagent";
 package moc.ipaddress;
 
 import "google/protobuf/wrappers.proto";

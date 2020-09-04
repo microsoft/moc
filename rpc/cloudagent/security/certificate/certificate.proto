@@ -2,7 +2,7 @@
 // Licensed under the Apache v2.0 license.
 
 syntax = "proto3";
-option go_package = "github.com/microsoft/moc-proto/rpc/cloudagent/security";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/security";
 package moc.cloudagent.security;
 import "google/protobuf/wrappers.proto";
 import "common.proto";

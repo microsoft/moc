@@ -1,4 +1,4 @@
-module github.com/microsoft/moc-proto
+module github.com/microsoft/moc
 
 go 1.14
 
