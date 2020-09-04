@@ -2,7 +2,7 @@
 // Licensed under the Apache v2.0 license.
 
 syntax = "proto3";
-option go_package = "github.com/microsoft/moc/rpc/nodeagent/compute";
+option go_package = "github.com/microsoft/moc-proto/rpc/nodeagent/compute";
 package moc.nodeagent.compute;
 
 import "google/protobuf/wrappers.proto";
