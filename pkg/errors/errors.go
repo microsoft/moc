@@ -37,6 +37,7 @@ var (
 	PendingState         error = errors.New("Pending state")
 	WrongHost            error = errors.New("Wrong host")
 	PoolFull             error = errors.New("The pool is full")
+	NoActionTaken        error = errors.New("No Action Taken")
 	Unknown              error = errors.New("Unknown Reason")
 )
 
@@ -141,6 +142,10 @@ func IsWrongHost(err error) bool {
 func IsPoolFull(err error) bool {
 	return checkError(err, PoolFull)
 }
+func IsNoActionTaken(err error) bool {
+	return checkError(err, NoActionTaken)
+}
+
 func checkError(wrappedError, err error) bool {
 	if wrappedError == nil {
 		return false
