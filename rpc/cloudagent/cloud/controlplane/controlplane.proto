@@ -13,11 +13,6 @@ message ControlPlaneRequest {
 	Operation OperationType = 2;
 }
 
-message ControlPlanePeerRequest {
-	repeated ControlPlane ControlPlanes = 1;
-	Peer Peer = 2;
-}
-
 message ControlPlaneResponse {
 	repeated ControlPlane ControlPlanes = 1;
 	google.protobuf.BoolValue Result = 2;
@@ -26,22 +21,17 @@ message ControlPlaneResponse {
 
 message ControlPlane {
 	string id = 1;
-	string locationName = 2;
-	repeated Peer peers = 3;
-	string leaderIp = 4;
-	string leaderPort = 5;
-	string leaderFqdn = 6;
-	Status status = 7;
-}
-
-message Peer {
-	string fqdn = 1;
-	string port = 2;
+	string name = 2;
+	string locationName = 3;
+	string fqdn = 4;
+	int32 port = 5;
+	string certificate = 6;
+	int32  authorizerPort = 7;
+	bool isLeader = 8;
+	Status status = 9;
 }
 
 service ControlPlaneAgent {
 	rpc Invoke(ControlPlaneRequest) returns (ControlPlaneResponse) {}
-	rpc AddPeer(ControlPlanePeerRequest) returns (ControlPlaneResponse) {}
-	rpc RemovePeer(ControlPlanePeerRequest) returns (ControlPlaneResponse) {}
 }
 
