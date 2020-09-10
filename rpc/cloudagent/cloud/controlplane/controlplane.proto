@@ -1,0 +1,47 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/cloud";
+package moc.cloudagent.controlplane;
+
+import "google/protobuf/wrappers.proto";
+import "common.proto";
+
+message ControlPlaneRequest {
+	repeated ControlPlane ControlPlanes = 1;
+	Operation OperationType = 2;
+}
+
+message ControlPlanePeerRequest {
+	repeated ControlPlane ControlPlanes = 1;
+	Peer Peer = 2;
+}
+
+message ControlPlaneResponse {
+	repeated ControlPlane ControlPlanes = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message ControlPlane {
+	string id = 1;
+	string locationName = 2;
+	repeated Peer peers = 3;
+	string leaderIp = 4;
+	string leaderPort = 5;
+	string leaderFqdn = 6;
+	Status status = 7;
+}
+
+message Peer {
+	string fqdn = 1;
+	string port = 2;
+}
+
+service ControlPlaneAgent {
+	rpc Invoke(ControlPlaneRequest) returns (ControlPlaneResponse) {}
+	rpc AddPeer(ControlPlanePeerRequest) returns (ControlPlaneResponse) {}
+	rpc RemovePeer(ControlPlanePeerRequest) returns (ControlPlaneResponse) {}
+}
+
