@@ -109,6 +109,18 @@ func IsInvalidVersion(err error) bool {
 func IsNotFound(err error) bool {
 	return checkError(err, NotFound)
 }
+func IsDegraded(err error) bool {
+	return checkError(err, Degraded)
+}
+func IsNotSupported(err error) bool {
+	return checkError(err, NotSupported)
+}
+func IsInvalidConfiguration(err error) bool {
+	return checkError(err, InvalidConfiguration)
+}
+func IsInvalidInput(err error) bool {
+	return checkError(err, InvalidInput)
+}
 func IsAlreadyExists(err error) bool {
 	return checkError(err, AlreadyExists)
 }
