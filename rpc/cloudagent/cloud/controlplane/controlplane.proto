@@ -23,7 +23,7 @@ message ControlPlane {
 	string id = 1;
 	string name = 2;
 	string locationName = 3;
-	string fqdn = 4;
+	string ip = 4;
 	int32 port = 5;
 	string certificate = 6;
 	int32  authorizerPort = 7;
