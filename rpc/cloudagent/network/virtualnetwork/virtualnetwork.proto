@@ -33,6 +33,7 @@ message VirtualNetworkResponse {
 }
 
 message VirtualNetwork {
+	reserved 11;
 	string name = 1;
 	string id = 2;
 	repeated Subnet subnets = 3;
@@ -43,7 +44,6 @@ message VirtualNetwork {
 	Status status = 8;
 	string locationName = 9;
 	string macPoolName = 10;
-	uint32 vlan = 11;
 }
 
 message Subnet {
@@ -52,6 +52,7 @@ message Subnet {
 	string cidr = 3;
 	repeated Route routes = 4;
 	IPAllocationMethod allocation = 5;
+	uint32 vlan = 6;
 }
 message Ipam {
 	string type = 1;
