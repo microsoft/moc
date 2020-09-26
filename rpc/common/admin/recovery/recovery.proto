@@ -14,8 +14,12 @@ enum Operation {
 
 message RecoveryRequest{
 	Operation OperationType = 1;
-	// Path to back to or restore from
+	// Path to back to or restore from. Can be a relative path for registry
 	string Path = 2;
+	// Config file path. Must be on hard disk.
+	string ConfigFilePath = 3;
+	// Type of data store
+	string StoreType = 4;
 }
 
 message RecoveryResponse {
