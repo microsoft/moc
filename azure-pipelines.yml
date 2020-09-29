@@ -15,29 +15,17 @@ steps:
     knownHostsEntry: '$(KNOWN_HOST)' 
     sshPublicKey: '$(SSH_PUBLIC_KEY)'
     sshKeySecureFile: 'azure-pipelines-ssh-key'
+
 - script: |
-    git config --global url.ssh://git@github.com/.insteadOf https://github.com/
-    (cd ~/ && curl -OL https://github.com/google/protobuf/releases/download/v3.11.4/protoc-3.11.4-linux-x86_64.zip)
-    unzip -o ~/protoc-3.11.4-linux-x86_64.zip -d ~/protoc3
-    sudo mv ~/protoc3/bin/* /usr/local/bin/
-    sudo rm -rf /usr/local/include/google
-    sudo mv ~/protoc3/include/* /usr/local/include/
-    rm -rf ~/protoc3
-    rm -f ~/protoc-3.11.4-linux-x86_64.zip
-    protoc --version
-    export GOPATH=$(go env GOPATH)
-    sudo mkdir -p $GOPATH/src
-    sudo chmod 777 $GOPATH
-    sudo chmod 777 $GOPATH/src
-    export PATH=$PATH:$GOPATH/bin
-    (cd $GOPATH/src && mkdir -p github.com/protocolbuffers && cd github.com/protocolbuffers && git clone https://github.com/protocolbuffers/protobuf.git)
-    make generate
+    ./gen.sh
   displayName: 'Generate Protobuf'
+
 - script: |
     git config --global url.ssh://git@github.com/.insteadOf https://github.com/
     go version
     make
   displayName: 'Build'
+
 - script: |
     make unittest
   displayName: 'Unit Tests'
