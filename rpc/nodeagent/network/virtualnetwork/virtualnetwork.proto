@@ -35,13 +35,13 @@ message VirtualNetworkResponse {
 }
 
 message VirtualNetwork {
+	reserved 7;
 	string name = 1;
 	string id = 2;
 	repeated Ipam ipams = 3;
 	Dns dns = 4;
 	VirtualNetworkType type = 5;
 	MacPool macPool = 6;
-	uint32 vlan = 7;
 	Status status = 8;
 	Entity entity = 9;
 }
@@ -60,6 +60,7 @@ message Subnet {
 	string cidr = 3;
 	repeated Route routes = 4;
 	IPAllocationMethod allocation = 5;
+	uint32 vlan = 6;
 }
 message Ipam {
 	string type = 1;

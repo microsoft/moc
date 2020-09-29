@@ -4,8 +4,7 @@ go 1.14
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/golang/protobuf v1.3.2
-	github.com/google/go-cmp v0.5.0 // indirect
+	github.com/golang/protobuf v1.4.1
 	github.com/jmespath/go-jmespath v0.3.0
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/pkg/errors v0.9.1
@@ -14,6 +13,7 @@ require (
 	golang.org/x/sys v0.0.0-20200831180312-196b9ba8737a // indirect
 	golang.org/x/text v0.3.3 // indirect
 	google.golang.org/grpc v1.27.0
+	google.golang.org/protobuf v1.25.0
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
