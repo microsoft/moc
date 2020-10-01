@@ -7,12 +7,12 @@ import (
 	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
+	empty "github.com/golang/protobuf/ptypes/empty"
+	wrappers "github.com/golang/protobuf/ptypes/wrappers"
 	common "github.com/microsoft/moc/rpc/common"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
-	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
 	math "math"
 )
 
@@ -121,12 +121,12 @@ func (m *VirtualNetworkRequest) GetOperationType() common.Operation {
 }
 
 type VirtualNetworkResponse struct {
-	VirtualNetworks      []*VirtualNetwork     `protobuf:"bytes,1,rep,name=VirtualNetworks,proto3" json:"VirtualNetworks,omitempty"`
-	Result               *wrapperspb.BoolValue `protobuf:"bytes,2,opt,name=Result,proto3" json:"Result,omitempty"`
-	Error                string                `protobuf:"bytes,3,opt,name=Error,proto3" json:"Error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
-	XXX_unrecognized     []byte                `json:"-"`
-	XXX_sizecache        int32                 `json:"-"`
+	VirtualNetworks      []*VirtualNetwork   `protobuf:"bytes,1,rep,name=VirtualNetworks,proto3" json:"VirtualNetworks,omitempty"`
+	Result               *wrappers.BoolValue `protobuf:"bytes,2,opt,name=Result,proto3" json:"Result,omitempty"`
+	Error                string              `protobuf:"bytes,3,opt,name=Error,proto3" json:"Error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
 }
 
 func (m *VirtualNetworkResponse) Reset()         { *m = VirtualNetworkResponse{} }
@@ -161,7 +161,7 @@ func (m *VirtualNetworkResponse) GetVirtualNetworks() []*VirtualNetwork {
 	return nil
 }
 
-func (m *VirtualNetworkResponse) GetResult() *wrapperspb.BoolValue {
+func (m *VirtualNetworkResponse) GetResult() *wrappers.BoolValue {
 	if m != nil {
 		return m.Result
 	}
@@ -619,7 +619,7 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type VirtualNetworkAgentClient interface {
 	Invoke(ctx context.Context, in *VirtualNetworkRequest, opts ...grpc.CallOption) (*VirtualNetworkResponse, error)
-	CheckNotification(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*common.NotificationResponse, error)
+	CheckNotification(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*common.NotificationResponse, error)
 }
 
 type virtualNetworkAgentClient struct {
@@ -639,7 +639,7 @@ func (c *virtualNetworkAgentClient) Invoke(ctx context.Context, in *VirtualNetwo
 	return out, nil
 }
 
-func (c *virtualNetworkAgentClient) CheckNotification(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*common.NotificationResponse, error) {
+func (c *virtualNetworkAgentClient) CheckNotification(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*common.NotificationResponse, error) {
 	out := new(common.NotificationResponse)
 	err := c.cc.Invoke(ctx, "/moc.nodeagent.network.VirtualNetworkAgent/CheckNotification", in, out, opts...)
 	if err != nil {
@@ -651,7 +651,7 @@ func (c *virtualNetworkAgentClient) CheckNotification(ctx context.Context, in *e
 // VirtualNetworkAgentServer is the server API for VirtualNetworkAgent service.
 type VirtualNetworkAgentServer interface {
 	Invoke(context.Context, *VirtualNetworkRequest) (*VirtualNetworkResponse, error)
-	CheckNotification(context.Context, *emptypb.Empty) (*common.NotificationResponse, error)
+	CheckNotification(context.Context, *empty.Empty) (*common.NotificationResponse, error)
 }
 
 // UnimplementedVirtualNetworkAgentServer can be embedded to have forward compatible implementations.
@@ -661,7 +661,7 @@ type UnimplementedVirtualNetworkAgentServer struct {
 func (*UnimplementedVirtualNetworkAgentServer) Invoke(ctx context.Context, req *VirtualNetworkRequest) (*VirtualNetworkResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Invoke not implemented")
 }
-func (*UnimplementedVirtualNetworkAgentServer) CheckNotification(ctx context.Context, req *emptypb.Empty) (*common.NotificationResponse, error) {
+func (*UnimplementedVirtualNetworkAgentServer) CheckNotification(ctx context.Context, req *empty.Empty) (*common.NotificationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckNotification not implemented")
 }
 
@@ -688,7 +688,7 @@ func _VirtualNetworkAgent_Invoke_Handler(srv interface{}, ctx context.Context, d
 }
 
 func _VirtualNetworkAgent_CheckNotification_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+	in := new(empty.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -700,7 +700,7 @@ func _VirtualNetworkAgent_CheckNotification_Handler(srv interface{}, ctx context
 		FullMethod: "/moc.nodeagent.network.VirtualNetworkAgent/CheckNotification",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VirtualNetworkAgentServer).CheckNotification(ctx, req.(*emptypb.Empty))
+		return srv.(VirtualNetworkAgentServer).CheckNotification(ctx, req.(*empty.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }

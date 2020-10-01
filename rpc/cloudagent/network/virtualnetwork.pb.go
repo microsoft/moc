@@ -7,11 +7,11 @@ import (
 	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
+	wrappers "github.com/golang/protobuf/ptypes/wrappers"
 	common "github.com/microsoft/moc/rpc/common"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
 	math "math"
 )
 
@@ -120,12 +120,12 @@ func (m *VirtualNetworkRequest) GetOperationType() common.Operation {
 }
 
 type VirtualNetworkResponse struct {
-	VirtualNetworks      []*VirtualNetwork     `protobuf:"bytes,1,rep,name=VirtualNetworks,proto3" json:"VirtualNetworks,omitempty"`
-	Result               *wrapperspb.BoolValue `protobuf:"bytes,2,opt,name=Result,proto3" json:"Result,omitempty"`
-	Error                string                `protobuf:"bytes,3,opt,name=Error,proto3" json:"Error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
-	XXX_unrecognized     []byte                `json:"-"`
-	XXX_sizecache        int32                 `json:"-"`
+	VirtualNetworks      []*VirtualNetwork   `protobuf:"bytes,1,rep,name=VirtualNetworks,proto3" json:"VirtualNetworks,omitempty"`
+	Result               *wrappers.BoolValue `protobuf:"bytes,2,opt,name=Result,proto3" json:"Result,omitempty"`
+	Error                string              `protobuf:"bytes,3,opt,name=Error,proto3" json:"Error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
 }
 
 func (m *VirtualNetworkResponse) Reset()         { *m = VirtualNetworkResponse{} }
@@ -160,7 +160,7 @@ func (m *VirtualNetworkResponse) GetVirtualNetworks() []*VirtualNetwork {
 	return nil
 }
 
-func (m *VirtualNetworkResponse) GetResult() *wrapperspb.BoolValue {
+func (m *VirtualNetworkResponse) GetResult() *wrappers.BoolValue {
 	if m != nil {
 		return m.Result
 	}
