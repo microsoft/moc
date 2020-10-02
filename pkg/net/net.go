@@ -3,8 +3,15 @@
 package net
 
 import (
+	"bytes"
+	"context"
+	"fmt"
 	"math/big"
 	"net"
+	"os/exec"
+
+	"github.com/microsoft/moc-pkg/pkg/trace"
+	"github.com/microsoft/moc/pkg/errors"
 )
 
 func GetIPAddress() (string, error) {
@@ -110,4 +117,80 @@ func PrefixesOverlap(cidr1 net.IPNet, cidr2 net.IPNet) bool {
 		return true
 	}
 	return false
+}
+
+func GetNetworkInterface() (string, error) {
+	networkInterfaces, err := net.Interfaces()
+	if err != nil {
+		return "", err
+	}
+
+	for _, networkInterface := range networkInterfaces {
+		// skip down interface
+		if networkInterface.Flags&net.FlagUp == 0 {
+			continue
+		}
+		// skip loopback
+		if networkInterface.Flags&net.FlagLoopback != 0 {
+			continue
+		}
+
+		// list of unicast interface addresses for specific interface
+		addresses, err := networkInterface.Addrs()
+		if err != nil {
+			return "", err
+		}
+		// network end point address
+		for _, address := range addresses {
+			var ip net.IP
+			switch v := address.(type) {
+			case *net.IPNet:
+				ip = v.IP
+			case *net.IPAddr:
+				ip = v.IP
+			}
+			// skip loopback or wrong type
+			if ip == nil || ip.IsLoopback() {
+				continue
+			}
+			// return this interface
+			return networkInterface.Name, nil
+		}
+	}
+
+	return "", fmt.Errorf("No network interfaces found")
+}
+
+const (
+	cmdNetsh string = "netsh"
+)
+
+func callNetsh(netshCommandArgs []string) error {
+	var err error
+	_, span := trace.NewSpan(context.Background(), "net", "updateNICForIPAddress")
+	defer span.End(err)
+
+	span.Log("netsh command: %v", netshCommandArgs)
+	cmd := exec.Command(cmdNetsh, netshCommandArgs...)
+
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	var errBuf bytes.Buffer
+	cmd.Stderr = &errBuf
+	err = cmd.Run()
+
+	if err != nil {
+		span.Log("netsh err:[%v] errOut:[%v] out:[%v]\n", err, errBuf.String(), out.String())
+		return errors.Wrapf(err, "netsh command failed with error %s", errBuf.String())
+	}
+
+	span.Log("netsh out [%s]\n", out.String())
+	return nil
+}
+
+func EnableDHCPAndStaticIP(alias string) error {
+	netshCommandArgs := []string{
+		"interface", "ip", "set", "interface", "interface=" + alias, "dhcpstaticipcoexistence=enable",
+	}
+	return callNetsh(netshCommandArgs)
 }
