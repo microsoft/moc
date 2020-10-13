@@ -162,7 +162,7 @@ func TransportCredentialsFromFile(wssdConfigLocation string, server string) cred
 	clientCerts := []tls.Certificate{}
 	certPool := x509.NewCertPool()
 
-	serverPem, tlsCert, err := readAccessFileToTls(wssdConfigLocation)
+	serverPem, tlsCert, err := ReadAccessFileToTls(wssdConfigLocation)
 	if err == nil {
 		clientCerts = append(clientCerts, tlsCert)
 		// Append the client certificates from the CA
@@ -183,7 +183,7 @@ func TransportCredentialsFromFile(wssdConfigLocation string, server string) cred
 	})
 }
 
-func readAccessFileToTls(accessFileLocation string) ([]byte, tls.Certificate, error) {
+func ReadAccessFileToTls(accessFileLocation string) ([]byte, tls.Certificate, error) {
 	accessFile := WssdConfig{}
 	err := marshal.FromJSONFile(accessFileLocation, &accessFile)
 	if err != nil {
