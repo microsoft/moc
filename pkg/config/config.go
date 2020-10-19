@@ -5,10 +5,11 @@ package config
 
 import (
 	"fmt"
-	"github.com/jmespath/go-jmespath"
-	"github.com/microsoft/moc/pkg/marshal"
 	"io/ioutil"
 	"reflect"
+
+	"github.com/jmespath/go-jmespath"
+	"github.com/microsoft/moc/pkg/marshal"
 )
 
 // Load the virtual machine configuration from the specified path
@@ -117,7 +118,7 @@ func LoadValueFile(path string) (*string, error) {
 func ExportFormatList(datasets interface{}, path string, query string, outputType string) error {
 	var fileToWrite string
 
-	marshaledByte, err := marshalOutput(datasets, query, outputType)
+	marshaledByte, err := MarshalOutput(datasets, query, outputType)
 	if err != nil {
 		fmt.Printf("%v", err)
 		return err
@@ -132,7 +133,7 @@ func ExportFormatList(datasets interface{}, path string, query string, outputTyp
 }
 
 func PrintFormat(data interface{}, query string, outputType string) {
-	marshaledByte, err := marshalOutput(data, query, outputType)
+	marshaledByte, err := MarshalOutput(data, query, outputType)
 	if err != nil {
 		fmt.Printf("%v", err)
 		return
@@ -144,7 +145,7 @@ func PrintFormatList(datasets interface{}, query string, outputType string) {
 	PrintFormat(datasets, query, outputType)
 }
 
-func marshalOutput(data interface{}, query string, outputType string) ([]byte, error) {
+func MarshalOutput(data interface{}, query string, outputType string) ([]byte, error) {
 	var queryTarget interface{}
 	var result interface{}
 	var err error
@@ -154,7 +155,6 @@ func marshalOutput(data interface{}, query string, outputType string) ([]byte, e
 		return nil, err
 	}
 	marshal.FromJSONBytes(jsonByte, &queryTarget)
-
 	if query != "" {
 		result, err = jmespath.Search(query, queryTarget)
 		if err != nil {

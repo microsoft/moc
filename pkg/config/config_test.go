@@ -2,7 +2,12 @@
 // Licensed under the Apache v2.0 license.
 package config
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+
+	"github.com/microsoft/moc/pkg/marshal"
+)
 
 type SampleStruct struct {
 	TestString  string   `json:"testString,omitempty" yaml:testString,omitempty"`
@@ -74,4 +79,44 @@ func Test_PrintFormat(t *testing.T) {
 func Test_PrintFormatList(t *testing.T) {
 	PrintFormatList(tmpArray, "", "tsv")
 	PrintFormatList(tmpArray, "", "csv")
+}
+
+func Test_MarshalOutputWithoutQuery(t *testing.T) {
+	err := verifyMarshalOutput(tmpArray, "", 2)
+	if err != nil {
+		t.Errorf("MarshalOutput with empty query failed: %s", err.Error())
+	}
+}
+
+func Test_MarshalOutputWithIntQuery(t *testing.T) {
+	err := verifyMarshalOutput(tmpArray, "[?testInt==`2`]", 1)
+	if err != nil {
+		t.Errorf("MarshalOutput with int query failed: %s", err.Error())
+	}
+}
+
+func Test_MarshalOutputWithStringQuery(t *testing.T) {
+	err := verifyMarshalOutput(tmpArray, "[?testString=='test1String']", 1)
+	if err != nil {
+		t.Errorf("MarshalOutput with string query failed: %s", err.Error())
+	}
+}
+
+func verifyMarshalOutput(data interface{}, query string, expectedResultCount int) error {
+	result, err := MarshalOutput(data, query, "json")
+	if err != nil {
+		return err
+	}
+
+	var filteredArray []SampleStruct
+	err = marshal.FromJSONBytes(result, &filteredArray)
+	if err != nil {
+		return err
+	}
+
+	if len(filteredArray) != expectedResultCount {
+		return fmt.Errorf("Unexpected result count. Expected: %d / Actual: %d", expectedResultCount, len(filteredArray))
+	}
+
+	return nil
 }
