@@ -4,13 +4,11 @@ package net
 
 import (
 	"bytes"
-	"context"
 	"fmt"
 	"math/big"
 	"net"
 	"os/exec"
 
-	"github.com/microsoft/moc-pkg/pkg/trace"
 	"github.com/microsoft/moc/pkg/errors"
 )
 
@@ -166,25 +164,18 @@ const (
 )
 
 func callNetsh(netshCommandArgs []string) error {
-	var err error
-	_, span := trace.NewSpan(context.Background(), "net", "updateNICForIPAddress")
-	defer span.End(err)
-
-	span.Log("netsh command: %v", netshCommandArgs)
 	cmd := exec.Command(cmdNetsh, netshCommandArgs...)
 
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	var errBuf bytes.Buffer
 	cmd.Stderr = &errBuf
-	err = cmd.Run()
+	err := cmd.Run()
 
 	if err != nil {
-		span.Log("netsh err:[%v] errOut:[%v] out:[%v]\n", err, errBuf.String(), out.String())
 		return errors.Wrapf(err, "netsh command failed with error %s", errBuf.String())
 	}
 
-	span.Log("netsh out [%s]\n", out.String())
 	return nil
 }
 
