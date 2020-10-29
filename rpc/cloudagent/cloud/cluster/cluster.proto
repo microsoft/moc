@@ -25,6 +25,7 @@ message Cluster {
 	string domain = 7;
 	repeated moc.cloudagent.node.Node Nodes = 8;
 	string locationName = 9; 
+	Tags tags = 10;
 }
 
 

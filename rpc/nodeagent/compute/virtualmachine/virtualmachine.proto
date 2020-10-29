@@ -83,6 +83,7 @@ message VirtualMachine {
 	SecurityConfiguration security = 11;
 	Entity entity = 12;
 	HighAvailabilityState highAvailabilityState = 13;
+	Tags tags = 14;
 }
 
 message VirtualMachineOperationRequest {

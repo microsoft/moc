@@ -35,6 +35,7 @@ message Container {
 	string path = 4;
 	Status status = 5;
 	Entity entity = 6;
+	Tags tags = 7;
 }
 
 service ContainerAgent {

@@ -44,6 +44,7 @@ message VirtualNetwork {
 	Status status = 8;
 	string locationName = 9;
 	string macPoolName = 10;
+	Tags tags = 12;
 }
 
 message Subnet {

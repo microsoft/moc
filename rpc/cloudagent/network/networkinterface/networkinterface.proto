@@ -47,6 +47,7 @@ message NetworkInterface {
 	Status status = 10;
 	string virtualMachineName = 11;
 	uint32 iovWeight = 12;
+	Tags tags = 13;
 }
 
 service NetworkInterfaceAgent {

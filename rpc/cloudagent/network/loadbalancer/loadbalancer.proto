@@ -37,6 +37,7 @@ message LoadBalancer {
 	string groupName = 8;
 	string locationName = 9;
 	Status status = 10;
+	Tags tags = 11;
 }
 
 service LoadBalancerAgent {

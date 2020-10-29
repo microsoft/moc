@@ -96,6 +96,7 @@ message Kubernetes {
 	ClusterAPIConfiguration capiConfig = 13;
 	ContainerRegistry containerRegistry = 14;
 	bytes deploymentManifest = 15;
+	Tags tags = 16;
 }
 
 service KubernetesAgent {

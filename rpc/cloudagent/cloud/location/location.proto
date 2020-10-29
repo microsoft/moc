@@ -23,6 +23,7 @@ message Location {
 	string name = 1;
 	string id = 2;
 	Status status = 3;
+	Tags tags = 4;
 }
 
 service LocationAgent {

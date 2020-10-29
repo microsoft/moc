@@ -27,6 +27,7 @@ message KeyVault {
 	string groupName = 4;
 	Status status = 5;
 	Entity entity = 6;
+	Tags tags = 7;
 }
 
 service KeyVaultAgent {

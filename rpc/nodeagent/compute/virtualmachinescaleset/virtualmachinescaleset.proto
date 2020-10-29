@@ -50,6 +50,7 @@ message VirtualMachineScaleSet {
 	repeated string allowedOwnerNodes = 9;
 	Entity entity = 10;
 	HighAvailabilityState highAvailabilityState = 11;
+	Tags tags = 12;
 }
 
 service VirtualMachineScaleSetAgent {

@@ -44,6 +44,7 @@ message VirtualNetwork {
 	MacPool macPool = 6;
 	Status status = 8;
 	Entity entity = 9;
+	Tags tags = 10;
 }
 
 message MacRange {

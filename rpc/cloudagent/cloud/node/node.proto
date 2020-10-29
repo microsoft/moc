@@ -37,6 +37,7 @@ message Node {
 	int32  authorizerPort = 8;
 	NodeState runningState = 9;
 	moc.common.NodeInfo info = 10;
+	Tags tags = 11;
 } 
 
 service NodeAgent {
