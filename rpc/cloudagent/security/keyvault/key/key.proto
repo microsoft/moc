@@ -47,6 +47,7 @@ message Key {
 	KeySize size = 9;
 	JsonWebKeyCurveName curve = 10;
 	repeated KeyOperation keyOps = 11;
+	Tags tags = 12;
 }
 
 service KeyAgent {

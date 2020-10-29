@@ -39,6 +39,7 @@ message GalleryImage {
 	string containerName = 10;
 	// Source of the GalleryImage from where we can copy the image from.
 	string sourcePath = 11;
+	Tags tags = 12;
 }
 
 service GalleryImageAgent {

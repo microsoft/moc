@@ -28,6 +28,7 @@ message Identity {
 	bytes certificate = 6;
 	Status status = 7;
 	Entity entity = 8;
+	Tags tags = 9;
 }
 
 service IdentityAgent {

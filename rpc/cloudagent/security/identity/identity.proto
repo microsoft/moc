@@ -27,7 +27,8 @@ message Identity {
 	string token = 5;
 	bytes certificate = 6;
 	Status status = 7;
-        string locationName = 10;
+	string locationName = 10;
+	Tags tags = 11;
 }
 
 service IdentityAgent {

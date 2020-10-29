@@ -30,6 +30,7 @@ message MacPool {
 	MacRange range = 3;
 	string locationName = 4;
 	Status status = 6;
+	Tags tags = 7;
 }
 
 service MacPoolAgent {

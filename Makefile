@@ -32,6 +32,7 @@ test:
 unittest:
 	$(GOTEST) ./pkg/marshal
 	$(GOTEST) ./pkg/config
+	$(GOTEST) ./pkg/tags
 
 generate: bootstrap
 	(cd rpc && ./gen_proto.sh)

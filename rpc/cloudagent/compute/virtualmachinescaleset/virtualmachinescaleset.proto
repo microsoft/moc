@@ -51,6 +51,7 @@ message VirtualMachineScaleSet {
 	Status status = 9;
 	bool disableHighAvailability = 11;
 	repeated string allowedOwnerNodes = 12;
+	Tags tags = 13;
 }
 
 service VirtualMachineScaleSetAgent {

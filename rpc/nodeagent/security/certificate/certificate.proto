@@ -31,6 +31,7 @@ message Certificate {
     Status status = 6;
     CertificateType type = 7;
     Entity entity = 8;
+    Tags tags = 9;
 }
 
 service CertificateAgent {

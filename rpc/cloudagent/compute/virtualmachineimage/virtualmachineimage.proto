@@ -28,6 +28,7 @@ message VirtualMachineImage {
 	string containerName = 6;
 	string groupName = 18;
 	string locationName = 19;
+	Tags tags = 20;
 }
 
 service VirtualMachineImageAgent {

@@ -31,6 +31,7 @@ message VipPool {
 	Status status = 8;
 	string startip = 9;
 	string endip = 10;
+	Tags tags = 11;
 }
 
 service VipPoolAgent {

@@ -46,6 +46,7 @@ message VirtualNetworkInterface {
 	Status status = 8;
 	Entity entity = 9;
 	uint32 iovWeight = 10;
+	Tags tags = 11;
 }
 
 service VirtualNetworkInterfaceAgent {

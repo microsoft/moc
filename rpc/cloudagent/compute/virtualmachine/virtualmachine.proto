@@ -90,6 +90,7 @@ message VirtualMachine {
 	repeated string allowedOwnerNodes = 13;
 	PowerState powerState = 14;
 	SecurityConfiguration security = 15;
+	Tags tags = 16;
 }
 
 message VirtualMachineOperationRequest {

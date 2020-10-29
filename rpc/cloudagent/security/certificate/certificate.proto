@@ -33,6 +33,7 @@ message Certificate {
     string groupName = 8;
     string vaultName = 9;
     string locationName = 10;
+    Tags tags = 11;
 }
 
 service CertificateAgent {

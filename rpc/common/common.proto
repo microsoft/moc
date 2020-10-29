@@ -84,3 +84,12 @@ message Entity {
 							// IsPlacehoder therefore defines where the entity (VM) is *not* located.
 							// This property is the exact inverse of the node agent's SystemOwned property.
 }
+
+message Tag {
+	string key = 1;
+	string value = 2;
+}
+
+message Tags {
+	repeated Tag tags = 1;
+}

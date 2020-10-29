@@ -46,6 +46,7 @@ message VirtualHardDisk {
 	string scsipath = 16;
 	VirtualHardDiskType virtualharddisktype = 17;
 	Entity entity = 18;
+	Tags tags = 19;
 }
 
 service VirtualHardDiskAgent {
