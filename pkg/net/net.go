@@ -5,9 +5,11 @@ package net
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"math/big"
 	"net"
 	"os/exec"
+	"strings"
 
 	"github.com/microsoft/moc/pkg/errors"
 )
@@ -164,6 +166,7 @@ const (
 )
 
 func callNetsh(netshCommandArgs []string) error {
+	log.Printf("callNetsh [%s]\n", strings.Join(netshCommandArgs, " "))
 	cmd := exec.Command(cmdNetsh, netshCommandArgs...)
 
 	var out bytes.Buffer
@@ -176,12 +179,20 @@ func callNetsh(netshCommandArgs []string) error {
 		return errors.Wrapf(err, "netsh command failed with error %s", errBuf.String())
 	}
 
+	log.Printf("Result [%s]\n", out.String())
 	return nil
 }
 
 func EnableDHCPAndStaticIP(alias string) error {
 	netshCommandArgs := []string{
 		"interface", "ip", "set", "interface", "interface=" + alias, "dhcpstaticipcoexistence=enable",
+	}
+	return callNetsh(netshCommandArgs)
+}
+
+func RemoveStaticIP(alias string, address string) error {
+	netshCommandArgs := []string{
+		"interface", "ip", "delete", "address", alias, address,
 	}
 	return callNetsh(netshCommandArgs)
 }
