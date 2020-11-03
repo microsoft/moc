@@ -27,7 +27,7 @@ message Certificate {
     string id = 2;
     int64 notBefore = 3; 
     int64 notAfter = 4;
-    bytes certificate = 5;
+    string certificate = 5;
     Status status = 6;
     CertificateType type = 7; 
     string groupName = 8;

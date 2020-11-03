@@ -264,16 +264,16 @@ func SaveToken(tokenStr string) error {
 		0644)
 }
 
-func GenerateClientKey(loginconfig LoginConfig) ([]byte, WssdConfig, error) {
+func GenerateClientKey(loginconfig LoginConfig) (string, WssdConfig, error) {
 	certBytes, err := marshal.FromBase64(loginconfig.Certificate)
 	if err != nil {
-		return []byte{}, WssdConfig{}, err
+		return "", WssdConfig{}, err
 	}
 	accessFile, err := readAccessFile(GetWssdConfigLocation())
 	if err != nil {
 		x509CertClient, keyClient, err := certs.GenerateClientCertificate(loginconfig.Name)
 		if err != nil {
-			return []byte{}, WssdConfig{}, err
+			return "", WssdConfig{}, err
 		}
 
 		certBytesClient := certs.EncodeCertPEM(x509CertClient)
@@ -289,7 +289,7 @@ func GenerateClientKey(loginconfig LoginConfig) ([]byte, WssdConfig, error) {
 	if accessFile.CloudCertificate != "" {
 		serverPem, err := marshal.FromBase64(accessFile.CloudCertificate)
 		if err != nil {
-			return []byte{}, WssdConfig{}, err
+			return "", WssdConfig{}, err
 		}
 
 		if string(certBytes) != string(serverPem) {
@@ -298,7 +298,7 @@ func GenerateClientKey(loginconfig LoginConfig) ([]byte, WssdConfig, error) {
 	}
 
 	accessFile.CloudCertificate = marshal.ToBase64(string(certBytes))
-	return []byte(accessFile.ClientCertificate), accessFile, nil
+	return accessFile.ClientCertificate, accessFile, nil
 }
 
 func PrintAccessFile(accessFile WssdConfig) error {
