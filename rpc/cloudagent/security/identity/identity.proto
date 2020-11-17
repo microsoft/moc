@@ -25,7 +25,7 @@ message Identity {
 	string resourceGroup = 3;
 	string password = 4;
 	string token = 5;
-	bytes certificate = 6;
+	map<string, string> certificates = 6;
 	Status status = 7;
 	string locationName = 10;
 	Tags tags = 11;

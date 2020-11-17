@@ -25,7 +25,7 @@ message Identity {
     string resourceGroup = 3;
 	string password = 4;
 	string token = 5;
-	bytes certificate = 6;
+	string certificate = 6;
 	Status status = 7;
 	Entity entity = 8;
 	Tags tags = 9;
