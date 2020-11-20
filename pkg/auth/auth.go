@@ -48,6 +48,7 @@ type LoginConfig struct {
 	Name        string
 	Token       string
 	Certificate string
+	CACertHash  string
 }
 
 func (ba *BearerAuthorizer) WithRPCAuthorization() credentials.PerRPCCredentials {
@@ -94,6 +95,8 @@ func NewAuthorizerFromInput(tlsCert tls.Certificate, serverCertificate []byte, s
 	return NewBearerAuthorizer(JwtTokenProvider{}, transportCreds), nil
 }
 
+// NewAuthorizerForAuth is deprecated. Use NewAuthorizerForAuthFromCACertHash as this is the
+// new preferred usage for creating an auth config
 func NewAuthorizerForAuth(tokenString string, certificate string, server string) (Authorizer, error) {
 
 	serverPem, err := marshal.FromBase64(certificate)
@@ -109,6 +112,23 @@ func NewAuthorizerForAuth(tokenString string, certificate string, server string)
 	transportCreds := credentials.NewTLS(&tls.Config{
 		ServerName: server,
 		RootCAs:    certPool,
+	})
+
+	return NewBearerAuthorizer(JwtTokenProvider{tokenString}, transportCreds), nil
+}
+
+func NewAuthorizerForAuthFromCACertHash(tokenString string, cacerthash string, server string) (Authorizer, error) {
+	pkv := NewPublicKeyVerifier()
+	err := pkv.Allow(cacerthash)
+	if err != nil {
+		return NewBearerAuthorizer(JwtTokenProvider{}, credentials.NewTLS(nil)), fmt.Errorf("could not marshal the server certificate")
+	}
+
+	transportCreds := credentials.NewTLS(&tls.Config{
+		ServerName:            server,
+		InsecureSkipVerify:    true,
+		VerifyPeerCertificate: pkv.VerifyPeerCertificate,
+		RootCAs:               x509.NewCertPool(),
 	})
 
 	return NewBearerAuthorizer(JwtTokenProvider{tokenString}, transportCreds), nil
