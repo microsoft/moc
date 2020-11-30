@@ -19,13 +19,20 @@ message ControlPlaneResponse {
 	string  Error = 3;
 }
 
+enum ControlPlaneState {
+	Unknown = 0;
+	Active = 1;
+	Leader = 2;
+}
+
 message ControlPlane {
 	string id = 1;
 	string name = 2;
 	string locationName = 3;
 	string fqdn = 4;
 	int32 port = 5;
-	Status status = 9;
+	Status status = 6;
+	ControlPlaneState state = 7;
 }
 
 service ControlPlaneAgent {
