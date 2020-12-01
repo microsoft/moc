@@ -114,12 +114,21 @@ func PrefixesOverlap(cidr1 net.IPNet, cidr2 net.IPNet) bool {
 }
 
 func GetNetworkInterface() (string, error) {
+	// get primary public IP address
+	primaryPublicIP, err := GetIPAddress()
+	if err != nil {
+		return "", err
+	}
+
 	networkInterfaces, err := net.Interfaces()
 	if err != nil {
 		return "", err
 	}
 
 	for _, networkInterface := range networkInterfaces {
+		// return this interface iff it contains the
+		// primary public IP address
+
 		// skip down interface
 		if networkInterface.Flags&net.FlagUp == 0 {
 			continue
@@ -128,7 +137,6 @@ func GetNetworkInterface() (string, error) {
 		if networkInterface.Flags&net.FlagLoopback != 0 {
 			continue
 		}
-
 		// list of unicast interface addresses for specific interface
 		addresses, err := networkInterface.Addrs()
 		if err != nil {
@@ -147,8 +155,11 @@ func GetNetworkInterface() (string, error) {
 			if ip == nil || ip.IsLoopback() {
 				continue
 			}
-			// return this interface
-			return networkInterface.Name, nil
+
+			if ip.String() == primaryPublicIP {
+				// return this interface
+				return networkInterface.Name, nil
+			}
 		}
 	}
 
