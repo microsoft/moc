@@ -20,9 +20,8 @@ message ControlPlaneResponse {
 }
 
 enum ControlPlaneState {
-	Unknown = 0;
-	Active = 1;
-	Leader = 2;
+	NotLeader = 0;
+	Leader = 1;
 }
 
 message ControlPlane {
