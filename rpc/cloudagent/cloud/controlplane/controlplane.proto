@@ -16,7 +16,7 @@ message ControlPlaneRequest {
 message ControlPlaneResponse {
 	repeated ControlPlane ControlPlanes = 1;
 	google.protobuf.BoolValue Result = 2;
-	string  Error = 3;
+	string Error = 3;
 }
 
 enum ControlPlaneState {
