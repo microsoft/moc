@@ -145,11 +145,11 @@ func GetNetworkInterface() (string, error) {
 		// network end point address
 		for _, address := range addresses {
 			var ip net.IP
-			switch v := address.(type) {
+			switch typedAddress := address.(type) {
 			case *net.IPNet:
-				ip = v.IP
+				ip = typedAddress.IP
 			case *net.IPAddr:
-				ip = v.IP
+				ip = typedAddress.IP
 			}
 			// skip loopback or wrong type
 			if ip == nil || ip.IsLoopback() {
