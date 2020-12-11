@@ -1,0 +1,50 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/cloud";
+package moc.cloudagent.controlplane;
+
+import "google/protobuf/wrappers.proto";
+import "common.proto";
+
+message ControlPlaneRequest {
+	repeated ControlPlane ControlPlanes = 1;
+	Operation OperationType = 2;
+}
+
+message ControlPlaneResponse {
+	repeated ControlPlane ControlPlanes = 1;
+	google.protobuf.BoolValue Result = 2;
+	string Error = 3;
+}
+
+enum ControlPlaneState {
+	NotLeader = 0;
+	Leader = 1;
+}
+
+// There is a ControlPlane entity for every CloudAgent
+// participating to provide high availability without
+// FailoverCluster
+message ControlPlane {
+	// id is an internal value required for all entities
+	string id = 1;
+	// name is an identifier provided during ControlPlane creation
+	string name = 2;
+	// locationName is the name of the Location entity this ControlPlane belongs to
+	string locationName = 3;
+	// fqdn is the fqdn, hostname, or ip address that this ControlPlane will use as part of the leadership election
+	string fqdn = 4;
+	// port is the port that this ControlPlane will use as part of the leadership election
+	int32 port = 5;
+	// status is a standard entity status
+	Status status = 6;
+	// state stores the last known election status of this ControlPlane
+	ControlPlaneState state = 7;
+}
+
+service ControlPlaneAgent {
+	rpc Invoke(ControlPlaneRequest) returns (ControlPlaneResponse) {}
+}
+

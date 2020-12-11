@@ -116,6 +116,7 @@ protoc -I $Agent/$Module/kubernetes -I ./common $Agent/$Module/kubernetes/kubern
 protoc -I $Agent/$Module/cluster -I $Agent/$Module/node -I ./common $Agent/$Module/cluster/cluster.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/location -I ./common $Agent/$Module/location/location.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/subscription -I ./common $Agent/$Module/subscription/subscription.proto  --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/controlplane -I ./common $Agent/$Module/controlplane/controlplane.proto  --go_out=plugins=grpc:../bld/gen/
 
 
 Module="security"
