@@ -153,13 +153,23 @@ func (m *ControlPlaneResponse) GetError() string {
 	return ""
 }
 
+// There is a ControlPlane entity for every CloudAgent
+// participating to provide high availability without
+// FailoverCluster
 type ControlPlane struct {
-	Id                   string            `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name                 string            `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	LocationName         string            `protobuf:"bytes,3,opt,name=locationName,proto3" json:"locationName,omitempty"`
-	Fqdn                 string            `protobuf:"bytes,4,opt,name=fqdn,proto3" json:"fqdn,omitempty"`
-	Port                 int32             `protobuf:"varint,5,opt,name=port,proto3" json:"port,omitempty"`
-	Status               *common.Status    `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
+	// id is an internal value required for all entities
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// name is an identifier provided during ControlPlane creation
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// locationName is the name of the Location entity this ControlPlane belongs to
+	LocationName string `protobuf:"bytes,3,opt,name=locationName,proto3" json:"locationName,omitempty"`
+	// fqdn is the fqdn, hostname, or ip address that this ControlPlane will use as part of the leadership election
+	Fqdn string `protobuf:"bytes,4,opt,name=fqdn,proto3" json:"fqdn,omitempty"`
+	// port is the port that this ControlPlane will use as part of the leadership election
+	Port int32 `protobuf:"varint,5,opt,name=port,proto3" json:"port,omitempty"`
+	// status is a standard entity status
+	Status *common.Status `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
+	// state stores the last known election status of this ControlPlane
 	State                ControlPlaneState `protobuf:"varint,7,opt,name=state,proto3,enum=moc.cloudagent.controlplane.ControlPlaneState" json:"state,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
