@@ -9,11 +9,15 @@ import (
 	"crypto/x509"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"os"
 	"path/filepath"
+	"strconv"
+	"strings"
 
 	"github.com/microsoft/moc/pkg/certs"
 	"github.com/microsoft/moc/pkg/marshal"
+	"github.com/pkg/errors"
 	"google.golang.org/grpc/credentials"
 )
 
@@ -95,8 +99,6 @@ func NewAuthorizerFromInput(tlsCert tls.Certificate, serverCertificate []byte, s
 	return NewBearerAuthorizer(JwtTokenProvider{}, transportCreds), nil
 }
 
-// NewAuthorizerForAuth is deprecated. Use NewAuthorizerForAuthFromCACertHash as this is the
-// new preferred usage for creating an auth config
 func NewAuthorizerForAuth(tokenString string, certificate string, server string) (Authorizer, error) {
 
 	serverPem, err := marshal.FromBase64(certificate)
@@ -319,6 +321,48 @@ func GenerateClientKey(loginconfig LoginConfig) (string, WssdConfig, error) {
 
 	accessFile.CloudCertificate = marshal.ToBase64(string(certBytes))
 	return accessFile.ClientCertificate, accessFile, nil
+}
+
+func GetServerCertificateFromHash(server, caCertHash string) (string, error) {
+	sp := strings.Split(server, ":")
+	if len(sp) != 2 {
+		return "", errors.Errorf("server must be the hostname + ':' + port, was %s", server)
+	}
+
+	if _, err := strconv.Atoi(sp[1]); err != nil {
+		return "", errors.Errorf("server must have integer after ':', had %s", sp[1])
+	}
+
+	nconn, err := net.Dial("tcp", server)
+	if err != nil {
+		return "", errors.Wrapf(err, "problem dialing %s", server)
+	}
+
+	pkv := NewPublicKeyVerifier()
+	err = pkv.Allow(caCertHash)
+	if err != nil {
+		return "", errors.Wrapf(err, "problem dialing %s", server)
+	}
+
+	config := &tls.Config{
+		ServerName:            server,
+		InsecureSkipVerify:    true,
+		VerifyPeerCertificate: pkv.VerifyPeerCertificate,
+		RootCAs:               x509.NewCertPool(),
+	}
+
+	tconn := tls.Client(nconn, config)
+	if err := tconn.Handshake(); err != nil {
+		return "", errors.Wrap(err, "problem with TLS handshake")
+	}
+
+	if len(tconn.ConnectionState().PeerCertificates) == 0 {
+		return "", errors.Errorf("unable to retieve certificates from %s ", server)
+	}
+
+	certBytesClient := certs.EncodeCertPEM(tconn.ConnectionState().PeerCertificates[0])
+
+	return marshal.ToBase64(string(certBytesClient)), nil
 }
 
 func PrintAccessFile(accessFile WssdConfig) error {
