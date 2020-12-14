@@ -49,10 +49,10 @@ type ManagedIdentityConfig struct {
 }
 
 type LoginConfig struct {
-	Name        string
-	Token       string
-	Certificate string
-	CACertHash  string
+	Name        string `json:"name,omitempty"`
+	Token       string `json:"token,omitempty"`
+	Certificate string `json:"certificate,omitempty"`
+	CACertHash  string `json:"cacerthash,omitempty"`
 }
 
 func (ba *BearerAuthorizer) WithRPCAuthorization() credentials.PerRPCCredentials {
