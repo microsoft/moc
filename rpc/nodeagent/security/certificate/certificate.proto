@@ -27,11 +27,12 @@ message Certificate {
     string id = 2;
     int64 notBefore = 3; 
     int64 notAfter = 4;
-    string certificate = 5;
+    bytes certificate = 5 [deprecated = true];
     Status status = 6;
     CertificateType type = 7;
     Entity entity = 8;
     Tags tags = 9;
+    string newCertificate = 10;
 }
 
 service CertificateAgent {

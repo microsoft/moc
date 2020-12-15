@@ -25,10 +25,11 @@ message Identity {
     string resourceGroup = 3;
 	string password = 4;
 	string token = 5;
-	string certificate = 6;
+	bytes certificate = 6 [deprecated = true];
 	Status status = 7;
 	Entity entity = 8;
 	Tags tags = 9;
+	string newCertificate = 10;
 }
 
 service IdentityAgent {
