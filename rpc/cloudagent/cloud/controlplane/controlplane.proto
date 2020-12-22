@@ -30,8 +30,12 @@ message ControlPlane {
 	string locationName = 3;
 	string fqdn = 4;
 	int32 port = 5;
-	Status status = 6;
-	ControlPlaneState state = 7;
+	uint32 etcdClientPort = 6;
+	uint32 etcdPeerPort = 7;
+	string etcdCaCertificate = 8;
+	string etcdCaKey = 9;  
+	Status status = 10;
+	ControlPlaneState state = 11;
 }
 
 service ControlPlaneAgent {
