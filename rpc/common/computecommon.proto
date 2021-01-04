@@ -21,6 +21,10 @@ enum ProcessorType {
 	ARM64 = 6;
 }
 
+enum OperatingSystemBootstrapEngine {
+	CLOUD_INIT = 0; // For both cloud-init and cloudbase-init
+	WINDOWS_ANSWER_FILES = 1;
+}
 
 enum OperatingSystemType {
 	WINDOWS = 0;

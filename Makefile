@@ -35,4 +35,7 @@ unittest:
 	$(GOTEST) ./pkg/tags
 
 generate: bootstrap
-	(cd rpc && ./gen_proto.sh)
+	(./gen.sh)
+
+pipeline: bootstrap
+	(./gen.sh -c)

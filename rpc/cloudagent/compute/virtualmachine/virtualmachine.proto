@@ -57,6 +57,20 @@ message UserConfiguration {
 	UserType usertype = 3;
 }
 
+message RDPConfiguration {
+	bool disableRDP = 1;
+}
+
+message LinuxConfiguration {
+	bool disablePasswordAuthentication = 1;
+}
+
+message WindowsConfiguration {
+	bool enableAutomaticUpdates = 1;
+	string timeZone = 2;
+	RDPConfiguration RDPConfiguration = 3;
+}
+
 message OperatingSystemConfiguration {
 	string computerName = 1;
 	UserConfiguration administrator = 2;
@@ -64,6 +78,10 @@ message OperatingSystemConfiguration {
 	string customData = 4;
 	repeated SSHPublicKey publickeys = 5;
 	OperatingSystemType ostype = 6;
+	// bootstrap engine can be cloud-init, Windows answer files, ...
+	OperatingSystemBootstrapEngine osBootstrapEngine = 7;
+	LinuxConfiguration linuxConfiguration = 8;
+	WindowsConfiguration windowsConfiguration = 9;
 }
 
 message HardwareConfiguration {
