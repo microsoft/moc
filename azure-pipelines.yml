@@ -17,7 +17,7 @@ steps:
     sshKeySecureFile: 'azure-pipelines-ssh-key'
 
 - script: |
-    ./gen.sh -c
+    make pipeline
   displayName: 'Generate Protobuf'
 
 - script: |

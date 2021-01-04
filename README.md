@@ -8,7 +8,8 @@ Go must be installed.
 ## Steps
 Simply run:
 
-    gen.sh
+    make generate
+    make all
 
 This will automatically handle pulling down the remaining dependencies (e.g. `protoc`), generating the `*.pb.go`
 files and placing those files in the repository. After that, you can use git (e.g. `git status`) to review the
