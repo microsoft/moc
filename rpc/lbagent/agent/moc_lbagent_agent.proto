@@ -1,0 +1,62 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/lbagent";
+package moc.lbagent;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "moc_common_common.proto";
+import "moc_common_networkcommon.proto";
+import "moc_common_notification.proto";
+
+message LoadBalancerRequest {
+	repeated LoadBalancer LoadBalancers = 1;
+	Operation OperationType = 2;
+}
+
+message LoadBalancerResponse {
+	repeated LoadBalancer LoadBalancers = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message LoadBalancingRule {
+	uint32 frontendPort = 1;
+	uint32 backendPort = 2;
+	Protocol protocol = 3;
+}
+
+message LoadBalancer {
+	string name = 1;
+	string id = 2;
+	repeated string backendips = 3;
+	string frontendip = 4;
+	repeated LoadBalancingRule loadbalancingrules = 5;
+	Status status = 8;
+}
+
+enum LoadBalancerType {
+	Haproxy = 0;
+	Keepalived = 1;
+	Nginx = 2;
+}
+
+message LoadBalancerConfigRequest {
+	LoadBalancerType loadbalancertype = 1;
+}
+
+message LoadBalancerConfigResponse {
+	string config = 1;
+}
+
+service LoadBalancerAgent {
+	rpc Create(LoadBalancerRequest) returns (LoadBalancerResponse) {}
+	rpc Delete(LoadBalancerRequest) returns (LoadBalancerResponse) {}
+	rpc Get(LoadBalancerRequest) returns (LoadBalancerResponse) {}
+	//GetConfig is for debugging/testing
+	rpc GetConfig(LoadBalancerConfigRequest) returns (LoadBalancerConfigResponse) {}
+	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
+}
+

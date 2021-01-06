@@ -1,0 +1,23 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/nodeagent/security";
+package moc.nodeagent.security;
+
+import "google/protobuf/wrappers.proto";
+import "moc_nodeagent_identity.proto";
+
+message AuthenticationRequest {
+	Identity Identity = 1;
+}
+
+message AuthenticationResponse {
+	string Token = 1;
+	google.protobuf.BoolValue Result = 2;
+    string  Error = 3;
+}
+
+service AuthenticationAgent {
+	rpc Login(AuthenticationRequest) returns (AuthenticationResponse) {}
+}

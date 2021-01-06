@@ -1,0 +1,59 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/nodeagent/compute";
+package moc.nodeagent.compute;
+
+import "google/protobuf/wrappers.proto";
+import "moc_nodeagent_virtualmachine.proto";
+import "moc_common_common.proto";
+import "moc_nodeagent_virtualnetworkinterface.proto";
+
+message VirtualMachineScaleSetRequest {
+	repeated VirtualMachineScaleSet VirtualMachineScaleSetSystems = 1;
+	Operation OperationType = 2;
+}
+
+message VirtualMachineScaleSetResponse {
+	repeated VirtualMachineScaleSet VirtualMachineScaleSetSystems = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message Sku {
+	string name = 1;
+	int64 capacity = 2;
+}
+
+message NetworkConfigurationScaleSet {
+	repeated moc.nodeagent.network.VirtualNetworkInterface interfaces = 1;
+}
+
+message VirtualMachineProfile {
+	string vmprefix = 1;
+	NetworkConfigurationScaleSet network = 2;
+	StorageConfiguration storage = 3;
+	OperatingSystemConfiguration os = 4;
+	HardwareConfiguration hardware = 5;
+	SecurityConfiguration security = 6;
+}
+
+message VirtualMachineScaleSet {
+	string name = 1;
+	string id = 2;
+	Sku sku = 3;
+	VirtualMachineProfile virtualmachineprofile = 4;
+	repeated VirtualMachine VirtualMachineSystems = 5;
+	Status status = 7;
+	bool DisableHighAvailability = 8;
+	repeated string allowedOwnerNodes = 9;
+	Entity entity = 10;
+	HighAvailabilityState highAvailabilityState = 11;
+	Tags tags = 12;
+}
+
+service VirtualMachineScaleSetAgent {
+	rpc Invoke(VirtualMachineScaleSetRequest) returns (VirtualMachineScaleSetResponse) {}
+}
+

@@ -1,0 +1,47 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/compute";
+package moc.cloudagent.compute;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+enum GalleryImageOSType {
+	UNKNOWN = 0;
+	LINUX = 1;
+	WINDOWS = 2;
+}
+
+message GalleryImageRequest {
+	repeated GalleryImage GalleryImages = 1;
+	Operation OperationType = 2;
+}
+
+message GalleryImageResponse {
+	repeated GalleryImage GalleryImages = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message GalleryImage {
+	string name = 1;
+	string id = 2;
+	GalleryImageOSType imageOSType = 3;
+	// Path of the image on the cloud
+	string path = 4;
+	Status status = 5;
+	string locationName = 6;
+	string publisher = 7;
+	string sku = 8;
+	string offer = 9;
+	string containerName = 10;
+	// Source of the GalleryImage from where we can copy the image from.
+	string sourcePath = 11;
+	Tags tags = 12;
+}
+
+service GalleryImageAgent {
+	rpc Invoke(GalleryImageRequest) returns (GalleryImageResponse) {}
+}

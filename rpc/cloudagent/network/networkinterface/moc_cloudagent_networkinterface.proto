@@ -1,0 +1,55 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/network";
+package moc.cloudagent.network;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_networkcommon.proto";
+
+message NetworkInterfaceRequest {
+	repeated NetworkInterface NetworkInterfaces = 1;
+	Operation OperationType = 2;
+}
+
+message NetworkInterfaceResponse {
+	repeated NetworkInterface NetworkInterfaces = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message IpConfiguration {
+	string ipaddress = 1;
+	string prefixlength = 2;
+	string subnetid = 3;
+	bool primary = 4;
+	repeated string loadbalanceraddresspool = 5;
+	IPAllocationMethod allocation = 6;
+	string gateway = 7;
+}
+
+message NetworkInterface {
+	string name = 1;
+	string id = 2;
+	enum NetworkInterfaceType {
+		Local = 0;
+		Remote = 1;
+	}
+	NetworkInterfaceType type = 3;
+	repeated IpConfiguration ipConfigurations = 4;
+	string macaddress = 5;
+	Dns dns = 6;
+	string nodeName = 7;
+	string groupName = 8;
+	string locationName = 9;
+	Status status = 10;
+	string virtualMachineName = 11;
+	uint32 iovWeight = 12;
+	Tags tags = 13;
+}
+
+service NetworkInterfaceAgent {
+	rpc Invoke(NetworkInterfaceRequest) returns (NetworkInterfaceResponse) {}
+}

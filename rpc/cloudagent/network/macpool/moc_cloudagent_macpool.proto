@@ -1,0 +1,39 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/network";
+package moc.cloudagent.network;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+message MacPoolRequest {
+	repeated MacPool MacPools = 1;
+	Operation OperationType = 2;
+}
+
+message MacPoolResponse {
+	repeated MacPool MacPools = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message MacRange {
+	string startMacAddress = 1;
+	string endMacAddress = 2;
+}
+
+message MacPool {
+	string name = 1;
+	string id = 2;
+	MacRange range = 3;
+	string locationName = 4;
+	Status status = 6;
+	Tags tags = 7;
+}
+
+service MacPoolAgent {
+	rpc Invoke(MacPoolRequest) returns (MacPoolResponse) {}
+}
+

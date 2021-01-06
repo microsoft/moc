@@ -1,0 +1,40 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/cloud";
+package moc.cloudagent.group;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+enum SubPostOperation {
+	CREATE = 0;
+	UPDATE = 1;
+	LOCK = 2;
+}
+
+message GroupRequest {
+	repeated Group Groups = 1;
+	Operation OperationType = 2;
+	SubPostOperation PostOperationType = 3;
+}
+
+message GroupResponse {
+	repeated Group Groups = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message Group {
+	string name = 1;
+	string id = 2;
+	Status status = 3;
+	string locationName = 4;
+	Tags tags = 5;
+}
+
+service GroupAgent {
+	rpc Invoke(GroupRequest) returns (GroupResponse) {}
+}
+
