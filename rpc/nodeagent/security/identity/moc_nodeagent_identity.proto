@@ -1,0 +1,37 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/nodeagent/security";
+package moc.nodeagent.security;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+message IdentityRequest {
+	repeated Identity Identitys = 1;
+	Operation OperationType = 2;
+}
+
+message IdentityResponse {
+	repeated Identity Identitys = 1;
+	google.protobuf.BoolValue Result = 2;
+    string  Error = 3;
+}
+
+message Identity {
+	string name = 1;
+    string id = 2;
+    string resourceGroup = 3;
+	string password = 4;
+	string token = 5;
+	bytes certificate = 6 [deprecated = true];
+	Status status = 7;
+	Entity entity = 8;
+	Tags tags = 9;
+	string newCertificate = 10;
+}
+
+service IdentityAgent {
+	rpc Invoke(IdentityRequest) returns (IdentityResponse) {}
+}

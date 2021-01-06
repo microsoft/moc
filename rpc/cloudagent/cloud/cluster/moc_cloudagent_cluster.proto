@@ -1,0 +1,38 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/cloud";
+package moc.cloudagent.cluster;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_cloudagent_node.proto";
+
+message ClusterResponse {
+	repeated Cluster Clusters = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message Cluster {
+	string name = 1;
+	string id = 2;
+	string fqdn = 3;
+	Status status = 4;
+	bool UserOwned = 5;
+	bool IsLocalCluster = 6;
+	string domain = 7;
+	repeated moc.cloudagent.node.Node Nodes = 8;
+	string locationName = 9; 
+	Tags tags = 10;
+}
+
+
+service ClusterAgent {
+	rpc LoadCluster(Cluster) returns (ClusterResponse) {}
+	rpc UnloadCluster(Cluster) returns (ClusterResponse) {}
+	rpc GetCluster(Cluster) returns (ClusterResponse) {}
+	rpc GetNodes(Cluster) returns (moc.cloudagent.node.NodeResponse) {}
+}
+

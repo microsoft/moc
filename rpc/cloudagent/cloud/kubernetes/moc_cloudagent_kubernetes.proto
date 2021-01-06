@@ -1,0 +1,105 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/cloud";
+package moc.cloudagent.kubernetes;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+message KubernetesRequest {
+	repeated Kubernetes Kubernetess = 1;
+	Operation OperationType = 2;
+}
+
+message KubernetesResponse {
+	repeated Kubernetes Kubernetess = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message StorageConfiguration {
+	string csi = 1;
+}
+
+message NetworkConfiguration {
+	string cni = 1;
+	string podCidr = 2;
+	string clusterCidr = 3;
+	// TODO: merge controlplane cidr and network
+	string controlPlaneCidr = 4;
+	string virtualnetwork = 5;
+	string loadBalancerVip = 6;
+	string loadBalancerMac = 7;
+}
+
+enum NodeType {
+	ControlPlane = 0;
+	LinuxWorker = 1;
+	WindowsWorker = 2;
+	LoadBalancer = 3;
+}
+
+enum ManagementStrategyType {
+	Pivoted = 0;
+	Distinct = 1;
+}
+
+message NodePoolConfiguration {
+	NodeType NodeType = 1;
+	string imagereference = 2;
+	int32 replicas = 3;
+	string VMSize = 4;
+}
+
+message SSHPublicKey {
+	string keyData = 1;
+}
+
+message ComputeConfiguration {
+	string cri = 1;
+	SSHPublicKey publicKey = 2;
+	repeated NodePoolConfiguration NodePools = 3;
+}
+
+message ClusterConfiguration {
+	string version = 1;
+}
+
+message ClusterAPIConfiguration {
+	string ConfigurationEndpoint = 1;         
+	string InfrastructureProviderVersion = 2; 
+	string BootstrapProviderVersion = 3;
+	string ControlPlaneProviderVersion = 4; 
+	string CoreProviderVersion = 5;
+}
+
+message ContainerRegistry {
+	string Name = 1;
+	string Username = 2;
+	string Password = 3;
+}
+
+message Kubernetes {
+	string name = 1;
+	string id = 2;
+	Status status = 4;
+	ClusterConfiguration cluster = 5;
+	NetworkConfiguration network = 6;
+	StorageConfiguration storage = 7;
+	ComputeConfiguration compute = 8;
+	string groupName = 9;
+	ManagementStrategyType managementStrategy = 10;
+	string locationName = 11;
+	bytes kubeConfig = 12;
+	ClusterAPIConfiguration capiConfig = 13;
+	ContainerRegistry containerRegistry = 14;
+	bytes deploymentManifest = 15;
+	Tags tags = 16;
+}
+
+service KubernetesAgent {
+	rpc Invoke(KubernetesRequest) returns (KubernetesResponse) {}
+}
+

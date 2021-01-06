@@ -1,0 +1,35 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/security";
+package moc.cloudagent.security;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_cloudagent_secret.proto";
+
+message KeyVaultRequest {
+	repeated KeyVault KeyVaults = 1;
+	Operation OperationType = 2;
+}
+
+message KeyVaultResponse {
+	repeated KeyVault KeyVaults = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message KeyVault {
+	string name = 1;
+	string id = 2;
+	repeated Secret Secrets = 3;
+	string groupName = 4;
+	Status status = 5;
+	string locationName = 10;
+	Tags tags = 11;
+}
+
+service KeyVaultAgent {
+	rpc Invoke(KeyVaultRequest) returns (KeyVaultResponse) {}
+}

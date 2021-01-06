@@ -1,0 +1,46 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/network";
+package moc.cloudagent.network;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_networkcommon.proto";
+
+message LoadBalancerRequest {
+	repeated LoadBalancer LoadBalancers = 1;
+	Operation OperationType = 2;
+}
+
+message LoadBalancerResponse {
+	repeated LoadBalancer LoadBalancers = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message LoadBalancingRule {
+	uint32 frontendPort = 1;
+	uint32 backendPort = 2;
+	Protocol protocol = 3;
+}
+
+message LoadBalancer {
+	string name = 1;
+	string id = 2;
+	string frontendIP = 3;
+	repeated string backendpoolnames = 4;
+	string networkid = 5;
+	repeated LoadBalancingRule loadbalancingrules = 6;
+	string nodefqdn = 7;
+	string groupName = 8;
+	string locationName = 9;
+	Status status = 10;
+	Tags tags = 11;
+}
+
+service LoadBalancerAgent {
+	rpc Invoke(LoadBalancerRequest) returns (LoadBalancerResponse) {}
+}
+
