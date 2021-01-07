@@ -114,15 +114,6 @@ protoc -I $Agent/$Module/container -I ./common $Agent/$Module/container/moc_clou
 
 Module="cloud"
 echo "Generating $Agent/$Module protoc"
-<<<<<<< HEAD
-protoc -I $Agent/$Module/group -I ./common $Agent/$Module/group/group.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/node -I ./common $Agent/$Module/node/node.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/kubernetes -I ./common $Agent/$Module/kubernetes/kubernetes.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/cluster -I $Agent/$Module/node -I ./common $Agent/$Module/cluster/cluster.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/location -I ./common $Agent/$Module/location/location.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/subscription -I ./common $Agent/$Module/subscription/subscription.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/controlplane -I ./common $Agent/$Module/controlplane/controlplane.proto  --go_out=plugins=grpc:../bld/gen/
-=======
 protoc -I $Agent/$Module/group -I ./common $Agent/$Module/group/moc_cloudagent_group.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/node -I ./common $Agent/$Module/node/moc_cloudagent_node.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/kubernetes -I ./common $Agent/$Module/kubernetes/moc_cloudagent_kubernetes.proto  --go_out=plugins=grpc:../bld/gen/
@@ -130,7 +121,6 @@ protoc -I $Agent/$Module/cluster -I $Agent/$Module/node -I ./common $Agent/$Modu
 protoc -I $Agent/$Module/location -I ./common $Agent/$Module/location/moc_cloudagent_location.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/subscription -I ./common $Agent/$Module/subscription/moc_cloudagent_subscription.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/controlplane -I ./common $Agent/$Module/controlplane/moc_cloudagent_controlplane.proto  --go_out=plugins=grpc:../bld/gen/
->>>>>>> main
 
 
 Module="security"
