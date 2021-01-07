@@ -1,0 +1,34 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/common/admin";
+package moc.common.admin;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_nodeinfo.proto";
+
+message HealthRequest{
+	uint32 timeoutSeconds = 1;
+}
+
+message HealthResponse {
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+	HealthState State = 4;
+	bool Rebooted = 5;
+}
+
+message AgentInfoResponse{
+	NodeInfo node = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+service HealthAgent {
+	rpc CheckHealth(HealthRequest) returns (HealthResponse) {}
+	rpc GetAgentInfo(google.protobuf.Empty) returns (AgentInfoResponse) {}
+}
+

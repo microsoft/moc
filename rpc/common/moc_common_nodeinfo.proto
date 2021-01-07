@@ -1,0 +1,44 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/common";
+package moc.common;
+
+import "moc_common_common.proto";
+import "moc_common_computecommon.proto";
+
+message Processor {
+	string name = 1;
+	uint32 cores = 2;
+	string speed = 3;
+	ProcessorType type = 4;
+	bool virtualization = 5;
+	uint32 logicalprocessors = 6;
+}
+
+message PhysicalMemory {
+	uint64 sizeBytes = 1;
+}
+
+message GPU {
+	string name = 1;
+	uint32 sizeBytes = 2;
+	uint32 count = 3;
+}
+
+message NodeInfo {
+	string name = 1;
+	string id = 2;
+	Resources capability = 3;
+	Resources availability = 4;
+	OperatingSystemType ostype = 6;
+	Status status = 7;
+}
+
+message Resources {   
+	Processor processor = 1;
+	PhysicalMemory memory = 2;
+	GPU gpu = 3;
+}
+

@@ -1,0 +1,73 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/common";
+
+package moc;
+
+enum UserType {
+	ROOT = 0;
+	USER = 1;
+}
+
+enum ProcessorType {
+	None = 0;
+	Intel = 1;
+	Intel64 = 2;
+	AMD = 3;
+	AMD64 = 4;
+	ARM = 5;
+	ARM64 = 6;
+}
+
+enum OperatingSystemBootstrapEngine {
+	CLOUD_INIT = 0; // For both cloud-init and cloudbase-init
+	WINDOWS_ANSWER_FILES = 1;
+}
+
+enum OperatingSystemType {
+	WINDOWS = 0;
+	LINUX = 1;
+}
+
+enum VirtualMachineSizeType {
+	Default = 0;
+	Standard_A2_v2 = 2;
+	Standard_A4_v2 = 3;
+	Standard_D2s_v3 = 4;
+	Standard_D4s_v3 = 5;
+	Standard_D8s_v3 = 6;
+	Standard_D16s_v3 = 7;
+	Standard_D32s_v3 = 8;
+	Standard_DS2_v2 = 9;
+	Standard_DS3_v2 = 10;
+	Standard_DS4_v2 = 11;
+	Standard_DS5_v2 = 12;
+	Standard_DS13_v2 = 13;
+	Standard_K8S_v1 = 14;
+	Standard_K8S2_v1 = 15;
+	Standard_K8S3_v1 = 16;
+	Standard_K8S4_v1 = 17;
+	Standard_NK6 = 18;
+	Standard_NK12 = 19;
+	Standard_NV6 = 20;
+	Standard_NV12 = 21;
+	Unsupported = 99;
+}
+
+enum PowerState {
+	Unknown = 0;
+	Running = 1 ;
+	Off = 2;
+	Paused = 3;
+	Critical = 4;
+}
+
+enum VirtualMachineOperation {
+	START = 0;
+	STOP = 1;
+	RESET = 2;
+}
+
+

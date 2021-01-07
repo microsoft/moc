@@ -1,0 +1,40 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/network";
+package moc.cloudagent.network;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+
+message VipPoolRequest {
+	repeated VipPool VipPools = 1;
+	Operation OperationType = 2;
+}
+
+message VipPoolResponse {
+	repeated VipPool VipPools = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message VipPool {
+	string name = 1;
+	string id = 2;
+	string cidr = 3;
+	string networkid = 4;
+	string nodefqdn = 5;
+	string groupName = 6;
+	string locationName = 7;
+	Status status = 8;
+	string startip = 9;
+	string endip = 10;
+	Tags tags = 11;
+}
+
+service VipPoolAgent {
+	rpc Invoke(VipPoolRequest) returns (VipPoolResponse) {}
+}
+

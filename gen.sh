@@ -1,3 +1,7 @@
+#!/bin/bash
+# Copyright (c) Microsoft Corporation.
+# Licensed under the Apache v2.0 license.
+
 # Script that handles regenerating protobuf files.
 
 # Make sure the script exits on first failure and returns the
@@ -38,7 +42,8 @@ GOPATH=$(go env GOPATH)
 export PATH=$GOPATH/bin:$SCRIPTPATH/bld/protoc/bin:$SCRIPTPATH/bld/protoc/include:$PATH
 
 # Generate the .go files from the .proto files.
-make generate
+cd rpc
+/bin/bash ./gen_proto.sh
 )
 
 # Copy generated .go files into repo.

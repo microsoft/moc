@@ -1,0 +1,43 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/ipamagent";
+package moc.ipaddress;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+
+message IPAddressRequest {
+	repeated IPAddress IPAddresss = 1;
+	Operation OperationType = 2;
+}
+
+message IPAddressResponse {
+	repeated IPAddress IPAddresss = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+enum IPAddressFamily {
+	IPV4 = 0;
+	IPV6 = 1;
+}
+
+message IPAddress {
+	string name = 1;
+	string id = 2;
+	string address = 3;
+	string cidr = 4;
+	int32 prefixLength = 5;
+	Status status = 8;
+}
+
+
+service IPAddressAgent {
+	rpc Get(IPAddressRequest) returns (IPAddressResponse) {}
+	rpc Create(IPAddressRequest) returns (IPAddressResponse) {}
+	rpc Delete(IPAddressRequest) returns (IPAddressResponse) {}
+}
+

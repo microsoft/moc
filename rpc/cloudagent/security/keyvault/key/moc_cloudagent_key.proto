@@ -1,0 +1,56 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/security";
+package moc.cloudagent.security;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_security.proto";
+
+
+message KeyRequest {
+	repeated Key Keys = 1;
+	Operation OperationType = 2;
+}
+
+message KeyResponse {
+	repeated Key Keys = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message KeyOperationRequest {
+	Key key = 1;
+	string Data = 2;
+	Algorithm algorithm = 3;
+	KeyOperation OperationType = 4;
+}
+
+message KeyOperationResponse {
+	string Data = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message Key {
+	string name = 1;
+	string id = 2;
+	string locationName = 3;
+	// Public Key Value
+	bytes publicKey = 4;
+	JsonWebKeyType type = 5;
+	string vaultName = 6;
+	string groupName = 7;
+	Status status = 8;
+	KeySize size = 9;
+	JsonWebKeyCurveName curve = 10;
+	repeated KeyOperation keyOps = 11;
+	Tags tags = 12;
+}
+
+service KeyAgent {
+	rpc Invoke(KeyRequest) returns (KeyResponse) {}
+	rpc Operate(KeyOperationRequest) returns (KeyOperationResponse) {}
+}

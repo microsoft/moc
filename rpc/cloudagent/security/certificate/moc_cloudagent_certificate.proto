@@ -1,0 +1,44 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/security";
+package moc.cloudagent.security;
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+enum CertificateType {
+	Client = 0;
+	Server = 1;
+}
+
+message CertificateRequest {
+	repeated Certificate Certificates = 1;
+}
+
+message CertificateResponse {
+	repeated Certificate Certificates = 1;
+	google.protobuf.BoolValue Result = 2;
+    string  Error = 3;
+}
+
+message Certificate {
+    string name = 1;
+    string id = 2;
+    int64 notBefore = 3; 
+    int64 notAfter = 4;
+    bytes certificate = 5 [deprecated = true];
+    Status status = 6;
+    CertificateType type = 7; 
+    string groupName = 8;
+    string vaultName = 9;
+    string locationName = 10;
+    Tags tags = 11;
+    string newCertificate = 12;
+}
+
+service CertificateAgent {
+    rpc CreateOrUpdate(CertificateRequest) returns (CertificateResponse) {}
+    rpc Get(CertificateRequest) returns (CertificateResponse) {}
+    rpc Delete(CertificateRequest) returns (CertificateResponse) {}
+}

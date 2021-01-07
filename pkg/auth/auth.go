@@ -9,11 +9,15 @@ import (
 	"crypto/x509"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"os"
 	"path/filepath"
+	"strconv"
+	"strings"
 
 	"github.com/microsoft/moc/pkg/certs"
 	"github.com/microsoft/moc/pkg/marshal"
+	"github.com/pkg/errors"
 	"google.golang.org/grpc/credentials"
 )
 
@@ -45,9 +49,10 @@ type ManagedIdentityConfig struct {
 }
 
 type LoginConfig struct {
-	Name        string
-	Token       string
-	Certificate string
+	Name        string `json:"name,omitempty"`
+	Token       string `json:"token,omitempty"`
+	Certificate string `json:"certificate,omitempty"`
+	CACertHash  string `json:"cacerthash,omitempty"`
 }
 
 func (ba *BearerAuthorizer) WithRPCAuthorization() credentials.PerRPCCredentials {
@@ -109,6 +114,23 @@ func NewAuthorizerForAuth(tokenString string, certificate string, server string)
 	transportCreds := credentials.NewTLS(&tls.Config{
 		ServerName: server,
 		RootCAs:    certPool,
+	})
+
+	return NewBearerAuthorizer(JwtTokenProvider{tokenString}, transportCreds), nil
+}
+
+func NewAuthorizerForAuthFromCACertHash(tokenString string, cacerthash string, server string) (Authorizer, error) {
+	pkv := NewPublicKeyVerifier()
+	err := pkv.Allow(cacerthash)
+	if err != nil {
+		return NewBearerAuthorizer(JwtTokenProvider{}, credentials.NewTLS(nil)), fmt.Errorf("could not marshal the server certificate")
+	}
+
+	transportCreds := credentials.NewTLS(&tls.Config{
+		ServerName:            server,
+		InsecureSkipVerify:    true,
+		VerifyPeerCertificate: pkv.VerifyPeerCertificate,
+		RootCAs:               x509.NewCertPool(),
 	})
 
 	return NewBearerAuthorizer(JwtTokenProvider{tokenString}, transportCreds), nil
@@ -264,16 +286,16 @@ func SaveToken(tokenStr string) error {
 		0644)
 }
 
-func GenerateClientKey(loginconfig LoginConfig) ([]byte, WssdConfig, error) {
+func GenerateClientKey(loginconfig LoginConfig) (string, WssdConfig, error) {
 	certBytes, err := marshal.FromBase64(loginconfig.Certificate)
 	if err != nil {
-		return []byte{}, WssdConfig{}, err
+		return "", WssdConfig{}, err
 	}
 	accessFile, err := readAccessFile(GetWssdConfigLocation())
 	if err != nil {
 		x509CertClient, keyClient, err := certs.GenerateClientCertificate(loginconfig.Name)
 		if err != nil {
-			return []byte{}, WssdConfig{}, err
+			return "", WssdConfig{}, err
 		}
 
 		certBytesClient := certs.EncodeCertPEM(x509CertClient)
@@ -289,7 +311,7 @@ func GenerateClientKey(loginconfig LoginConfig) ([]byte, WssdConfig, error) {
 	if accessFile.CloudCertificate != "" {
 		serverPem, err := marshal.FromBase64(accessFile.CloudCertificate)
 		if err != nil {
-			return []byte{}, WssdConfig{}, err
+			return "", WssdConfig{}, err
 		}
 
 		if string(certBytes) != string(serverPem) {
@@ -298,7 +320,49 @@ func GenerateClientKey(loginconfig LoginConfig) ([]byte, WssdConfig, error) {
 	}
 
 	accessFile.CloudCertificate = marshal.ToBase64(string(certBytes))
-	return []byte(accessFile.ClientCertificate), accessFile, nil
+	return accessFile.ClientCertificate, accessFile, nil
+}
+
+func GetServerCertificateFromHash(server, caCertHash string) (string, error) {
+	sp := strings.Split(server, ":")
+	if len(sp) != 2 {
+		return "", errors.Errorf("server must be the hostname + ':' + port, was %s", server)
+	}
+
+	if _, err := strconv.Atoi(sp[1]); err != nil {
+		return "", errors.Errorf("server must have integer after ':', had %s", sp[1])
+	}
+
+	nconn, err := net.Dial("tcp", server)
+	if err != nil {
+		return "", errors.Wrapf(err, "problem dialing %s", server)
+	}
+
+	pkv := NewPublicKeyVerifier()
+	err = pkv.Allow(caCertHash)
+	if err != nil {
+		return "", errors.Wrapf(err, "problem dialing %s", server)
+	}
+
+	config := &tls.Config{
+		ServerName:            server,
+		InsecureSkipVerify:    true,
+		VerifyPeerCertificate: pkv.VerifyPeerCertificate,
+		RootCAs:               x509.NewCertPool(),
+	}
+
+	tconn := tls.Client(nconn, config)
+	if err := tconn.Handshake(); err != nil {
+		return "", errors.Wrap(err, "problem with TLS handshake")
+	}
+
+	if len(tconn.ConnectionState().PeerCertificates) == 0 {
+		return "", errors.Errorf("unable to retieve certificates from %s ", server)
+	}
+
+	certBytesClient := certs.EncodeCertPEM(tconn.ConnectionState().PeerCertificates[0])
+
+	return marshal.ToBase64(string(certBytesClient)), nil
 }
 
 func PrintAccessFile(accessFile WssdConfig) error {
