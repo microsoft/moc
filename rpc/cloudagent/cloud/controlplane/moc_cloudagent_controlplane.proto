@@ -43,13 +43,6 @@ message ControlPlane {
 	// state stores the last known election status of this ControlPlane
 	ControlPlaneState state = 7;
 	// etcd client port to listen on
-	uint32 etcdClientPort = 8;
-	// etcd peer port to listen on
-	uint32 etcdPeerPort = 9;
-	// etcd ca certificate that works as RoT for client and peer connections
-	string etcdCaCertificate = 10;
-	// etcd ca key associated with the ca certificate
-	string etcdCaKey = 11;  
 }
 
 service ControlPlaneAgent {
