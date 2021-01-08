@@ -42,7 +42,6 @@ message ControlPlane {
 	Status status = 6;
 	// state stores the last known election status of this ControlPlane
 	ControlPlaneState state = 7;
-	// etcd client port to listen on
 }
 
 service ControlPlaneAgent {
