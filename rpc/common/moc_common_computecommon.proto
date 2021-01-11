@@ -53,7 +53,14 @@ enum VirtualMachineSizeType {
 	Standard_NK12 = 19;
 	Standard_NV6 = 20;
 	Standard_NV12 = 21;
+	Standard_K8S5_v1 = 22;
+	Custom = 98;
 	Unsupported = 99;
+}
+
+message VirtualMachineCustomSize {
+	int32 cpuCount = 1;
+	int32 memoryMB = 2;
 }
 
 enum PowerState {
