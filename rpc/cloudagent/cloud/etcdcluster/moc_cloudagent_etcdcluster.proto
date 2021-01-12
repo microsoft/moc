@@ -3,10 +3,11 @@
 
 syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/cloudagent/cloud";
-package moc.cloudagent.etcdcluster;
+package moc.cloudagent.etcd;
 
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
+import "moc_cloudagent_etcdserver.proto";
 
 message EtcdClusterRequest {
 	repeated EtcdCluster EtcdClusters = 1;
@@ -23,11 +24,13 @@ message EtcdCluster {
 	string id = 1;
 	string name = 2;
 	string locationName = 3;
+	string groupName = 4;
 	// etcd ca certificate that works as RoT for client and peer connections
-	string caCertificate = 4;
+	string caCertificate = 5;
 	// etcd ca key associated with the ca certificate
-	string caKey = 5;  
-	Status status = 6;
+	string caKey = 6;
+	repeated EtcdServer servers = 7;
+	Status status = 8;
 }
 
 service EtcdClusterAgent {
