@@ -8,10 +8,11 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"reflect"
 	"sort"
+
+	"gopkg.in/yaml.v3"
 )
 
 func Duplicate(data interface{}, duplicatedData interface{}) error {
@@ -39,6 +40,10 @@ func ToJSON(data interface{}) (string, error) {
 }
 func ToJSONBytes(data interface{}) ([]byte, error) {
 	return json.Marshal(data)
+}
+
+func ToPrettyPrintedJSONBytes(data interface{}) ([]byte, error) {
+	return json.MarshalIndent(data, "", "    ")
 }
 
 // json.Marshal writes some characters (e.g. '<') as unicode. This stops that to make logsa easier to read.
