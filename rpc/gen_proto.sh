@@ -122,7 +122,7 @@ protoc -I $Agent/$Module/location -I ./common $Agent/$Module/location/moc_clouda
 protoc -I $Agent/$Module/subscription -I ./common $Agent/$Module/subscription/moc_cloudagent_subscription.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/controlplane -I ./common $Agent/$Module/controlplane/moc_cloudagent_controlplane.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/etcdcluster -I ./common $Agent/$Module/etcdcluster/moc_cloudagent_etcdcluster.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/etcdpeer -I ./common $Agent/$Module/etcdpeer/moc_cloudagent_etcdpeer.proto  --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/etcdserver -I ./common $Agent/$Module/etcdserver/moc_cloudagent_etcdserver.proto  --go_out=plugins=grpc:../bld/gen/
 
 Module="security"
 echo "Generating $Agent/$Module protoc"
