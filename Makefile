@@ -33,6 +33,7 @@ unittest:
 	$(GOTEST) ./pkg/marshal
 	$(GOTEST) ./pkg/config
 	$(GOTEST) ./pkg/tags
+	$(GOTEST) ./pkg/net
 
 generate: bootstrap
 	(./gen.sh)

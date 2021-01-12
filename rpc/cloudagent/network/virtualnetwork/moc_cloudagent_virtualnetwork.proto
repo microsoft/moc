@@ -21,6 +21,10 @@ enum VirtualNetworkType {
     Mirrored = 8;
 }
 
+enum IPPoolType {
+	VM = 0;
+	VIPPool = 1;
+}
 message VirtualNetworkRequest {
 	repeated VirtualNetwork VirtualNetworks = 1;
 	Operation OperationType = 2;
@@ -54,7 +58,16 @@ message Subnet {
 	repeated Route routes = 4;
 	IPAllocationMethod allocation = 5;
 	uint32 vlan = 6;
+	repeated IPPool ippools = 7;
 }
+
+message IPPool {
+	string name = 1;
+	IPPoolType type = 2;
+	string start = 3;
+	string end = 4;
+}
+
 message Ipam {
 	string type = 1;
 	repeated Subnet subnets = 2;
