@@ -7,7 +7,6 @@ package moc.cloudagent.etcd;
 
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
-import "moc_cloudagent_etcdserver.proto";
 
 message EtcdClusterRequest {
 	repeated EtcdCluster EtcdClusters = 1;
@@ -29,8 +28,7 @@ message EtcdCluster {
 	string caCertificate = 5;
 	// etcd ca key associated with the ca certificate
 	string caKey = 6;
-	repeated EtcdServer servers = 7;
-	Status status = 8;
+	Status status = 7;
 }
 
 service EtcdClusterAgent {
