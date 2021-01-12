@@ -167,6 +167,8 @@ func MarshalOutput(data interface{}, query string, outputType string) ([]byte, e
 	var marshaledByte []byte
 	if outputType == "json" {
 		marshaledByte, err = marshal.ToJSONBytes(result)
+	} else if outputType == "ppjson" {
+		marshaledByte, err = marshal.ToPrettyPrintedJSONBytes(result)
 	} else if outputType == "tsv" {
 		marshaledByte, err = marshal.ToTSVBytes(result)
 	} else if outputType == "csv" {
