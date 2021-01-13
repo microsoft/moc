@@ -1,0 +1,40 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/cloud";
+package moc.cloudagent.etcd;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+message EtcdServerRequest {
+	repeated EtcdServer EtcdServers = 1;
+	Operation OperationType = 2;
+}
+
+message EtcdServerResponse {
+	repeated EtcdServer EtcdServers = 1;
+	google.protobuf.BoolValue Result = 2;
+	string Error = 3;
+}
+
+message EtcdServer {
+	string id = 1;
+	string name = 2;
+	string etcdClusterName = 3;
+	string clusterId = 4;
+	string locationName = 5;
+	string groupName = 6;
+	// fqdn is the fqdn, hostname, or ip address that this EtcdServer will
+	// advertise on
+	string fqdn = 7;
+	// etcd client port to listen on
+	uint32 clientPort = 8;
+	Status status = 9;
+}
+
+service EtcdServerAgent {
+	rpc Invoke(EtcdServerRequest) returns (EtcdServerResponse) {}
+}
+

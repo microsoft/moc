@@ -1,0 +1,37 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/cloud";
+package moc.cloudagent.etcd;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+message EtcdClusterRequest {
+	repeated EtcdCluster EtcdClusters = 1;
+	Operation OperationType = 2;
+}
+
+message EtcdClusterResponse {
+	repeated EtcdCluster EtcdClusters = 1;
+	google.protobuf.BoolValue Result = 2;
+	string Error = 3;
+}
+
+message EtcdCluster {
+	string id = 1;
+	string name = 2;
+	string locationName = 3;
+	string groupName = 4;
+	// etcd ca certificate that works as RoT for client and peer connections
+	string caCertificate = 5;
+	// etcd ca key associated with the ca certificate
+	string caKey = 6;
+	Status status = 7;
+}
+
+service EtcdClusterAgent {
+	rpc Invoke(EtcdClusterRequest) returns (EtcdClusterResponse) {}
+}
+
