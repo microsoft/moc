@@ -81,6 +81,7 @@ message OperatingSystemConfiguration {
 
 message HardwareConfiguration {
 	VirtualMachineSizeType VMSize = 1;
+	VirtualMachineCustomSize customSize = 2;
 }
 
 message SecurityConfiguration {
