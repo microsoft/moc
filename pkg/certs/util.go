@@ -182,7 +182,7 @@ func NewSignedCert(key *rsa.PrivateKey, caCert *x509.Certificate, caKey *rsa.Pri
 		NotBefore:             now.Add(time.Minute * -5),
 		NotAfter:              now.Add(time.Hour * 24 * 365), // 1 year
 		KeyUsage:              x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign,
-		ExtKeyUsage:           []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth, x509.ExtKeyUsageClientAuth},
+		ExtKeyUsage:           conf.Usages,
 		BasicConstraintsValid: true,
 		DNSNames:              conf.AltNames.DNSNames,
 		IPAddresses:           conf.AltNames.IPs,
