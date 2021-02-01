@@ -11,10 +11,11 @@ import (
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"encoding/pem"
-	"fmt"
 	"math"
 	"math/big"
 	"time"
+
+	"github.com/microsoft/moc/pkg/errors"
 )
 
 var (
@@ -67,11 +68,12 @@ func parseCertsPEM(pemCerts []byte) ([]*x509.Certificate, error) {
 	}
 
 	if !ok {
-		return certs, fmt.Errorf("data does not contain any valid certificates")
+		return certs, errors.Wrapf(errors.InvalidInput, "data does not contain any valid certificates")
 	}
 	return certs, nil
 }
 
+// NewCertificateAuthority creates a CertificateAuthority
 func NewCertificateAuthority(config *CAConfig) (*CertificateAuthority, error) {
 	var err error
 
@@ -85,7 +87,7 @@ func NewCertificateAuthority(config *CAConfig) (*CertificateAuthority, error) {
 	if ca.rootCert == nil {
 		ca.rootCert, err = x509.ParseCertificate(ca.rootSigner.Certificate[0])
 		if err != nil {
-			return nil, fmt.Errorf("unable to parse rootSigner: %v", err)
+			return nil, errors.Wrapf(errors.Failed, "unable to parse rootSigner: %v", err)
 		}
 	}
 
@@ -99,22 +101,19 @@ func NewCertificateAuthority(config *CAConfig) (*CertificateAuthority, error) {
 	return &ca, nil
 }
 
-func (ca *CertificateAuthority) VerifyClientCertificate(rawCerts [][]byte) error {
+// VerifyClientCertificate verifies certPems using the CertificateAuthority
+func (ca *CertificateAuthority) VerifyClientCertificate(certsPems [][]byte) error {
+	if len(certsPems) == 0 {
+		return errors.Wrapf(errors.InvalidInput, "Certificate list empty, nothing to verify")
+	}
 	certs := []*x509.Certificate{}
-
-	for _, rawCert := range rawCerts {
-		cert, err := DecodeCertPEM(rawCert)
+	for _, rawcert := range certsPems {
+		cert, err := DecodeCertPEM(rawcert)
 		if err != nil {
-			return fmt.Errorf("Unable to ASN.1 parse rawCerts: %v", err)
+			return err
 		}
-
 		certs = append(certs, cert)
 	}
-
-	if len(certs) == 0 {
-		return fmt.Errorf("No rawCerts")
-	}
-
 	// TODO Need more clarification
 	intermediatesPool := x509.NewCertPool()
 	if len(certs) > 1 {
@@ -135,17 +134,30 @@ func (ca *CertificateAuthority) VerifyClientCertificate(rawCerts [][]byte) error
 	_, err := leaf.Verify(verifyOptions)
 
 	if err != nil {
-		return fmt.Errorf("unable to verify client certificate: %v", err)
+		return errors.Wrapf(errors.Failed, "unable to verify client certificate: %v", err)
 	}
 
 	return nil
 }
 
-func (ca *CertificateAuthority) NewSignedCert(csr *x509.CertificateRequest, conf SignConfig) (*x509.Certificate, error) {
-	var err error
+// SignRequest signs the CSR using Certificate Authority
+// if oldCertPem is provided it is validated against CA
+func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, conf *SignConfig) (retCert []byte, err error) {
+
+	csr, err := DecodeCertRequestPEM(csrPem)
+	if err != nil {
+		return
+	}
+	var oldCert *x509.Certificate
+	if oldCertPem != nil || len(oldCertPem) != 0 {
+		if err = ca.VerifyClientCertificate([][]byte{oldCertPem}); err != nil {
+			return nil, errors.Wrapf(errors.InvalidInput, "Old certificate not signed by the CA authority : %v", err)
+		}
+		oldCert, err = DecodeCertPEM(oldCertPem)
+	}
 	err = csr.CheckSignature()
 	if err != nil {
-		return nil, fmt.Errorf("invalid CSR signature: %v", err)
+		return nil, errors.Wrapf(errors.InvalidInput, "Invalid CSR signature: %v", err)
 	}
 
 	serial, err := rand.Int(rand.Reader, new(big.Int).SetInt64(math.MaxInt64))
@@ -153,32 +165,21 @@ func (ca *CertificateAuthority) NewSignedCert(csr *x509.CertificateRequest, conf
 		return nil, err
 	}
 
+	offset := (time.Hour * 24 * 365)
+	if conf != nil {
+		offset = conf.Offset
+	}
 	now := time.Now().UTC()
 
-	tmpl := x509.Certificate{
+	template := x509.Certificate{
 		SerialNumber:          serial,
 		Subject:               csr.Subject,
 		NotBefore:             now,
-		NotAfter:              now.Add(conf.offset), // 1 year
+		NotAfter:              now.Add(offset), // 1 year
 		KeyUsage:              x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign,
 		BasicConstraintsValid: true,
 		DNSNames:              csr.DNSNames,
 		IPAddresses:           csr.IPAddresses,
-	}
-
-	b, err := x509.CreateCertificate(rand.Reader, &tmpl, ca.rootCert, csr.PublicKey, ca.rootSigner.PrivateKey)
-	if err != nil {
-		return nil, err
-	}
-
-	return x509.ParseCertificate(b)
-}
-
-func (ca *CertificateAuthority) SignRenewRequest(csr *x509.CertificateRequest, oldCert *x509.Certificate) (*x509.Certificate, error) {
-	var err error
-	err = csr.CheckSignature()
-	if err != nil {
-		return nil, fmt.Errorf("invalid CSR signature: %v", err)
 	}
 
 	csrRenewCertsPEM := []byte{}
@@ -190,112 +191,116 @@ func (ca *CertificateAuthority) SignRenewRequest(csr *x509.CertificateRequest, o
 		}
 	}
 
-	if len(csrRenewCertsPEM) == 0 {
-		return nil, fmt.Errorf("missing CSR renew certificates extension")
-	}
+	if len(csrRenewCertsPEM) != 0 {
 
-	csrRenewCert, err := parseCertsPEM(csrRenewCertsPEM)
-	if err != nil || len(csrRenewCert) < 2 {
-		return nil, fmt.Errorf("missing CSR renew certificates")
-	}
-
-	// csrRenewCert[0] is signed by csrRenewCert[1]
-	// csrRenewCert[1] is cert to be renewed
-	// csrRenewCert[2] ... optional intermediate certificates to verify csrRenewCert
-
-	certToRenew := csrRenewCert[1]
-
-	// The certToRenew must also be used as the clientAuthCert
-	if oldCert != nil {
-		if !bytes.Equal(certToRenew.Raw, oldCert.Raw) {
-			return nil, fmt.Errorf("certToRenew wasn't used for clientAuthCert")
+		csrRenewCert, err := parseCertsPEM(csrRenewCertsPEM)
+		if err != nil || len(csrRenewCert) < 2 {
+			return nil, errors.Wrapf(errors.InvalidInput, "missing CSR renew certificates")
 		}
-	}
 
-	intermediatesPool := x509.NewCertPool()
-	if len(csrRenewCert) > 2 {
-		for _, cert := range csrRenewCert[2:] {
-			intermediatesPool.AddCert(cert)
+		// csrRenewCert[0] is signed by csrRenewCert[1]
+		// csrRenewCert[1] is cert to be renewed
+		// csrRenewCert[2] ... optional intermediate certificates to verify csrRenewCert
+
+		certToRenew := csrRenewCert[1]
+
+		// The certToRenew must also be used as the clientAuthCert
+		if oldCert != nil {
+			if !bytes.Equal(certToRenew.Raw, oldCert.Raw) {
+				return nil, errors.Wrapf(errors.InvalidInput, "certToRenew wasn't used for clientAuthCert")
+			}
 		}
-	}
 
-	verifyOptions := x509.VerifyOptions{
-		Intermediates: intermediatesPool,
-		Roots:         ca.rootsPool,
-		KeyUsages:     []x509.ExtKeyUsage{x509.ExtKeyUsageAny},
-	}
-
-	_, err = certToRenew.Verify(verifyOptions)
-	if err != nil {
-		if time.Now().After(certToRenew.NotAfter) {
-			return nil, fmt.Errorf("unable to verify certificate to be renewed: Certificate Expired: %v", err)
-		} else {
-			return nil, fmt.Errorf("unable to verify certificate to be renewed: %v", err)
+		intermediatesPool := x509.NewCertPool()
+		if len(csrRenewCert) > 2 {
+			for _, cert := range csrRenewCert[2:] {
+				intermediatesPool.AddCert(cert)
+			}
 		}
-	}
 
-	err = certToRenew.CheckSignature(csrRenewCert[0].SignatureAlgorithm,
-		csrRenewCert[0].RawTBSCertificate, csrRenewCert[0].Signature)
-	if err != nil {
-		return nil, fmt.Errorf("unable to verify signature of CSR Key certificate: %v", err)
-	}
-
-	// Check that the public key in the CSR matches the public key in the CSR Key certificate
-	if !bytes.Equal(csr.RawSubjectPublicKeyInfo, csrRenewCert[0].RawSubjectPublicKeyInfo) {
-		return nil, fmt.Errorf("public key in CSR and CSR Key certificate don't match")
-	}
-
-	if ca.revocation != nil && ca.revocation.IsRevoked(certToRenew) {
-		return nil, fmt.Errorf("certificate to be renewed is revoked")
-	}
-
-	// We can now use the content from the certificate to be renewed
-	template := *certToRenew
-
-	// We are intentionally using the serial number from the certificate to be renewed
-	// template.SerialNumber
-
-	// We are using the same validity as the certificate being renewed
-	validity := template.NotAfter.Sub(template.NotBefore)
-
-	template.NotBefore = time.Now()
-	template.NotAfter = template.NotBefore.Add(validity)
-	spkiHash := sha256.Sum256(csr.RawSubjectPublicKeyInfo)
-	template.SubjectKeyId = spkiHash[:]
-	template.AuthorityKeyId = nil
-	template.SignatureAlgorithm = x509.UnknownSignatureAlgorithm
-
-	origCertDER := certToRenew.Raw
-	var renewCount int64 = 0
-
-	for _, ext := range certToRenew.Extensions {
-		if ext.Id.Equal(oidOriginalCertificate) {
-			origCertDER = ext.Value
-		} else if ext.Id.Equal(oidRenewCount) {
-			asn1.Unmarshal(ext.Value, &renewCount)
+		verifyOptions := x509.VerifyOptions{
+			Intermediates: intermediatesPool,
+			Roots:         ca.rootsPool,
+			KeyUsages:     []x509.ExtKeyUsage{x509.ExtKeyUsageAny},
 		}
-	}
 
-	renewCount++
-	renewCountDER, _ := asn1.Marshal(renewCount)
+		_, err = certToRenew.Verify(verifyOptions)
+		if err != nil {
+			if time.Now().After(certToRenew.NotAfter) {
+				return nil, errors.Wrapf(errors.Expired, "unable to verify certificate to be renewed: Certificate Expired: %v", err)
+			} else {
+				return nil, errors.Wrapf(errors.Failed, "unable to verify certificate to be renewed: %v", err)
+			}
+		}
 
-	template.ExtraExtensions = []pkix.Extension{
-		{
-			Id:       oidOriginalCertificate,
-			Critical: false,
-			Value:    origCertDER,
-		},
-		{
-			Id:       oidRenewCount,
-			Critical: false,
-			Value:    renewCountDER,
-		},
+		err = certToRenew.CheckSignature(csrRenewCert[0].SignatureAlgorithm,
+			csrRenewCert[0].RawTBSCertificate, csrRenewCert[0].Signature)
+		if err != nil {
+			return nil, errors.Wrapf(errors.Failed, "unable to verify signature of CSR Key certificate: %v", err)
+		}
+
+		// Check that the public key in the CSR matches the public key in the CSR Key certificate
+		if !bytes.Equal(csr.RawSubjectPublicKeyInfo, csrRenewCert[0].RawSubjectPublicKeyInfo) {
+			return nil, errors.Wrapf(errors.Failed, "public key in CSR and CSR Key certificate don't match")
+		}
+
+		if ca.revocation != nil && ca.revocation.IsRevoked(certToRenew) {
+			return nil, errors.Wrapf(errors.Revoked, "certificate to be renewed is revoked")
+		}
+
+		// We can now use the content from the certificate to be renewed
+		template = *certToRenew
+
+		// We are intentionally using the serial number from the certificate to be renewed
+		// template.SerialNumber
+
+		// We are using the same validity as the certificate being renewed
+		validity := template.NotAfter.Sub(template.NotBefore)
+
+		template.NotBefore = time.Now()
+		template.NotAfter = template.NotBefore.Add(validity)
+		spkiHash := sha256.Sum256(csr.RawSubjectPublicKeyInfo)
+		template.SubjectKeyId = spkiHash[:]
+		template.AuthorityKeyId = nil
+		template.SignatureAlgorithm = x509.UnknownSignatureAlgorithm
+
+		origCertDER := certToRenew.Raw
+		var renewCount int64 = 0
+
+		for _, ext := range certToRenew.Extensions {
+			if ext.Id.Equal(oidOriginalCertificate) {
+				origCertDER = ext.Value
+			} else if ext.Id.Equal(oidRenewCount) {
+				asn1.Unmarshal(ext.Value, &renewCount)
+			}
+		}
+
+		renewCount++
+		renewCountDER, _ := asn1.Marshal(renewCount)
+
+		template.ExtraExtensions = []pkix.Extension{
+			{
+				Id:       oidOriginalCertificate,
+				Critical: false,
+				Value:    origCertDER,
+			},
+			{
+				Id:       oidRenewCount,
+				Critical: false,
+				Value:    renewCountDER,
+			},
+		}
 	}
 
 	cert, err := x509.CreateCertificate(rand.Reader, &template, ca.rootCert, csr.PublicKey, ca.rootSigner.PrivateKey)
 	if err != nil {
-		return nil, fmt.Errorf("unable to create renewed certificate: %v", err)
+		return
 	}
 
-	return x509.ParseCertificate(cert)
+	x509Cert, err := x509.ParseCertificate(cert)
+	if err != nil {
+		return
+	}
+	retCert = EncodeCertPEM(x509Cert)
+	return
 }

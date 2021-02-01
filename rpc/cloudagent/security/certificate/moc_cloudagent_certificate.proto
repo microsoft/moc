@@ -16,10 +16,26 @@ message CertificateRequest {
 	repeated Certificate Certificates = 1;
 }
 
+message CSRRequest {
+	repeated CertificateSigningRequest CSRs = 1;
+}
+
 message CertificateResponse {
 	repeated Certificate Certificates = 1;
 	google.protobuf.BoolValue Result = 2;
     string  Error = 3;
+}
+
+message CertificateSigningRequest {
+    string name = 1;
+    string csr = 2;
+    string oldCertificate = 3;
+    Status status = 4;
+    string caName = 5;
+    bool renew = 6;
+    string groupName = 7;
+    string vaultName = 8;
+    string locationName = 9;
 }
 
 message Certificate {
@@ -41,4 +57,5 @@ service CertificateAgent {
     rpc CreateOrUpdate(CertificateRequest) returns (CertificateResponse) {}
     rpc Get(CertificateRequest) returns (CertificateResponse) {}
     rpc Delete(CertificateRequest) returns (CertificateResponse) {}
+    rpc CreateClientCertificate(CSRRequest) returns (CertificateResponse) {}
 }

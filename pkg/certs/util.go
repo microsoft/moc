@@ -10,12 +10,12 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
-	"fmt"
 	"math"
 	"math/big"
 	"net"
 	"time"
 
+	"github.com/microsoft/moc/pkg/errors"
 	wssdnet "github.com/microsoft/moc/pkg/net"
 )
 
@@ -34,7 +34,7 @@ type Config struct {
 
 // Config contains the basic fields required for signing a certificate.
 type SignConfig struct {
-	offset time.Duration
+	Offset time.Duration
 }
 
 // AltNames contains the domain names and IP addresses for a cert
@@ -67,6 +67,15 @@ func NewPrivateKey() (*rsa.PrivateKey, error) {
 func EncodeCertPEM(cert *x509.Certificate) []byte {
 	block := pem.Block{
 		Type:  "CERTIFICATE",
+		Bytes: cert.Raw,
+	}
+	return pem.EncodeToMemory(&block)
+}
+
+// EncodeCertRequestPEM returns PEM-endcoded certificate request data.
+func EncodeCertRequestPEM(cert *x509.CertificateRequest) []byte {
+	block := pem.Block{
+		Type:  "CERTIFICATE REQUEST",
 		Bytes: cert.Raw,
 	}
 	return pem.EncodeToMemory(&block)
@@ -109,6 +118,17 @@ func DecodeCertPEM(encoded []byte) (*x509.Certificate, error) {
 	}
 
 	return x509.ParseCertificate(block.Bytes)
+}
+
+// DecodeCertRequestPEM attempts to return a decoded certificate request or nil
+// if the encoded input does not contain a certificate request.
+func DecodeCertRequestPEM(encoded []byte) (*x509.CertificateRequest, error) {
+	block, _ := pem.Decode(encoded)
+	if block == nil {
+		return nil, nil
+	}
+
+	return x509.ParseCertificateRequest(block.Bytes)
 }
 
 // DecodePrivateKeyPEM attempts to return a decoded key or nil
@@ -196,11 +216,25 @@ func NewSignedCert(key *rsa.PrivateKey, caCert *x509.Certificate, caKey *rsa.Pri
 	return x509.ParseCertificate(b)
 }
 
-func GenerateCertificateRequest(conf Config) (*x509.CertificateRequest, *rsa.PrivateKey, error) {
+// GenerateCertificateRequest creates a CSR
+// if privKey is not provided, a new one will be created and returned
+// if privKey is provided, it will be used to create csr and the same key will be returned
+func GenerateCertificateRequest(conf *Config, privKey []byte) (csr []byte, retPrivKey []byte, err error) {
 
-	key, err := rsa.GenerateKey(rand.Reader, 2048)
-	if err != nil {
-		return nil, key, err
+	var key *rsa.PrivateKey
+	// It private key does not exist create a new key
+	if privKey == nil || len(privKey) == 0 {
+		key, err = rsa.GenerateKey(rand.Reader, 2048)
+		if err != nil {
+			return
+		}
+		retPrivKey = EncodePrivateKeyPEM(key)
+	} else {
+		key, err = DecodePrivateKeyPEM(privKey)
+		if err != nil {
+			return
+		}
+		retPrivKey = privKey
 	}
 
 	tmpl := x509.CertificateRequest{
@@ -216,15 +250,17 @@ func GenerateCertificateRequest(conf Config) (*x509.CertificateRequest, *rsa.Pri
 
 	b, err := x509.CreateCertificateRequest(rand.Reader, &tmpl, key)
 	if err != nil {
-		return nil, key, err
+		return
 	}
 
 	x509CertReq, err := x509.ParseCertificateRequest(b)
 	if err != nil {
-		return nil, key, err
+		return
 	}
 
-	return x509CertReq, key, nil
+	csr = EncodeCertRequestPEM(x509CertReq)
+
+	return
 }
 
 func createCSRRenewExtensions(csrCertificate []byte, currentCertificate [][]byte) (extensions []pkix.Extension, err error) {
@@ -236,14 +272,14 @@ func createCSRRenewExtensions(csrCertificate []byte, currentCertificate [][]byte
 
 	err = pem.Encode(&certsBuffer, certPEMBlock)
 	if err != nil {
-		return nil, fmt.Errorf("unable to PEM encode CSR certificate: %v", err)
+		return nil, errors.Wrapf(errors.Failed, "unable to PEM encode CSR certificate: %v", err)
 	}
 
 	for _, cert := range currentCertificate {
 		certPEMBlock.Bytes = cert
 		err = pem.Encode(&certsBuffer, certPEMBlock)
 		if err != nil {
-			return nil, fmt.Errorf("unable to PEM encode certificates: %v", err)
+			return nil, errors.Wrapf(errors.Failed, "unable to PEM encode certificates: %v", err)
 		}
 	}
 
@@ -258,13 +294,14 @@ func createCSRRenewExtensions(csrCertificate []byte, currentCertificate [][]byte
 	return extensions, nil
 }
 
-func GenerateCertificateRenewRequest(cert *tls.Certificate) (*x509.CertificateRequest, *rsa.PrivateKey, error) {
-	var err error
+// GenerateCertificateRenewRequest creates a renew CSR
+// A new private key will be created, used to create CSR and returned
+func GenerateCertificateRenewRequest(cert *tls.Certificate) (retCsr []byte, retPriv []byte, err error) {
 	leaf := cert.Leaf
 	if leaf == nil {
 		leaf, err = x509.ParseCertificate(cert.Certificate[0])
 		if err != nil {
-			return nil, nil, fmt.Errorf("unable to parse leaf: %v", err)
+			return nil, nil, errors.Wrapf(errors.Failed, "unable to parse leaf: %v", err)
 		}
 	}
 
@@ -274,11 +311,12 @@ func GenerateCertificateRenewRequest(cert *tls.Certificate) (*x509.CertificateRe
 	case *rsa.PublicKey:
 		privateKey, err = rsa.GenerateKey(rand.Reader, pub.Size()*8)
 	default:
-		err = fmt.Errorf("unsupported public key type: %T", pub)
+		err = errors.Wrapf(errors.NotSupported, "unsupported public key type: %T", pub)
 	}
 	if err != nil {
-		return nil, nil, fmt.Errorf("unable to generate private key: %v", err)
+		return nil, nil, errors.Wrapf(errors.Failed, "unable to generate private key: %v", err)
 	}
+	retPriv = EncodePrivateKeyPEM(privateKey)
 	csrKeyTemplate := x509.Certificate{
 		SerialNumber: big.NewInt(1),
 		Subject: pkix.Name{
@@ -291,7 +329,7 @@ func GenerateCertificateRenewRequest(cert *tls.Certificate) (*x509.CertificateRe
 	csrCertificate, err := x509.CreateCertificate(rand.Reader, &csrKeyTemplate, leaf,
 		privateKey.Public(), cert.PrivateKey)
 	if err != nil {
-		return nil, nil, fmt.Errorf("unable to create CSR Key certificate: %v", err)
+		return nil, nil, errors.Wrapf(errors.Failed, "unable to create CSR Key certificate: %v", err)
 	}
 
 	csrTemplate := x509.CertificateRequest{
@@ -303,29 +341,31 @@ func GenerateCertificateRenewRequest(cert *tls.Certificate) (*x509.CertificateRe
 
 	template.ExtraExtensions, err = createCSRRenewExtensions(csrCertificate, cert.Certificate)
 	if err != nil {
-		return nil, nil, fmt.Errorf("unable to create CSR renew extensions: %v", err)
+		return nil, nil, errors.Wrapf(errors.Failed, "unable to create CSR renew extensions: %v", err)
 	}
 
 	csr, err := x509.CreateCertificateRequest(rand.Reader, template, privateKey)
 	if err != nil {
-		return nil, nil, fmt.Errorf("unable to create CSR request: %v", err)
+		return nil, nil, errors.Wrapf(errors.Failed, "unable to create CSR request: %v", err)
 	}
 
 	x509CertReq, err := x509.ParseCertificateRequest(csr)
 	if err != nil {
-		return nil, nil, err
+		return
 	}
-
-	return x509CertReq, privateKey, nil
+	retCsr = EncodeCertRequestPEM(x509CertReq)
+	return
 }
 
-func GenerateCertificateRenewRequestSameKey(cert *tls.Certificate) (*x509.CertificateRequest, error) {
-	var err error
+// GenerateCertificateRenewRequestSameKey creates a renew CSR
+// A same private key in cert will be used to create CSR
+func GenerateCertificateRenewRequestSameKey(cert *tls.Certificate) (retCsr []byte, err error) {
+
 	leaf := cert.Leaf
 	if leaf == nil {
 		leaf, err = x509.ParseCertificate(cert.Certificate[0])
 		if err != nil {
-			return nil, fmt.Errorf("unable to parse leaf: %v", err)
+			return nil, errors.Wrapf(errors.Failed, "unable to parse leaf: %v", err)
 		}
 	}
 
@@ -343,7 +383,7 @@ func GenerateCertificateRenewRequestSameKey(cert *tls.Certificate) (*x509.Certif
 	csrCertificate, err := x509.CreateCertificate(rand.Reader, &csrKeyTemplate, leaf,
 		publicKey(cert.PrivateKey), cert.PrivateKey)
 	if err != nil {
-		return nil, fmt.Errorf("unable to create CSR Key certificate: %v", err)
+		return nil, errors.Wrapf(errors.Failed, "unable to create CSR Key certificate: %v", err)
 	}
 
 	csrTemplate := x509.CertificateRequest{
@@ -355,18 +395,18 @@ func GenerateCertificateRenewRequestSameKey(cert *tls.Certificate) (*x509.Certif
 
 	template.ExtraExtensions, err = createCSRRenewExtensions(csrCertificate, cert.Certificate)
 	if err != nil {
-		return nil, fmt.Errorf("unable to create CSR renew extensions: %v", err)
+		return nil, errors.Wrapf(errors.Failed, "unable to create CSR renew extensions: %v", err)
 	}
 
 	csr, err := x509.CreateCertificateRequest(rand.Reader, template, cert.PrivateKey)
 	if err != nil {
-		return nil, fmt.Errorf("unable to create CSR request: %v", err)
+		return nil, errors.Wrapf(errors.Failed, "unable to create CSR request: %v", err)
 	}
 
 	x509CertReq, err := x509.ParseCertificateRequest(csr)
 	if err != nil {
 		return nil, err
 	}
-
-	return x509CertReq, nil
+	retCsr = EncodeCertRequestPEM(x509CertReq)
+	return
 }
