@@ -38,6 +38,8 @@ var (
 	WrongHost            error = errors.New("Wrong host")
 	PoolFull             error = errors.New("The pool is full")
 	NoActionTaken        error = errors.New("No Action Taken")
+	Expired              error = errors.New("Expired")
+	Revoked              error = errors.New("Revoked")
 	Unknown              error = errors.New("Unknown Reason")
 )
 
