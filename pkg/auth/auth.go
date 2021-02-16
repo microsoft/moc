@@ -52,7 +52,11 @@ type LoginConfig struct {
 	Name        string `json:"name,omitempty"`
 	Token       string `json:"token,omitempty"`
 	Certificate string `json:"certificate,omitempty"`
+	ClientType  string `json:"clienttype,omitempty"`
+	CloudFqdn   string `json:"cloudfqdn,omitempty"`
+	CloudPort   int32  `json:"cloudport,omitempty"`
 	CACertHash  string `json:"cacerthash,omitempty"`
+	Location    string `json:"location,omitempty"`
 }
 
 func (ba *BearerAuthorizer) WithRPCAuthorization() credentials.PerRPCCredentials {
