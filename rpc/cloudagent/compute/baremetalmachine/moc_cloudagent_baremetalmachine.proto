@@ -41,7 +41,7 @@ message BareMetalMachineOperatingSystemConfiguration {
 	UserConfiguration administrator = 2;
 	repeated UserConfiguration users = 3;
 	string customData = 4;
-	repeated SSHPublicKey publickeys = 5;
+	repeated SSHPublicKey publicKeys = 5;
 	LinuxConfiguration linuxConfiguration = 6;
 }
 
