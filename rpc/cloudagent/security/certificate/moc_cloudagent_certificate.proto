@@ -32,10 +32,9 @@ message CertificateSigningRequest {
     string oldCertificate = 3;
     Status status = 4;
     string caName = 5;
-    bool renew = 6;
-    string groupName = 7;
-    string vaultName = 8;
-    string locationName = 9;
+    string groupName = 6;
+    string vaultName = 7;
+    string locationName = 8;
 }
 
 message Certificate {
@@ -57,5 +56,6 @@ service CertificateAgent {
     rpc CreateOrUpdate(CertificateRequest) returns (CertificateResponse) {}
     rpc Get(CertificateRequest) returns (CertificateResponse) {}
     rpc Delete(CertificateRequest) returns (CertificateResponse) {}
-    rpc CreateClientCertificate(CSRRequest) returns (CertificateResponse) {}
+    rpc Sign(CSRRequest) returns (CertificateResponse) {}
+    rpc Renew(CSRRequest) returns (CertificateResponse) {}
 }
