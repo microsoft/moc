@@ -13,7 +13,7 @@ func init() {
 }
 
 func Test_GetWssdConfigLocationName(t *testing.T) {
-	path := GetWssdConfigLocationName("", "")
+	path := GetMocConfigLocationName("", "")
 	wd, err := os.UserHomeDir()
 	if err != nil {
 		t.Errorf("Failed getting home path %v", err)
@@ -25,7 +25,7 @@ func Test_GetWssdConfigLocationName(t *testing.T) {
 }
 
 func Test_GetWssdConfigLocationNameWithSubfolder(t *testing.T) {
-	path := GetWssdConfigLocationName("test", "")
+	path := GetMocConfigLocationName("test", "")
 	wd, err := os.UserHomeDir()
 	if err != nil {
 		t.Errorf("Failed getting home path %v", err)
@@ -37,7 +37,7 @@ func Test_GetWssdConfigLocationNameWithSubfolder(t *testing.T) {
 }
 
 func Test_GetWssdConfigLocationNameWithSubfolderName(t *testing.T) {
-	path := GetWssdConfigLocationName("test", "cc")
+	path := GetMocConfigLocationName("test", "cc")
 	wd, err := os.UserHomeDir()
 	if err != nil {
 		t.Errorf("Failed getting home path %v", err)
@@ -49,7 +49,7 @@ func Test_GetWssdConfigLocationNameWithSubfolderName(t *testing.T) {
 }
 
 func Test_GetWssdConfigLocationNameWithName(t *testing.T) {
-	path := GetWssdConfigLocationName("", "cc")
+	path := GetMocConfigLocationName("", "cc")
 	wd, err := os.UserHomeDir()
 	if err != nil {
 		t.Errorf("Failed getting home path %v", err)

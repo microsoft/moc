@@ -163,7 +163,7 @@ func GetSettingsFromEnvironmentByName(serverName, subfolder, filename string) (s
 		Values: map[string]string{},
 	}
 	s.Values[ClientTokenPath] = getClientTokenLocation()
-	s.Values[WssdConfigPath] = GetWssdConfigLocationName(subfolder, filename)
+	s.Values[WssdConfigPath] = GetMocConfigLocationName(subfolder, filename)
 
 	s.Values[ServerName] = serverName
 
@@ -304,7 +304,7 @@ func GetWssdConfigLocation() string {
 }
 
 // GetWssdConfigLocationName gets the path for access filename from environment + subfolder with file name fileName
-func GetWssdConfigLocationName(subfolder, filename string) string {
+func GetMocConfigLocationName(subfolder, filename string) string {
 	wssdConfigPath := os.Getenv(WssdConfigPath)
 
 	file := AccessFileDefaultName
@@ -379,7 +379,7 @@ func GenerateClientKeyWithName(loginconfig LoginConfig, subfolder, filename stri
 	if err != nil {
 		return "", WssdConfig{}, err
 	}
-	accessFile, err := readAccessFile(GetWssdConfigLocationName(subfolder, filename))
+	accessFile, err := readAccessFile(GetMocConfigLocationName(subfolder, filename))
 	if err != nil {
 		x509CertClient, keyClient, err := certs.GenerateClientCertificate(loginconfig.Name)
 		if err != nil {
@@ -461,7 +461,7 @@ func PrintAccessFile(accessFile WssdConfig) error {
 // PrintAccessFileByName stores wssdConfig in GetWssdConfigLocationName
 func PrintAccessFileByName(accessFile WssdConfig, subfolder, filename string) error {
 	fmt.Println("Rgha")
-	return marshal.ToJSONFile(accessFile, GetWssdConfigLocationName(subfolder, filename))
+	return marshal.ToJSONFile(accessFile, GetMocConfigLocationName(subfolder, filename))
 }
 
 func readAccessFile(accessFileLocation string) (WssdConfig, error) {
