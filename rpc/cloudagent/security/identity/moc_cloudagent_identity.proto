@@ -30,6 +30,11 @@ message Identity {
 	string locationName = 10;
 	Tags tags = 11;
 	map<string, string> certificates = 12;
+	int64 tokenExpiry = 13;
+	ClientType clientType = 14;
+	string cloudFqdn = 15;
+	int32 cloudPort = 16;
+	int32 cloudAuthPort = 17;
 }
 
 service IdentityAgent {

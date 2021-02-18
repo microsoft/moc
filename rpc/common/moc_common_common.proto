@@ -93,3 +93,9 @@ message Tag {
 message Tags {
 	repeated Tag tags = 1;
 }
+
+enum ClientType {
+        CONTROLPLANE = 0;
+        EXTERNALCLIENT = 1;
+        NODE = 2;
+}

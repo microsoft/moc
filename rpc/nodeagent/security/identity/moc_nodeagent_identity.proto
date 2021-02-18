@@ -16,13 +16,13 @@ message IdentityRequest {
 message IdentityResponse {
 	repeated Identity Identitys = 1;
 	google.protobuf.BoolValue Result = 2;
-    string  Error = 3;
+	string  Error = 3;
 }
 
 message Identity {
 	string name = 1;
-    string id = 2;
-    string resourceGroup = 3;
+	string id = 2;
+	string resourceGroup = 3;
 	string password = 4;
 	string token = 5;
 	bytes certificate = 6 [deprecated = true];
@@ -30,6 +30,8 @@ message Identity {
 	Entity entity = 8;
 	Tags tags = 9;
 	string newCertificate = 10;
+	int64 tokenExpiry = 13;
+	ClientType clientType = 14;
 }
 
 service IdentityAgent {
