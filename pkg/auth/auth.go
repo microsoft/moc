@@ -406,7 +406,7 @@ func GenerateClientCsr(loginconfig LoginConfig) (string, WssdConfig, error) {
 	}
 
 	cloudAgentIPAddress := wssdnet.StringToNetIPAddress(cloudAgentIpAddress)
-	ipAddresses := []net.IP{wssdnet.StringToNetIPAddress("127.0.0.1"), cloudAgentIPAddress}
+	ipAddresses := []net.IP{wssdnet.StringToNetIPAddress(wssdnet.LOOPBACK_ADDRESS), cloudAgentIPAddress}
 	dnsNames := []string{"localhost", localHostName}
 
 	conf := &certs.Config{
