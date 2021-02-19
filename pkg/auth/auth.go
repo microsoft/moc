@@ -99,6 +99,14 @@ func NewAuthorizerFromEnvironment(serverName string) (Authorizer, error) {
 	return settings.GetAuthorizer()
 }
 
+func NewAuthorizerFromEnvironmentByName(serverName, subfolder, filename string) (Authorizer, error) {
+	settings, err := GetSettingsFromEnvironmentByName(serverName, subfolder, filename)
+	if err != nil {
+		return nil, err
+	}
+	return settings.GetAuthorizer()
+}
+
 func NewAuthorizerFromInput(tlsCert tls.Certificate, serverCertificate []byte, server string) (Authorizer, error) {
 	transportCreds := TransportCredentialsFromNode(tlsCert, serverCertificate, server)
 	return NewBearerAuthorizer(JwtTokenProvider{}, transportCreds), nil
@@ -141,12 +149,26 @@ func NewAuthorizerForAuthFromCACertHash(tokenString string, cacerthash string, s
 	return NewBearerAuthorizer(JwtTokenProvider{tokenString}, transportCreds), nil
 }
 
+// GetSettingsFromEnvironment Read settings from WssdConfigLocation
 func GetSettingsFromEnvironment(serverName string) (s EnvironmentSettings, err error) {
 	s = EnvironmentSettings{
 		Values: map[string]string{},
 	}
 	s.Values[ClientTokenPath] = getClientTokenLocation()
 	s.Values[WssdConfigPath] = GetWssdConfigLocation()
+
+	s.Values[ServerName] = serverName
+
+	return
+}
+
+// GetSettingsFromEnvironmentByName Read settings from GetWssdConfigLocationName
+func GetSettingsFromEnvironmentByName(serverName, subfolder, filename string) (s EnvironmentSettings, err error) {
+	s = EnvironmentSettings{
+		Values: map[string]string{},
+	}
+	s.Values[ClientTokenPath] = getClientTokenLocation()
+	s.Values[WssdConfigPath] = GetMocConfigLocationName(subfolder, filename)
 
 	s.Values[ServerName] = serverName
 
@@ -267,6 +289,7 @@ func getClientTokenLocation() string {
 	return clientTokenPath
 }
 
+// GetWssdConfigLocation gets the path for access file from environment
 func GetWssdConfigLocation() string {
 	wssdConfigPath := os.Getenv(WssdConfigPath)
 	if wssdConfigPath == "" {
@@ -284,6 +307,30 @@ func GetWssdConfigLocation() string {
 	}
 	return wssdConfigPath
 }
+
+// GetWssdConfigLocationName gets the path for access filename from environment + subfolder with file name fileName
+func GetMocConfigLocationName(subfolder, filename string) string {
+	wssdConfigPath := os.Getenv(WssdConfigPath)
+
+	file := AccessFileDefaultName
+	if filename != "" {
+		file = filename
+	}
+	wd, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
+	if wssdConfigPath == "" || !strings.HasSuffix(wssdConfigPath, filepath.Join(wd, subfolder, file)) {
+		// Create the default config path and set the
+		// env variable
+		defaultPath := filepath.Join(wd, DefaultWSSDFolder, subfolder)
+		os.MkdirAll(defaultPath, os.ModePerm)
+		wssdConfigPath = filepath.Join(defaultPath, file)
+		os.Setenv(WssdConfigPath, wssdConfigPath)
+	}
+	return wssdConfigPath
+}
+
 func SaveToken(tokenStr string) error {
 	return ioutil.WriteFile(
 		getClientTokenLocation(),
@@ -291,12 +338,53 @@ func SaveToken(tokenStr string) error {
 		0644)
 }
 
+// GenerateClientKey generates key and self-signed cert if the file does not exist in WssdConfigLocation
+// If the file exists the values from the fie is returned
 func GenerateClientKey(loginconfig LoginConfig) (string, WssdConfig, error) {
 	certBytes, err := marshal.FromBase64(loginconfig.Certificate)
 	if err != nil {
 		return "", WssdConfig{}, err
 	}
 	accessFile, err := readAccessFile(GetWssdConfigLocation())
+	if err != nil {
+		x509CertClient, keyClient, err := certs.GenerateClientCertificate(loginconfig.Name)
+		if err != nil {
+			return "", WssdConfig{}, err
+		}
+
+		certBytesClient := certs.EncodeCertPEM(x509CertClient)
+		keyBytesClient := certs.EncodePrivateKeyPEM(keyClient)
+
+		accessFile = WssdConfig{
+			CloudCertificate:  "",
+			ClientCertificate: marshal.ToBase64(string(certBytesClient)),
+			ClientKey:         marshal.ToBase64(string(keyBytesClient)),
+		}
+	}
+
+	if accessFile.CloudCertificate != "" {
+		serverPem, err := marshal.FromBase64(accessFile.CloudCertificate)
+		if err != nil {
+			return "", WssdConfig{}, err
+		}
+
+		if string(certBytes) != string(serverPem) {
+			certBytes = append(certBytes, serverPem...)
+		}
+	}
+
+	accessFile.CloudCertificate = marshal.ToBase64(string(certBytes))
+	return accessFile.ClientCertificate, accessFile, nil
+}
+
+// GenerateClientKeyWithName generates key and self-signed cert if the file does not exist in GetWssdConfigLocationName
+// If the file exists the values from the fie is returned
+func GenerateClientKeyWithName(loginconfig LoginConfig, subfolder, filename string) (string, WssdConfig, error) {
+	certBytes, err := marshal.FromBase64(loginconfig.Certificate)
+	if err != nil {
+		return "", WssdConfig{}, err
+	}
+	accessFile, err := readAccessFile(GetMocConfigLocationName(subfolder, filename))
 	if err != nil {
 		x509CertClient, keyClient, err := certs.GenerateClientCertificate(loginconfig.Name)
 		if err != nil {
@@ -370,8 +458,15 @@ func GetServerCertificateFromHash(server, caCertHash string) (string, error) {
 	return marshal.ToBase64(string(certBytesClient)), nil
 }
 
+// PrintAccessFile stores wssdConfig in WssdConfigLocation
 func PrintAccessFile(accessFile WssdConfig) error {
 	return marshal.ToJSONFile(accessFile, GetWssdConfigLocation())
+}
+
+// PrintAccessFileByName stores wssdConfig in GetWssdConfigLocationName
+func PrintAccessFileByName(accessFile WssdConfig, subfolder, filename string) error {
+	fmt.Println("Rgha")
+	return marshal.ToJSONFile(accessFile, GetMocConfigLocationName(subfolder, filename))
 }
 
 func readAccessFile(accessFileLocation string) (WssdConfig, error) {

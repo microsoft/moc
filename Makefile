@@ -35,6 +35,7 @@ unittest:
 	$(GOTEST) ./pkg/tags
 	$(GOTEST) ./pkg/net
 	$(GOTEST) ./pkg/certs
+	$(GOTEST) ./pkg/auth
 
 generate: bootstrap
 	(./gen.sh)
