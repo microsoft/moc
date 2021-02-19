@@ -17,6 +17,7 @@ import (
 
 	"github.com/microsoft/moc/pkg/certs"
 	"github.com/microsoft/moc/pkg/marshal"
+	wssdnet "github.com/microsoft/moc/pkg/net"
 	"github.com/pkg/errors"
 	"google.golang.org/grpc/credentials"
 )
