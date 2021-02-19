@@ -169,7 +169,7 @@ func GenerateClientCertificate(name string) (*x509.Certificate, *rsa.PrivateKey,
 		MaxPathLen:            0,
 		IsCA:                  true,
 		DNSNames:              []string{"localhost"},
-		IPAddresses:           []net.IP{wssdnet.StringToNetIPAddress("127.0.0.1"), wssdnet.StringToNetIPAddress(nodeFqdn)},
+		IPAddresses:           []net.IP{wssdnet.StringToNetIPAddress(wssdnet.LOOPBACK_ADDRESS), wssdnet.StringToNetIPAddress(nodeFqdn)},
 	}
 
 	b, err := x509.CreateCertificate(rand.Reader, &tmpl, &tmpl, key.Public(), key)

@@ -17,6 +17,7 @@ import (
 
 	"github.com/microsoft/moc/pkg/certs"
 	"github.com/microsoft/moc/pkg/marshal"
+	wssdnet "github.com/microsoft/moc/pkg/net"
 	"github.com/pkg/errors"
 	"google.golang.org/grpc/credentials"
 )
@@ -29,6 +30,16 @@ const (
 	DefaultWSSDFolder     = ".wssd"
 	AccessFileDefaultName = "cloudconfig"
 	ServerName            = "ServerName"
+)
+
+// LoginType
+type LoginType string
+
+const (
+	// SelfSigned ...
+	SelfSigned LoginType = "Self-Signed"
+	// CASigned ...
+	CASigned LoginType = "CA-Signed"
 )
 
 type WssdConfig struct {
@@ -49,15 +60,16 @@ type ManagedIdentityConfig struct {
 }
 
 type LoginConfig struct {
-	Name          string `json:"name,omitempty"`
-	Token         string `json:"token,omitempty"`
-	Certificate   string `json:"certificate,omitempty"`
-	ClientType    string `json:"clienttype,omitempty"`
-	CloudFqdn     string `json:"cloudfqdn,omitempty"`
-	CloudPort     int32  `json:"cloudport,omitempty"`
-	CloudAuthPort int32  `json:"cloudauthport,omitempty"`
-	CACertHash    string `json:"cacerthash,omitempty"`
-	Location      string `json:"location,omitempty"`
+	Name          string    `json:"name,omitempty"`
+	Token         string    `json:"token,omitempty"`
+	Certificate   string    `json:"certificate,omitempty"`
+	ClientType    string    `json:"clienttype,omitempty"`
+	CloudFqdn     string    `json:"cloudfqdn,omitempty"`
+	CloudPort     int32     `json:"cloudport,omitempty"`
+	CloudAuthPort int32     `json:"cloudauthport,omitempty"`
+	CACertHash    string    `json:"cacerthash,omitempty"`
+	Location      string    `json:"location,omitempty"`
+	Type          LoginType `json:"type,omitempty"`
 }
 
 func (ba *BearerAuthorizer) WithRPCAuthorization() credentials.PerRPCCredentials {
@@ -375,6 +387,59 @@ func GenerateClientKey(loginconfig LoginConfig) (string, WssdConfig, error) {
 
 	accessFile.CloudCertificate = marshal.ToBase64(string(certBytes))
 	return accessFile.ClientCertificate, accessFile, nil
+}
+
+func GenerateClientCsr(loginconfig LoginConfig) (string, WssdConfig, error) {
+	certBytes, err := marshal.FromBase64(loginconfig.Certificate)
+	if err != nil {
+		return "", WssdConfig{}, err
+	}
+	accessFile, err := readAccessFile(GetWssdConfigLocation())
+	cloudAgentIpAddress, err := wssdnet.GetIPAddress()
+	if err != nil {
+		return "", WssdConfig{}, err
+	}
+
+	localHostName, err := os.Hostname()
+	if err != nil {
+		return "", WssdConfig{}, err
+	}
+
+	cloudAgentIPAddress := wssdnet.StringToNetIPAddress(cloudAgentIpAddress)
+	ipAddresses := []net.IP{wssdnet.StringToNetIPAddress(wssdnet.LOOPBACK_ADDRESS), cloudAgentIPAddress}
+	dnsNames := []string{"localhost", localHostName}
+
+	conf := &certs.Config{
+		CommonName: loginconfig.Name,
+		AltNames: certs.AltNames{
+			DNSNames: dnsNames,
+			IPs:      ipAddresses,
+		},
+	}
+	x509Csr, keyClient, err := certs.GenerateCertificateRequest(conf, nil)
+	if err != nil {
+		return "", WssdConfig{}, err
+	}
+
+	accessFile = WssdConfig{
+		CloudCertificate:  "",
+		ClientCertificate: "",
+		ClientKey:         marshal.ToBase64(string(keyClient)),
+	}
+
+	if accessFile.CloudCertificate != "" {
+		serverPem, err := marshal.FromBase64(accessFile.CloudCertificate)
+		if err != nil {
+			return "", WssdConfig{}, err
+		}
+
+		if string(certBytes) != string(serverPem) {
+			certBytes = append(certBytes, serverPem...)
+		}
+	}
+
+	accessFile.CloudCertificate = marshal.ToBase64(string(certBytes))
+	return string(x509Csr), accessFile, nil
 }
 
 // GenerateClientKeyWithName generates key and self-signed cert if the file does not exist in GetWssdConfigLocationName
