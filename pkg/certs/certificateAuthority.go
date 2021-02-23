@@ -101,14 +101,14 @@ func NewCertificateAuthority(config *CAConfig) (*CertificateAuthority, error) {
 	return &ca, nil
 }
 
-// VerifyClientCertificate verifies certPems using the CertificateAuthority
-func (ca *CertificateAuthority) VerifyClientCertificate(certsPems [][]byte) error {
-	if len(certsPems) == 0 {
+// VerifyClientCertificate verifies rawCerts(ASN encoded) using the CertificateAuthority
+func (ca *CertificateAuthority) VerifyClientCertificate(rawCerts [][]byte) error {
+	if len(rawCerts) == 0 {
 		return errors.Wrapf(errors.InvalidInput, "Certificate list empty, nothing to verify")
 	}
 	certs := []*x509.Certificate{}
-	for _, rawcert := range certsPems {
-		cert, err := DecodeCertPEM(rawcert)
+	for _, rawcert := range rawCerts {
+		cert, err := x509.ParseCertificate(rawcert)
 		if err != nil {
 			return err
 		}
