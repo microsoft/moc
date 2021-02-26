@@ -153,7 +153,7 @@ func Test_CACertsVerify(t *testing.T) {
 		t.Errorf("Found certDER or renewCount Extensions")
 	}
 
-	clientCerts := [][]byte{clientCertPem}
+	clientCerts := [][]byte{clientCert.Raw}
 
 	if err := caAuth.VerifyClientCertificate(clientCerts); err != nil {
 		panic("failed to verify certificate: " + err.Error())
@@ -216,7 +216,7 @@ func Test_CACertsRenewVerify(t *testing.T) {
 		t.Errorf("Invalid certificate expiry")
 	}
 
-	clientCerts := [][]byte{clientCertPem}
+	clientCerts := [][]byte{clientCert.Raw}
 
 	if err := caAuth.VerifyClientCertificate(clientCerts); err != nil {
 		panic("failed to verify certificate: " + err.Error())
@@ -237,7 +237,7 @@ func Test_CACertsRenewVerify(t *testing.T) {
 		t.Errorf("Failed Decoding privatekey: %s", err.Error())
 	}
 	signConf = SignConfig{Offset: time.Second * 20}
-	certClient1Pem, err := caAuth.SignRequest(csr1, clientCertPem, &signConf)
+	certClient1Pem, err := caAuth.SignRequest(csr1, clientCert.Raw, &signConf)
 	if err != nil {
 		t.Errorf("Error signing CSR: %s", err.Error())
 	}
@@ -278,7 +278,7 @@ func Test_CACertsRenewVerify(t *testing.T) {
 		t.Errorf("Extension renew count is wrong")
 	}
 
-	clientCerts = [][]byte{certClient1Pem}
+	clientCerts = [][]byte{certClient1.Raw}
 	if err := caAuth.VerifyClientCertificate(clientCerts); err != nil {
 		t.Errorf("failed to verify certificate: " + err.Error())
 	}
@@ -299,7 +299,7 @@ func Test_CACertsRenewVerify(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed Decoding privatekey: %s", err.Error())
 	}
-	certClient2Pem, err := caAuth.SignRequest(csr2, certClient1Pem, nil)
+	certClient2Pem, err := caAuth.SignRequest(csr2, certClient1.Raw, nil)
 	if err != nil {
 		t.Errorf("Error signing CSR: %s", err.Error())
 	}
@@ -337,7 +337,7 @@ func Test_CACertsRenewVerify(t *testing.T) {
 		t.Errorf("Extension renew count is wrong")
 	}
 
-	clientCerts = [][]byte{certClient2Pem}
+	clientCerts = [][]byte{certClient2.Raw}
 	if err := caAuth.VerifyClientCertificate(clientCerts); err != nil {
 		t.Errorf("failed to verify certificate: " + err.Error())
 	}
@@ -394,7 +394,7 @@ func Test_CACertsRenewVerifySameKey(t *testing.T) {
 		t.Errorf("Invalid certificate expiry")
 	}
 
-	clientCerts := [][]byte{clientCertPem}
+	clientCerts := [][]byte{clientCert.Raw}
 
 	if err := caAuth.VerifyClientCertificate(clientCerts); err != nil {
 		panic("failed to verify certificate: " + err.Error())
@@ -409,7 +409,7 @@ func Test_CACertsRenewVerifySameKey(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error creating renew CSR: %s", err.Error())
 	}
-	certClient1Pem, err := caAuth.SignRequest(csr1, clientCertPem, nil)
+	certClient1Pem, err := caAuth.SignRequest(csr1, clientCert.Raw, nil)
 	if err != nil {
 		t.Errorf("Error signing CSR: %s", err.Error())
 	}
@@ -450,7 +450,7 @@ func Test_CACertsRenewVerifySameKey(t *testing.T) {
 		t.Errorf("Extension renew count is wrong")
 	}
 
-	clientCerts = [][]byte{certClient1Pem}
+	clientCerts = [][]byte{certClient1.Raw}
 	if err := caAuth.VerifyClientCertificate(clientCerts); err != nil {
 		t.Errorf("failed to verify certificate: " + err.Error())
 	}
@@ -467,7 +467,7 @@ func Test_CACertsRenewVerifySameKey(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error creating renew CSR: %s", err.Error())
 	}
-	certClient2Pem, err := caAuth.SignRequest(csr2, certClient1Pem, nil)
+	certClient2Pem, err := caAuth.SignRequest(csr2, certClient1.Raw, nil)
 	if err != nil {
 		t.Errorf("Error signing CSR: %s", err.Error())
 	}
@@ -506,7 +506,7 @@ func Test_CACertsRenewVerifySameKey(t *testing.T) {
 		t.Errorf("Extension renew count is wrong")
 	}
 
-	clientCerts = [][]byte{certClient2Pem}
+	clientCerts = [][]byte{certClient2.Raw}
 	if err := caAuth.VerifyClientCertificate(clientCerts); err != nil {
 		t.Errorf("failed to verify certificate: " + err.Error())
 	}
