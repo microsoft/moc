@@ -135,6 +135,9 @@ func IsNotInitialized(err error) bool {
 func IsOutOfRange(err error) bool {
 	return checkError(err, OutOfRange)
 }
+func IsOutOfCapacity(err error) bool {
+	return checkError(err, OutOfCapacity)
+}
 func IsAlreadySet(err error) bool {
 	return checkError(err, AlreadySet)
 }
