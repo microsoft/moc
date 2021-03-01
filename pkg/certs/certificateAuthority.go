@@ -23,10 +23,13 @@ var (
 	oidRenewCertificates   = []int{1, 3, 6, 1, 4, 1, 311, 104, 1, 1}
 	oidOriginalCertificate = []int{1, 3, 6, 1, 4, 1, 311, 104, 1, 2}
 	oidRenewCount          = []int{1, 3, 6, 1, 4, 1, 311, 104, 1, 3}
+
+	// RFC 5755
+	OidAccessIdentity = []int{1, 3, 6, 1, 5, 5, 7, 10, 2}
 )
 
 type Revocation interface {
-	IsRevoked(cert *x509.Certificate) bool
+	IsRevoked(cert *x509.Certificate) error
 }
 
 type CAConfig struct {
@@ -137,6 +140,12 @@ func (ca *CertificateAuthority) VerifyClientCertificate(rawCerts [][]byte) error
 		return errors.Wrapf(errors.Failed, "unable to verify client certificate: %v", err)
 	}
 
+	if ca.revocation != nil {
+		if err = ca.revocation.IsRevoked(leaf); err != nil {
+			return errors.Wrapf(err, "certificate is revoked")
+		}
+	}
+
 	return nil
 }
 
@@ -166,8 +175,10 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 	}
 
 	offset := (time.Hour * 24 * 365)
+	accessIdentity := []byte{}
 	if conf != nil {
 		offset = conf.Offset
+		accessIdentity = []byte(conf.Identity)
 	}
 	now := time.Now().UTC()
 
@@ -244,8 +255,10 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 			return nil, errors.Wrapf(errors.Failed, "public key in CSR and CSR Key certificate don't match")
 		}
 
-		if ca.revocation != nil && ca.revocation.IsRevoked(certToRenew) {
-			return nil, errors.Wrapf(errors.Revoked, "certificate to be renewed is revoked")
+		if ca.revocation != nil {
+			if err = ca.revocation.IsRevoked(certToRenew); err != nil {
+				return nil, errors.Wrapf(err, "certificate is revoked")
+			}
 		}
 
 		// We can now use the content from the certificate to be renewed
@@ -277,7 +290,6 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 
 		renewCount++
 		renewCountDER, _ := asn1.Marshal(renewCount)
-
 		template.ExtraExtensions = []pkix.Extension{
 			{
 				Id:       oidOriginalCertificate,
@@ -291,7 +303,11 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 			},
 		}
 	}
-
+	template.ExtraExtensions = append(template.ExtraExtensions, pkix.Extension{
+		Id:       OidAccessIdentity,
+		Critical: false,
+		Value:    accessIdentity,
+	})
 	cert, err := x509.CreateCertificate(rand.Reader, &template, ca.rootCert, csr.PublicKey, ca.rootSigner.PrivateKey)
 	if err != nil {
 		return

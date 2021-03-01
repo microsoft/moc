@@ -301,6 +301,14 @@ func getClientTokenLocation() string {
 	return clientTokenPath
 }
 
+func getExecutableName() (string, error) {
+	execPath, err := os.Executable()
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSuffix(filepath.Base(execPath), filepath.Ext(execPath)), nil
+}
+
 // GetWssdConfigLocation gets the path for access file from environment
 func GetWssdConfigLocation() string {
 	wssdConfigPath := os.Getenv(WssdConfigPath)
@@ -313,6 +321,9 @@ func GetWssdConfigLocation() string {
 		// Create the default config path and set the
 		// env variable
 		defaultPath := filepath.Join(wd, DefaultWSSDFolder)
+		if execName, err := getExecutableName(); err == nil {
+			defaultPath = filepath.Join(defaultPath, execName)
+		}
 		os.MkdirAll(defaultPath, os.ModePerm)
 		wssdConfigPath = filepath.Join(defaultPath, AccessFileDefaultName)
 		os.Setenv(WssdConfigPath, wssdConfigPath)
