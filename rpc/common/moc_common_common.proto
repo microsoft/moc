@@ -11,6 +11,7 @@ enum Operation {
 	POST = 1;
 	DELETE = 2;
 	UPDATE = 3;
+	REVOKE = 4;
 }
 
 enum ProvisionState {
