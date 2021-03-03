@@ -1,0 +1,23 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/security";
+package moc.cloudagent.security;
+
+import "google/protobuf/wrappers.proto";
+import "moc_cloudagent_certificate.proto";
+
+message RenewRequest {
+	CertificateSigningRequest CSR = 1;
+}
+
+message RenewResponse {
+	Certificate Certificate = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+service RenewalAgent {
+	rpc RenewCertificate(RenewRequest) returns (RenewResponse) {}
+}
