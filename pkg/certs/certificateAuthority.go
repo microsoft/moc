@@ -137,7 +137,7 @@ func (ca *CertificateAuthority) VerifyClientCertificate(rawCerts [][]byte) error
 	_, err := leaf.Verify(verifyOptions)
 
 	if err != nil {
-		return errors.Wrapf(errors.Failed, "unable to verify client certificate: %v", err)
+		return errors.Wrapf(err, "unable to verify client certificate")
 	}
 
 	if ca.revocation != nil {
