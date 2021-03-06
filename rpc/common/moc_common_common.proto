@@ -100,3 +100,8 @@ enum ClientType {
         EXTERNALCLIENT = 1;
         NODE = 2;
 }
+
+enum AuthenticationType {
+	SELFSIGNED = 0;
+	CASIGNED = 1;
+}

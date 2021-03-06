@@ -35,6 +35,7 @@ message Identity {
 	string cloudFqdn = 15;
 	int32 cloudPort = 16;
 	int32 cloudAuthPort = 17;
+	AuthenticationType authType = 18;
 }
 
 service IdentityAgent {

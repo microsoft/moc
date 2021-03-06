@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/moc/pkg/certs"
 	"github.com/microsoft/moc/pkg/marshal"
 	wssdnet "github.com/microsoft/moc/pkg/net"
+	"github.com/microsoft/moc/rpc/common"
 	"github.com/pkg/errors"
 	"google.golang.org/grpc/credentials"
 )
@@ -574,4 +575,24 @@ func AccessFileToTls(accessFile WssdConfig) ([]byte, tls.Certificate, error) {
 	}
 
 	return serverPem, tlsCert, nil
+}
+
+func LoginTypeToAuthType(authType string) common.AuthenticationType {
+	switch authType {
+	case string(SelfSigned):
+		return common.AuthenticationType_SELFSIGNED
+	case string(CASigned):
+		return common.AuthenticationType_CASIGNED
+	}
+	return common.AuthenticationType_SELFSIGNED
+}
+
+func AuthTypeToLoginType(authType common.AuthenticationType) LoginType {
+	switch authType {
+	case common.AuthenticationType_SELFSIGNED:
+		return SelfSigned
+	case common.AuthenticationType_CASIGNED:
+		return CASigned
+	}
+	return SelfSigned
 }
