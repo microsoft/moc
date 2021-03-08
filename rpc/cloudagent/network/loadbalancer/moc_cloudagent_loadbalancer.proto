@@ -38,6 +38,7 @@ message LoadBalancer {
 	string locationName = 9;
 	Status status = 10;
 	Tags tags = 11;
+	uint32 replicationCount = 12;
 }
 
 service LoadBalancerAgent {
