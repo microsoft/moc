@@ -1,0 +1,114 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/nodeagent/compute";
+
+package moc.nodeagent.compute;
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_computecommon.proto";
+
+
+message BareMetalHostSSHPublicKey {
+	string keydata = 1;
+}
+
+message BareMetalHostDisk {
+	string diskName = 1;
+	int32 diskSizeGB = 2;
+}
+
+message BareMetalHostStorageConfiguration {
+	repeated BareMetalHostDisk disks = 1;
+	string imageReference = 2;
+}
+
+message BareMetalHostNetworkInterface {
+	// reference to network interface managed by network
+	string networkInterfaceName = 1;
+}
+
+message BareMetalHostNetworkConfiguration {
+	repeated BareMetalHostNetworkInterface interfaces = 1;
+}
+
+message BareMetalHostUserConfiguration {
+	string username = 1;
+	string password = 2;
+	UserType usertype = 3;
+}
+
+message BareMetalHostRDPConfiguration {
+	bool disableRDP = 1;
+}
+
+message BareMetalHostLinuxConfiguration {
+	bool disablePasswordAuthentication = 1;
+}
+
+message BareMetalHostWindowsConfiguration {
+	bool enableAutomaticUpdates = 1;
+	string timeZone = 2;
+	BareMetalHostRDPConfiguration RDPConfiguration = 3;
+}
+
+message BareMetalHostOperatingSystemConfiguration {
+	string computerName = 1;
+	BareMetalHostUserConfiguration administrator = 2;
+	repeated BareMetalHostUserConfiguration users = 3;
+	string customData = 4;
+	repeated BareMetalHostSSHPublicKey publickeys = 5;
+	OperatingSystemType ostype = 6;
+	// bootstrap engine can be cloud-init, Windows answer files, ...
+	OperatingSystemBootstrapEngine osBootstrapEngine = 7;
+	BareMetalHostLinuxConfiguration linuxConfiguration = 8;
+	BareMetalHostWindowsConfiguration windowsConfiguration = 9;
+}
+
+message BareMetalMachineSize {
+	int32 cpuCount = 1;
+	int32 gpuCount = 2;
+	int32 memoryMB = 3;
+}
+
+message BareMetalHostHardwareConfiguration {
+	BareMetalMachineSize size = 1;
+}
+
+message BareMetalHostSecurityConfiguration {
+	bool enableTPM = 1;
+}
+
+message BareMetalHost {
+	string name = 1;
+	string id = 2;
+	BareMetalHostStorageConfiguration storage = 3;
+	BareMetalHostOperatingSystemConfiguration os = 4;
+	BareMetalHostNetworkConfiguration network = 5;
+	BareMetalHostHardwareConfiguration hardware = 6;
+	Status status = 7;
+	bool disableHighAvailability = 8;
+	repeated string allowedOwnerNodes = 9;
+	PowerState powerState = 10;
+	BareMetalHostSecurityConfiguration security = 11;
+	Entity entity = 12;
+	HighAvailabilityState highAvailabilityState = 13;
+	Tags tags = 14;
+}
+
+message BareMetalHostRequest {
+	BareMetalHost bareMetalHost = 1;
+}
+
+message BareMetalHostResponse {
+	BareMetalHost bareMetalHost = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+service BareMetalHostAgent {
+	rpc CreateOrUpdate(BareMetalHostRequest) returns (BareMetalHostResponse) {}
+	rpc Delete(BareMetalHostRequest) returns (BareMetalHostResponse) {}
+	rpc Get(BareMetalHostRequest) returns (BareMetalHostResponse) {}
+}
