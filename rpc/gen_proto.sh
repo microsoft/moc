@@ -63,6 +63,14 @@ protoc -I $Agent/$Module -I ./common $Agent/$Module/moc_lbagent_agent.proto --go
 
 #### 
 
+Agent="baremetalhostagent"
+echo "Generating Protoc for $Agent"
+Module="agent"
+echo "Generating $Agent/$Module protoc"
+protoc -I $Agent/$Module -I ./common $Agent/$Module/moc_baremetalhost_agent.proto --go_out=plugins=grpc:../bld/gen/
+
+#### 
+
 Agent="ipamagent"
 echo "Generating Protoc for $Agent"
 Module="ipaddressmanager"
