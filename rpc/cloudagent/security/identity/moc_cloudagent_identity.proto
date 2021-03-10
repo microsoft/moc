@@ -7,6 +7,7 @@ package moc.cloudagent.security;
 
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
+import "moc_common_security.proto";
 
 message IdentityRequest {
 	repeated Identity Identitys = 1;
@@ -17,6 +18,11 @@ message IdentityResponse {
 	repeated Identity Identitys = 1;
 	google.protobuf.BoolValue Result = 2;
 	string  Error = 3;
+}
+
+message IdentityOperationRequest {
+	repeated Identity Identities = 1;
+	IdentityOperation OperationType = 2;
 }
 
 message Identity {
@@ -40,4 +46,5 @@ message Identity {
 
 service IdentityAgent {
 	rpc Invoke(IdentityRequest) returns (IdentityResponse) {}
+	rpc Operate(IdentityOperationRequest) returns (IdentityResponse) {}
 }

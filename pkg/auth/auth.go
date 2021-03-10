@@ -44,9 +44,10 @@ const (
 )
 
 type WssdConfig struct {
-	CloudCertificate  string
-	ClientCertificate string
-	ClientKey         string
+	CloudCertificate      string
+	ClientCertificate     string
+	ClientKey             string
+	ClientCertificateType LoginType
 }
 
 type Authorizer interface {
@@ -109,11 +110,19 @@ func NewAuthorizerFromEnvironment(serverName string) (Authorizer, error) {
 	if err != nil {
 		return nil, err
 	}
+	err = RenewCertificates(settings.GetManagedIdentityConfig().ServerName, settings.GetManagedIdentityConfig().WssdConfigPath)
+	if err != nil {
+		return nil, err
+	}
 	return settings.GetAuthorizer()
 }
 
 func NewAuthorizerFromEnvironmentByName(serverName, subfolder, filename string) (Authorizer, error) {
 	settings, err := GetSettingsFromEnvironmentByName(serverName, subfolder, filename)
+	if err != nil {
+		return nil, err
+	}
+	err = RenewCertificates(settings.GetManagedIdentityConfig().ServerName, settings.GetManagedIdentityConfig().WssdConfigPath)
 	if err != nil {
 		return nil, err
 	}
