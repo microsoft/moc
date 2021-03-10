@@ -46,3 +46,6 @@ enum KeySize {
 	_4096 = 4;
 }
 
+enum IdentityOperation {
+	REVOKE = 0;
+}

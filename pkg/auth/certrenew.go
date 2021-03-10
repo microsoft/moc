@@ -112,7 +112,7 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 	}
 
 	csr := &security.CertificateSigningRequest{
-		Name:           x509Cert.Issuer.CommonName,
+		Name:           x509Cert.Subject.CommonName,
 		Csr:            string(newCsr),
 		OldCertificate: wssdConfig.ClientCertificate,
 	}
@@ -135,15 +135,16 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 	}
 	renewed = true
 	newWssdConfig := &WssdConfig{
-		CloudCertificate:  wssdConfig.CloudCertificate,
-		ClientCertificate: marshal.ToBase64(response.Certificate.NewCertificate),
-		ClientKey:         marshal.ToBase64(string(newKey)),
+		CloudCertificate:      wssdConfig.CloudCertificate,
+		ClientCertificate:     marshal.ToBase64(response.Certificate.NewCertificate),
+		ClientKey:             marshal.ToBase64(string(newKey)),
+		ClientCertificateType: wssdConfig.ClientCertificateType,
 	}
 	return newWssdConfig, renewed, nil
 }
 
 // renewCertificates picks the wssdconfig from the location performs a renewal if close to expiry and stores the same back to the location
-func renewCertificates(server string, wssdConfigLocation string) error {
+func RenewCertificates(server string, wssdConfigLocation string) error {
 	accessFile := WssdConfig{}
 	err := marshal.FromJSONFile(wssdConfigLocation, &accessFile)
 	if err != nil {

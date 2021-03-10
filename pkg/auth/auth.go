@@ -110,7 +110,7 @@ func NewAuthorizerFromEnvironment(serverName string) (Authorizer, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = renewCertificates(settings.GetManagedIdentityConfig().ServerName, settings.GetManagedIdentityConfig().WssdConfigPath)
+	err = RenewCertificates(settings.GetManagedIdentityConfig().ServerName, settings.GetManagedIdentityConfig().WssdConfigPath)
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +122,7 @@ func NewAuthorizerFromEnvironmentByName(serverName, subfolder, filename string) 
 	if err != nil {
 		return nil, err
 	}
-	err = renewCertificates(settings.GetManagedIdentityConfig().ServerName, settings.GetManagedIdentityConfig().WssdConfigPath)
+	err = RenewCertificates(settings.GetManagedIdentityConfig().ServerName, settings.GetManagedIdentityConfig().WssdConfigPath)
 	if err != nil {
 		return nil, err
 	}
