@@ -55,7 +55,7 @@ func fromBase64(cert, key string) (pemCert, pemKey []byte, err error) {
 }
 
 // renewRequired check the cert is it needs a renewal
-// It the certificate is within treshold time the renewal is required.
+// If the certificate is within threshold time the renewal is required.
 func renewRequired(x509Cert *x509.Certificate) bool {
 	validity := x509Cert.NotAfter.Sub(x509Cert.NotBefore)
 
@@ -86,7 +86,8 @@ func accessFiletoRenewClient(server string, wssdConfig *WssdConfig) (security.Re
 
 // renewCertificate renews the cert and key in wssdconfig.
 // If it is to early for renewal the same cert and key are returned in the wssdconfig
-func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdConfig, err error) {
+func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdConfig, renewed bool, err error) {
+	renewed = false
 	pemCert, pemKey, err := fromBase64(wssdConfig.ClientCertificate, wssdConfig.ClientKey)
 	if err != nil {
 		return
@@ -98,7 +99,7 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 	}
 
 	if !renewRequired(x509Cert) {
-		return wssdConfig, nil
+		return wssdConfig, renewed, nil
 	}
 
 	tlsCert, err := tls.X509KeyPair(pemCert, pemKey)
@@ -128,16 +129,17 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 	response, err := authClient.RenewCertificate(ctx, renewRequest)
 	if err != nil {
 		if errors.IsNotSupported(err) {
-			return wssdConfig, nil
+			return wssdConfig, renewed, nil
 		}
 		return
 	}
+	renewed = true
 	newWssdConfig := &WssdConfig{
 		CloudCertificate:  wssdConfig.CloudCertificate,
 		ClientCertificate: marshal.ToBase64(response.Certificate.NewCertificate),
 		ClientKey:         marshal.ToBase64(string(newKey)),
 	}
-	return newWssdConfig, nil
+	return newWssdConfig, renewed, nil
 }
 
 // renewCertificates picks the wssdconfig from the location performs a renewal if close to expiry and stores the same back to the location
@@ -147,9 +149,17 @@ func renewCertificates(server string, wssdConfigLocation string) error {
 	if err != nil {
 		return err
 	}
-	retAccessFile, err := renewCertificate(server, &accessFile)
-	if err != nil {
-		return err
+	if accessFile.ClientCertificateType == CASigned {
+		retAccessFile, renewed, err := renewCertificate(server, &accessFile)
+		if err != nil {
+			return err
+		}
+		if renewed {
+			if err = marshal.ToJSONFile(*retAccessFile, wssdConfigLocation); err != nil {
+				return err
+			}
+		}
 	}
-	return marshal.ToJSONFile(*retAccessFile, wssdConfigLocation)
+
+	return nil
 }
