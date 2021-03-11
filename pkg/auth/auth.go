@@ -48,6 +48,7 @@ type WssdConfig struct {
 	ClientCertificate     string
 	ClientKey             string
 	ClientCertificateType LoginType
+	IdentityName          string
 }
 
 type Authorizer interface {

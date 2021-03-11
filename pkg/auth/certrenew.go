@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/moc/pkg/errors"
 	"github.com/microsoft/moc/pkg/marshal"
 	"github.com/microsoft/moc/rpc/cloudagent/security"
+	"github.com/microsoft/moc/rpc/common"
 	"google.golang.org/grpc"
 )
 
@@ -28,7 +29,7 @@ func getServerEndpoint(serverAddress *string) string {
 }
 
 // getRenewClient returns the renew client to communicate with the wssdcloudagent
-func getRenewClient(serverAddress *string, authorizer Authorizer) (security.RenewalAgentClient, error) {
+func getRenewClient(serverAddress *string, authorizer Authorizer) (security.IdentityAgentClient, error) {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(authorizer.WithTransportAuthorization()))
 	opts = append(opts, grpc.WithPerRPCCredentials(authorizer.WithRPCAuthorization()))
@@ -38,7 +39,7 @@ func getRenewClient(serverAddress *string, authorizer Authorizer) (security.Rene
 		log.Fatalf("Unable to get AuthenticationClient. Failed to dial: %v", err)
 	}
 
-	return security.NewRenewalAgentClient(conn), nil
+	return security.NewIdentityAgentClient(conn), nil
 }
 
 // fromBase64 converts the base64 encoded cert and key to pem encoded
@@ -70,7 +71,7 @@ func renewRequired(x509Cert *x509.Certificate) bool {
 }
 
 // accessFiletoRenewClient creates a renew client from wssdconfig and server
-func accessFiletoRenewClient(server string, wssdConfig *WssdConfig) (security.RenewalAgentClient, error) {
+func accessFiletoRenewClient(server string, wssdConfig *WssdConfig) (security.IdentityAgentClient, error) {
 	serverPem, tlsCert, err := AccessFileToTls(*wssdConfig)
 	if err != nil {
 		return nil, err
@@ -117,8 +118,10 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 		OldCertificate: wssdConfig.ClientCertificate,
 	}
 
-	renewRequest := &security.RenewRequest{
-		CSR: csr,
+	renewRequest := &security.IdentityCertificateRequest{
+		OperationType: common.IdentityCertificateOperation_RENEW_CERTIFICATE,
+		IdentityName:  wssdConfig.IdentityName,
+		CSR:           []*security.CertificateSigningRequest{csr},
 	}
 	authClient, err := accessFiletoRenewClient(server, wssdConfig)
 	if err != nil {
@@ -126,19 +129,21 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), DefaultServerContextTimeout)
 	defer cancel()
-	response, err := authClient.RenewCertificate(ctx, renewRequest)
+	response, err := authClient.OperateCertificates(ctx, renewRequest)
 	if err != nil {
-		if errors.IsNotSupported(err) {
-			return wssdConfig, renewed, nil
-		}
 		return
 	}
+	if len(response.Certificates) == 0 {
+		return nil, false, errors.Wrapf(errors.NotFound, "Missing certificates from renewal response")
+	}
 	renewed = true
+
 	newWssdConfig := &WssdConfig{
 		CloudCertificate:      wssdConfig.CloudCertificate,
-		ClientCertificate:     marshal.ToBase64(response.Certificate.NewCertificate),
+		ClientCertificate:     marshal.ToBase64(response.Certificates[0].NewCertificate),
 		ClientKey:             marshal.ToBase64(string(newKey)),
 		ClientCertificateType: wssdConfig.ClientCertificateType,
+		IdentityName:          wssdConfig.IdentityName,
 	}
 	return newWssdConfig, renewed, nil
 }
