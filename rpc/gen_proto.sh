@@ -128,10 +128,9 @@ protoc -I $Agent/$Module/etcdcluster -I ./common -I $Agent/$Module/etcdcluster/e
 Module="security"
 echo "Generating $Agent/$Module protoc"
 
-protoc -I $Agent/$Module/identity -I ./common $Agent/$Module/identity/moc_cloudagent_identity.proto --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/identity -I ./common -I $Agent/$Module/certificate $Agent/$Module/identity/moc_cloudagent_identity.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/keyvault/secret -I ./common $Agent/$Module/keyvault/secret/moc_cloudagent_secret.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/keyvault/key -I ./common $Agent/$Module/keyvault/key/moc_cloudagent_key.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/keyvault -I ./common -I $Agent/$Module/keyvault/secret $Agent/$Module/keyvault/moc_cloudagent_keyvault.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/authentication -I ./common -I $Agent/$Module/identity $Agent/$Module/authentication/moc_cloudagent_authentication.proto --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/certificate -I ./common -I $Agent/$Module/certificate $Agent/$Module/certificate/moc_cloudagent_certificate.proto --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/renewal -I ./common -I $Agent/$Module/certificate $Agent/$Module/renewal/moc_cloudagent_renewal.proto --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/authentication -I ./common -I $Agent/$Module/identity -I $Agent/$Module/certificate $Agent/$Module/authentication/moc_cloudagent_authentication.proto --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/certificate -I ./common $Agent/$Module/certificate/moc_cloudagent_certificate.proto --go_out=plugins=grpc:../bld/gen/

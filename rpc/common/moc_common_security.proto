@@ -49,3 +49,8 @@ enum KeySize {
 enum IdentityOperation {
 	REVOKE = 0;
 }
+
+enum IdentityCertificateOperation {
+	CREATE_CERTIFICATE = 0;
+	RENEW_CERTIFICATE = 1;
+}
