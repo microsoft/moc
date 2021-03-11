@@ -87,12 +87,11 @@ message BareMetalHost {
 	BareMetalHostNetworkConfiguration network = 4;
 	BareMetalHostHardwareConfiguration hardware = 5;
 	Status status = 6;
-	bool disableHighAvailability = 7;
-	repeated string allowedOwnerNodes = 8;
-	PowerState powerState = 9;
-	BareMetalHostSecurityConfiguration security = 10;
-	Entity entity = 11;
-	Tags tags = 12;
+	repeated string allowedOwnerNodes = 7;
+	PowerState powerState = 8;
+	BareMetalHostSecurityConfiguration security = 9;
+	Entity entity = 10;
+	Tags tags = 11;
 }
 
 message BareMetalHostRequest {
