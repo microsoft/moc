@@ -82,19 +82,17 @@ message BareMetalHostSecurityConfiguration {
 
 message BareMetalHost {
 	string name = 1;
-	string id = 2;
-	BareMetalHostStorageConfiguration storage = 3;
-	BareMetalHostOperatingSystemConfiguration os = 4;
-	BareMetalHostNetworkConfiguration network = 5;
-	BareMetalHostHardwareConfiguration hardware = 6;
-	Status status = 7;
-	bool disableHighAvailability = 8;
-	repeated string allowedOwnerNodes = 9;
-	PowerState powerState = 10;
-	BareMetalHostSecurityConfiguration security = 11;
-	Entity entity = 12;
-	HighAvailabilityState highAvailabilityState = 13;
-	Tags tags = 14;
+	BareMetalHostStorageConfiguration storage = 2;
+	BareMetalHostOperatingSystemConfiguration os = 3;
+	BareMetalHostNetworkConfiguration network = 4;
+	BareMetalHostHardwareConfiguration hardware = 5;
+	Status status = 6;
+	bool disableHighAvailability = 7;
+	repeated string allowedOwnerNodes = 8;
+	PowerState powerState = 9;
+	BareMetalHostSecurityConfiguration security = 10;
+	Entity entity = 11;
+	Tags tags = 12;
 }
 
 message BareMetalHostRequest {
