@@ -552,7 +552,6 @@ func PrintAccessFile(accessFile WssdConfig) error {
 
 // PrintAccessFileByName stores wssdConfig in GetWssdConfigLocationName
 func PrintAccessFileByName(accessFile WssdConfig, subfolder, filename string) error {
-	fmt.Println("Rgha")
 	return marshal.ToJSONFile(accessFile, GetMocConfigLocationName(subfolder, filename))
 }
 
