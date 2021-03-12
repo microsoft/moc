@@ -14,25 +14,6 @@ message BareMetalHostSSHPublicKey {
 	string keydata = 1;
 }
 
-message BareMetalHostDisk {
-	string diskName = 1;
-	int32 diskSizeGB = 2;
-}
-
-message BareMetalHostStorageConfiguration {
-	repeated BareMetalHostDisk disks = 1;
-	string imageReference = 2;
-}
-
-message BareMetalHostNetworkInterface {
-	// reference to network interface managed by network
-	string networkInterfaceName = 1;
-}
-
-message BareMetalHostNetworkConfiguration {
-	repeated BareMetalHostNetworkInterface interfaces = 1;
-}
-
 message BareMetalHostUserConfiguration {
 	string username = 1;
 	string password = 2;
@@ -66,32 +47,13 @@ message BareMetalHostOperatingSystemConfiguration {
 	BareMetalHostWindowsConfiguration windowsConfiguration = 9;
 }
 
-message BareMetalMachineSize {
-	int32 cpuCount = 1;
-	int32 gpuCount = 2;
-	int32 memoryMB = 3;
-}
-
-message BareMetalHostHardwareConfiguration {
-	BareMetalMachineSize size = 1;
-}
-
-message BareMetalHostSecurityConfiguration {
-	bool enableTPM = 1;
-}
-
 message BareMetalHost {
 	string name = 1;
-	BareMetalHostStorageConfiguration storage = 2;
+	string id = 2;
 	BareMetalHostOperatingSystemConfiguration os = 3;
-	BareMetalHostNetworkConfiguration network = 4;
-	BareMetalHostHardwareConfiguration hardware = 5;
-	Status status = 6;
-	repeated string allowedOwnerNodes = 7;
-	PowerState powerState = 8;
-	BareMetalHostSecurityConfiguration security = 9;
-	Entity entity = 10;
-	Tags tags = 11;
+	Status status = 4;
+	Entity entity = 5;
+	Tags tags = 6;
 }
 
 message BareMetalHostRequest {
@@ -105,7 +67,5 @@ message BareMetalHostResponse {
 }
 
 service BareMetalHostAgent {
-	rpc CreateOrUpdate(BareMetalHostRequest) returns (BareMetalHostResponse) {}
-	rpc Delete(BareMetalHostRequest) returns (BareMetalHostResponse) {}
-	rpc Get(BareMetalHostRequest) returns (BareMetalHostResponse) {}
+	rpc Update(BareMetalHostRequest) returns (BareMetalHostResponse) {}
 }

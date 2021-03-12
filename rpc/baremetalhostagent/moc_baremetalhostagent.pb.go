@@ -65,179 +65,6 @@ func (m *BareMetalHostSSHPublicKey) GetKeydata() string {
 	return ""
 }
 
-type BareMetalHostDisk struct {
-	DiskName             string   `protobuf:"bytes,1,opt,name=diskName,proto3" json:"diskName,omitempty"`
-	DiskSizeGB           int32    `protobuf:"varint,2,opt,name=diskSizeGB,proto3" json:"diskSizeGB,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *BareMetalHostDisk) Reset()         { *m = BareMetalHostDisk{} }
-func (m *BareMetalHostDisk) String() string { return proto.CompactTextString(m) }
-func (*BareMetalHostDisk) ProtoMessage()    {}
-func (*BareMetalHostDisk) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{1}
-}
-
-func (m *BareMetalHostDisk) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_BareMetalHostDisk.Unmarshal(m, b)
-}
-func (m *BareMetalHostDisk) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_BareMetalHostDisk.Marshal(b, m, deterministic)
-}
-func (m *BareMetalHostDisk) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BareMetalHostDisk.Merge(m, src)
-}
-func (m *BareMetalHostDisk) XXX_Size() int {
-	return xxx_messageInfo_BareMetalHostDisk.Size(m)
-}
-func (m *BareMetalHostDisk) XXX_DiscardUnknown() {
-	xxx_messageInfo_BareMetalHostDisk.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_BareMetalHostDisk proto.InternalMessageInfo
-
-func (m *BareMetalHostDisk) GetDiskName() string {
-	if m != nil {
-		return m.DiskName
-	}
-	return ""
-}
-
-func (m *BareMetalHostDisk) GetDiskSizeGB() int32 {
-	if m != nil {
-		return m.DiskSizeGB
-	}
-	return 0
-}
-
-type BareMetalHostStorageConfiguration struct {
-	Disks                []*BareMetalHostDisk `protobuf:"bytes,1,rep,name=disks,proto3" json:"disks,omitempty"`
-	ImageReference       string               `protobuf:"bytes,2,opt,name=imageReference,proto3" json:"imageReference,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
-	XXX_unrecognized     []byte               `json:"-"`
-	XXX_sizecache        int32                `json:"-"`
-}
-
-func (m *BareMetalHostStorageConfiguration) Reset()         { *m = BareMetalHostStorageConfiguration{} }
-func (m *BareMetalHostStorageConfiguration) String() string { return proto.CompactTextString(m) }
-func (*BareMetalHostStorageConfiguration) ProtoMessage()    {}
-func (*BareMetalHostStorageConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{2}
-}
-
-func (m *BareMetalHostStorageConfiguration) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_BareMetalHostStorageConfiguration.Unmarshal(m, b)
-}
-func (m *BareMetalHostStorageConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_BareMetalHostStorageConfiguration.Marshal(b, m, deterministic)
-}
-func (m *BareMetalHostStorageConfiguration) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BareMetalHostStorageConfiguration.Merge(m, src)
-}
-func (m *BareMetalHostStorageConfiguration) XXX_Size() int {
-	return xxx_messageInfo_BareMetalHostStorageConfiguration.Size(m)
-}
-func (m *BareMetalHostStorageConfiguration) XXX_DiscardUnknown() {
-	xxx_messageInfo_BareMetalHostStorageConfiguration.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_BareMetalHostStorageConfiguration proto.InternalMessageInfo
-
-func (m *BareMetalHostStorageConfiguration) GetDisks() []*BareMetalHostDisk {
-	if m != nil {
-		return m.Disks
-	}
-	return nil
-}
-
-func (m *BareMetalHostStorageConfiguration) GetImageReference() string {
-	if m != nil {
-		return m.ImageReference
-	}
-	return ""
-}
-
-type BareMetalHostNetworkInterface struct {
-	// reference to network interface managed by network
-	NetworkInterfaceName string   `protobuf:"bytes,1,opt,name=networkInterfaceName,proto3" json:"networkInterfaceName,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *BareMetalHostNetworkInterface) Reset()         { *m = BareMetalHostNetworkInterface{} }
-func (m *BareMetalHostNetworkInterface) String() string { return proto.CompactTextString(m) }
-func (*BareMetalHostNetworkInterface) ProtoMessage()    {}
-func (*BareMetalHostNetworkInterface) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{3}
-}
-
-func (m *BareMetalHostNetworkInterface) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_BareMetalHostNetworkInterface.Unmarshal(m, b)
-}
-func (m *BareMetalHostNetworkInterface) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_BareMetalHostNetworkInterface.Marshal(b, m, deterministic)
-}
-func (m *BareMetalHostNetworkInterface) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BareMetalHostNetworkInterface.Merge(m, src)
-}
-func (m *BareMetalHostNetworkInterface) XXX_Size() int {
-	return xxx_messageInfo_BareMetalHostNetworkInterface.Size(m)
-}
-func (m *BareMetalHostNetworkInterface) XXX_DiscardUnknown() {
-	xxx_messageInfo_BareMetalHostNetworkInterface.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_BareMetalHostNetworkInterface proto.InternalMessageInfo
-
-func (m *BareMetalHostNetworkInterface) GetNetworkInterfaceName() string {
-	if m != nil {
-		return m.NetworkInterfaceName
-	}
-	return ""
-}
-
-type BareMetalHostNetworkConfiguration struct {
-	Interfaces           []*BareMetalHostNetworkInterface `protobuf:"bytes,1,rep,name=interfaces,proto3" json:"interfaces,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}                         `json:"-"`
-	XXX_unrecognized     []byte                           `json:"-"`
-	XXX_sizecache        int32                            `json:"-"`
-}
-
-func (m *BareMetalHostNetworkConfiguration) Reset()         { *m = BareMetalHostNetworkConfiguration{} }
-func (m *BareMetalHostNetworkConfiguration) String() string { return proto.CompactTextString(m) }
-func (*BareMetalHostNetworkConfiguration) ProtoMessage()    {}
-func (*BareMetalHostNetworkConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{4}
-}
-
-func (m *BareMetalHostNetworkConfiguration) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_BareMetalHostNetworkConfiguration.Unmarshal(m, b)
-}
-func (m *BareMetalHostNetworkConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_BareMetalHostNetworkConfiguration.Marshal(b, m, deterministic)
-}
-func (m *BareMetalHostNetworkConfiguration) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BareMetalHostNetworkConfiguration.Merge(m, src)
-}
-func (m *BareMetalHostNetworkConfiguration) XXX_Size() int {
-	return xxx_messageInfo_BareMetalHostNetworkConfiguration.Size(m)
-}
-func (m *BareMetalHostNetworkConfiguration) XXX_DiscardUnknown() {
-	xxx_messageInfo_BareMetalHostNetworkConfiguration.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_BareMetalHostNetworkConfiguration proto.InternalMessageInfo
-
-func (m *BareMetalHostNetworkConfiguration) GetInterfaces() []*BareMetalHostNetworkInterface {
-	if m != nil {
-		return m.Interfaces
-	}
-	return nil
-}
-
 type BareMetalHostUserConfiguration struct {
 	Username             string          `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	Password             string          `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
@@ -251,7 +78,7 @@ func (m *BareMetalHostUserConfiguration) Reset()         { *m = BareMetalHostUse
 func (m *BareMetalHostUserConfiguration) String() string { return proto.CompactTextString(m) }
 func (*BareMetalHostUserConfiguration) ProtoMessage()    {}
 func (*BareMetalHostUserConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{5}
+	return fileDescriptor_254a3462c20ef4c7, []int{1}
 }
 
 func (m *BareMetalHostUserConfiguration) XXX_Unmarshal(b []byte) error {
@@ -304,7 +131,7 @@ func (m *BareMetalHostRDPConfiguration) Reset()         { *m = BareMetalHostRDPC
 func (m *BareMetalHostRDPConfiguration) String() string { return proto.CompactTextString(m) }
 func (*BareMetalHostRDPConfiguration) ProtoMessage()    {}
 func (*BareMetalHostRDPConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{6}
+	return fileDescriptor_254a3462c20ef4c7, []int{2}
 }
 
 func (m *BareMetalHostRDPConfiguration) XXX_Unmarshal(b []byte) error {
@@ -343,7 +170,7 @@ func (m *BareMetalHostLinuxConfiguration) Reset()         { *m = BareMetalHostLi
 func (m *BareMetalHostLinuxConfiguration) String() string { return proto.CompactTextString(m) }
 func (*BareMetalHostLinuxConfiguration) ProtoMessage()    {}
 func (*BareMetalHostLinuxConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{7}
+	return fileDescriptor_254a3462c20ef4c7, []int{3}
 }
 
 func (m *BareMetalHostLinuxConfiguration) XXX_Unmarshal(b []byte) error {
@@ -384,7 +211,7 @@ func (m *BareMetalHostWindowsConfiguration) Reset()         { *m = BareMetalHost
 func (m *BareMetalHostWindowsConfiguration) String() string { return proto.CompactTextString(m) }
 func (*BareMetalHostWindowsConfiguration) ProtoMessage()    {}
 func (*BareMetalHostWindowsConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{8}
+	return fileDescriptor_254a3462c20ef4c7, []int{4}
 }
 
 func (m *BareMetalHostWindowsConfiguration) XXX_Unmarshal(b []byte) error {
@@ -450,7 +277,7 @@ func (m *BareMetalHostOperatingSystemConfiguration) String() string {
 }
 func (*BareMetalHostOperatingSystemConfiguration) ProtoMessage() {}
 func (*BareMetalHostOperatingSystemConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{9}
+	return fileDescriptor_254a3462c20ef4c7, []int{5}
 }
 
 func (m *BareMetalHostOperatingSystemConfiguration) XXX_Unmarshal(b []byte) error {
@@ -534,151 +361,13 @@ func (m *BareMetalHostOperatingSystemConfiguration) GetWindowsConfiguration() *B
 	return nil
 }
 
-type BareMetalMachineSize struct {
-	CpuCount             int32    `protobuf:"varint,1,opt,name=cpuCount,proto3" json:"cpuCount,omitempty"`
-	GpuCount             int32    `protobuf:"varint,2,opt,name=gpuCount,proto3" json:"gpuCount,omitempty"`
-	MemoryMB             int32    `protobuf:"varint,3,opt,name=memoryMB,proto3" json:"memoryMB,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *BareMetalMachineSize) Reset()         { *m = BareMetalMachineSize{} }
-func (m *BareMetalMachineSize) String() string { return proto.CompactTextString(m) }
-func (*BareMetalMachineSize) ProtoMessage()    {}
-func (*BareMetalMachineSize) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{10}
-}
-
-func (m *BareMetalMachineSize) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_BareMetalMachineSize.Unmarshal(m, b)
-}
-func (m *BareMetalMachineSize) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_BareMetalMachineSize.Marshal(b, m, deterministic)
-}
-func (m *BareMetalMachineSize) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BareMetalMachineSize.Merge(m, src)
-}
-func (m *BareMetalMachineSize) XXX_Size() int {
-	return xxx_messageInfo_BareMetalMachineSize.Size(m)
-}
-func (m *BareMetalMachineSize) XXX_DiscardUnknown() {
-	xxx_messageInfo_BareMetalMachineSize.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_BareMetalMachineSize proto.InternalMessageInfo
-
-func (m *BareMetalMachineSize) GetCpuCount() int32 {
-	if m != nil {
-		return m.CpuCount
-	}
-	return 0
-}
-
-func (m *BareMetalMachineSize) GetGpuCount() int32 {
-	if m != nil {
-		return m.GpuCount
-	}
-	return 0
-}
-
-func (m *BareMetalMachineSize) GetMemoryMB() int32 {
-	if m != nil {
-		return m.MemoryMB
-	}
-	return 0
-}
-
-type BareMetalHostHardwareConfiguration struct {
-	Size                 *BareMetalMachineSize `protobuf:"bytes,1,opt,name=size,proto3" json:"size,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
-	XXX_unrecognized     []byte                `json:"-"`
-	XXX_sizecache        int32                 `json:"-"`
-}
-
-func (m *BareMetalHostHardwareConfiguration) Reset()         { *m = BareMetalHostHardwareConfiguration{} }
-func (m *BareMetalHostHardwareConfiguration) String() string { return proto.CompactTextString(m) }
-func (*BareMetalHostHardwareConfiguration) ProtoMessage()    {}
-func (*BareMetalHostHardwareConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{11}
-}
-
-func (m *BareMetalHostHardwareConfiguration) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_BareMetalHostHardwareConfiguration.Unmarshal(m, b)
-}
-func (m *BareMetalHostHardwareConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_BareMetalHostHardwareConfiguration.Marshal(b, m, deterministic)
-}
-func (m *BareMetalHostHardwareConfiguration) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BareMetalHostHardwareConfiguration.Merge(m, src)
-}
-func (m *BareMetalHostHardwareConfiguration) XXX_Size() int {
-	return xxx_messageInfo_BareMetalHostHardwareConfiguration.Size(m)
-}
-func (m *BareMetalHostHardwareConfiguration) XXX_DiscardUnknown() {
-	xxx_messageInfo_BareMetalHostHardwareConfiguration.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_BareMetalHostHardwareConfiguration proto.InternalMessageInfo
-
-func (m *BareMetalHostHardwareConfiguration) GetSize() *BareMetalMachineSize {
-	if m != nil {
-		return m.Size
-	}
-	return nil
-}
-
-type BareMetalHostSecurityConfiguration struct {
-	EnableTPM            bool     `protobuf:"varint,1,opt,name=enableTPM,proto3" json:"enableTPM,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *BareMetalHostSecurityConfiguration) Reset()         { *m = BareMetalHostSecurityConfiguration{} }
-func (m *BareMetalHostSecurityConfiguration) String() string { return proto.CompactTextString(m) }
-func (*BareMetalHostSecurityConfiguration) ProtoMessage()    {}
-func (*BareMetalHostSecurityConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{12}
-}
-
-func (m *BareMetalHostSecurityConfiguration) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_BareMetalHostSecurityConfiguration.Unmarshal(m, b)
-}
-func (m *BareMetalHostSecurityConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_BareMetalHostSecurityConfiguration.Marshal(b, m, deterministic)
-}
-func (m *BareMetalHostSecurityConfiguration) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BareMetalHostSecurityConfiguration.Merge(m, src)
-}
-func (m *BareMetalHostSecurityConfiguration) XXX_Size() int {
-	return xxx_messageInfo_BareMetalHostSecurityConfiguration.Size(m)
-}
-func (m *BareMetalHostSecurityConfiguration) XXX_DiscardUnknown() {
-	xxx_messageInfo_BareMetalHostSecurityConfiguration.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_BareMetalHostSecurityConfiguration proto.InternalMessageInfo
-
-func (m *BareMetalHostSecurityConfiguration) GetEnableTPM() bool {
-	if m != nil {
-		return m.EnableTPM
-	}
-	return false
-}
-
 type BareMetalHost struct {
 	Name                 string                                     `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Storage              *BareMetalHostStorageConfiguration         `protobuf:"bytes,2,opt,name=storage,proto3" json:"storage,omitempty"`
+	Id                   string                                     `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
 	Os                   *BareMetalHostOperatingSystemConfiguration `protobuf:"bytes,3,opt,name=os,proto3" json:"os,omitempty"`
-	Network              *BareMetalHostNetworkConfiguration         `protobuf:"bytes,4,opt,name=network,proto3" json:"network,omitempty"`
-	Hardware             *BareMetalHostHardwareConfiguration        `protobuf:"bytes,5,opt,name=hardware,proto3" json:"hardware,omitempty"`
-	Status               *common.Status                             `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
-	AllowedOwnerNodes    []string                                   `protobuf:"bytes,7,rep,name=allowedOwnerNodes,proto3" json:"allowedOwnerNodes,omitempty"`
-	PowerState           common.PowerState                          `protobuf:"varint,8,opt,name=powerState,proto3,enum=moc.PowerState" json:"powerState,omitempty"`
-	Security             *BareMetalHostSecurityConfiguration        `protobuf:"bytes,9,opt,name=security,proto3" json:"security,omitempty"`
-	Entity               *common.Entity                             `protobuf:"bytes,10,opt,name=entity,proto3" json:"entity,omitempty"`
-	Tags                 *common.Tags                               `protobuf:"bytes,11,opt,name=tags,proto3" json:"tags,omitempty"`
+	Status               *common.Status                             `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"`
+	Entity               *common.Entity                             `protobuf:"bytes,5,opt,name=entity,proto3" json:"entity,omitempty"`
+	Tags                 *common.Tags                               `protobuf:"bytes,6,opt,name=tags,proto3" json:"tags,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                                   `json:"-"`
 	XXX_unrecognized     []byte                                     `json:"-"`
 	XXX_sizecache        int32                                      `json:"-"`
@@ -688,7 +377,7 @@ func (m *BareMetalHost) Reset()         { *m = BareMetalHost{} }
 func (m *BareMetalHost) String() string { return proto.CompactTextString(m) }
 func (*BareMetalHost) ProtoMessage()    {}
 func (*BareMetalHost) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{13}
+	return fileDescriptor_254a3462c20ef4c7, []int{6}
 }
 
 func (m *BareMetalHost) XXX_Unmarshal(b []byte) error {
@@ -716,11 +405,11 @@ func (m *BareMetalHost) GetName() string {
 	return ""
 }
 
-func (m *BareMetalHost) GetStorage() *BareMetalHostStorageConfiguration {
+func (m *BareMetalHost) GetId() string {
 	if m != nil {
-		return m.Storage
+		return m.Id
 	}
-	return nil
+	return ""
 }
 
 func (m *BareMetalHost) GetOs() *BareMetalHostOperatingSystemConfiguration {
@@ -730,44 +419,9 @@ func (m *BareMetalHost) GetOs() *BareMetalHostOperatingSystemConfiguration {
 	return nil
 }
 
-func (m *BareMetalHost) GetNetwork() *BareMetalHostNetworkConfiguration {
-	if m != nil {
-		return m.Network
-	}
-	return nil
-}
-
-func (m *BareMetalHost) GetHardware() *BareMetalHostHardwareConfiguration {
-	if m != nil {
-		return m.Hardware
-	}
-	return nil
-}
-
 func (m *BareMetalHost) GetStatus() *common.Status {
 	if m != nil {
 		return m.Status
-	}
-	return nil
-}
-
-func (m *BareMetalHost) GetAllowedOwnerNodes() []string {
-	if m != nil {
-		return m.AllowedOwnerNodes
-	}
-	return nil
-}
-
-func (m *BareMetalHost) GetPowerState() common.PowerState {
-	if m != nil {
-		return m.PowerState
-	}
-	return common.PowerState_Unknown
-}
-
-func (m *BareMetalHost) GetSecurity() *BareMetalHostSecurityConfiguration {
-	if m != nil {
-		return m.Security
 	}
 	return nil
 }
@@ -797,7 +451,7 @@ func (m *BareMetalHostRequest) Reset()         { *m = BareMetalHostRequest{} }
 func (m *BareMetalHostRequest) String() string { return proto.CompactTextString(m) }
 func (*BareMetalHostRequest) ProtoMessage()    {}
 func (*BareMetalHostRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{14}
+	return fileDescriptor_254a3462c20ef4c7, []int{7}
 }
 
 func (m *BareMetalHostRequest) XXX_Unmarshal(b []byte) error {
@@ -838,7 +492,7 @@ func (m *BareMetalHostResponse) Reset()         { *m = BareMetalHostResponse{} }
 func (m *BareMetalHostResponse) String() string { return proto.CompactTextString(m) }
 func (*BareMetalHostResponse) ProtoMessage()    {}
 func (*BareMetalHostResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_254a3462c20ef4c7, []int{15}
+	return fileDescriptor_254a3462c20ef4c7, []int{8}
 }
 
 func (m *BareMetalHostResponse) XXX_Unmarshal(b []byte) error {
@@ -882,18 +536,11 @@ func (m *BareMetalHostResponse) GetError() string {
 
 func init() {
 	proto.RegisterType((*BareMetalHostSSHPublicKey)(nil), "moc.baremetalhostagent.BareMetalHostSSHPublicKey")
-	proto.RegisterType((*BareMetalHostDisk)(nil), "moc.baremetalhostagent.BareMetalHostDisk")
-	proto.RegisterType((*BareMetalHostStorageConfiguration)(nil), "moc.baremetalhostagent.BareMetalHostStorageConfiguration")
-	proto.RegisterType((*BareMetalHostNetworkInterface)(nil), "moc.baremetalhostagent.BareMetalHostNetworkInterface")
-	proto.RegisterType((*BareMetalHostNetworkConfiguration)(nil), "moc.baremetalhostagent.BareMetalHostNetworkConfiguration")
 	proto.RegisterType((*BareMetalHostUserConfiguration)(nil), "moc.baremetalhostagent.BareMetalHostUserConfiguration")
 	proto.RegisterType((*BareMetalHostRDPConfiguration)(nil), "moc.baremetalhostagent.BareMetalHostRDPConfiguration")
 	proto.RegisterType((*BareMetalHostLinuxConfiguration)(nil), "moc.baremetalhostagent.BareMetalHostLinuxConfiguration")
 	proto.RegisterType((*BareMetalHostWindowsConfiguration)(nil), "moc.baremetalhostagent.BareMetalHostWindowsConfiguration")
 	proto.RegisterType((*BareMetalHostOperatingSystemConfiguration)(nil), "moc.baremetalhostagent.BareMetalHostOperatingSystemConfiguration")
-	proto.RegisterType((*BareMetalMachineSize)(nil), "moc.baremetalhostagent.BareMetalMachineSize")
-	proto.RegisterType((*BareMetalHostHardwareConfiguration)(nil), "moc.baremetalhostagent.BareMetalHostHardwareConfiguration")
-	proto.RegisterType((*BareMetalHostSecurityConfiguration)(nil), "moc.baremetalhostagent.BareMetalHostSecurityConfiguration")
 	proto.RegisterType((*BareMetalHost)(nil), "moc.baremetalhostagent.BareMetalHost")
 	proto.RegisterType((*BareMetalHostRequest)(nil), "moc.baremetalhostagent.BareMetalHostRequest")
 	proto.RegisterType((*BareMetalHostResponse)(nil), "moc.baremetalhostagent.BareMetalHostResponse")
@@ -902,79 +549,57 @@ func init() {
 func init() { proto.RegisterFile("moc_baremetalhostagent.proto", fileDescriptor_254a3462c20ef4c7) }
 
 var fileDescriptor_254a3462c20ef4c7 = []byte{
-	// 1147 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0xdd, 0x6e, 0xe3, 0x44,
-	0x14, 0x26, 0x6d, 0x93, 0x36, 0x27, 0xb4, 0xb0, 0xa3, 0xb2, 0x98, 0x68, 0x5b, 0x8a, 0x57, 0xa0,
-	0x56, 0x2a, 0x09, 0x1b, 0xb4, 0x8b, 0xe0, 0x66, 0x69, 0x9a, 0x6a, 0x8b, 0x76, 0xdb, 0xa6, 0x93,
-	0x76, 0x91, 0x56, 0x48, 0x68, 0xe2, 0x9c, 0xb8, 0xa6, 0xb1, 0xc7, 0xcc, 0x8c, 0x15, 0xd2, 0x5b,
-	0x6e, 0x79, 0x00, 0x9e, 0x82, 0x17, 0xe1, 0x96, 0x2b, 0x9e, 0x06, 0xcd, 0xd8, 0x09, 0xb6, 0x63,
-	0x16, 0x0b, 0xb1, 0x57, 0xc9, 0x9c, 0x9f, 0xef, 0xfc, 0xcc, 0xf9, 0xe6, 0x18, 0x1e, 0xf8, 0xdc,
-	0xf9, 0x7e, 0xc8, 0x04, 0xfa, 0xa8, 0xd8, 0xe4, 0x86, 0x4b, 0xc5, 0x5c, 0x0c, 0x54, 0x2b, 0x14,
-	0x5c, 0x71, 0x72, 0xdf, 0xe7, 0x4e, 0x6b, 0x59, 0xdb, 0xdc, 0x75, 0x39, 0x77, 0x27, 0xd8, 0x36,
-	0x56, 0xc3, 0x68, 0xdc, 0x9e, 0x0a, 0x16, 0x86, 0x28, 0x64, 0xec, 0xd7, 0x7c, 0x5f, 0xa3, 0x3a,
-	0xdc, 0xf7, 0x79, 0x90, 0xfc, 0x24, 0x8a, 0xdd, 0xac, 0x22, 0x8c, 0x14, 0xa6, 0xf5, 0xf6, 0x63,
-	0xf8, 0xa0, 0xcb, 0x04, 0x9e, 0xe9, 0x70, 0xa7, 0x5c, 0xaa, 0xc1, 0xe0, 0xb4, 0x1f, 0x0d, 0x27,
-	0x9e, 0xf3, 0x1c, 0x67, 0xc4, 0x82, 0xf5, 0x5b, 0x9c, 0x8d, 0x98, 0x62, 0x56, 0x65, 0xaf, 0xb2,
-	0x5f, 0xa7, 0xf3, 0xa3, 0x7d, 0x01, 0xf7, 0x32, 0x6e, 0x3d, 0x4f, 0xde, 0x92, 0x26, 0x6c, 0x8c,
-	0x3c, 0x79, 0x7b, 0xce, 0x7c, 0x4c, 0xec, 0x17, 0x67, 0xb2, 0x0b, 0xa0, 0xff, 0x0f, 0xbc, 0x3b,
-	0x7c, 0xd6, 0xb5, 0x56, 0xf6, 0x2a, 0xfb, 0x55, 0x9a, 0x92, 0xd8, 0xbf, 0x54, 0xe0, 0xa3, 0x6c,
-	0x22, 0x8a, 0x0b, 0xe6, 0xe2, 0x31, 0x0f, 0xc6, 0x9e, 0x1b, 0x09, 0xa6, 0x3c, 0x1e, 0x90, 0xa7,
-	0x50, 0xd5, 0x3e, 0xd2, 0xaa, 0xec, 0xad, 0xee, 0x37, 0x3a, 0x07, 0xad, 0xe2, 0x76, 0xb5, 0x96,
-	0x72, 0xa3, 0xb1, 0x1f, 0xf9, 0x04, 0xb6, 0x3c, 0x9f, 0xb9, 0x48, 0x71, 0x8c, 0x02, 0x03, 0x07,
-	0x4d, 0x2a, 0x75, 0x9a, 0x93, 0xda, 0x03, 0xd8, 0xc9, 0x60, 0x9c, 0xa3, 0x9a, 0x72, 0x71, 0xfb,
-	0x4d, 0xa0, 0x50, 0x8c, 0x99, 0x83, 0xa4, 0x03, 0xdb, 0x41, 0x4e, 0x96, 0xaa, 0xbb, 0x50, 0x67,
-	0xdf, 0xe5, 0x4a, 0x4c, 0x40, 0xb3, 0x25, 0x5e, 0x03, 0x78, 0x73, 0xaf, 0x79, 0x9d, 0x8f, 0x4b,
-	0xd5, 0x99, 0xcf, 0x91, 0xa6, 0x80, 0xec, 0x9f, 0x2b, 0xb0, 0x9b, 0xb1, 0xbe, 0x96, 0x28, 0xb2,
-	0x91, 0x9b, 0xb0, 0x11, 0x49, 0x14, 0x41, 0xea, 0xfa, 0xe6, 0x67, 0xad, 0x0b, 0x99, 0x94, 0x53,
-	0x2e, 0x46, 0x49, 0xc7, 0x16, 0x67, 0x72, 0x10, 0xfb, 0xa9, 0x59, 0x88, 0xd6, 0xea, 0x5e, 0x65,
-	0x7f, 0xab, 0xb3, 0x69, 0xf2, 0xd5, 0x11, 0xae, 0x66, 0x21, 0xd2, 0x85, 0xda, 0x7e, 0x9a, 0x6b,
-	0x2b, 0xed, 0xf5, 0xb3, 0x39, 0xc4, 0x63, 0xc2, 0x86, 0x13, 0xa4, 0xbd, 0xbe, 0xc9, 0x62, 0x83,
-	0xa6, 0x24, 0xb6, 0x0b, 0x1f, 0x66, 0x00, 0x5e, 0x78, 0x41, 0xf4, 0x53, 0x16, 0xa2, 0x07, 0x3b,
-	0x89, 0x43, 0x3f, 0xc9, 0xf0, 0x28, 0x52, 0x37, 0x18, 0x28, 0xcf, 0x31, 0x06, 0x09, 0xea, 0xeb,
-	0x8d, 0xec, 0x3f, 0xf3, 0xf3, 0xf8, 0xad, 0x17, 0x8c, 0xf8, 0x54, 0x66, 0x63, 0x3d, 0x81, 0xfb,
-	0x18, 0x68, 0x94, 0xa3, 0x48, 0x71, 0x9f, 0x29, 0xcf, 0xb9, 0x0e, 0x47, 0x4c, 0x99, 0x8b, 0xd3,
-	0x41, 0xfe, 0x41, 0xab, 0xdb, 0xa9, 0x3c, 0x1f, 0x5f, 0xf1, 0x60, 0x3e, 0x80, 0x8b, 0x33, 0x61,
-	0xf0, 0x6e, 0xbe, 0x2d, 0xa6, 0xad, 0x65, 0xc7, 0x20, 0xef, 0x4c, 0x97, 0xe0, 0xec, 0xdf, 0xab,
-	0x70, 0x90, 0xf1, 0xb9, 0x08, 0x51, 0xab, 0x02, 0x77, 0x30, 0x93, 0x0a, 0xfd, 0x6c, 0x91, 0x36,
-	0xbc, 0x9d, 0xbc, 0x1c, 0x22, 0x35, 0xe2, 0x19, 0x19, 0xf9, 0x0e, 0x36, 0xd9, 0xc8, 0xf7, 0x02,
-	0x4f, 0x2a, 0xc1, 0x14, 0x17, 0xa6, 0xaa, 0x46, 0xe7, 0x49, 0xa9, 0x8c, 0x97, 0x46, 0x91, 0x66,
-	0xc1, 0xc8, 0x0b, 0xa8, 0xea, 0x11, 0x92, 0xd6, 0xaa, 0xa1, 0xc3, 0x7f, 0x45, 0x8d, 0x41, 0xf4,
-	0x8c, 0x39, 0x91, 0x54, 0xdc, 0xef, 0xe9, 0x87, 0x6d, 0xcd, 0x54, 0x93, 0x92, 0x90, 0x4b, 0x80,
-	0xd0, 0x3c, 0x81, 0xb7, 0x38, 0x93, 0x56, 0xd5, 0x84, 0x7c, 0x54, 0x2a, 0x64, 0xfa, 0xf1, 0xa4,
-	0x29, 0x10, 0xf2, 0x19, 0xd4, 0xb8, 0x34, 0x04, 0xa9, 0x19, 0x82, 0x58, 0x06, 0x2e, 0xd7, 0x75,
-	0xc3, 0x95, 0xc4, 0x8e, 0x5c, 0xc2, 0x3d, 0x2e, 0xbb, 0x9c, 0x2b, 0xdd, 0x83, 0xf0, 0x24, 0x70,
-	0xbd, 0x00, 0xad, 0x75, 0xe3, 0xfc, 0xb0, 0xc8, 0x39, 0x67, 0x4a, 0x97, 0xbd, 0x89, 0x0b, 0x64,
-	0xb2, 0x44, 0x17, 0x6b, 0xc3, 0x5c, 0xd4, 0x17, 0xa5, 0xea, 0x5b, 0x66, 0x1b, 0x2d, 0x80, 0x24,
-	0x3e, 0x6c, 0x4f, 0x0b, 0xd8, 0x62, 0xd5, 0x4d, 0xa8, 0x2f, 0x4b, 0x85, 0x2a, 0xa2, 0x1b, 0x2d,
-	0x84, 0xb5, 0x7f, 0x80, 0xed, 0x85, 0xeb, 0x19, 0x73, 0x6e, 0xbc, 0x00, 0xf5, 0x52, 0xd1, 0x24,
-	0x73, 0xc2, 0xe8, 0x98, 0x47, 0x81, 0x32, 0x33, 0x5b, 0xa5, 0x8b, 0xb3, 0xd6, 0xb9, 0x73, 0x5d,
-	0xbc, 0x8c, 0x16, 0x67, 0xad, 0xf3, 0xd1, 0xe7, 0x62, 0x76, 0xd6, 0x35, 0xc4, 0xab, 0xd2, 0xc5,
-	0xd9, 0x1e, 0x83, 0x9d, 0x49, 0xf3, 0x94, 0x89, 0xd1, 0x94, 0x89, 0xdc, 0x9a, 0xfa, 0x1a, 0xd6,
-	0xa4, 0x77, 0x17, 0x33, 0xa5, 0xd1, 0x39, 0xfc, 0xd7, 0x82, 0x53, 0x59, 0x53, 0xe3, 0x69, 0x77,
-	0x73, 0x71, 0x06, 0xe8, 0x44, 0xc2, 0x53, 0xb3, 0x6c, 0x9c, 0x07, 0x50, 0x8f, 0x1f, 0x98, 0xab,
-	0xfe, 0x59, 0xf2, 0xe2, 0xfc, 0x2d, 0xb0, 0x7f, 0xad, 0xc2, 0x66, 0x06, 0x84, 0x10, 0x58, 0x4b,
-	0xbd, 0xee, 0xe6, 0x3f, 0x19, 0xc0, 0xba, 0x8c, 0x57, 0x6d, 0xc2, 0xd9, 0x72, 0xf7, 0x53, 0xb4,
-	0x9e, 0xe9, 0x1c, 0x89, 0x5c, 0xc2, 0x0a, 0x97, 0xc9, 0xab, 0x75, 0x54, 0x0a, 0xef, 0x75, 0x2f,
-	0x10, 0x5d, 0xe1, 0x52, 0xe7, 0x99, 0x2c, 0x55, 0x43, 0xd9, 0xb2, 0x79, 0x16, 0xed, 0x58, 0x3a,
-	0x47, 0x22, 0x2f, 0x61, 0xe3, 0x26, 0xb9, 0x41, 0xab, 0x6a, 0x50, 0xbf, 0x2a, 0x85, 0x5a, 0x78,
-	0xed, 0x74, 0x81, 0x45, 0x1e, 0x42, 0x4d, 0x2a, 0xa6, 0x22, 0x69, 0xf8, 0xde, 0xe8, 0x34, 0x0c,
-	0xea, 0xc0, 0x88, 0x68, 0xa2, 0x22, 0x87, 0x70, 0x8f, 0x4d, 0x26, 0x7c, 0x8a, 0xa3, 0x8b, 0x69,
-	0x80, 0xe2, 0x9c, 0x8f, 0x50, 0x5a, 0xeb, 0x7b, 0xab, 0xfb, 0x75, 0xba, 0xac, 0x20, 0x6d, 0x80,
-	0x90, 0x4f, 0x51, 0x68, 0x10, 0x34, 0xac, 0xdd, 0xea, 0xbc, 0x63, 0x60, 0xfb, 0x0b, 0x31, 0x4d,
-	0x99, 0xe8, 0xda, 0x64, 0x32, 0x35, 0x09, 0xf3, 0xca, 0xd5, 0x56, 0x38, 0x6a, 0x74, 0x81, 0xa5,
-	0x6b, 0xd3, 0x7b, 0x52, 0xcd, 0x2c, 0x48, 0xd5, 0x76, 0x62, 0x44, 0x34, 0x51, 0x91, 0x1d, 0x58,
-	0x53, 0xcc, 0x95, 0x56, 0xc3, 0x98, 0xd4, 0x8d, 0xc9, 0x15, 0x73, 0x25, 0x35, 0x62, 0xdb, 0x49,
-	0x51, 0xd6, 0xec, 0x2c, 0xfc, 0x31, 0x42, 0xa9, 0xc8, 0x73, 0xd8, 0x1c, 0xa6, 0xe5, 0x09, 0x83,
-	0x3e, 0x2e, 0xb7, 0xf8, 0xb2, 0xbe, 0xf6, 0x6f, 0x15, 0x78, 0x2f, 0x17, 0x45, 0x86, 0x3c, 0x90,
-	0xf8, 0xbf, 0x86, 0x21, 0x1d, 0xa8, 0x51, 0x94, 0xd1, 0x44, 0x25, 0xfc, 0x69, 0xb6, 0xe2, 0x6f,
-	0xf5, 0xd6, 0xfc, 0x5b, 0xbd, 0xd5, 0xe5, 0x7c, 0xf2, 0x92, 0x4d, 0x22, 0xa4, 0x89, 0x25, 0xd9,
-	0x86, 0xea, 0x89, 0x10, 0x5c, 0x18, 0x8a, 0xd4, 0x69, 0x7c, 0xe8, 0xfc, 0xb1, 0x02, 0x24, 0x13,
-	0xea, 0x48, 0x47, 0x27, 0x1c, 0xb6, 0x8e, 0x05, 0x32, 0x85, 0x17, 0x22, 0xfe, 0x7e, 0x20, 0x87,
-	0xe5, 0x12, 0x8d, 0x9b, 0xda, 0xfc, 0xb4, 0xa4, 0x75, 0xdc, 0x1c, 0xfb, 0x2d, 0xe2, 0x42, 0xad,
-	0x87, 0x13, 0x7c, 0xf3, 0x81, 0x46, 0xb0, 0xfa, 0x0c, 0xd5, 0x1b, 0x8e, 0xd2, 0x7d, 0xf4, 0xaa,
-	0xed, 0x7a, 0xea, 0x26, 0x1a, 0xb6, 0x1c, 0xee, 0xb7, 0x7d, 0xcf, 0x11, 0x5c, 0xf2, 0xb1, 0x6a,
-	0xfb, 0xdc, 0x69, 0x8b, 0xd0, 0x69, 0x2f, 0x43, 0x0d, 0x6b, 0xe6, 0xee, 0x3e, 0xff, 0x2b, 0x00,
-	0x00, 0xff, 0xff, 0x0b, 0x29, 0x78, 0x30, 0xad, 0x0d, 0x00, 0x00,
+	// 796 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x55, 0xdd, 0x6e, 0xe3, 0x44,
+	0x14, 0x26, 0x69, 0x93, 0x6d, 0x4e, 0xc8, 0x0a, 0x46, 0x65, 0x31, 0x11, 0x0d, 0xc5, 0x2b, 0xa4,
+	0x5d, 0x09, 0x1c, 0xd6, 0x68, 0x8b, 0xb8, 0x42, 0x09, 0xa9, 0x54, 0xa9, 0x05, 0xd2, 0x49, 0x0b,
+	0x52, 0x85, 0x84, 0x26, 0xce, 0xd4, 0x1d, 0xd5, 0xf6, 0x31, 0x33, 0x63, 0x85, 0x5c, 0x70, 0xc5,
+	0xfb, 0xf0, 0x22, 0xbc, 0x01, 0x2f, 0xc1, 0x2b, 0x20, 0x8f, 0x9d, 0xe2, 0x49, 0x42, 0x65, 0x89,
+	0xbd, 0x4a, 0xe6, 0xfc, 0x7c, 0xdf, 0x99, 0xe3, 0xf3, 0x9d, 0x81, 0x0f, 0x63, 0x0c, 0x7e, 0x9e,
+	0x33, 0xc9, 0x63, 0xae, 0x59, 0x74, 0x87, 0x4a, 0xb3, 0x90, 0x27, 0xda, 0x4b, 0x25, 0x6a, 0x24,
+	0xcf, 0x62, 0x0c, 0xbc, 0x6d, 0x6f, 0x7f, 0x10, 0x22, 0x86, 0x11, 0x1f, 0x9a, 0xa8, 0x79, 0x76,
+	0x3b, 0x5c, 0x4a, 0x96, 0xa6, 0x5c, 0xaa, 0x22, 0xaf, 0xff, 0x7e, 0x8e, 0x1a, 0x60, 0x1c, 0x63,
+	0x52, 0xfe, 0x94, 0x8e, 0x81, 0xed, 0x48, 0x33, 0xcd, 0xab, 0x7e, 0xf7, 0x35, 0x7c, 0x30, 0x66,
+	0x92, 0x7f, 0x9b, 0xd3, 0x9d, 0xa1, 0xd2, 0xb3, 0xd9, 0xd9, 0x34, 0x9b, 0x47, 0x22, 0x38, 0xe7,
+	0x2b, 0xe2, 0xc0, 0x93, 0x7b, 0xbe, 0x5a, 0x30, 0xcd, 0x9c, 0xc6, 0x71, 0xe3, 0x45, 0x87, 0xae,
+	0x8f, 0xee, 0xef, 0x0d, 0x18, 0x58, 0x79, 0xd7, 0x8a, 0xcb, 0x6f, 0x30, 0xb9, 0x15, 0x61, 0x26,
+	0x99, 0x16, 0x98, 0x90, 0x3e, 0x1c, 0x64, 0x8a, 0xcb, 0x84, 0xc5, 0xbc, 0xcc, 0x7e, 0x38, 0xe7,
+	0xbe, 0x94, 0x29, 0xb5, 0x44, 0xb9, 0x70, 0x9a, 0x85, 0x6f, 0x7d, 0x26, 0x2f, 0x8b, 0x3c, 0xbd,
+	0x4a, 0xb9, 0xb3, 0x77, 0xdc, 0x78, 0xf1, 0xd4, 0xef, 0x79, 0x79, 0x57, 0x72, 0x86, 0xab, 0x55,
+	0xca, 0xe9, 0x83, 0xdb, 0xfd, 0x1a, 0x8e, 0xac, 0x22, 0xe8, 0x64, 0x6a, 0xd7, 0x30, 0x00, 0x58,
+	0x08, 0xc5, 0xe6, 0x11, 0xa7, 0x93, 0xa9, 0xa9, 0xe2, 0x80, 0x56, 0x2c, 0x6e, 0x08, 0x1f, 0x59,
+	0x00, 0x17, 0x22, 0xc9, 0x7e, 0xb5, 0x21, 0x26, 0x70, 0x54, 0x26, 0x4c, 0xcb, 0x0a, 0x47, 0x99,
+	0xbe, 0xe3, 0x89, 0x16, 0x81, 0x09, 0x28, 0x51, 0x1f, 0x0f, 0x72, 0xff, 0x6a, 0xc0, 0xc7, 0x16,
+	0xd3, 0x8f, 0x22, 0x59, 0xe0, 0x52, 0xd9, 0x5c, 0x27, 0xf0, 0x8c, 0x27, 0x39, 0xca, 0x28, 0xd3,
+	0x18, 0x33, 0x2d, 0x82, 0xeb, 0x74, 0xc1, 0x34, 0x57, 0x25, 0xc9, 0x7f, 0x78, 0xf3, 0x76, 0x6a,
+	0x11, 0xf3, 0x1b, 0x4c, 0xf8, 0xba, 0x9d, 0xeb, 0x33, 0x61, 0xf0, 0xce, 0x66, 0x5b, 0x4c, 0x5b,
+	0xbb, 0xfe, 0x6b, 0x6f, 0xf7, 0xb0, 0x79, 0x8f, 0xf6, 0x94, 0x6e, 0xc1, 0xb9, 0x7f, 0xb6, 0xe0,
+	0xa5, 0x95, 0xf3, 0x7d, 0xca, 0x73, 0x57, 0x12, 0xce, 0x56, 0x4a, 0xf3, 0xd8, 0xbe, 0xa4, 0x0b,
+	0x6f, 0x97, 0x83, 0x28, 0xbf, 0xfb, 0x77, 0x36, 0x2c, 0x1b, 0xf9, 0x09, 0x7a, 0x6c, 0x11, 0x8b,
+	0x44, 0x28, 0x2d, 0x99, 0x46, 0x69, 0x6e, 0xd5, 0xf5, 0x4f, 0x6a, 0x55, 0xbc, 0x35, 0x8a, 0xd4,
+	0x06, 0x23, 0x17, 0xd0, 0xca, 0x47, 0x48, 0x39, 0x7b, 0xc7, 0x7b, 0xff, 0x03, 0xb5, 0x00, 0xc9,
+	0x67, 0x2c, 0xc8, 0x94, 0xc6, 0x78, 0x92, 0xeb, 0x64, 0xdf, 0xdc, 0xa6, 0x62, 0x21, 0x97, 0x00,
+	0xa9, 0x51, 0xd4, 0x3d, 0x5f, 0x29, 0xa7, 0x65, 0x28, 0x5f, 0xd5, 0xa2, 0xac, 0x6a, 0x91, 0x56,
+	0x40, 0xc8, 0xe7, 0xd0, 0x46, 0x65, 0x04, 0xd2, 0x36, 0x02, 0x71, 0x0c, 0xdc, 0x46, 0xd7, 0x8d,
+	0x56, 0xca, 0x38, 0x72, 0x09, 0xef, 0xa2, 0x1a, 0x23, 0xea, 0xbc, 0x07, 0xe9, 0x69, 0x12, 0x8a,
+	0x84, 0x3b, 0x4f, 0x4c, 0xf2, 0xf3, 0x5d, 0xc9, 0x1b, 0xa1, 0x74, 0x3b, 0x9b, 0x84, 0x40, 0xa2,
+	0x2d, 0xb9, 0x38, 0x07, 0xe6, 0x43, 0x7d, 0x59, 0xeb, 0x7e, 0xdb, 0x6a, 0xa3, 0x3b, 0x20, 0x49,
+	0x0c, 0x87, 0xcb, 0x1d, 0x6a, 0x71, 0x3a, 0x86, 0xea, 0xab, 0x5a, 0x54, 0xbb, 0xe4, 0x46, 0x77,
+	0xc2, 0xba, 0x7f, 0x37, 0xa0, 0x67, 0xe5, 0x12, 0x02, 0xfb, 0x95, 0x2d, 0x66, 0xfe, 0x93, 0xa7,
+	0xd0, 0x14, 0xeb, 0xdd, 0xd5, 0x14, 0x0b, 0x72, 0x09, 0x4d, 0x54, 0xa5, 0xb0, 0x46, 0xb5, 0x4a,
+	0x7a, 0x4c, 0x24, 0xb4, 0x89, 0x8a, 0x3c, 0x87, 0xb6, 0xd2, 0x4c, 0x67, 0xca, 0x0c, 0x55, 0xd7,
+	0xef, 0x1a, 0xd8, 0x99, 0x31, 0xd1, 0xd2, 0x95, 0x07, 0xe5, 0x6b, 0x46, 0xaf, 0x9c, 0x56, 0x25,
+	0xe8, 0xd4, 0x98, 0x68, 0xe9, 0x22, 0x47, 0xb0, 0xaf, 0x59, 0xa8, 0xcc, 0xb4, 0x74, 0xfd, 0x8e,
+	0x09, 0xb9, 0x62, 0xa1, 0xa2, 0xc6, 0xec, 0x06, 0x70, 0x68, 0x4b, 0x9e, 0xff, 0x92, 0x71, 0xa5,
+	0xc9, 0x39, 0xf4, 0xe6, 0x55, 0xbb, 0x69, 0x40, 0xd7, 0xff, 0xa4, 0xde, 0xde, 0xb0, 0x73, 0xdd,
+	0x3f, 0x1a, 0xf0, 0xde, 0x06, 0x8b, 0x4a, 0x31, 0x51, 0xfc, 0x8d, 0xd2, 0x10, 0x1f, 0xda, 0x94,
+	0xab, 0x2c, 0xd2, 0xe5, 0xca, 0xe8, 0x7b, 0xc5, 0xcb, 0xe9, 0xad, 0x5f, 0x4e, 0x6f, 0x8c, 0x18,
+	0xfd, 0xc0, 0xa2, 0x8c, 0xd3, 0x32, 0x92, 0x1c, 0x42, 0xeb, 0x54, 0x4a, 0x94, 0xe6, 0xf3, 0x75,
+	0x68, 0x71, 0xf0, 0x7f, 0x03, 0x62, 0x31, 0x8d, 0x72, 0x72, 0x12, 0x42, 0xbb, 0xd8, 0xba, 0xe4,
+	0xd3, 0x7a, 0xf5, 0x15, 0xbd, 0xec, 0x7f, 0x56, 0x33, 0xba, 0xe8, 0x89, 0xfb, 0xd6, 0xf8, 0xd5,
+	0xcd, 0x30, 0x14, 0xfa, 0x2e, 0x9b, 0x7b, 0x01, 0xc6, 0xc3, 0x58, 0x04, 0x12, 0x15, 0xde, 0xea,
+	0x61, 0x8c, 0xc1, 0x50, 0xa6, 0xc1, 0x70, 0x1b, 0x6a, 0xde, 0x36, 0x77, 0xfc, 0xe2, 0x9f, 0x00,
+	0x00, 0x00, 0xff, 0xff, 0x73, 0x66, 0x9b, 0x0c, 0x63, 0x08, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -989,9 +614,7 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type BareMetalHostAgentClient interface {
-	CreateOrUpdate(ctx context.Context, in *BareMetalHostRequest, opts ...grpc.CallOption) (*BareMetalHostResponse, error)
-	Delete(ctx context.Context, in *BareMetalHostRequest, opts ...grpc.CallOption) (*BareMetalHostResponse, error)
-	Get(ctx context.Context, in *BareMetalHostRequest, opts ...grpc.CallOption) (*BareMetalHostResponse, error)
+	Update(ctx context.Context, in *BareMetalHostRequest, opts ...grpc.CallOption) (*BareMetalHostResponse, error)
 }
 
 type bareMetalHostAgentClient struct {
@@ -1002,27 +625,9 @@ func NewBareMetalHostAgentClient(cc *grpc.ClientConn) BareMetalHostAgentClient {
 	return &bareMetalHostAgentClient{cc}
 }
 
-func (c *bareMetalHostAgentClient) CreateOrUpdate(ctx context.Context, in *BareMetalHostRequest, opts ...grpc.CallOption) (*BareMetalHostResponse, error) {
+func (c *bareMetalHostAgentClient) Update(ctx context.Context, in *BareMetalHostRequest, opts ...grpc.CallOption) (*BareMetalHostResponse, error) {
 	out := new(BareMetalHostResponse)
-	err := c.cc.Invoke(ctx, "/moc.baremetalhostagent.BareMetalHostAgent/CreateOrUpdate", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bareMetalHostAgentClient) Delete(ctx context.Context, in *BareMetalHostRequest, opts ...grpc.CallOption) (*BareMetalHostResponse, error) {
-	out := new(BareMetalHostResponse)
-	err := c.cc.Invoke(ctx, "/moc.baremetalhostagent.BareMetalHostAgent/Delete", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *bareMetalHostAgentClient) Get(ctx context.Context, in *BareMetalHostRequest, opts ...grpc.CallOption) (*BareMetalHostResponse, error) {
-	out := new(BareMetalHostResponse)
-	err := c.cc.Invoke(ctx, "/moc.baremetalhostagent.BareMetalHostAgent/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/moc.baremetalhostagent.BareMetalHostAgent/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1031,79 +636,35 @@ func (c *bareMetalHostAgentClient) Get(ctx context.Context, in *BareMetalHostReq
 
 // BareMetalHostAgentServer is the server API for BareMetalHostAgent service.
 type BareMetalHostAgentServer interface {
-	CreateOrUpdate(context.Context, *BareMetalHostRequest) (*BareMetalHostResponse, error)
-	Delete(context.Context, *BareMetalHostRequest) (*BareMetalHostResponse, error)
-	Get(context.Context, *BareMetalHostRequest) (*BareMetalHostResponse, error)
+	Update(context.Context, *BareMetalHostRequest) (*BareMetalHostResponse, error)
 }
 
 // UnimplementedBareMetalHostAgentServer can be embedded to have forward compatible implementations.
 type UnimplementedBareMetalHostAgentServer struct {
 }
 
-func (*UnimplementedBareMetalHostAgentServer) CreateOrUpdate(ctx context.Context, req *BareMetalHostRequest) (*BareMetalHostResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateOrUpdate not implemented")
-}
-func (*UnimplementedBareMetalHostAgentServer) Delete(ctx context.Context, req *BareMetalHostRequest) (*BareMetalHostResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
-}
-func (*UnimplementedBareMetalHostAgentServer) Get(ctx context.Context, req *BareMetalHostRequest) (*BareMetalHostResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (*UnimplementedBareMetalHostAgentServer) Update(ctx context.Context, req *BareMetalHostRequest) (*BareMetalHostResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 
 func RegisterBareMetalHostAgentServer(s *grpc.Server, srv BareMetalHostAgentServer) {
 	s.RegisterService(&_BareMetalHostAgent_serviceDesc, srv)
 }
 
-func _BareMetalHostAgent_CreateOrUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _BareMetalHostAgent_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(BareMetalHostRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BareMetalHostAgentServer).CreateOrUpdate(ctx, in)
+		return srv.(BareMetalHostAgentServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/moc.baremetalhostagent.BareMetalHostAgent/CreateOrUpdate",
+		FullMethod: "/moc.baremetalhostagent.BareMetalHostAgent/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BareMetalHostAgentServer).CreateOrUpdate(ctx, req.(*BareMetalHostRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _BareMetalHostAgent_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BareMetalHostRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BareMetalHostAgentServer).Delete(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/moc.baremetalhostagent.BareMetalHostAgent/Delete",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BareMetalHostAgentServer).Delete(ctx, req.(*BareMetalHostRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _BareMetalHostAgent_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BareMetalHostRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(BareMetalHostAgentServer).Get(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/moc.baremetalhostagent.BareMetalHostAgent/Get",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BareMetalHostAgentServer).Get(ctx, req.(*BareMetalHostRequest))
+		return srv.(BareMetalHostAgentServer).Update(ctx, req.(*BareMetalHostRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1113,16 +674,8 @@ var _BareMetalHostAgent_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*BareMetalHostAgentServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateOrUpdate",
-			Handler:    _BareMetalHostAgent_CreateOrUpdate_Handler,
-		},
-		{
-			MethodName: "Delete",
-			Handler:    _BareMetalHostAgent_Delete_Handler,
-		},
-		{
-			MethodName: "Get",
-			Handler:    _BareMetalHostAgent_Get_Handler,
+			MethodName: "Update",
+			Handler:    _BareMetalHostAgent_Update_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
