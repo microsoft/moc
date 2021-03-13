@@ -40,8 +40,75 @@ var (
 	NoActionTaken        error = errors.New("No Action Taken")
 	Expired              error = errors.New("Expired")
 	Revoked              error = errors.New("Revoked")
+	Timeout              error = errors.New("The operation has timed out")
 	Unknown              error = errors.New("Unknown Reason")
 )
+
+func GetErrorCode(err error) string {
+	if IsNotFound(err) {
+		return "NotFound"
+	} else if IsDegraded(err) {
+		return "Degraded"
+	} else if IsInvalidConfiguration(err) {
+		return "InvalidConfiguration"
+	} else if IsInvalidInput(err) {
+		return "InvalidInput"
+	} else if IsNotSupported(err) {
+		return "NotSupported"
+	} else if IsAlreadyExists(err) {
+		return "AlreadyExists"
+	} else if IsInUse(err) {
+		return "InUse"
+	} else if IsDuplicates(err) {
+		return "Duplicates"
+	} else if IsInvalidFilter(err) {
+		return "InvalidFilter"
+	} else if IsFailed(err) {
+		return "Failed"
+	} else if IsInvalidGroup(err) {
+		return "InvalidGroup"
+	} else if IsInvalidVersion(err) {
+		return "InvalidVersion"
+	} else if IsOldVersion(err) {
+		return "OldVersion"
+	} else if IsOutOfCapacity(err) {
+		return "OutOfCapacity"
+	} else if IsOutOfMemory(err) {
+		return "OutOfMemory"
+	} else if IsUpdateFailed(err) {
+		return "UpdateFailed"
+	} else if IsNotInitialized(err) {
+		return "NotInitialized"
+	} else if IsNotImplemented(err) {
+		return "NotImplemented"
+	} else if IsOutOfRange(err) {
+		return "OutOfRange"
+	} else if IsAlreadySet(err) {
+		return "AlreadySet"
+	} else if IsNotSet(err) {
+		return "NotSet"
+	} else if IsInconsistentState(err) {
+		return "InconsistentState"
+	} else if IsPendingState(err) {
+		return "PendingState"
+	} else if IsWrongHost(err) {
+		return "WrongHost"
+	} else if IsPoolFull(err) {
+		return "PoolFull"
+	} else if IsNoActionTaken(err) {
+		return "NoActionTaken"
+	} else if IsExpired(err) {
+		return "Expired"
+	} else if IsRevoked(err) {
+		return "Revoked"
+	} else if IsTimeout(err) {
+		return "Timeout"
+	} else if IsUnknown(err) {
+		return "Unknown"
+	}
+
+	return "GenericError"
+}
 
 func Wrap(cause error, message string) error {
 	return perrors.Wrap(cause, message)
@@ -153,6 +220,27 @@ func IsPendingState(err error) bool {
 func IsInUse(err error) bool {
 	return checkError(err, InUse)
 }
+func IsDuplicates(err error) bool {
+	return checkError(err, Duplicates)
+}
+func IsInvalidFilter(err error) bool {
+	return checkError(err, InvalidFilter)
+}
+func IsFailed(err error) bool {
+	return checkError(err, Failed)
+}
+func IsOldVersion(err error) bool {
+	return checkError(err, OldVersion)
+}
+func IsUpdateFailed(err error) bool {
+	return checkError(err, UpdateFailed)
+}
+func IsNotImplemented(err error) bool {
+	return checkError(err, NotImplemented)
+}
+func IsUnknown(err error) bool {
+	return checkError(err, Unknown)
+}
 func IsWrongHost(err error) bool {
 	return checkError(err, WrongHost)
 }
@@ -161,6 +249,15 @@ func IsPoolFull(err error) bool {
 }
 func IsNoActionTaken(err error) bool {
 	return checkError(err, NoActionTaken)
+}
+func IsExpired(err error) bool {
+	return checkError(err, Expired)
+}
+func IsRevoked(err error) bool {
+	return checkError(err, Revoked)
+}
+func IsTimeout(err error) bool {
+	return checkError(err, Timeout)
 }
 
 func checkError(wrappedError, err error) bool {
