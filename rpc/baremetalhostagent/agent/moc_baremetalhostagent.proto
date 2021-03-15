@@ -1,0 +1,38 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/baremetalhostagent";
+
+package moc.baremetalhostagent;
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_computecommon.proto";
+
+message BareMetalHostOperatingSystemConfiguration {
+	string computerName = 1;
+	string customData = 2;
+}
+
+message BareMetalHost {
+	string name = 1;
+	string id = 2;
+	BareMetalHostOperatingSystemConfiguration os = 3;
+	Status status = 4;
+	Entity entity = 5;
+	Tags tags = 6;
+}
+
+message BareMetalHostRequest {
+	BareMetalHost bareMetalHost = 1;
+}
+
+message BareMetalHostResponse {
+	BareMetalHost bareMetalHost = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+service BareMetalHostAgent {
+	rpc Update(BareMetalHostRequest) returns (BareMetalHostResponse) {}
+}
