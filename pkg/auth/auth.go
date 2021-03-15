@@ -44,9 +44,11 @@ const (
 )
 
 type WssdConfig struct {
-	CloudCertificate  string
-	ClientCertificate string
-	ClientKey         string
+	CloudCertificate      string
+	ClientCertificate     string
+	ClientKey             string
+	ClientCertificateType LoginType
+	IdentityName          string
 }
 
 type Authorizer interface {
@@ -109,11 +111,19 @@ func NewAuthorizerFromEnvironment(serverName string) (Authorizer, error) {
 	if err != nil {
 		return nil, err
 	}
+	err = RenewCertificates(settings.GetManagedIdentityConfig().ServerName, settings.GetManagedIdentityConfig().WssdConfigPath)
+	if err != nil {
+		return nil, err
+	}
 	return settings.GetAuthorizer()
 }
 
 func NewAuthorizerFromEnvironmentByName(serverName, subfolder, filename string) (Authorizer, error) {
 	settings, err := GetSettingsFromEnvironmentByName(serverName, subfolder, filename)
+	if err != nil {
+		return nil, err
+	}
+	err = RenewCertificates(settings.GetManagedIdentityConfig().ServerName, settings.GetManagedIdentityConfig().WssdConfigPath)
 	if err != nil {
 		return nil, err
 	}
@@ -542,7 +552,6 @@ func PrintAccessFile(accessFile WssdConfig) error {
 
 // PrintAccessFileByName stores wssdConfig in GetWssdConfigLocationName
 func PrintAccessFileByName(accessFile WssdConfig, subfolder, filename string) error {
-	fmt.Println("Rgha")
 	return marshal.ToJSONFile(accessFile, GetMocConfigLocationName(subfolder, filename))
 }
 

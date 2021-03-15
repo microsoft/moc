@@ -6,7 +6,9 @@ option go_package = "github.com/microsoft/moc/rpc/cloudagent/security";
 package moc.cloudagent.security;
 
 import "google/protobuf/wrappers.proto";
+import "moc_cloudagent_certificate.proto";
 import "moc_common_common.proto";
+import "moc_common_security.proto";
 
 message IdentityRequest {
 	repeated Identity Identitys = 1;
@@ -15,6 +17,23 @@ message IdentityRequest {
 
 message IdentityResponse {
 	repeated Identity Identitys = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message IdentityOperationRequest {
+	repeated Identity Identities = 1;
+	IdentityOperation OperationType = 2;
+}
+
+message IdentityCertificateRequest {
+	string IdentityName = 1;
+	repeated CertificateSigningRequest CSR = 2;
+	IdentityCertificateOperation OperationType = 3;
+}
+
+message IdentityCertificateResponse {
+	repeated Certificate Certificates = 1;
 	google.protobuf.BoolValue Result = 2;
 	string  Error = 3;
 }
@@ -36,8 +55,11 @@ message Identity {
 	int32 cloudPort = 16;
 	int32 cloudAuthPort = 17;
 	AuthenticationType authType = 18;
+	bool revoked = 19;
 }
 
 service IdentityAgent {
 	rpc Invoke(IdentityRequest) returns (IdentityResponse) {}
+	rpc Operate(IdentityOperationRequest) returns (IdentityResponse) {}
+	rpc OperateCertificates(IdentityCertificateRequest) returns (IdentityCertificateResponse) {}
 }

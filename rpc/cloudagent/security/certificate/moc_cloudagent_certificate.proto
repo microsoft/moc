@@ -35,8 +35,7 @@ message CertificateSigningRequest {
     string groupName = 6;
     string vaultName = 7;
     string locationName = 8;
-    string identity = 9;
-    int64 validity = 10;
+    int64 validity = 9;
 }
 
 message Certificate {

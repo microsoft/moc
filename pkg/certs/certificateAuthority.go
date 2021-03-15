@@ -160,7 +160,7 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 	var oldCert *x509.Certificate
 	if oldCertPem != nil || len(oldCertPem) != 0 {
 		if err = ca.VerifyClientCertificate([][]byte{oldCertPem}); err != nil {
-			return nil, errors.Wrapf(errors.InvalidInput, "Old certificate not signed by the CA authority : %v", err)
+			return nil, errors.Wrapf(errors.InvalidInput, "Old certificate verification failed : %v", err)
 		}
 		oldCert, err = DecodeCertPEM(oldCertPem)
 	}
@@ -264,8 +264,8 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 		// We can now use the content from the certificate to be renewed
 		template = *certToRenew
 
-		// We are intentionally using the serial number from the certificate to be renewed
-		// template.SerialNumber
+		// Not reusing the serial number. New serial should be generated
+		template.SerialNumber = serial
 
 		// We are using the same validity as the certificate being renewed
 		validity := template.NotAfter.Sub(template.NotBefore)
