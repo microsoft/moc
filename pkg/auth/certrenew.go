@@ -8,6 +8,7 @@ import (
 	"crypto/x509"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/microsoft/moc/pkg/certs"
@@ -153,6 +154,9 @@ func RenewCertificates(server string, wssdConfigLocation string) error {
 	accessFile := WssdConfig{}
 	err := marshal.FromJSONFile(wssdConfigLocation, &accessFile)
 	if err != nil {
+		if err != os.ErrNotExist {
+			return nil
+		}
 		return err
 	}
 	if accessFile.ClientCertificateType == CASigned {
