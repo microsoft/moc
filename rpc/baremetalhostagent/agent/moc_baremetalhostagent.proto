@@ -7,7 +7,6 @@ option go_package = "github.com/microsoft/moc/rpc/baremetalhostagent";
 package moc.baremetalhostagent;
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
-import "moc_common_computecommon.proto";
 
 message BareMetalHostOperatingSystemConfiguration {
 	string computerName = 1;
