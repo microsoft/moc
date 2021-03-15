@@ -9,62 +9,18 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 import "moc_common_computecommon.proto";
 
-
-message BareMetalHostSSHPublicKey {
-	string keydata = 1;
-}
-
-message BareMetalHostDisk {
-	string diskName = 1;
-	int32 diskSizeGB = 2;
-}
-
-message BareMetalHostStorageConfiguration {
-	repeated BareMetalHostDisk disks = 1;
-	string imageReference = 2;
-}
-
-message BareMetalHostUserConfiguration {
-	string username = 1;
-	string password = 2;
-	UserType usertype = 3;
-}
-
-message BareMetalHostRDPConfiguration {
-	bool disableRDP = 1;
-}
-
-message BareMetalHostLinuxConfiguration {
-	bool disablePasswordAuthentication = 1;
-}
-
-message BareMetalHostWindowsConfiguration {
-	bool enableAutomaticUpdates = 1;
-	string timeZone = 2;
-	BareMetalHostRDPConfiguration RDPConfiguration = 3;
-}
-
 message BareMetalHostOperatingSystemConfiguration {
 	string computerName = 1;
-	BareMetalHostUserConfiguration administrator = 2;
-	repeated BareMetalHostUserConfiguration users = 3;
-	string customData = 4;
-	repeated BareMetalHostSSHPublicKey publickeys = 5;
-	OperatingSystemType ostype = 6;
-	// bootstrap engine can be cloud-init, Windows answer files, ...
-	OperatingSystemBootstrapEngine osBootstrapEngine = 7;
-	BareMetalHostLinuxConfiguration linuxConfiguration = 8;
-	BareMetalHostWindowsConfiguration windowsConfiguration = 9;
+	string customData = 2;
 }
 
 message BareMetalHost {
 	string name = 1;
 	string id = 2;
-	BareMetalHostStorageConfiguration storage = 3;
-	BareMetalHostOperatingSystemConfiguration os = 4;
-	Status status = 5;
-	Entity entity = 6;
-	Tags tags = 7;
+	BareMetalHostOperatingSystemConfiguration os = 3;
+	Status status = 4;
+	Entity entity = 5;
+	Tags tags = 6;
 }
 
 message BareMetalHostRequest {
