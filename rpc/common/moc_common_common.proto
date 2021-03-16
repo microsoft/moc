@@ -95,12 +95,40 @@ message Tags {
 }
 
 enum ClientType {
-        CONTROLPLANE = 0;
-        EXTERNALCLIENT = 1;
-        NODE = 2;
+	CONTROLPLANE = 0;
+	EXTERNALCLIENT = 1;
+	NODE = 2;
+	ADMIN = 3;
 }
 
 enum AuthenticationType {
 	SELFSIGNED = 0;
 	CASIGNED = 1;
+}
+
+enum ProviderType {
+	AnyProvider            = 0;
+	VirtualMachine         = 1;
+	VirtualMachineScaleSet = 2;
+	LoadBalancer           = 3;
+	VirtualNetwork         = 4;
+	VirtualHardDisk        = 5;
+	GalleryImage           = 6;
+	VirtualMachineImage    = 7;
+	NetworkInterface       = 8;
+	KeyVault               = 9;
+	Kubernetes             = 10;
+	Cluster                = 11;
+	ControlPlane           = 12;
+	Group                  = 13;
+	Node                   = 14;
+	Location               = 15;
+	StorageContainer       = 16;
+	StorageFile            = 17;
+	StorageDirectory       = 18;
+	Subscription           = 19;
+	VipPool                = 20;
+	MacPool                = 21;
+	EtcdCluster            = 22;
+	BareMetalMachine       = 23;
 }

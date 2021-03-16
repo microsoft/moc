@@ -1,0 +1,38 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/security";
+package moc.cloudagent.security;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_security.proto";
+
+message RoleAssignmentRequest {
+	repeated RoleAssignment roleAssignments = 2;
+	Operation OperationType = 3;
+}
+
+message RoleAssignmentResponse {
+	repeated RoleAssignment roleAssignments = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message RoleAssignment {
+	string name = 1;
+	string id = 2;
+	// Name of role to be applied
+	string roleName = 3;
+	// Scope to which role is applied
+	Scope scope = 4;
+	// Name of identity to be assigned to
+	string identityName = 5;
+	Status status = 6;
+	Tags tags = 7;
+}
+
+service RoleAssignmentAgent {
+	rpc Invoke(RoleAssignmentRequest) returns (RoleAssignmentResponse) {}
+}

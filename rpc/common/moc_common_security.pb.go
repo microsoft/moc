@@ -238,6 +238,69 @@ func (IdentityCertificateOperation) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_0d3874efde778ac1, []int{6}
 }
 
+type Scope struct {
+	Location             string       `protobuf:"bytes,1,opt,name=location,proto3" json:"location,omitempty"`
+	ResourceGroup        string       `protobuf:"bytes,2,opt,name=resourceGroup,proto3" json:"resourceGroup,omitempty"`
+	ProviderType         ProviderType `protobuf:"varint,3,opt,name=providerType,proto3,enum=moc.ProviderType" json:"providerType,omitempty"`
+	Resource             string       `protobuf:"bytes,4,opt,name=resource,proto3" json:"resource,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
+}
+
+func (m *Scope) Reset()         { *m = Scope{} }
+func (m *Scope) String() string { return proto.CompactTextString(m) }
+func (*Scope) ProtoMessage()    {}
+func (*Scope) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0d3874efde778ac1, []int{0}
+}
+
+func (m *Scope) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Scope.Unmarshal(m, b)
+}
+func (m *Scope) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Scope.Marshal(b, m, deterministic)
+}
+func (m *Scope) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Scope.Merge(m, src)
+}
+func (m *Scope) XXX_Size() int {
+	return xxx_messageInfo_Scope.Size(m)
+}
+func (m *Scope) XXX_DiscardUnknown() {
+	xxx_messageInfo_Scope.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Scope proto.InternalMessageInfo
+
+func (m *Scope) GetLocation() string {
+	if m != nil {
+		return m.Location
+	}
+	return ""
+}
+
+func (m *Scope) GetResourceGroup() string {
+	if m != nil {
+		return m.ResourceGroup
+	}
+	return ""
+}
+
+func (m *Scope) GetProviderType() ProviderType {
+	if m != nil {
+		return m.ProviderType
+	}
+	return ProviderType_AnyProvider
+}
+
+func (m *Scope) GetResource() string {
+	if m != nil {
+		return m.Resource
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterEnum("moc.Algorithm", Algorithm_name, Algorithm_value)
 	proto.RegisterEnum("moc.KeyOperation", KeyOperation_name, KeyOperation_value)
@@ -246,12 +309,12 @@ func init() {
 	proto.RegisterEnum("moc.KeySize", KeySize_name, KeySize_value)
 	proto.RegisterEnum("moc.IdentityOperation", IdentityOperation_name, IdentityOperation_value)
 	proto.RegisterEnum("moc.IdentityCertificateOperation", IdentityCertificateOperation_name, IdentityCertificateOperation_value)
+	proto.RegisterType((*Scope)(nil), "moc.Scope")
 }
 
 func init() { proto.RegisterFile("moc_common_security.proto", fileDescriptor_0d3874efde778ac1) }
 
 var fileDescriptor_0d3874efde778ac1 = []byte{
-	// 418 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x54, 0x52, 0x5d, 0x6f, 0xd3, 0x30,
 	0x14, 0x6d, 0x92, 0xae, 0xa3, 0x17, 0x98, 0xee, 0x8c, 0x40, 0x42, 0xe2, 0x0d, 0xf1, 0x12, 0xa4,
 	0xb5, 0x4b, 0x3f, 0x18, 0x8f, 0x9e, 0x67, 0x44, 0x09, 0x4b, 0x2a, 0x27, 0x23, 0x1a, 0x2f, 0x51,
