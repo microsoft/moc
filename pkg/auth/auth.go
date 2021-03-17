@@ -578,6 +578,11 @@ func AccessFileToTls(accessFile WssdConfig) ([]byte, tls.Certificate, error) {
 	if err != nil {
 		return []byte{}, tls.Certificate{}, err
 	}
+
+	if err = certCheck(clientPem); err != nil {
+		return []byte{}, tls.Certificate{}, err
+	}
+
 	tlsCert, err := tls.X509KeyPair(clientPem, keyPem)
 	if err != nil {
 		return []byte{}, tls.Certificate{}, err
