@@ -12,6 +12,9 @@ import (
 	"path/filepath"
 	"testing"
 	"time"
+
+	"github.com/microsoft/moc/pkg/certs"
+	"github.com/microsoft/moc/pkg/errors"
 )
 
 var key *rsa.PrivateKey
@@ -200,5 +203,65 @@ func Test_GetCertRenewRequiredDelay(t *testing.T) {
 	time.Sleep(time.Second * 2)
 	if !renewRequired(x509Cert) {
 		t.Errorf("RenewRequired Expected:true Actual:false")
+	}
+}
+
+func Test_CertCheckNotExpired(t *testing.T) {
+	now := time.Now().UTC()
+
+	tmpl := x509.Certificate{
+		SerialNumber: new(big.Int).SetInt64(0),
+		Subject: pkix.Name{
+			CommonName: "test",
+		},
+		NotBefore: now,
+		NotAfter:  now.Add(time.Second * 30),
+	}
+
+	b, err := x509.CreateCertificate(rand.Reader, &tmpl, &tmpl, key.Public(), key)
+	if err != nil {
+		t.Errorf("Failed creating certificate %v", err)
+	}
+
+	x509Cert, err := x509.ParseCertificate(b)
+	if err != nil {
+		t.Errorf("Failed parsing certificate %v", err)
+	}
+
+	certPem := certs.EncodeCertPEM(x509Cert)
+	if err = certCheck(certPem); err != nil {
+		if errors.IsExpired(err) {
+			t.Errorf("certCheck return certificate expired %v: Expected Valid Certificate", err)
+		} else {
+			t.Errorf("certCheck Expected:nil Actual:%v", err)
+		}
+	}
+}
+
+func Test_CertCheckExpired(t *testing.T) {
+	now := time.Now().UTC()
+
+	tmpl := x509.Certificate{
+		SerialNumber: new(big.Int).SetInt64(0),
+		Subject: pkix.Name{
+			CommonName: "test",
+		},
+		NotBefore: now.Add(time.Second * -10),
+		NotAfter:  now.Add(time.Second * -1),
+	}
+
+	b, err := x509.CreateCertificate(rand.Reader, &tmpl, &tmpl, key.Public(), key)
+	if err != nil {
+		t.Errorf("Failed creating certificate %v", err)
+	}
+
+	x509Cert, err := x509.ParseCertificate(b)
+	if err != nil {
+		t.Errorf("Failed parsing certificate %v", err)
+	}
+
+	certPem := certs.EncodeCertPEM(x509Cert)
+	if err = certCheck(certPem); err == nil || !errors.IsExpired(err) {
+		t.Errorf("certCheck Expected:Expired Actual:%v", err)
 	}
 }

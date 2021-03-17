@@ -71,6 +71,20 @@ func renewRequired(x509Cert *x509.Certificate) bool {
 	return true
 }
 
+func certCheck(pemCert []byte) error {
+
+	x509Cert, err := certs.DecodeCertPEM([]byte(pemCert))
+	if err != nil {
+		return err
+	}
+
+	if time.Now().After(x509Cert.NotAfter) {
+		return errors.Wrapf(errors.Expired, "Certificate has expired")
+	}
+
+	return nil
+}
+
 // accessFiletoRenewClient creates a renew client from wssdconfig and server
 func accessFiletoRenewClient(server string, wssdConfig *WssdConfig) (security.IdentityAgentClient, error) {
 	serverPem, tlsCert, err := AccessFileToTls(*wssdConfig)
@@ -92,6 +106,10 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 	renewed = false
 	pemCert, pemKey, err := fromBase64(wssdConfig.ClientCertificate, wssdConfig.ClientKey)
 	if err != nil {
+		return
+	}
+
+	if err = certCheck(pemCert); err != nil {
 		return
 	}
 
