@@ -215,7 +215,7 @@ func Test_CertCheckNotExpired(t *testing.T) {
 			CommonName: "test",
 		},
 		NotBefore: now,
-		NotAfter:  now.Add(time.Second * 10),
+		NotAfter:  now.Add(time.Second * 30),
 	}
 
 	b, err := x509.CreateCertificate(rand.Reader, &tmpl, &tmpl, key.Public(), key)
@@ -230,7 +230,11 @@ func Test_CertCheckNotExpired(t *testing.T) {
 
 	certPem := certs.EncodeCertPEM(x509Cert)
 	if err = certCheck(certPem); err != nil {
-		t.Errorf("certCheck Expected:nil Actual:%v", err)
+		if errors.IsExpired(err) {
+			t.Errorf("certCheck return certificate expired %v: Expected Valid Certificate", err)
+		} else {
+			t.Errorf("certCheck Expected:nil Actual:%v", err)
+		}
 	}
 }
 
