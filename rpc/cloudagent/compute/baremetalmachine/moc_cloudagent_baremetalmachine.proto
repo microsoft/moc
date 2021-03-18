@@ -76,7 +76,11 @@ message BareMetalMachine {
 	string groupName = 10;
 	Status status = 11;
 	string locationName = 12;
-	Tags tags = 13;
+	string fqdn = 13; 
+	string certificate = 14;
+	int32  port = 15;
+	int32  authorizerPort = 16;
+	Tags tags = 17;
 }
 
 service BareMetalMachineAgent {
