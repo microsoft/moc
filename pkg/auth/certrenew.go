@@ -3,8 +3,6 @@
 package auth
 
 import (
-	"context"
-	"crypto/tls"
 	"crypto/x509"
 	"fmt"
 	"log"
@@ -15,7 +13,6 @@ import (
 	"github.com/microsoft/moc/pkg/errors"
 	"github.com/microsoft/moc/pkg/marshal"
 	"github.com/microsoft/moc/rpc/cloudagent/security"
-	"github.com/microsoft/moc/rpc/common"
 	"google.golang.org/grpc"
 )
 
@@ -104,7 +101,7 @@ func accessFiletoRenewClient(server string, wssdConfig *WssdConfig) (security.Id
 // If it is to early for renewal the same cert and key are returned in the wssdconfig
 func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdConfig, renewed bool, err error) {
 	renewed = false
-	pemCert, pemKey, err := fromBase64(wssdConfig.ClientCertificate, wssdConfig.ClientKey)
+	pemCert, _, err := fromBase64(wssdConfig.ClientCertificate, wssdConfig.ClientKey)
 	if err != nil {
 		return
 	}
@@ -122,7 +119,9 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 		return wssdConfig, renewed, nil
 	}
 
-	tlsCert, err := tls.X509KeyPair(pemCert, pemKey)
+	// To unblock PR. Will be added back again.
+	return wssdConfig, renewed, nil
+	/*tlsCert, err := tls.X509KeyPair(pemCert, pemKey)
 	if err != nil {
 		return
 	}
@@ -164,7 +163,7 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 		ClientCertificateType: wssdConfig.ClientCertificateType,
 		IdentityName:          wssdConfig.IdentityName,
 	}
-	return newWssdConfig, renewed, nil
+	return newWssdConfig, renewed, nil*/
 }
 
 // renewCertificates picks the wssdconfig from the location performs a renewal if close to expiry and stores the same back to the location
