@@ -36,6 +36,7 @@ message CertificateSigningRequest {
     string vaultName = 7;
     string locationName = 8;
     int64 validity = 9;
+    string identity = 10; // introduce to unblock PR. Will be removed. 
 }
 
 message Certificate {
