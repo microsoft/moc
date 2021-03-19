@@ -60,7 +60,6 @@ message Identity {
 
 service IdentityAgent {
 	rpc Invoke(IdentityRequest) returns (IdentityResponse) {}
-	// To unblock PR. Will be added back again. 
-	//rpc Operate(IdentityOperationRequest) returns (IdentityResponse) {}
-	//rpc OperateCertificates(IdentityCertificateRequest) returns (IdentityCertificateResponse) {}
+	rpc Operate(IdentityOperationRequest) returns (IdentityResponse) {}
+	rpc OperateCertificates(IdentityCertificateRequest) returns (IdentityCertificateResponse) {}
 }
