@@ -78,6 +78,10 @@ func certCheck(pemCert []byte) error {
 		return err
 	}
 
+	if x509Cert == nil {
+		return errors.Wrapf(errors.InvalidInput, "Invalid certificate PEM block")
+	}
+
 	if time.Now().After(x509Cert.NotAfter) {
 		return errors.Wrapf(errors.Expired, "Certificate has expired")
 	}
