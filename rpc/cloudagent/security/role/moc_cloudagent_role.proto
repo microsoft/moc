@@ -1,0 +1,54 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/security";
+package moc.cloudagent.security;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_security.proto";
+
+enum AccessOperation {
+	Read = 0;
+	Write = 1;
+	Delete = 2;
+	All = 3;
+}
+
+message RoleRequest {
+	repeated Role Roles = 1;
+	Operation OperationType = 2;
+}
+
+message RoleResponse {
+	repeated Role Roles = 1;
+	google.protobuf.BoolValue Result = 2;
+	string Error = 3;
+}
+
+message Action {
+	AccessOperation operation = 1;
+	// ProviderType the rule works on
+	ProviderType providerType = 2;
+}
+
+message Permission {
+	repeated Action actions = 1;
+	repeated Action notActions = 2;
+}
+
+message Role {
+	string name = 1;
+	string id = 2;
+	// The scopes to which this role can be applied
+	repeated Scope assignableScopes = 3;
+	repeated Permission permissions = 4;
+	Status status = 6;
+	Tags tags = 7;
+}
+
+service RoleAgent {
+	rpc Invoke(RoleRequest) returns (RoleResponse) {}
+}
+
