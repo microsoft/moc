@@ -66,8 +66,10 @@ type ClientType string
 
 const (
 	Admin          ClientType = "Admin"
+	BareMetal      ClientType = "BareMetal"
 	ControlPlane   ClientType = "ControlPlane"
 	ExternalClient ClientType = "ExternalClient"
+	LoadBalancer   ClientType = "LoadBalancer"
 	Node           ClientType = "Node"
 )
 
