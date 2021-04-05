@@ -99,6 +99,8 @@ enum ClientType {
 	EXTERNALCLIENT = 1;
 	NODE = 2;
 	ADMIN = 3;
+	BAREMETAL = 4;
+	LOADBALANCER = 5;
 }
 
 enum AuthenticationType {
