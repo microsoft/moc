@@ -138,4 +138,5 @@ enum ProviderType {
 	EtcdCluster            = 28;
 	EtcdServer             = 29;
 	BareMetalMachine       = 30;
+	BareMetalHost          = 31;
 }
