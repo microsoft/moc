@@ -44,14 +44,13 @@ message Certificate {
     string id = 2;
     int64 notBefore = 3; 
     int64 notAfter = 4;
-    bytes certificate = 5 [deprecated = true];
+    string certificate = 5;
     Status status = 6;
     CertificateType type = 7; 
     string groupName = 8;
     string vaultName = 9;
     string locationName = 10;
     Tags tags = 11;
-    string newCertificate = 12;
 }
 
 service CertificateAgent {
