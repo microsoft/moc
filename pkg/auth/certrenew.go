@@ -164,7 +164,7 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 
 	newWssdConfig := &WssdConfig{
 		CloudCertificate:      wssdConfig.CloudCertificate,
-		ClientCertificate:     marshal.ToBase64(response.Certificates[0].NewCertificate),
+		ClientCertificate:     marshal.ToBase64(response.Certificates[0].Certificate),
 		ClientKey:             marshal.ToBase64(string(newKey)),
 		ClientCertificateType: wssdConfig.ClientCertificateType,
 		IdentityName:          wssdConfig.IdentityName,
