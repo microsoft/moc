@@ -126,7 +126,6 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 		return wssdConfig, renewed, nil
 	}
 
-	return wssdConfig, renewed, nil
 	tlsCert, err := tls.X509KeyPair(pemCert, pemKey)
 	if err != nil {
 		return
