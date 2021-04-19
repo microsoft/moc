@@ -140,4 +140,7 @@ enum ProviderType {
 	EtcdCluster            = 28;
 	EtcdServer             = 29;
 	BareMetalMachine       = 30;
+	CredentialMonitor      = 31;
+	Logging                = 32;
+	Recovery               = 33;
 }
