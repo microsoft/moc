@@ -152,6 +152,13 @@ func (ca *CertificateAuthority) VerifyClientCertificate(rawCerts [][]byte) error
 // SignRequest signs the CSR using Certificate Authority
 // if oldCertPem is provided it is validated against CA
 func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, conf *SignConfig) (retCert []byte, err error) {
+	keyUsage := x509.KeyUsageDigitalSignature
+	extKeyUsage := []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth}
+
+	if conf != nil && conf.ServerAuth {
+		keyUsage |= x509.KeyUsageKeyEncipherment
+		extKeyUsage = append(extKeyUsage, x509.ExtKeyUsageServerAuth)
+	}
 
 	csr, err := DecodeCertRequestPEM(csrPem)
 	if err != nil {
@@ -187,7 +194,8 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 		Subject:               csr.Subject,
 		NotBefore:             now,
 		NotAfter:              now.Add(offset), // 1 year
-		KeyUsage:              x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign,
+		KeyUsage:              keyUsage,
+		ExtKeyUsage:           extKeyUsage,
 		BasicConstraintsValid: true,
 		DNSNames:              csr.DNSNames,
 		IPAddresses:           csr.IPAddresses,
