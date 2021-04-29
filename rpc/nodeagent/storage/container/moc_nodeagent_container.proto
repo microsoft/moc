@@ -9,6 +9,7 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 import "google/protobuf/empty.proto";
 import "moc_common_notification.proto";
+import "moc_common_storageinfo.proto";
 
 enum ContainerType {
 	UNKNOWN = 0;
@@ -36,12 +37,7 @@ message Container {
 	Status status = 5;
 	Entity entity = 6;
 	Tags tags = 7;
-	Capacity capacity = 8;
-}
-
-message Capacity {
-	uint64 totalBytes = 1;
-	uint64 availableBytes = 2;
+	StorageContainerInfo info = 8;
 }
 
 service ContainerAgent {
