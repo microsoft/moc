@@ -63,6 +63,12 @@ message VirtualMachineCustomSize {
 	int32 memoryMB = 2;
 }
 
+message DynamicMemoryConfiguration {
+	uint64 maximumMemoryMB = 1;
+	uint64 minimumMemoryMB = 2;
+	uint32 targetMemoryBuffer = 3;
+}
+
 enum PowerState {
 	Unknown = 0;
 	Running = 1 ;
