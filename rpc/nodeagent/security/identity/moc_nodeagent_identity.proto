@@ -23,9 +23,9 @@ message Identity {
 	string name = 1;
 	string id = 2;
 	string resourceGroup = 3;
-	string password = 4;
-	string token = 5;
-	string certificate = 6;
+	string password = 4 [(sensitive) = true];
+	string token = 5 [(sensitive) = true];
+	string certificate = 6 [(sensitive) = true];
 	Status status = 7;
 	Entity entity = 8;
 	Tags tags = 9;

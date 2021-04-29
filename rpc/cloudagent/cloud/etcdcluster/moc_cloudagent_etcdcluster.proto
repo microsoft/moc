@@ -25,9 +25,9 @@ message EtcdCluster {
 	string locationName = 3;
 	string groupName = 4;
 	// etcd ca certificate that works as RoT for client and peer connections
-	string caCertificate = 5;
+	string caCertificate = 5 [(sensitive) = true];
 	// etcd ca key associated with the ca certificate
-	string caKey = 6;
+	string caKey = 6 [(sensitive) = true];
 	Status status = 7;
 }
 

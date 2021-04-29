@@ -23,7 +23,7 @@ message VirtualMachineResponse {
 }
 
 message SSHPublicKey {
-	string keydata = 1;
+	string keydata = 1 [(sensitive) = true];
 }
 
 message Disk {
@@ -47,8 +47,8 @@ message NetworkConfiguration {
 }
 
 message UserConfiguration {
-	string username = 1;
-	string password = 2;
+	string username = 1 [(sensitive) = true];
+	string password = 2 [(sensitive) = true];
 	UserType usertype = 3;
 }
 
@@ -70,7 +70,7 @@ message OperatingSystemConfiguration {
 	string computerName = 1;
 	UserConfiguration administrator = 2;
 	repeated UserConfiguration users = 3;
-	string customData = 4;
+	string customData = 4 [(sensitive) = true];
 	repeated SSHPublicKey publickeys = 5;
 	OperatingSystemType ostype = 6;
 	// bootstrap engine can be cloud-init, Windows answer files, ...

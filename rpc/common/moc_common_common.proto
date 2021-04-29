@@ -5,6 +5,7 @@ syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/common";
 
 package moc;
+import "google/protobuf/descriptor.proto";
 
 enum Operation {
 	GET = 0;
@@ -143,4 +144,8 @@ enum ProviderType {
 	CredentialMonitor      = 31;
 	Logging                = 32;
 	Recovery               = 33;
+}
+
+extend google.protobuf.FieldOptions {
+	bool sensitive = 50001;
 }

@@ -23,13 +23,13 @@ message KeyResponse {
 
 message KeyOperationRequest {
 	Key key = 1;
-	string Data = 2;
+	string Data = 2 [(sensitive) = true];
 	Algorithm algorithm = 3;
 	KeyOperation OperationType = 4;
 }
 
 message KeyOperationResponse {
-	string Data = 1;
+	string Data = 1 [(sensitive) = true];
 	google.protobuf.BoolValue Result = 2;
 	string  Error = 3;
 }
@@ -39,7 +39,7 @@ message Key {
 	string id = 2;
 	string locationName = 3;
 	// Public Key Value
-	bytes publicKey = 4;
+	bytes publicKey = 4 [(sensitive) = true];
 	JsonWebKeyType type = 5;
 	string vaultName = 6;
 	string groupName = 7;
