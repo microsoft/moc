@@ -7,13 +7,14 @@ package moc.cloudagent.security;
 
 import "google/protobuf/wrappers.proto";
 import "moc_cloudagent_identity.proto";
+import "moc_common_common.proto";
 
 message AuthenticationRequest {
 	Identity Identity = 1;
 }
 
 message AuthenticationResponse {
-	string Token = 1;
+	string Token = 1 [(sensitive) = true];
 	google.protobuf.BoolValue Result = 2;
 	string  Error = 3;
 }

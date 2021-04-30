@@ -32,7 +32,7 @@ message Node {
 	string fqdn = 3; 
 	Status status = 4;
 	string locationName = 5; 
-	string certificate = 6;
+	string certificate = 6 [(sensitive) = true];
 	int32  port = 7;
 	int32  authorizerPort = 8;
 	NodeState runningState = 9;
