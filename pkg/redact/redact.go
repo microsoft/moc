@@ -12,6 +12,10 @@ import (
 	"github.com/microsoft/moc/rpc/common"
 )
 
+const (
+	RedactedString = "** Redacted **"
+)
+
 // RedactedMessage - returns a copy of a proto message struct with data from fields marked as sensitive redacted
 func RedactedMessage(msg interface{}) interface{} {
 	rMsg := proto.Clone((msg).(proto.Message))
@@ -74,8 +78,12 @@ func redactMessage(msg interface{}, val reflect.Value) {
 			}
 
 			if err != nil || *ex.(*bool) {
-				t := fieldVal.Type()
-				fieldVal.Set(reflect.Zero(t))
+				if fieldVal.Kind() == reflect.String {
+					fieldVal.SetString(RedactedString)
+				} else {
+					t := fieldVal.Type()
+					fieldVal.Set(reflect.Zero(t))
+				}
 				continue
 			}
 		}
