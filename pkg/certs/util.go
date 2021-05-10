@@ -34,8 +34,9 @@ type Config struct {
 
 // Config contains the basic fields required for signing a certificate.
 type SignConfig struct {
-	Offset   time.Duration
-	Identity string
+	Offset     time.Duration
+	Identity   string
+	ServerAuth bool
 }
 
 // AltNames contains the domain names and IP addresses for a cert

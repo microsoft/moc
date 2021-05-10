@@ -78,8 +78,9 @@ func Test_CACerts(t *testing.T) {
 	roots.AddCert(ca)
 
 	opts := x509.VerifyOptions{
-		Roots:   roots,
-		DNSName: "Test Cert",
+		Roots:     roots,
+		DNSName:   "Test Cert",
+		KeyUsages: []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth, x509.ExtKeyUsageClientAuth},
 	}
 
 	if _, err := clientCert.Verify(opts); err != nil {

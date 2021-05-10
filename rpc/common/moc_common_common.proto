@@ -5,6 +5,7 @@ syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/common";
 
 package moc;
+import "google/protobuf/descriptor.proto";
 
 enum Operation {
 	GET = 0;
@@ -99,6 +100,8 @@ enum ClientType {
 	EXTERNALCLIENT = 1;
 	NODE = 2;
 	ADMIN = 3;
+	BAREMETAL = 4;
+	LOADBALANCER = 5;
 }
 
 enum AuthenticationType {
@@ -138,5 +141,12 @@ enum ProviderType {
 	EtcdCluster            = 28;
 	EtcdServer             = 29;
 	BareMetalMachine       = 30;
-	BareMetalHost          = 31;
+	CredentialMonitor      = 31;
+	Logging                = 32;
+	Recovery               = 33;
+	BareMetalHost          = 34;
+}
+
+extend google.protobuf.FieldOptions {
+	bool sensitive = 50001;
 }

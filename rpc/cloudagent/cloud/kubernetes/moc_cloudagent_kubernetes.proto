@@ -54,7 +54,7 @@ message NodePoolConfiguration {
 }
 
 message SSHPublicKey {
-	string keyData = 1;
+	string keyData = 1 [(sensitive) = true];
 }
 
 message ComputeConfiguration {
@@ -77,8 +77,8 @@ message ClusterAPIConfiguration {
 
 message ContainerRegistry {
 	string Name = 1;
-	string Username = 2;
-	string Password = 3;
+	string Username = 2 [(sensitive) = true];
+	string Password = 3 [(sensitive) = true];
 }
 
 message Kubernetes {
