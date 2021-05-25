@@ -123,20 +123,7 @@ message VirtualMachineOperationResponse {
 	string  Error = 3;
 }
 
-message VirtualMachineRunCommandRequest {
-	VirtualMachine VirtualMachine = 1;
-	string CommandID = 2;
-	string Script = 3;
-	repeated RunCommandInputParameter RunCommandInputParameters = 4;
-}
-
-message VirtualMachineRunCommandResponse {
-	VirtualMachine VirtualMachine = 1;
-	string Output = 2;
-}
-
 service VirtualMachineAgent {
 	rpc Invoke(VirtualMachineRequest) returns (VirtualMachineResponse) {}
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
-	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
 }

@@ -77,7 +77,4 @@ enum VirtualMachineOperation {
 	RESET = 2;
 }
 
-message RunCommandInputParameter {
-	string Name = 1;
-	string Value = 2;
-}
+
