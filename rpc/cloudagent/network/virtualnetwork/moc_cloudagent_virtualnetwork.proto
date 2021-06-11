@@ -66,6 +66,8 @@ message IPPool {
 	IPPoolType type = 2;
 	string start = 3;
 	string end = 4;
+	string used = 5;
+	string available = 6;
 }
 
 message Ipam {
