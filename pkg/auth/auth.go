@@ -159,8 +159,18 @@ func NewAuthorizerForAuth(tokenString string, certificate string, server string)
 		return NewBearerAuthorizer(JwtTokenProvider{}, credentials.NewTLS(nil)), fmt.Errorf("could not append the server certificate")
 	}
 	transportCreds := credentials.NewTLS(&tls.Config{
-		ServerName: server,
-		RootCAs:    certPool,
+		CipherSuites: []uint16{
+			tls.TLS_AES_128_GCM_SHA256,
+			tls.TLS_AES_256_GCM_SHA384,
+			tls.TLS_CHACHA20_POLY1305_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,
+			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+		},
+		MinVersion:               tls.VersionTLS12,
+		PreferServerCipherSuites: true,
+		ServerName:               server,
+		RootCAs:                  certPool,
 	})
 
 	return NewBearerAuthorizer(JwtTokenProvider{tokenString}, transportCreds), nil
@@ -174,10 +184,20 @@ func NewAuthorizerForAuthFromCACertHash(tokenString string, cacerthash string, s
 	}
 
 	transportCreds := credentials.NewTLS(&tls.Config{
-		ServerName:            server,
-		InsecureSkipVerify:    true,
-		VerifyPeerCertificate: pkv.VerifyPeerCertificate,
-		RootCAs:               x509.NewCertPool(),
+		CipherSuites: []uint16{
+			tls.TLS_AES_128_GCM_SHA256,
+			tls.TLS_AES_256_GCM_SHA384,
+			tls.TLS_CHACHA20_POLY1305_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,
+			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+		},
+		MinVersion:               tls.VersionTLS12,
+		PreferServerCipherSuites: true,
+		ServerName:               server,
+		InsecureSkipVerify:       true,
+		VerifyPeerCertificate:    pkv.VerifyPeerCertificate,
+		RootCAs:                  x509.NewCertPool(),
 	})
 
 	return NewBearerAuthorizer(JwtTokenProvider{tokenString}, transportCreds), nil
@@ -250,7 +270,18 @@ func TransportCredentialsFromFile(wssdConfigLocation string, server string) cred
 		clientCerts = append(clientCerts, tlsCert)
 		// Append the client certificates from the CA
 		if ok := certPool.AppendCertsFromPEM(serverPem); !ok {
-			return credentials.NewTLS(&tls.Config{})
+			return credentials.NewTLS(&tls.Config{
+				CipherSuites: []uint16{
+					tls.TLS_AES_128_GCM_SHA256,
+					tls.TLS_AES_256_GCM_SHA384,
+					tls.TLS_CHACHA20_POLY1305_SHA256,
+					tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+					tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,
+					tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+				},
+				MinVersion:               tls.VersionTLS12,
+				PreferServerCipherSuites: true,
+			})
 		}
 	}
 	verifyPeerCertificate := func(rawCerts [][]byte, verifiedChains [][]*x509.Certificate) error {
@@ -259,10 +290,20 @@ func TransportCredentialsFromFile(wssdConfigLocation string, server string) cred
 	}
 
 	return credentials.NewTLS(&tls.Config{
-		ServerName:            server,
-		Certificates:          clientCerts,
-		RootCAs:               certPool,
-		VerifyPeerCertificate: verifyPeerCertificate,
+		CipherSuites: []uint16{
+			tls.TLS_AES_128_GCM_SHA256,
+			tls.TLS_AES_256_GCM_SHA384,
+			tls.TLS_CHACHA20_POLY1305_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,
+			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+		},
+		MinVersion:               tls.VersionTLS12,
+		PreferServerCipherSuites: true,
+		ServerName:               server,
+		Certificates:             clientCerts,
+		RootCAs:                  certPool,
+		VerifyPeerCertificate:    verifyPeerCertificate,
 	})
 }
 
@@ -279,7 +320,18 @@ func TransportCredentialsFromNode(tlsCert tls.Certificate, serverCertificate []b
 	certPool := x509.NewCertPool()
 	// Append the client certificates from the CA
 	if ok := certPool.AppendCertsFromPEM(serverCertificate); !ok {
-		return credentials.NewTLS(&tls.Config{})
+		return credentials.NewTLS(&tls.Config{
+			CipherSuites: []uint16{
+				tls.TLS_AES_128_GCM_SHA256,
+				tls.TLS_AES_256_GCM_SHA384,
+				tls.TLS_CHACHA20_POLY1305_SHA256,
+				tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+				tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,
+				tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+			},
+			MinVersion:               tls.VersionTLS12,
+			PreferServerCipherSuites: true,
+		})
 	}
 	verifyPeerCertificate := func(rawCerts [][]byte, verifiedChains [][]*x509.Certificate) error {
 		// This is the for extra verification
@@ -287,10 +339,20 @@ func TransportCredentialsFromNode(tlsCert tls.Certificate, serverCertificate []b
 	}
 
 	return credentials.NewTLS(&tls.Config{
-		ServerName:            server,
-		Certificates:          []tls.Certificate{tlsCert},
-		RootCAs:               certPool,
-		VerifyPeerCertificate: verifyPeerCertificate,
+		CipherSuites: []uint16{
+			tls.TLS_AES_128_GCM_SHA256,
+			tls.TLS_AES_256_GCM_SHA384,
+			tls.TLS_CHACHA20_POLY1305_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,
+			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+		},
+		MinVersion:               tls.VersionTLS12,
+		PreferServerCipherSuites: true,
+		ServerName:               server,
+		Certificates:             []tls.Certificate{tlsCert},
+		RootCAs:                  certPool,
+		VerifyPeerCertificate:    verifyPeerCertificate,
 	})
 
 }
@@ -536,10 +598,20 @@ func GetServerCertificateFromHash(server, caCertHash string) (string, error) {
 	}
 
 	config := &tls.Config{
-		ServerName:            server,
-		InsecureSkipVerify:    true,
-		VerifyPeerCertificate: pkv.VerifyPeerCertificate,
-		RootCAs:               x509.NewCertPool(),
+		CipherSuites: []uint16{
+			tls.TLS_AES_128_GCM_SHA256,
+			tls.TLS_AES_256_GCM_SHA384,
+			tls.TLS_CHACHA20_POLY1305_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,
+			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+		},
+		MinVersion:               tls.VersionTLS12,
+		PreferServerCipherSuites: true,
+		ServerName:               server,
+		InsecureSkipVerify:       true,
+		VerifyPeerCertificate:    pkv.VerifyPeerCertificate,
+		RootCAs:                  x509.NewCertPool(),
 	}
 
 	tconn := tls.Client(nconn, config)
