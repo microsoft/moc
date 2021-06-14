@@ -61,13 +61,17 @@ message Subnet {
 	repeated IPPool ippools = 7;
 }
 
+message IPPoolInfo {
+	string used = 1;
+	string available = 2;
+}
+
 message IPPool {
 	string name = 1;
 	IPPoolType type = 2;
 	string start = 3;
 	string end = 4;
-	string used = 5;
-	string available = 6;
+	IPPoolInfo info = 5;
 }
 
 message Ipam {
