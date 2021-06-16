@@ -85,13 +85,8 @@ message HardwareConfiguration {
 	DynamicMemoryConfiguration dynamicMemoryConfiguration = 3;
 }
 
-message UefiSettings {
-	bool secureBootEnabled = 1;
-}
-
 message SecurityConfiguration {
 	bool enableTPM = 1;
-	UefiSettings uefiSettings = 2;
 }
 
 message VirtualMachine {
