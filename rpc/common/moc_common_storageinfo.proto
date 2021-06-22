@@ -1,0 +1,24 @@
+
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/common";
+package moc;
+import "moc_common_common.proto";
+
+
+message StorageContainerInfo {
+	Capacity capacity  = 1;
+	Latency latency	= 2;
+	Status status = 7;
+}
+
+message Capacity {
+	uint64 totalBytes = 1;
+	uint64 availableBytes = 2;
+}
+
+message Latency {
+	uint64 iops = 1;
+}

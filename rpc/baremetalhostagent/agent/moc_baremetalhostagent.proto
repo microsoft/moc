@@ -10,7 +10,7 @@ import "moc_common_common.proto";
 
 message BareMetalHostOperatingSystemConfiguration {
 	string computerName = 1;
-	string customData = 2;
+	string customData = 2 [(sensitive) = true];
 }
 
 message BareMetalHost {

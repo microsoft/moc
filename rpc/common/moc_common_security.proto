@@ -6,6 +6,8 @@ option go_package = "github.com/microsoft/moc/rpc/common";
 
 package moc;
 
+import "moc_common_common.proto";
+
 enum Algorithm {
 	A_UNKNOWN = 0;
 	RSA15 = 1;
@@ -48,9 +50,17 @@ enum KeySize {
 
 enum IdentityOperation {
 	REVOKE = 0;
+	ROTATE = 1;
 }
 
 enum IdentityCertificateOperation {
 	CREATE_CERTIFICATE = 0;
 	RENEW_CERTIFICATE = 1;
+}
+
+message Scope {
+	string location = 1;
+	string resourceGroup = 2;
+	ProviderType providerType = 3;
+	string resource = 4;
 }

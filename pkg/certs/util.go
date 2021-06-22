@@ -34,8 +34,9 @@ type Config struct {
 
 // Config contains the basic fields required for signing a certificate.
 type SignConfig struct {
-	Offset   time.Duration
-	Identity string
+	Offset     time.Duration
+	Identity   string
+	ServerAuth bool
 }
 
 // AltNames contains the domain names and IP addresses for a cert
@@ -156,8 +157,13 @@ func GenerateClientCertificate(name string) (*x509.Certificate, *rsa.PrivateKey,
 
 	now := time.Now().UTC()
 
+	serial, err := rand.Int(rand.Reader, new(big.Int).SetInt64(math.MaxInt64))
+	if err != nil {
+		return nil, key, err
+	}
+
 	tmpl := x509.Certificate{
-		SerialNumber: new(big.Int).SetInt64(0),
+		SerialNumber: serial,
 		Subject: pkix.Name{
 			CommonName:   name,
 			Organization: []string{"microsoft"},

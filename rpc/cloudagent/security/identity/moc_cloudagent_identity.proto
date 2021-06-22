@@ -42,13 +42,12 @@ message Identity {
 	string name = 1;
 	string id = 2;
 	string resourceGroup = 3;
-	string password = 4;
-	string token = 5;
-	bytes certificate = 6 [deprecated = true];
+	string password = 4 [(sensitive) = true];
+	string token = 5 [(sensitive) = true];
 	Status status = 7;
 	string locationName = 10;
 	Tags tags = 11;
-	map<string, string> certificates = 12;
+	map<string, string> certificates = 12 [(sensitive) = true];
 	int64 tokenExpiry = 13;
 	ClientType clientType = 14;
 	string cloudFqdn = 15;

@@ -28,14 +28,15 @@ message CertificateResponse {
 
 message CertificateSigningRequest {
     string name = 1;
-    string csr = 2;
-    string oldCertificate = 3;
+    string csr = 2 [(sensitive) = true];
+    string oldCertificate = 3 [(sensitive) = true];
     Status status = 4;
     string caName = 5;
     string groupName = 6;
     string vaultName = 7;
     string locationName = 8;
-    int64 validity = 9;
+    string identity = 9;
+    int64 validity = 10;
 }
 
 message Certificate {
@@ -43,14 +44,13 @@ message Certificate {
     string id = 2;
     int64 notBefore = 3; 
     int64 notAfter = 4;
-    bytes certificate = 5 [deprecated = true];
+    string certificate = 5 [(sensitive) = true];
     Status status = 6;
     CertificateType type = 7; 
     string groupName = 8;
     string vaultName = 9;
     string locationName = 10;
     Tags tags = 11;
-    string newCertificate = 12;
 }
 
 service CertificateAgent {

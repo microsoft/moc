@@ -3,7 +3,7 @@
 package auth
 
 import (
-	"context"
+	context "context"
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
@@ -71,6 +71,24 @@ func renewRequired(x509Cert *x509.Certificate) bool {
 	return true
 }
 
+func certCheck(pemCert []byte) error {
+
+	x509Cert, err := certs.DecodeCertPEM([]byte(pemCert))
+	if err != nil {
+		return err
+	}
+
+	if x509Cert == nil {
+		return errors.Wrapf(errors.InvalidInput, "Invalid certificate PEM block")
+	}
+
+	if time.Now().After(x509Cert.NotAfter) {
+		return errors.Wrapf(errors.Expired, "Certificate has expired")
+	}
+
+	return nil
+}
+
 // accessFiletoRenewClient creates a renew client from wssdconfig and server
 func accessFiletoRenewClient(server string, wssdConfig *WssdConfig) (security.IdentityAgentClient, error) {
 	serverPem, tlsCert, err := AccessFileToTls(*wssdConfig)
@@ -92,6 +110,10 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 	renewed = false
 	pemCert, pemKey, err := fromBase64(wssdConfig.ClientCertificate, wssdConfig.ClientKey)
 	if err != nil {
+		return
+	}
+
+	if err = certCheck(pemCert); err != nil {
 		return
 	}
 
@@ -141,7 +163,7 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 
 	newWssdConfig := &WssdConfig{
 		CloudCertificate:      wssdConfig.CloudCertificate,
-		ClientCertificate:     marshal.ToBase64(response.Certificates[0].NewCertificate),
+		ClientCertificate:     marshal.ToBase64(response.Certificates[0].Certificate),
 		ClientKey:             marshal.ToBase64(string(newKey)),
 		ClientCertificateType: wssdConfig.ClientCertificateType,
 		IdentityName:          wssdConfig.IdentityName,

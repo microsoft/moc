@@ -40,7 +40,7 @@ message BareMetalMachineOperatingSystemConfiguration {
 	string computerName = 1;
 	UserConfiguration administrator = 2;
 	repeated UserConfiguration users = 3;
-	string customData = 4;
+	string customData = 4 [(sensitive) = true];
 	repeated SSHPublicKey publicKeys = 5;
 	LinuxConfiguration linuxConfiguration = 6;
 }

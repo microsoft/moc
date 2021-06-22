@@ -62,17 +62,28 @@ type ManagedIdentityConfig struct {
 	ServerName      string
 }
 
+type ClientType string
+
+const (
+	Admin          ClientType = "Admin"
+	BareMetal      ClientType = "BareMetal"
+	ControlPlane   ClientType = "ControlPlane"
+	ExternalClient ClientType = "ExternalClient"
+	LoadBalancer   ClientType = "LoadBalancer"
+	Node           ClientType = "Node"
+)
+
 type LoginConfig struct {
-	Name          string    `json:"name,omitempty"`
-	Token         string    `json:"token,omitempty"`
-	Certificate   string    `json:"certificate,omitempty"`
-	ClientType    string    `json:"clienttype,omitempty"`
-	CloudFqdn     string    `json:"cloudfqdn,omitempty"`
-	CloudPort     int32     `json:"cloudport,omitempty"`
-	CloudAuthPort int32     `json:"cloudauthport,omitempty"`
-	CACertHash    string    `json:"cacerthash,omitempty"`
-	Location      string    `json:"location,omitempty"`
-	Type          LoginType `json:"type,omitempty"`
+	Name          string     `json:"name,omitempty"`
+	Token         string     `json:"token,omitempty"`
+	Certificate   string     `json:"certificate,omitempty"`
+	ClientType    ClientType `json:"clienttype,omitempty"`
+	CloudFqdn     string     `json:"cloudfqdn,omitempty"`
+	CloudPort     int32      `json:"cloudport,omitempty"`
+	CloudAuthPort int32      `json:"cloudauthport,omitempty"`
+	CACertHash    string     `json:"cacerthash,omitempty"`
+	Location      string     `json:"location,omitempty"`
+	Type          LoginType  `json:"type,omitempty"`
 }
 
 func (ba *BearerAuthorizer) WithRPCAuthorization() credentials.PerRPCCredentials {
@@ -578,6 +589,11 @@ func AccessFileToTls(accessFile WssdConfig) ([]byte, tls.Certificate, error) {
 	if err != nil {
 		return []byte{}, tls.Certificate{}, err
 	}
+
+	if err = certCheck(clientPem); err != nil {
+		return []byte{}, tls.Certificate{}, err
+	}
+
 	tlsCert, err := tls.X509KeyPair(clientPem, keyPem)
 	if err != nil {
 		return []byte{}, tls.Certificate{}, err

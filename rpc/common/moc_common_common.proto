@@ -5,6 +5,7 @@ syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/common";
 
 package moc;
+import "google/protobuf/descriptor.proto";
 
 enum Operation {
 	GET = 0;
@@ -95,12 +96,56 @@ message Tags {
 }
 
 enum ClientType {
-        CONTROLPLANE = 0;
-        EXTERNALCLIENT = 1;
-        NODE = 2;
+	CONTROLPLANE = 0;
+	EXTERNALCLIENT = 1;
+	NODE = 2;
+	ADMIN = 3;
+	BAREMETAL = 4;
+	LOADBALANCER = 5;
 }
 
 enum AuthenticationType {
 	SELFSIGNED = 0;
 	CASIGNED = 1;
+}
+
+enum ProviderType {
+	AnyProvider            = 0;
+	VirtualMachine         = 1;
+	VirtualMachineScaleSet = 2;
+	LoadBalancer           = 3;
+	VirtualNetwork         = 4;
+	VirtualHardDisk        = 5;
+	GalleryImage           = 6;
+	VirtualMachineImage    = 7;
+	NetworkInterface       = 8;
+	Certificate            = 9;
+	Key                    = 10;
+	Secret                 = 11;
+	KeyVault               = 12;
+	Identity               = 13;
+	Role                   = 14;
+	RoleAssignment         = 15;
+	Kubernetes             = 16;
+	Cluster                = 17;
+	ControlPlane           = 18;
+	Group                  = 19;
+	Node                   = 20;
+	Location               = 21;
+	StorageContainer       = 22;
+	StorageFile            = 23;
+	StorageDirectory       = 24;
+	Subscription           = 25;
+	VipPool                = 26;
+	MacPool                = 27;
+	EtcdCluster            = 28;
+	EtcdServer             = 29;
+	BareMetalMachine       = 30;
+	CredentialMonitor      = 31;
+	Logging                = 32;
+	Recovery               = 33;
+}
+
+extend google.protobuf.FieldOptions {
+	bool sensitive = 50001;
 }
