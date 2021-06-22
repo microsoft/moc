@@ -70,6 +70,7 @@ const (
 	ProvisionState_DEPROVISIONING     ProvisionState = 13
 	ProvisionState_DEPROVISIONED      ProvisionState = 14
 	ProvisionState_DEPROVISION_FAILED ProvisionState = 15
+	ProvisionState_DELETE_PENDING     ProvisionState = 16
 )
 
 var ProvisionState_name = map[int32]string{
