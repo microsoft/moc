@@ -31,6 +31,7 @@ enum ProvisionState {
 	DEPROVISIONING = 13;
 	DEPROVISIONED = 14;
 	DEPROVISION_FAILED = 15;
+	DELETE_PENDING = 16;
 }
 
 enum HighAvailabilityState {
