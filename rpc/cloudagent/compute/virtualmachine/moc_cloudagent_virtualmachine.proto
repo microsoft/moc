@@ -129,7 +129,21 @@ message VirtualMachineOperationResponse {
 	string  Error = 3;
 }
 
+message VirtualMachineRunCommandRequest {
+	VirtualMachine VirtualMachine = 1;
+	VirtualMachineRunCommandScriptSource Source = 2;
+	repeated VirtualMachineRunCommandInputParameter RunCommandInputParameters = 3;
+	string RunAsUser = 4;
+	string RunAsPassword = 5;
+}
+
+message VirtualMachineRunCommandResponse {
+	VirtualMachine VirtualMachine = 1;
+	VirtualMachineRunCommandInstanceView InstanceView = 2;
+}
+
 service VirtualMachineAgent {
 	rpc Invoke(VirtualMachineRequest) returns (VirtualMachineResponse) {}
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
+	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
 }

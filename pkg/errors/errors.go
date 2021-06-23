@@ -41,6 +41,7 @@ var (
 	Expired              error = errors.New("Expired")
 	Revoked              error = errors.New("Revoked")
 	Timeout              error = errors.New("The operation has timed out")
+	RunCommandFailed     error = errors.New("Run Command Failed")
 	Unknown              error = errors.New("Unknown Reason")
 )
 
