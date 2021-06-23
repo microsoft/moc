@@ -84,9 +84,9 @@ enum VirtualMachineOperation {
 }
 
 enum VirtualMachineRunCommandExecutionState {
-	ExecutionState_FAILED = 0;
-	ExecutionState_SUCCEEDED = 1;
-	ExecutionState_UNKNOWN = 2;
+	ExecutionState_UNKNOWN = 0;
+	ExecutionState_FAILED = 1;
+	ExecutionState_SUCCEEDED = 2;
 }
 
 message VirtualMachineRunCommandInputParameter {
