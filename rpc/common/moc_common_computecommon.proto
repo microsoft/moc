@@ -83,4 +83,26 @@ enum VirtualMachineOperation {
 	RESET = 2;
 }
 
+enum VirtualMachineRunCommandExecutionState {
+	ExecutionState_UNKNOWN = 0;
+	ExecutionState_FAILED = 1;
+	ExecutionState_SUCCEEDED = 2;
+}
 
+message VirtualMachineRunCommandInputParameter {
+    string Name = 1;
+    string Value = 2;
+}
+
+message VirtualMachineRunCommandScriptSource {
+	string Script = 1;
+	string ScriptURI = 2;
+	string CommandID = 3;
+}
+
+message VirtualMachineRunCommandInstanceView {
+	VirtualMachineRunCommandExecutionState ExecutionState = 1;
+	int32 ExitCode = 2;
+	string Output = 3;
+	string Error = 4;
+}
