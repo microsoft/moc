@@ -64,6 +64,7 @@ message WindowsConfiguration {
 	bool enableAutomaticUpdates = 1;
 	string timeZone = 2;
 	RDPConfiguration RDPConfiguration = 3;
+	WinRMConfiguration WinRMConfiguration = 4;
 }
 
 message OperatingSystemConfiguration {
