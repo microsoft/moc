@@ -134,8 +134,8 @@ message VirtualMachineRunCommandRequest {
 	VirtualMachine VirtualMachine = 1;
 	VirtualMachineRunCommandScriptSource Source = 2;
 	repeated VirtualMachineRunCommandInputParameter RunCommandInputParameters = 3;
-	string RunAsUser = 4;
-	string RunAsPassword = 5;
+	string RunAsUser = 4 [(sensitive) = true];
+	string RunAsPassword = 5 [(sensitive) = true];
 }
 
 message VirtualMachineRunCommandResponse {
