@@ -58,6 +58,19 @@ enum VirtualMachineSizeType {
 	Unsupported = 99;
 }
 
+enum WinRMProtocolType {
+	HTTP = 0;
+	HTTPS = 1;
+}
+
+message WinRMListener {
+	WinRMProtocolType Protocol = 1;
+}
+
+message WinRMConfiguration {
+	repeated WinRMListener Listeners = 1;
+}
+
 message VirtualMachineCustomSize {
 	int32 cpuCount = 1;
 	int32 memoryMB = 2;
