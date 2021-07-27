@@ -58,7 +58,7 @@ message GalleryImage {
 	// Source of the GalleryImage from where we can copy the image from.
 	string sourcePath = 11;
 	Tags tags = 12;
-	string sourceType = 13;
+	ImageSource sourceType = 13;
 }
 
 service GalleryImageAgent {
