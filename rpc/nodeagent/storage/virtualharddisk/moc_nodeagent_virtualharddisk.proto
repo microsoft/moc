@@ -68,7 +68,7 @@ message VirtualHardDisk {
 	VirtualHardDiskType virtualharddisktype = 17;
 	Entity entity = 18;
 	Tags tags = 19;
-	string SourceType = 20;
+	ImageSource sourceType = 20;
 }
 
 service VirtualHardDiskAgent {

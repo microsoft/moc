@@ -150,3 +150,10 @@ enum ProviderType {
 extend google.protobuf.FieldOptions {
 	bool sensitive = 50001;
 }
+
+enum ImageSource {
+        SFS_SOURCE  = 0;
+        HTTP_SOURCE  = 1;
+        LOCAL_SOURCE = 2;
+        CLONE_SOURCE = 3;
+}
