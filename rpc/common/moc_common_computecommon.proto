@@ -54,6 +54,8 @@ enum VirtualMachineSizeType {
 	Standard_NV6 = 20;
 	Standard_NV12 = 21;
 	Standard_K8S5_v1 = 22;
+	Custom_NK = 96;
+	Custom_Gpupv = 97;
 	Custom = 98;
 	Unsupported = 99;
 }
@@ -74,6 +76,7 @@ message WinRMConfiguration {
 message VirtualMachineCustomSize {
 	int32 cpuCount = 1;
 	int32 memoryMB = 2;
+	int32 gpuCount = 3;
 }
 
 message DynamicMemoryConfiguration {
