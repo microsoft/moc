@@ -1,0 +1,76 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/compute";
+package moc.cloudagent.compute;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_cloudagent_virtualmachine.proto";
+
+enum BareMetalHostPowerState {
+	Unknown = 0;
+	Running = 1 ;
+	Off = 2;
+}
+
+message BareMetalHostRequest {
+	repeated BareMetalHost BareMetalHosts = 1;
+	Operation OperationType = 2;
+}
+
+message BareMetalHostResponse {
+	repeated BareMetalHost BareMetalHosts = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message BareMetalHostDisk {
+	string diskName = 1;
+	int32 diskSizeGB = 2;
+}
+
+message BareMetalHostStorageConfiguration {
+	repeated BareMetalHostDisk disks = 1;
+}
+
+message BareMetalHostNetworkInterface {
+	string networkInterfaceName = 1;
+}
+
+message BareMetalHostNetworkConfiguration {
+	repeated BareMetalHostNetworkInterface interfaces = 1;
+}
+
+message BareMetalHostSize {
+	int32 cpuCount = 1;
+	int32 gpuCount = 2;
+	int32 memoryMB = 3;
+}
+
+message BareMetalHostHardwareConfiguration {
+	BareMetalHostSize machineSize = 1;
+}
+
+message BareMetalHost {
+	string name = 1;
+	string id = 2;
+	BareMetalHostStorageConfiguration storage = 3;
+	BareMetalHostNetworkConfiguration network = 4;
+	BareMetalHostHardwareConfiguration hardware = 5;
+	BareMetalHostPowerState powerState = 6;
+	SecurityConfiguration security = 7;
+	string bareMetalMachineName = 8;
+	Status status = 9;
+	string locationName = 10;
+	string fqdn = 11; 
+	string certificate = 12;
+	int32  port = 13;
+	int32  authorizerPort = 14;
+	Tags tags = 15;
+}
+
+service BareMetalHostAgent {
+	rpc Invoke(BareMetalHostRequest) returns (BareMetalHostResponse) {}
+}

@@ -9,12 +9,6 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 import "moc_cloudagent_virtualmachine.proto";
 
-enum BareMetalMachinePowerState {
-	Unknown = 0;
-	Running = 1 ;
-	Off = 2;
-}
-
 message BareMetalMachineRequest {
 	repeated BareMetalMachine BareMetalMachines = 1;
 	Operation OperationType = 2;
@@ -26,13 +20,7 @@ message BareMetalMachineResponse {
 	string  Error = 3;
 }
 
-message BareMetalMachineDisk {
-	string diskName = 1;
-	int32 diskSizeGB = 2;
-}
-
 message BareMetalMachineStorageConfiguration {
-	repeated BareMetalMachineDisk disks = 1;
 	string imageReference = 2;
 }
 
@@ -45,34 +33,13 @@ message BareMetalMachineOperatingSystemConfiguration {
 	LinuxConfiguration linuxConfiguration = 6;
 }
 
-message BareMetalMachineNetworkInterface {
-	string networkInterfaceName = 1;
-}
-
-message BareMetalMachineNetworkConfiguration {
-	repeated BareMetalMachineNetworkInterface interfaces = 1;
-}
-
-message BareMetalMachineSize {
-	int32 cpuCount = 1;
-	int32 gpuCount = 2;
-	int32 memoryMB = 3;
-}
-
-message BareMetalMachineHardwareConfiguration {
-	BareMetalMachineSize machineSize = 1;
-}
-
 message BareMetalMachine {
 	string name = 1;
 	string id = 2;
 	BareMetalMachineStorageConfiguration storage = 3;
 	BareMetalMachineOperatingSystemConfiguration os = 4;
-	BareMetalMachineNetworkConfiguration network = 5;
-	BareMetalMachineHardwareConfiguration hardware = 6;
-	BareMetalMachinePowerState powerState = 7;
 	SecurityConfiguration security = 8;
-	string nodeName = 9;
+	string bareMetalHostName = 9;
 	string groupName = 10;
 	Status status = 11;
 	string locationName = 12;

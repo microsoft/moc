@@ -145,6 +145,7 @@ enum ProviderType {
 	CredentialMonitor      = 31;
 	Logging                = 32;
 	Recovery               = 33;
+	BareMetalHost          = 34;
 }
 
 extend google.protobuf.FieldOptions {
