@@ -539,7 +539,7 @@ func (m *VirtualHardDisk) GetSourceType() common.ImageSource {
 	if m != nil {
 		return m.SourceType
 	}
-	return common.ImageSource_SFS_SOURCE
+	return common.ImageSource_LOCAL_SOURCE
 }
 
 func init() {
