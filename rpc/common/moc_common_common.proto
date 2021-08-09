@@ -153,8 +153,8 @@ extend google.protobuf.FieldOptions {
 }
 
 enum ImageSource {
-        SFS_SOURCE  = 0;
-        HTTP_SOURCE  = 1;
-        LOCAL_SOURCE = 2;
+        LOCAL_SOURCE = 0;
+        SFS_SOURCE   = 1;
+        HTTP_SOURCE  = 2;
         CLONE_SOURCE = 3;
 }
