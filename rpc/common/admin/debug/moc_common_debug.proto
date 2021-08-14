@@ -5,14 +5,14 @@ syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/common/admin";
 package moc.common.admin;
 
-enum Operation {
+enum DebugOperation {
 	DEBUGSERVER = 0;
 	STACKTRACE = 1;
 }
 
 message DebugRequest{
 	// Operation Type
-	Operation OperationType = 1;
+	DebugOperation OperationType = 1;
 	// Artibraty data
 	string Data = 2;
 }
