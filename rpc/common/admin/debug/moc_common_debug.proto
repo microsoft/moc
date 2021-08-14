@@ -1,0 +1,28 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/common/admin";
+package moc.common.admin;
+
+enum Operation {
+	DEBUGSERVER = 0;
+	STACKTRACE = 1;
+}
+
+message DebugRequest{
+	// Operation Type
+	Operation OperationType = 1;
+	// Artibraty data
+	string Data = 2;
+}
+
+message DebugResponse {
+	string Result = 1;
+}
+
+service DebugAgent {
+	rpc Invoke(DebugRequest) returns (DebugResponse) {}
+}
+
+
