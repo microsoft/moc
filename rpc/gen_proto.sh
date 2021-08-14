@@ -14,6 +14,7 @@ protoc -I common common/moc_common_common.proto --go_out=plugins=grpc:../bld/gen
 protoc -I common common/moc_common_computecommon.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I common common/moc_common_nodeinfo.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I common common/moc_common_networkcommon.proto --go_out=plugins=grpc:../bld/gen/
+protoc -I common common/admin/debug/moc_common_debug.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I common common/admin/logging/moc_common_logging.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I common common/admin/health/moc_common_health.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I common common/admin/recovery/moc_common_recovery.proto --go_out=plugins=grpc:../bld/gen/
