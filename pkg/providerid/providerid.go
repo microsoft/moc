@@ -38,7 +38,7 @@ func FormatProviderID(hostType HostType, machineName string) string {
 
 func ParseProviderID(providerID string) (HostType, string, error) {
 	if providerID == "" {
-		return "", "", errors.Wrap(errors.NotFound, "providerID is empty")
+		return "", "", errors.Wrap(errors.InvalidInput, "providerID is empty")
 	}
 
 	withoutPrefix := strings.TrimPrefix(providerID, ProviderIDPrefix)
