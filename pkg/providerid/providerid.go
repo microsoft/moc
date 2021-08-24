@@ -4,8 +4,9 @@
 package providerid
 
 import (
-	"fmt"
 	"strings"
+
+	"github.com/microsoft/moc/pkg/errors"
 )
 
 const (
@@ -37,12 +38,12 @@ func FormatProviderID(hostType HostType, machineName string) string {
 
 func ParseProviderID(providerID string) (HostType, string, error) {
 	if providerID == "" {
-		return "", "", fmt.Errorf("providerID is empty")
+		return "", "", errors.Wrap(errors.InvalidInput, "providerID is empty")
 	}
 
 	withoutPrefix := strings.TrimPrefix(providerID, ProviderIDPrefix)
 	if withoutPrefix == providerID {
-		return "", "", fmt.Errorf("providerID is missing expected prefix (%s): %s", ProviderIDPrefix, providerID)
+		return "", "", errors.Wrapf(errors.InvalidInput, "providerID is missing expected prefix (%s): %s", ProviderIDPrefix, providerID)
 	}
 
 	withoutPrefix = strings.TrimSpace(withoutPrefix)
@@ -50,7 +51,7 @@ func ParseProviderID(providerID string) (HostType, string, error) {
 	// Parse out the host type.
 	split := strings.SplitN(withoutPrefix, "/", 2)
 	if len(split) < 1 {
-		return "", "", fmt.Errorf("providerID is invalid")
+		return "", "", errors.Wrap(errors.InvalidInput, "providerID is invalid")
 	}
 
 	if len(split) == 1 {
@@ -62,7 +63,7 @@ func ParseProviderID(providerID string) (HostType, string, error) {
 	machineName := split[1]
 
 	if hostType != HostTypeBareMetal {
-		return "", "", fmt.Errorf("providerID contains unknown host type: %s", string(hostType))
+		return "", "", errors.Wrapf(errors.InvalidInput, "providerID contains unknown host type: %s", string(hostType))
 	}
 
 	return hostType, machineName, nil
