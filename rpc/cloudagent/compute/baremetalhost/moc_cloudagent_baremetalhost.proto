@@ -28,7 +28,7 @@ message BareMetalHostResponse {
 
 message BareMetalHostDisk {
 	string diskName = 1;
-	int32 diskSizeGB = 2;
+	uint32 diskSizeGB = 2;
 }
 
 message BareMetalHostStorageConfiguration {
@@ -44,9 +44,9 @@ message BareMetalHostNetworkConfiguration {
 }
 
 message BareMetalHostSize {
-	int32 cpuCount = 1;
-	int32 gpuCount = 2;
-	int32 memoryMB = 3;
+	uint32 cpuCount = 1;
+	uint32 gpuCount = 2;
+	uint32 memoryMB = 3;
 }
 
 message BareMetalHostHardwareConfiguration {
@@ -66,8 +66,8 @@ message BareMetalHost {
 	string locationName = 10;
 	string fqdn = 11; 
 	string certificate = 12;
-	int32  port = 13;
-	int32  authorizerPort = 14;
+	uint32 port = 13;
+	uint32 authorizerPort = 14;
 	Tags tags = 15;
 }
 
