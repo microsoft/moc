@@ -38,12 +38,12 @@ message BareMetalMachine {
 	string id = 2;
 	BareMetalMachineStorageConfiguration storage = 3;
 	BareMetalMachineOperatingSystemConfiguration os = 4;
-	SecurityConfiguration security = 8;
-	string bareMetalHostName = 9;
-	string groupName = 10;
-	Status status = 11;
-	string locationName = 12;
-	Tags tags = 13;
+	SecurityConfiguration security = 5;
+	string fqdn = 6;
+	string groupName = 7;
+	Status status = 8;
+	string locationName = 9;
+	Tags tags = 10;
 }
 
 service BareMetalMachineAgent {
