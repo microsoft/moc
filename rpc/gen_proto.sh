@@ -117,6 +117,7 @@ protoc -I $Agent/$Module/virtualmachine -I ./common $Agent/$Module/virtualmachin
 protoc -I $Agent/$Module/virtualmachinescaleset -I $Agent/$Module/virtualmachine -I $Agent/network/networkinterface -I ./common $Agent/$Module/virtualmachinescaleset/moc_cloudagent_virtualmachinescaleset.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/virtualmachineimage -I ./common $Agent/$Module/virtualmachineimage/moc_cloudagent_virtualmachineimage.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/galleryimage -I ./common $Agent/$Module/galleryimage/moc_cloudagent_galleryimage.proto  --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/baremetalhost -I ./common -I $Agent/$Module/virtualmachine $Agent/$Module/baremetalhost/moc_cloudagent_baremetalhost.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/baremetalmachine -I ./common -I $Agent/$Module/virtualmachine $Agent/$Module/baremetalmachine/moc_cloudagent_baremetalmachine.proto --go_out=plugins=grpc:../bld/gen/
 
 Module="storage"
