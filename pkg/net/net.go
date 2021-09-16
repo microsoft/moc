@@ -193,41 +193,41 @@ func GetNetworkInterface() (string, error) {
 	return "", fmt.Errorf("No network interfaces found")
 }
 
-func lessThan(left, right net.IP) bool {
+func IPCmp(left, right net.IP) int {
 	var l, r big.Int
 	l.SetBytes(left)
 	r.SetBytes(right)
-	if l.Cmp(&r) == -1 {
-		return true
-	}
-	return false
+	return l.Cmp(&r)
 }
 
-func greaterThan(left, right net.IP) bool {
-	var l, r big.Int
-	l.SetBytes(left)
-	r.SetBytes(right)
-	if l.Cmp(&r) == 1 {
-		return true
-	}
-	return false
+func IPLessThan(left, right net.IP) bool {
+	return IPCmp(left, right) < 0
+}
+
+func IPLessThanOrEqual(left, right net.IP) bool {
+	return IPCmp(left, right) <= 0
+}
+
+func IPGreaterThan(left, right net.IP) bool {
+	return IPCmp(left, right) > 0
+}
+
+func IPGreaterThanOrEqual(left, right net.IP) bool {
+	return IPCmp(left, right) >= 0
+}
+
+func IPRangeValid(start, end net.IP) bool {
+	return IPLessThanOrEqual(start, end)
 }
 
 func RangesOverlap(range1start, range1end, range2start, range2end net.IP) bool {
+	// If either range is invalid, return false.
+	if !IPRangeValid(range1start, range1end) || !IPRangeValid(range2start, range2end) {
+		return false
+	}
 
-	if lessThan(range1start, range2start) && lessThan(range2start, range1end) {
-		return true
-	}
-	if lessThan(range2start, range1start) && lessThan(range1start, range2end) {
-		return true
-	}
-	if range1start.Equal(range2start) || range1end.Equal(range2end) {
-		return true
-	}
-	if range1end.Equal(range2start) || range1start.Equal(range2end) {
-		return true
-	}
-	return false
+	// From https://stackoverflow.com/a/3269471
+	return IPLessThanOrEqual(range1start, range2end) && IPLessThanOrEqual(range2start, range1end)
 }
 
 func IsRangeInCIDR(start, end net.IP, cidr *net.IPNet) bool {
@@ -258,7 +258,7 @@ func RangeContains(start, end, ip net.IP) bool {
 	if ip.Equal(start) || ip.Equal(end) {
 		return true
 	}
-	if greaterThan(ip, start) && lessThan(ip, end) {
+	if IPGreaterThan(ip, start) && IPLessThan(ip, end) {
 		return true
 	}
 	return false
