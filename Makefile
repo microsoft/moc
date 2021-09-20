@@ -22,10 +22,6 @@ vendor:
 format:
 	gofmt -s -w rpc/ pkg/ 
 
-bootstrap:
-	GOOS="linux" go get -u google.golang.org/grpc@v1.26.0
-	GOOS="linux" go get -u github.com/golang/protobuf/protoc-gen-go@v1.3.2
-
 test:
 	GOOS=windows go build ./...
 
@@ -37,8 +33,8 @@ unittest:
 	$(GOTEST) ./pkg/certs
 	$(GOTEST) ./pkg/auth
 
-generate: bootstrap
+generate:
 	(./gen.sh)
 
-pipeline: bootstrap
+pipeline:
 	(./gen.sh -c)
