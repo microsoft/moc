@@ -54,6 +54,7 @@ message UserConfiguration {
 
 message RDPConfiguration {
 	bool disableRDP = 1;
+	uint32 port = 2;	
 }
 
 message LinuxConfiguration {
@@ -64,6 +65,7 @@ message WindowsConfiguration {
 	bool enableAutomaticUpdates = 1;
 	string timeZone = 2;
 	RDPConfiguration RDPConfiguration = 3;
+	WinRMConfiguration WinRMConfiguration = 4;
 }
 
 message OperatingSystemConfiguration {
@@ -82,10 +84,16 @@ message OperatingSystemConfiguration {
 message HardwareConfiguration {
 	VirtualMachineSizeType VMSize = 1;
 	VirtualMachineCustomSize customSize = 2;
+	DynamicMemoryConfiguration dynamicMemoryConfiguration = 3;
+}
+
+message UefiSettings {
+	bool secureBootEnabled = 1;
 }
 
 message SecurityConfiguration {
 	bool enableTPM = 1;
+	UefiSettings uefiSettings = 2;
 }
 
 message VirtualMachine {
@@ -116,10 +124,23 @@ message VirtualMachineOperationResponse {
 	string  Error = 3;
 }
 
+message VirtualMachineRunCommandRequest {
+	VirtualMachine VirtualMachine = 1;
+	VirtualMachineRunCommandScriptSource Source = 2;
+	repeated VirtualMachineRunCommandInputParameter RunCommandInputParameters = 3;
+	string RunAsUser = 4 [(sensitive) = true];
+	string RunAsPassword = 5 [(sensitive) = true];
+}
+
+message VirtualMachineRunCommandResponse {
+	VirtualMachine VirtualMachine = 1;
+	VirtualMachineRunCommandInstanceView InstanceView = 2;
+}
 
 service VirtualMachineAgent {
 	rpc Invoke(VirtualMachineRequest) returns (VirtualMachineResponse) {}
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
 	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
+	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
 }
 

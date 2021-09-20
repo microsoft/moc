@@ -26,6 +26,27 @@ message VirtualHardDiskResponse {
 	string  Error = 3;
 }
 
+message SFSImageProperties {
+	string catalogName = 1;
+	string audience = 2;
+	string version = 3;
+	string releaseName = 4;
+	uint32 parts = 5;
+	string destinationDir = 6;
+}
+
+message LocalImageProperties {
+	string path = 1;
+}
+
+message CloneImageProperties {
+	string cloneSource = 1;
+}
+
+message HttpImageProperties {
+	string httpURL = 1;
+}
+
 message VirtualHardDisk {
 	string name = 1;
 	string id = 2;
@@ -47,6 +68,7 @@ message VirtualHardDisk {
 	VirtualHardDiskType virtualharddisktype = 17;
 	Entity entity = 18;
 	Tags tags = 19;
+	ImageSource sourceType = 20;
 }
 
 service VirtualHardDiskAgent {

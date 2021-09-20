@@ -54,13 +54,35 @@ enum VirtualMachineSizeType {
 	Standard_NV6 = 20;
 	Standard_NV12 = 21;
 	Standard_K8S5_v1 = 22;
+	Custom_NK = 96;
+	Custom_Gpupv = 97;
 	Custom = 98;
 	Unsupported = 99;
+}
+
+enum WinRMProtocolType {
+	HTTP = 0;
+	HTTPS = 1;
+}
+
+message WinRMListener {
+	WinRMProtocolType Protocol = 1;
+}
+
+message WinRMConfiguration {
+	repeated WinRMListener Listeners = 1;
 }
 
 message VirtualMachineCustomSize {
 	int32 cpuCount = 1;
 	int32 memoryMB = 2;
+	int32 gpuCount = 3;
+}
+
+message DynamicMemoryConfiguration {
+	uint64 maximumMemoryMB = 1;
+	uint64 minimumMemoryMB = 2;
+	uint32 targetMemoryBuffer = 3;
 }
 
 enum PowerState {
@@ -77,4 +99,26 @@ enum VirtualMachineOperation {
 	RESET = 2;
 }
 
+enum VirtualMachineRunCommandExecutionState {
+	ExecutionState_UNKNOWN = 0;
+	ExecutionState_FAILED = 1;
+	ExecutionState_SUCCEEDED = 2;
+}
 
+message VirtualMachineRunCommandInputParameter {
+    string Name = 1;
+    string Value = 2;
+}
+
+message VirtualMachineRunCommandScriptSource {
+	string Script = 1;
+	string ScriptURI = 2;
+	string CommandID = 3;
+}
+
+message VirtualMachineRunCommandInstanceView {
+	VirtualMachineRunCommandExecutionState ExecutionState = 1;
+	int32 ExitCode = 2;
+	string Output = 3;
+	string Error = 4;
+}
