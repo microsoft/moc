@@ -25,6 +25,24 @@ message GalleryImageResponse {
 	string  Error = 3;
 }
 
+message SFSImageProperties {
+	string catalogName = 1;
+	string audience = 2;
+	string version = 3;
+	string releaseName = 4;
+	string destinationDir = 5;
+	uint32 parts = 6;
+}
+message LocalImageProperties {
+	string path = 1;
+}
+message CloneImageProperties {
+	string cloneSource = 1;
+}
+message HttpImageProperties {
+	string httpURL = 1;
+}
+
 message GalleryImage {
 	string name = 1;
 	string id = 2;
@@ -40,6 +58,7 @@ message GalleryImage {
 	// Source of the GalleryImage from where we can copy the image from.
 	string sourcePath = 11;
 	Tags tags = 12;
+	ImageSource sourceType = 13;
 }
 
 service GalleryImageAgent {

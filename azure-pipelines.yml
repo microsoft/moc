@@ -4,12 +4,16 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+- main
 
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: GoTool@0
+  inputs:
+    version: '1.15.x'
+
 - task: InstallSSHKey@0
   inputs:
     knownHostsEntry: '$(KNOWN_HOST)' 
@@ -22,7 +26,6 @@ steps:
 
 - script: |
     git config --global url.ssh://git@github.com/.insteadOf https://github.com/
-    go version
     make
   displayName: 'Build'
 

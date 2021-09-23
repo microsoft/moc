@@ -7,6 +7,7 @@ package moc.cloudagent.storage;
 
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
+import "moc_common_storageinfo.proto";
 
 enum ContainerType {
 	UNKNOWN = 0;
@@ -33,6 +34,8 @@ message Container {
 	string path = 4;
 	Status status = 5;
 	string locationName = 6;
+	StorageContainerInfo info = 7;
+          
 }
 
 service ContainerAgent {

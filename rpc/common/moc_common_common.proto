@@ -31,6 +31,7 @@ enum ProvisionState {
 	DEPROVISIONING = 13;
 	DEPROVISIONED = 14;
 	DEPROVISION_FAILED = 15;
+	DELETE_PENDING = 16;
 }
 
 enum HighAvailabilityState {
@@ -149,4 +150,11 @@ enum ProviderType {
 
 extend google.protobuf.FieldOptions {
 	bool sensitive = 50001;
+}
+
+enum ImageSource {
+        LOCAL_SOURCE = 0;
+        SFS_SOURCE   = 1;
+        HTTP_SOURCE  = 2;
+        CLONE_SOURCE = 3;
 }
