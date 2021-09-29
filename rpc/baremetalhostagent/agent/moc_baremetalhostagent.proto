@@ -5,8 +5,10 @@ syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/baremetalhostagent";
 
 package moc.baremetalhostagent;
+import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
+import "moc_common_notification.proto";
 
 message BareMetalHostOperatingSystemConfiguration {
 	string computerName = 1;
@@ -34,4 +36,5 @@ message BareMetalHostResponse {
 
 service BareMetalHostAgent {
 	rpc CreateOrUpdate(BareMetalHostRequest) returns (BareMetalHostResponse) {}
+	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 }
