@@ -44,6 +44,8 @@ message BareMetalMachine {
 	Status status = 8;
 	string locationName = 9;
 	Tags tags = 10;
+	// Allows bare-metal machine to run on hosts that have been tainted for a specific workload.
+	repeated Toleration hostTolerations = 11;
 }
 
 service BareMetalMachineAgent {

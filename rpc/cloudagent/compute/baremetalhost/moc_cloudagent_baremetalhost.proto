@@ -68,6 +68,8 @@ message BareMetalHost {
 	uint32 port = 12;
 	uint32 authorizerPort = 13;
 	Tags tags = 14;
+	// Taints that restricts which bare-metal machines can run on this host.
+	repeated Taint taints = 15;
 }
 
 service BareMetalHostAgent {

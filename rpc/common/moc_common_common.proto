@@ -158,3 +158,32 @@ enum ImageSource {
         HTTP_SOURCE  = 2;
         CLONE_SOURCE = 3;
 }
+
+// Used to reserve a resource for a specific workload.
+message Taint {
+	string key = 1;
+	string value = 2;
+}
+
+// Defines how the taint's value is handled by a toleration.
+enum TolerationOperator {
+	NONE = 0;
+	// Toleration will match any value.
+	Exists = 1;
+	// Toleration will only match if the value field equals the value of the taint.
+	Equal = 2;
+}
+
+// Used to permit a workload to use a resource reserved by a taint.
+message Toleration {
+	// How the taint's value is handled.
+	TolerationOperator operator = 1;
+	// The key of the taint to tolerate.
+	string key = 2;
+	// The value to match against the taint's value.
+	// This field is ignored if 'operator' is set to 'Exists'.
+	string value = 3;
+	// If true, toleration must match a taint. If false, taint may be present
+	// but is not required.
+	bool required = 4;
+}

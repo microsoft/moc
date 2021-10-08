@@ -38,6 +38,8 @@ message Node {
 	NodeState runningState = 9;
 	moc.common.NodeInfo info = 10;
 	Tags tags = 11;
+	// Taints that restricts which VMs can run on this node.
+	repeated Taint taints = 12;
 } 
 
 service NodeAgent {
