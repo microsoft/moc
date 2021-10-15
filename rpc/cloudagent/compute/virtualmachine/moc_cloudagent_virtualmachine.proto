@@ -118,6 +118,8 @@ message VirtualMachine {
 	PowerState powerState = 14;
 	SecurityConfiguration security = 15;
 	Tags tags = 16;
+	// Allows VM to run on nodes that have been tainted for a specific workload.
+	repeated Toleration nodeTolerations = 17;
 }
 
 message VirtualMachineOperationRequest {
