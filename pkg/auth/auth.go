@@ -28,7 +28,7 @@ const (
 	ClientCertName        = "wssd.pem"
 	ClientTokenPath       = "WSSD_CLIENT_TOKEN"
 	WssdConfigPath        = "WSSD_CONFIG_PATH"
-	AccessFilePath        = "ACCESS_FILE_PATH"
+	AccessFileDirPath     = "ACCESSFILE_DIR_PATH"
 	DefaultWSSDFolder     = ".wssd"
 	AccessFileDefaultName = "cloudconfig"
 	ServerName            = "ServerName"
@@ -334,14 +334,35 @@ func getExecutableName() (string, error) {
 
 // GetWssdConfigLocation gets the path for access file from environment
 func GetWssdConfigLocation() string {
-	accessFilePath := os.Getenv(AccessFilePath)
-	defaultPath := accessFilePath
-	if execName, err := getExecutableName(); err == nil {
-		defaultPath = filepath.Join(defaultPath, execName)
+	accessFileDirPath := os.Getenv(AccessFileDirPath)
+	if accessFileDirPath != "" {
+		defaultPath := accessFileDirPath
+		if execName, err := getExecutableName(); err == nil {
+			defaultPath = filepath.Join(defaultPath, execName)
+		}
+		os.MkdirAll(defaultPath, os.ModePerm)
+		accessFilePath := filepath.Join(defaultPath, AccessFileDefaultName)
+		return accessFilePath
 	}
-	os.MkdirAll(defaultPath, os.ModePerm)
-	accessFilePath = filepath.Join(defaultPath, AccessFileDefaultName)
-	return accessFilePath
+
+	wssdConfigPath := os.Getenv(WssdConfigPath)
+	if wssdConfigPath == "" {
+		wd, err := os.UserHomeDir()
+		if err != nil {
+			panic(err)
+		}
+
+		// Create the default config path and set the
+		// env variable
+		defaultPath := filepath.Join(wd, DefaultWSSDFolder)
+		if execName, err := getExecutableName(); err == nil {
+			defaultPath = filepath.Join(defaultPath, execName)
+		}
+		os.MkdirAll(defaultPath, os.ModePerm)
+		wssdConfigPath = filepath.Join(defaultPath, AccessFileDefaultName)
+		os.Setenv(WssdConfigPath, wssdConfigPath)
+	}
+	return wssdConfigPath
 }
 
 // GetWssdConfigLocationName gets the path for access filename from environment + subfolder with file name fileName
