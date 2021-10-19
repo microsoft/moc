@@ -335,18 +335,14 @@ func getExecutableName() (string, error) {
 // GetWssdConfigLocation gets the path for access file from environment
 func GetWssdConfigLocation() string {
 	accessFileDirPath := os.Getenv(AccessFileDirPath)
-	if accessFileDirPath != "" {
-		defaultPath := accessFileDirPath
-		if execName, err := getExecutableName(); err == nil {
-			defaultPath = filepath.Join(defaultPath, execName)
-		}
-		os.MkdirAll(defaultPath, os.ModePerm)
-		accessFilePath := filepath.Join(defaultPath, AccessFileDefaultName)
-		return accessFilePath
+	wssdConfigPath := os.Getenv(WssdConfigPath)
+	defaultPath := accessFileDirPath
+
+	if accessFileDirPath == "" && wssdConfigPath != "" {
+		return wssdConfigPath
 	}
 
-	wssdConfigPath := os.Getenv(WssdConfigPath)
-	if wssdConfigPath == "" {
+	if accessFileDirPath == "" && wssdConfigPath == "" {
 		wd, err := os.UserHomeDir()
 		if err != nil {
 			panic(err)
@@ -354,15 +350,16 @@ func GetWssdConfigLocation() string {
 
 		// Create the default config path and set the
 		// env variable
-		defaultPath := filepath.Join(wd, DefaultWSSDFolder)
-		if execName, err := getExecutableName(); err == nil {
-			defaultPath = filepath.Join(defaultPath, execName)
-		}
-		os.MkdirAll(defaultPath, os.ModePerm)
-		wssdConfigPath = filepath.Join(defaultPath, AccessFileDefaultName)
-		os.Setenv(WssdConfigPath, wssdConfigPath)
+		defaultPath = filepath.Join(wd, DefaultWSSDFolder)
+		os.Setenv(AccessFileDirPath, defaultPath)
 	}
-	return wssdConfigPath
+
+	if execName, err := getExecutableName(); err == nil {
+		defaultPath = filepath.Join(defaultPath, execName)
+	}
+	os.MkdirAll(defaultPath, os.ModePerm)
+	accessFilePath := filepath.Join(defaultPath, AccessFileDefaultName)
+	return accessFilePath
 }
 
 // GetWssdConfigLocationName gets the path for access filename from environment + subfolder with file name fileName
