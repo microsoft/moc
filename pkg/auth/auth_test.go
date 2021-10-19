@@ -26,9 +26,10 @@ func init() {
 
 func Test_GetWssdConfigLocation(t *testing.T) {
 
+	os.Unsetenv(AccessFileDirPath)
+	os.Setenv(WssdConfigPath, "TestWssdConfigPath")
 	accessFileDirPath := os.Getenv(AccessFileDirPath)
 	wssdConfigPath := os.Getenv(WssdConfigPath)
-
 	if accessFileDirPath == "" && wssdConfigPath != "" {
 		path := GetWssdConfigLocation()
 		expectedPath := wssdConfigPath
@@ -37,6 +38,10 @@ func Test_GetWssdConfigLocation(t *testing.T) {
 		}
 	}
 
+	os.Unsetenv(WssdConfigPath)
+	os.Unsetenv(AccessFileDirPath)
+	accessFileDirPath = os.Getenv(AccessFileDirPath)
+	wssdConfigPath = os.Getenv(WssdConfigPath)
 	if accessFileDirPath == "" && wssdConfigPath == "" {
 		path := GetWssdConfigLocation()
 		wd, err := os.UserHomeDir()
@@ -53,13 +58,15 @@ func Test_GetWssdConfigLocation(t *testing.T) {
 		}
 	}
 
+	os.Setenv(AccessFileDirPath, "TestAccessFileDirPath")
+	accessFileDirPath = os.Getenv(AccessFileDirPath)
 	if accessFileDirPath != "" {
 		path := GetWssdConfigLocation()
 		execName, err := getExecutableName()
 		if err != nil {
 			t.Errorf("Failed to get executable name %v", err)
 		}
-		expectedPath := filepath.Join(os.Getenv(AccessFileDirPath), execName, "cloudconfig")
+		expectedPath := filepath.Join(accessFileDirPath, execName, "cloudconfig")
 		if path != expectedPath {
 			t.Errorf("Invalid path when ACCESSFILE_DIR_PATH env variable is set! Expected %s Actual %s", expectedPath, path)
 		}
