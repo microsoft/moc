@@ -24,6 +24,7 @@ enum NodeState {
 	Unknown = 0;
 	Active = 1;
 	Inactive = 2;
+	Poweroff = 3;
 }
 
 message Node {
