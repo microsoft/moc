@@ -54,13 +54,36 @@ enum VirtualMachineSizeType {
 	Standard_NV6 = 20;
 	Standard_NV12 = 21;
 	Standard_K8S5_v1 = 22;
+	Standard_DS2_v2_HPN = 23;
+	Standard_DS3_v2_HPN = 24;
+	Standard_DS4_v2_HPN = 25;
+	Standard_F2s_HPN = 26;
+	Standard_F4s_HPN = 27;
+	Standard_F8s_HPN = 28;
+	Standard_F16s_HPN = 29;
+	Custom_NK = 96;
+	Custom_Gpupv = 97;
 	Custom = 98;
 	Unsupported = 99;
+}
+
+enum WinRMProtocolType {
+	HTTP = 0;
+	HTTPS = 1;
+}
+
+message WinRMListener {
+	WinRMProtocolType Protocol = 1;
+}
+
+message WinRMConfiguration {
+	repeated WinRMListener Listeners = 1;
 }
 
 message VirtualMachineCustomSize {
 	int32 cpuCount = 1;
 	int32 memoryMB = 2;
+	int32 gpuCount = 3;
 }
 
 message DynamicMemoryConfiguration {

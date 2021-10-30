@@ -145,8 +145,17 @@ enum ProviderType {
 	CredentialMonitor      = 31;
 	Logging                = 32;
 	Recovery               = 33;
+	Debug                  = 34;
+	BareMetalHost          = 35;
 }
 
 extend google.protobuf.FieldOptions {
 	bool sensitive = 50001;
+}
+
+enum ImageSource {
+        LOCAL_SOURCE = 0;
+        SFS_SOURCE   = 1;
+        HTTP_SOURCE  = 2;
+        CLONE_SOURCE = 3;
 }

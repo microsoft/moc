@@ -24,6 +24,54 @@ func init() {
 	key, _ = rsa.GenerateKey(rand.Reader, 2048)
 }
 
+func Test_GetWssdConfigLocationWssdConfigPathSet(t *testing.T) {
+
+	os.Unsetenv(AccessFileDirPath)
+	os.Setenv(WssdConfigPath, "TestWssdConfigPath")
+
+	wssdConfigPath := os.Getenv(WssdConfigPath)
+	path := GetWssdConfigLocation()
+	expectedPath := wssdConfigPath
+	if path != expectedPath {
+		t.Errorf("Invalid path when ACCESSFILE_DIR_PATH is not set and WSSD_CONFIG_PATH is set! Expected %s Actual %s", expectedPath, path)
+	}
+}
+
+func Test_GetWssdConfigLocationEnvNotSet(t *testing.T) {
+
+	os.Unsetenv(WssdConfigPath)
+	os.Unsetenv(AccessFileDirPath)
+
+	path := GetWssdConfigLocation()
+	wd, err := os.UserHomeDir()
+	if err != nil {
+		t.Errorf("Failed to get user home directory path %v", err)
+	}
+	execName, err := getExecutableName()
+	if err != nil {
+		t.Errorf("Failed to get executable name %v", err)
+	}
+	expectedPath := filepath.Join(wd, ".wssd", execName, "cloudconfig")
+	if path != expectedPath {
+		t.Errorf("Invalid path when both ACCESSFILE_DIR_PATH and WSSD_CONFIG_PATH env variables are not set! Expected %s Actual %s", expectedPath, path)
+	}
+}
+
+func Test_GetWssdConfigLocationAccessFileDirPathSet(t *testing.T) {
+
+	os.Setenv(AccessFileDirPath, "TestAccessFileDirPath")
+	accessFileDirPath := os.Getenv(AccessFileDirPath)
+	path := GetWssdConfigLocation()
+	execName, err := getExecutableName()
+	if err != nil {
+		t.Errorf("Failed to get executable name %v", err)
+	}
+	expectedPath := filepath.Join(accessFileDirPath, execName, "cloudconfig")
+	if path != expectedPath {
+		t.Errorf("Invalid path when ACCESSFILE_DIR_PATH env variable is set! Expected %s Actual %s", expectedPath, path)
+	}
+}
+
 func Test_GetWssdConfigLocationName(t *testing.T) {
 	path := GetMocConfigLocationName("", "")
 	wd, err := os.UserHomeDir()

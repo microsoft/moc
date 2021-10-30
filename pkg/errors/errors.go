@@ -42,6 +42,7 @@ var (
 	Revoked              error = errors.New("Revoked")
 	Timeout              error = errors.New("The operation has timed out")
 	RunCommandFailed     error = errors.New("Run Command Failed")
+	InvalidToken         error = errors.New("InvalidToken")
 	Unknown              error = errors.New("Unknown Reason")
 )
 
@@ -104,6 +105,8 @@ func GetErrorCode(err error) string {
 		return "Revoked"
 	} else if IsTimeout(err) {
 		return "Timeout"
+	} else if IsInvalidToken(err) {
+		return "InvalidToken"
 	} else if IsUnknown(err) {
 		return "Unknown"
 	}
@@ -259,6 +262,9 @@ func IsRevoked(err error) bool {
 }
 func IsTimeout(err error) bool {
 	return checkError(err, Timeout)
+}
+func IsInvalidToken(err error) bool {
+	return checkError(err, InvalidToken)
 }
 
 func checkError(wrappedError, err error) bool {
