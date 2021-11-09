@@ -22,11 +22,17 @@ func AddTag(key, value string, tags *common.Tags) {
 
 //GetTagValue
 func GetTagValue(key string, tags *common.Tags) (string, error) {
+	var ret string
 	for _, tag := range tags.GetTags() {
 		if tag.GetKey() == key {
-			return tag.GetValue(), nil
+			ret = tag.GetValue()
 		}
 	}
+
+	if len(ret) != 0 {
+		return ret, nil
+	}
+
 	return "", errors.Wrapf(errors.NotFound, "Missing tag %s", key)
 }
 
