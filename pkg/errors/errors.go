@@ -4,8 +4,8 @@ package errors
 
 import (
 	"errors"
-	"strings"
 	"os"
+	"strings"
 
 	perrors "github.com/pkg/errors"
 	"google.golang.org/grpc/codes"
@@ -269,7 +269,7 @@ func IsInvalidToken(err error) bool {
 }
 
 func IsErrDeadlineExceeded(err error) bool {
-       return checkError(err, os.ErrDeadlineExceeded)
+	return checkError(err, os.ErrDeadlineExceeded)
 }
 
 func checkError(wrappedError, err error) bool {

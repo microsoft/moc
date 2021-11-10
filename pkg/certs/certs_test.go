@@ -4,12 +4,59 @@ package certs
 
 import (
 	"bytes"
+	"crypto/rand"
+	"crypto/rsa"
 	"crypto/tls"
 	"crypto/x509"
+	"crypto/x509/pkix"
 	"encoding/asn1"
+	"math"
+	"math/big"
 	"testing"
 	"time"
+
+	"github.com/microsoft/moc/pkg/errors"
 )
+
+func createTestCertificate(before, after time.Time) (string, error) {
+	key, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		return "", err
+	}
+
+	serial, err := rand.Int(rand.Reader, new(big.Int).SetInt64(math.MaxInt64))
+	if err != nil {
+		return "", err
+	}
+
+	tmpl := x509.Certificate{
+		SerialNumber: serial,
+		Subject: pkix.Name{
+			CommonName:   "test",
+			Organization: []string{"microsoft"},
+		},
+		NotBefore:             before,
+		NotAfter:              after,
+		KeyUsage:              x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign,
+		MaxPathLenZero:        true,
+		BasicConstraintsValid: true,
+		MaxPathLen:            0,
+		IsCA:                  true,
+	}
+
+	b, err := x509.CreateCertificate(rand.Reader, &tmpl, &tmpl, key.Public(), key)
+	if err != nil {
+		return "", err
+	}
+
+	x509Cert, err := x509.ParseCertificate(b)
+	if err != nil {
+		return "", err
+	}
+
+	pemCert := EncodeCertPEM(x509Cert)
+	return string(pemCert), nil
+}
 
 func Test_CACerts(t *testing.T) {
 	ca, key, err := GenerateClientCertificate("test CA")
@@ -513,5 +560,318 @@ func Test_CACertsRenewVerifySameKey(t *testing.T) {
 	}
 	if _, err = tls.X509KeyPair(EncodeCertPEM(certClient2), EncodePrivateKeyPEM(keyClient)); err != nil {
 		t.Errorf("Error Verifying key and cert: %s", err.Error())
+	}
+}
+
+func Test_BackoffFactor(t *testing.T) {
+	_, err := NewBackOffFactor(-1.0, 5)
+	if err == nil || !errors.IsInvalidInput(err) {
+		t.Errorf("Expected Error InvalidInput")
+	}
+	_, err = NewBackOffFactor(1.0, -5.0)
+	if err == nil || !errors.IsInvalidInput(err) {
+		t.Errorf("Expected Error InvalidInput")
+	}
+	_, err = NewBackOffFactor(-1.0, -5.0)
+	if err == nil || !errors.IsInvalidInput(err) {
+		t.Errorf("Expected Error InvalidInput")
+	}
+}
+
+func Test_BackoffFactor1(t *testing.T) {
+	factor, err := NewBackOffFactor(1.0, 5)
+	if err != nil {
+		t.Errorf("Error creating Factor: %s", err.Error())
+	}
+	if factor.errorBackoffFactor != 5 || factor.renewBackoffFactor != 1 {
+		t.Errorf("renewBackoffFactor Expected:1.0 Actual:%f \n errorBackoffFactor Expected:5.0 Actual:%f", factor.renewBackoffFactor, factor.errorBackoffFactor)
+	}
+}
+
+func Test_CalculateTime(t *testing.T) {
+	factor, err := NewBackOffFactor(0.3, 0.02)
+	if err != nil {
+		t.Errorf("Error creating Factor: %s", err.Error())
+	}
+	now := time.Now()
+	before := now.Add(time.Duration(time.Second * -10))
+	after := now.Add(time.Duration(time.Second * 10))
+	duration := calculateTime(before, after, now, factor)
+	if duration.RenewBackoffDuration != time.Duration(time.Second*4) {
+		t.Errorf("Wrong wait time returned Expected %s Actual %s", time.Duration(time.Second*4), duration.RenewBackoffDuration)
+	}
+	if duration.RenewBackoffDuration < time.Duration(0) {
+		t.Errorf("Wrong wait time returned Expected greater than zero %s", duration.RenewBackoffDuration)
+	}
+	if duration.ErrorBackoffDuration != time.Duration(time.Millisecond*400) {
+		t.Errorf("Wrong renewbackoff time returned Expected %s Actual %s", time.Duration(time.Millisecond*400), duration.ErrorBackoffDuration)
+	}
+}
+
+func Test_CalculateTime1(t *testing.T) {
+	factor, err := NewBackOffFactor(0.1, 0.002)
+	if err != nil {
+		t.Errorf("Error creating Factor: %s", err.Error())
+	}
+	now := time.Now()
+	before := now.Add(time.Duration(time.Second * -30))
+	after := now.Add(time.Duration(time.Second * 10))
+	duration := calculateTime(before, after, now, factor)
+	if duration.RenewBackoffDuration != time.Duration(time.Second*6) {
+		t.Errorf("Wrong wait time returned Expected %s Actual %s", time.Duration(time.Second*6), duration.RenewBackoffDuration)
+	}
+	if duration.RenewBackoffDuration < time.Duration(0) {
+		t.Errorf("Wrong wait time returned Expected greater than zero %s", duration.RenewBackoffDuration)
+	}
+	if duration.ErrorBackoffDuration != time.Duration(time.Millisecond*80) {
+		t.Errorf("Wrong renewbackoff time returned Expected %s Actual %s", time.Duration(time.Millisecond*400), duration.ErrorBackoffDuration)
+	}
+}
+
+func Test_CalculateTime2(t *testing.T) {
+	factor, err := NewBackOffFactor(0.5, 0.002)
+	if err != nil {
+		t.Errorf("Error creating Factor: %s", err.Error())
+	}
+	now := time.Now()
+	before := now.Add(time.Duration(time.Second * -30))
+	after := now.Add(time.Duration(time.Second * 10))
+	duration := calculateTime(before, after, now, factor)
+	if duration.RenewBackoffDuration != time.Duration(time.Second*-10) {
+		t.Errorf("Wrong wait time returned Expected %s Actual %s", time.Duration(time.Second*-10), duration.RenewBackoffDuration)
+	}
+	if duration.RenewBackoffDuration > time.Duration(0) {
+		t.Errorf("Wrong wait time returned Expected greater than zero %s", duration.RenewBackoffDuration)
+	}
+	if duration.ErrorBackoffDuration != time.Duration(time.Millisecond*80) {
+		t.Errorf("Wrong renewbackoff time returned Expected %s Actual %s", time.Duration(time.Millisecond*400), duration.ErrorBackoffDuration)
+	}
+}
+
+func Test_CalculateTime3(t *testing.T) {
+	factor, err := NewBackOffFactor(30.0/100.0, 0.02)
+	if err != nil {
+		t.Errorf("Error creating Factor: %s", err.Error())
+	}
+	now := time.Now()
+	before := now.Add(time.Minute * -5)
+	after := now.Add(time.Duration(time.Minute*10 + time.Second*30))
+	duration := calculateTime(before, after, now, factor)
+	if duration.RenewBackoffDuration != time.Duration(time.Minute*5+time.Second*51) {
+		t.Errorf("Wrong wait time returned Expected %s Actual %s", time.Duration(time.Minute*5+time.Second*51), duration.RenewBackoffDuration)
+	}
+	if duration.RenewBackoffDuration < time.Duration(0) {
+		t.Errorf("Wrong wait time returned Expected greater than zero %s", duration.RenewBackoffDuration)
+	}
+	if duration.ErrorBackoffDuration != time.Duration(time.Second*18+time.Millisecond*600) {
+		t.Errorf("Wrong renewbackoff time returned Expected %s Actual %s", time.Duration(time.Millisecond*400), duration.ErrorBackoffDuration)
+	}
+}
+
+func Test_CalculateTimeNegative(t *testing.T) {
+	factor, err := NewBackOffFactor(0.3, 0.02)
+	if err != nil {
+		t.Errorf("Error creating Factor: %s", err.Error())
+	}
+	now := time.Now()
+	before := now.Add(time.Duration(time.Second * -20))
+	after := now.Add(time.Duration(time.Second * -10))
+	duration := calculateTime(before, after, now, factor)
+	if duration.RenewBackoffDuration != time.Duration(time.Second*-13) {
+		t.Errorf("Wrong wait time returned Expected %s Actual %s", time.Duration(time.Second*-13), duration.RenewBackoffDuration)
+	}
+	if duration.RenewBackoffDuration > time.Duration(0) {
+		t.Errorf("Wrong wait time returned Expected less than zero %s", duration.RenewBackoffDuration)
+	}
+	if duration.ErrorBackoffDuration != time.Duration(time.Millisecond*200) {
+		t.Errorf("Wrong renewbackoff time returned Expected %s Actual %s", time.Duration(time.Millisecond*200), duration.ErrorBackoffDuration)
+	}
+}
+
+func Test_CalculateTimeAfter(t *testing.T) {
+	factor, err := NewBackOffFactor(0.3, 0.02)
+	if err != nil {
+		t.Errorf("Error creating Factor: %s", err.Error())
+	}
+	now := time.Now()
+	before := now.Add(time.Duration(time.Second * 10))
+	after := now.Add(time.Duration(time.Second * 30))
+	duration := calculateTime(before, after, now, factor)
+	if duration.RenewBackoffDuration != time.Duration(time.Second*24) {
+		t.Errorf("Wrong wait time returned Expected %s Actual %s", time.Duration(time.Second*24), duration.RenewBackoffDuration)
+	}
+	if duration.ErrorBackoffDuration != time.Duration(time.Millisecond*400) {
+		t.Errorf("Wrong renewbackoff time returned Expected %s Actual %s", time.Duration(time.Millisecond*400), duration.ErrorBackoffDuration)
+	}
+}
+
+func Test_CalculateRenewTime(t *testing.T) {
+	factor, err := NewBackOffFactor(0.3, 0.02)
+	if err != nil {
+		t.Errorf("Error creating Factor: %s", err.Error())
+	}
+	now := time.Now()
+	before := now.Add(time.Duration(time.Second * -10))
+	after := now.Add(time.Duration(time.Second * 10))
+	cert, err := createTestCertificate(before, after)
+	if err != nil {
+		t.Errorf("Failed creating certificate: %s", err.Error())
+	}
+	duration, err := CalculateRenewTime(cert, factor)
+	if err != nil {
+		t.Errorf("Failed calculating Certificate renewal backoff: %s", err.Error())
+	}
+	if duration.RenewBackoffDuration > time.Duration(time.Second*4) || duration.RenewBackoffDuration < time.Duration(time.Second*2) {
+		t.Errorf("Wrong wait time returned Expected %s Actual %s", time.Duration(time.Second*4), duration.RenewBackoffDuration)
+	}
+	if duration.RenewBackoffDuration < time.Duration(0) {
+		t.Errorf("Wrong wait time returned Expected greater than zero %s", duration.RenewBackoffDuration)
+	}
+	if duration.ErrorBackoffDuration != time.Duration(time.Millisecond*400) {
+		t.Errorf("Wrong renewbackoff time returned Expected %s Actual %s", time.Duration(time.Millisecond*400), duration.ErrorBackoffDuration)
+	}
+}
+
+func Test_CalculateRenewTime1(t *testing.T) {
+	factor, err := NewBackOffFactor(0.1, 0.002)
+	if err != nil {
+		t.Errorf("Error creating Factor: %s", err.Error())
+	}
+	now := time.Now()
+	before := now.Add(time.Duration(time.Second * -30))
+	after := now.Add(time.Duration(time.Second * 10))
+	cert, err := createTestCertificate(before, after)
+	if err != nil {
+		t.Errorf("Failed creating certificate: %s", err.Error())
+	}
+	duration, err := CalculateRenewTime(cert, factor)
+	if err != nil {
+		t.Errorf("Failed calculating Certificate renewal backoff: %s", err.Error())
+	}
+	if duration.RenewBackoffDuration > time.Duration(time.Second*6) || duration.RenewBackoffDuration < time.Duration(time.Second*4) {
+		t.Errorf("Wrong wait time returned Expected %s Actual %s", time.Duration(time.Second*6), duration.RenewBackoffDuration)
+	}
+	if duration.RenewBackoffDuration < time.Duration(0) {
+		t.Errorf("Wrong wait time returned Expected greater than zero %s", duration.RenewBackoffDuration)
+	}
+	if duration.ErrorBackoffDuration != time.Duration(time.Millisecond*80) {
+		t.Errorf("Wrong renewbackoff time returned Expected %s Actual %s", time.Duration(time.Millisecond*400), duration.ErrorBackoffDuration)
+	}
+}
+
+func Test_CalculateRenewTime2(t *testing.T) {
+	factor, err := NewBackOffFactor(0.5, 0.002)
+	if err != nil {
+		t.Errorf("Error creating Factor: %s", err.Error())
+	}
+	now := time.Now()
+	before := now.Add(time.Duration(time.Second * -30))
+	after := now.Add(time.Duration(time.Second * 10))
+	cert, err := createTestCertificate(before, after)
+	if err != nil {
+		t.Errorf("Failed creating certificate: %s", err.Error())
+	}
+	duration, err := CalculateRenewTime(cert, factor)
+	if err != nil {
+		t.Errorf("Failed calculating Certificate renewal backoff: %s", err.Error())
+	}
+	if duration.RenewBackoffDuration > time.Duration(time.Second*-10) || duration.RenewBackoffDuration < time.Duration(time.Second*-12) {
+		t.Errorf("Wrong wait time returned Expected %s Actual %s", time.Duration(time.Second*-10), duration.RenewBackoffDuration)
+	}
+	if duration.RenewBackoffDuration > time.Duration(0) {
+		t.Errorf("Wrong wait time returned Expected greater than zero %s", duration.RenewBackoffDuration)
+	}
+	if duration.ErrorBackoffDuration != time.Duration(time.Millisecond*80) {
+		t.Errorf("Wrong renewbackoff time returned Expected %s Actual %s", time.Duration(time.Millisecond*400), duration.ErrorBackoffDuration)
+	}
+}
+
+func Test_CalculateRenewTimeNegative(t *testing.T) {
+	factor, err := NewBackOffFactor(0.3, 0.02)
+	if err != nil {
+		t.Errorf("Error creating Factor: %s", err.Error())
+	}
+	now := time.Now()
+	before := now.Add(time.Duration(time.Second * -20))
+	after := now.Add(time.Duration(time.Second * -10))
+	cert, err := createTestCertificate(before, after)
+	if err != nil {
+		t.Errorf("Failed creating certificate: %s", err.Error())
+	}
+	duration, err := CalculateRenewTime(cert, factor)
+	if err != nil {
+		t.Errorf("Failed calculating Certificate renewal backoff: %s", err.Error())
+	}
+	if duration.RenewBackoffDuration > time.Duration(time.Second*-13) || duration.RenewBackoffDuration < time.Duration(time.Second*-15) {
+		t.Errorf("Wrong wait time returned Expected %s Actual %s", time.Duration(time.Second*-13), duration.RenewBackoffDuration)
+	}
+	if duration.RenewBackoffDuration > time.Duration(0) {
+		t.Errorf("Wrong wait time returned Expected less than zero %s", duration.RenewBackoffDuration)
+	}
+	if duration.ErrorBackoffDuration != time.Duration(time.Millisecond*200) {
+		t.Errorf("Wrong renewbackoff time returned Expected %s Actual %s", time.Duration(time.Millisecond*200), duration.ErrorBackoffDuration)
+	}
+}
+
+func Test_CalculateRenewTimeAfter(t *testing.T) {
+	factor, err := NewBackOffFactor(0.3, 0.02)
+	if err != nil {
+		t.Errorf("Error creating Factor: %s", err.Error())
+	}
+	now := time.Now()
+	before := now.Add(time.Duration(time.Second * 10))
+	after := now.Add(time.Duration(time.Second * 30))
+	cert, err := createTestCertificate(before, after)
+	if err != nil {
+		t.Errorf("Failed creating certificate: %s", err.Error())
+	}
+	duration, err := CalculateRenewTime(cert, factor)
+	if err != nil {
+		t.Errorf("Failed calculating Certificate renewal backoff: %s", err.Error())
+	}
+	if duration.RenewBackoffDuration < time.Duration(time.Second*22) || duration.RenewBackoffDuration > time.Duration(time.Second*24) {
+		t.Errorf("Wrong wait time returned Expected %s Actual %s", time.Duration(time.Second*24), duration.RenewBackoffDuration)
+	}
+	if duration.RenewBackoffDuration < time.Duration(0) {
+		t.Errorf("Wrong wait time returned Expected greater than zero %s", duration.RenewBackoffDuration)
+	}
+	if duration.ErrorBackoffDuration != time.Duration(time.Millisecond*400) {
+		t.Errorf("Wrong renewbackoff time returned Expected %s Actual %s", time.Duration(time.Millisecond*400), duration.ErrorBackoffDuration)
+	}
+}
+
+func Test_CalculateCertExpiry(t *testing.T) {
+	now := time.Now()
+	before := now.Add(time.Duration(time.Second * -30))
+	after := now.Add(time.Duration(time.Second * 10))
+	cert, err := createTestCertificate(before, after)
+	if err != nil {
+		t.Errorf("Failed creating certificate: %s", err.Error())
+	}
+	expired, err := IsCertificateExpired(cert)
+	if err != nil {
+		t.Errorf("Failed finding certificate expired: %s", err.Error())
+	}
+
+	if expired {
+		t.Errorf("Certificate expired")
+	}
+}
+
+func Test_CalculateCertExpiry1(t *testing.T) {
+	now := time.Now()
+	before := now.Add(time.Duration(time.Second * -20))
+	after := now.Add(time.Duration(time.Second * -10))
+	cert, err := createTestCertificate(before, after)
+	if err != nil {
+		t.Errorf("Failed creating certificate: %s", err.Error())
+	}
+	expired, err := IsCertificateExpired(cert)
+	if err != nil {
+		t.Errorf("Failed finding certificate expired: %s", err.Error())
+	}
+
+	if !expired {
+		t.Errorf("Certificate not expired")
 	}
 }
