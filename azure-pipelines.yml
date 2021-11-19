@@ -18,7 +18,7 @@ steps:
   inputs:
     knownHostsEntry: '$(KNOWN_HOST)' 
     sshPublicKey: '$(SSH_PUBLIC_KEY)'
-    sshKeySecureFile: 'azure-pipelines-ssh-key'
+    sshKeySecureFile: 'azure-pipelines-ssh-key-new'
 
 - script: |
     make pipeline
