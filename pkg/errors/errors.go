@@ -4,6 +4,7 @@ package errors
 
 import (
 	"errors"
+	"os"
 	"strings"
 
 	perrors "github.com/pkg/errors"
@@ -265,6 +266,10 @@ func IsTimeout(err error) bool {
 }
 func IsInvalidToken(err error) bool {
 	return checkError(err, InvalidToken)
+}
+
+func IsErrDeadlineExceeded(err error) bool {
+	return checkError(err, os.ErrDeadlineExceeded)
 }
 
 func checkError(wrappedError, err error) bool {
