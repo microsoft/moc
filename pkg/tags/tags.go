@@ -21,7 +21,7 @@ func AddTag(key, value string, tags *common.Tags) {
 }
 
 //DeleteTag
-func DeleteTag(key, value string, tags *common.Tags) {
+func DeleteTag(key string, tags *common.Tags) {
 	index := -1
 	tagsList := tags.GetTags()
 	for idx, tag := range tagsList {

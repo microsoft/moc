@@ -5,6 +5,7 @@ package tags
 import (
 	"testing"
 
+	"github.com/microsoft/moc/pkg/errors"
 	common "github.com/microsoft/moc/rpc/common"
 )
 
@@ -21,6 +22,30 @@ func TestAddTag(t *testing.T) {
 	AddTag("testkey", "testvalue", tags)
 	if len(tags.GetTags()) != 1 || tags.Tags[0].GetKey() != "testkey" || tags.Tags[0].GetValue() != "testvalue" {
 		t.Errorf("Failed to add Tag")
+	}
+	t.Logf("%s-%s", tags.Tags[0].GetKey(), tags.Tags[0].GetValue())
+}
+
+func TestDeleteTag(t *testing.T) {
+	tags := &common.Tags{}
+	AddTag("testkey", "testvalue", tags)
+	AddTag("testkey1", "testvalue1", tags)
+	DeleteTag("testkey", tags)
+	if len(tags.GetTags()) != 1 || tags.Tags[0].GetKey() != "testkey1" || tags.Tags[0].GetValue() != "testvalue1" {
+		t.Errorf("Failed to delete Tag")
+	}
+
+	_, err := GetTagValue("testkey", tags)
+	if err == nil {
+		t.Errorf("Failed to delete Tag")
+	}
+	if !errors.IsNotFound(err) {
+		t.Errorf("DeleteTag failed")
+	}
+
+	DeleteTag("testkey2", tags)
+	if len(tags.GetTags()) != 1 || tags.Tags[0].GetKey() != "testkey1" || tags.Tags[0].GetValue() != "testvalue1" {
+		t.Errorf("Failed to delete Tag")
 	}
 	t.Logf("%s-%s", tags.Tags[0].GetKey(), tags.Tags[0].GetValue())
 }
