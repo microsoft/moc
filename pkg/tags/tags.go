@@ -20,6 +20,23 @@ func AddTag(key, value string, tags *common.Tags) {
 	tags.Tags = append(tags.GetTags(), InitTag(key, value))
 }
 
+//DeleteTag
+func DeleteTag(key string, tags *common.Tags) {
+	index := -1
+	tagsList := tags.GetTags()
+	for idx, tag := range tagsList {
+		if tag.GetKey() == key {
+			index = idx
+			break
+		}
+	}
+
+	if index != -1 {
+		tags.Tags = append(tagsList[:index], tagsList[index+1:]...)
+	}
+	return
+}
+
 //GetTagValue
 func GetTagValue(key string, tags *common.Tags) (string, error) {
 	for _, tag := range tags.GetTags() {
@@ -30,7 +47,7 @@ func GetTagValue(key string, tags *common.Tags) (string, error) {
 	return "", errors.Wrapf(errors.NotFound, "Missing tag %s", key)
 }
 
-//GetTagValue
+//AddTagValue
 func AddTagValue(key, value string, tags *common.Tags) {
 	for _, tag := range tags.GetTags() {
 		if tag.GetKey() == key {
