@@ -1,0 +1,48 @@
+jobs:
+- job: Build
+
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  variables:
+  - group: wssdagent-build
+  - name: GO111MODULE
+    value: 'on'
+  - name: GDN_VERSION
+    value: '0.110.0-linux'
+  - name: GDNP_VERSION
+    value: '1.61.0-linux'
+  - name: LGTM.UploadSnapshot
+    value: true
+
+  steps:
+  - task: GoTool@0
+    inputs:
+      version: '1.15.x'
+  - task: InstallSSHKey@0
+    inputs:
+      knownHostsEntry: '$(KNOWN_HOST)' 
+      sshPublicKey: '$(SSH_PUBLIC_KEY)'
+      sshKeySecureFile: 'azure-pipelines-ssh-key-new'
+  - script: |
+      git config --global url.ssh://git@github.com/.insteadOf https://github.com/
+      git config --global url."msazure@vs-ssh.visualstudio.com:v3".insteadOf https://msazure.visualstudio.com
+    displayName: 'Set up the Go workspace'
+
+  - script: |
+      make pipeline
+    displayName: 'Generate Protobuf'
+
+  - script: |
+      make all
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    displayName: 'Build'
+
+  - script: |
+      make unittest
+    displayName: 'Unit Tests'
+
+  - task: AzureArtifacts.manifest-generator-task.manifest-generator-task.ManifestGeneratorTask@0
+    displayName: 'SBOM Generation'
+    inputs:
+      BuildDropPath: $(System.DefaultWorkingDirectory)/bin

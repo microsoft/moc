@@ -1,34 +1,6 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - main
 
-pool:
-  vmImage: 'ubuntu-latest'
-
-steps:
-- task: GoTool@0
-  inputs:
-    version: '1.15.x'
-
-- task: InstallSSHKey@0
-  inputs:
-    knownHostsEntry: '$(KNOWN_HOST)' 
-    sshPublicKey: '$(SSH_PUBLIC_KEY)'
-    sshKeySecureFile: 'azure-pipelines-ssh-key-new'
-
-- script: |
-    make pipeline
-  displayName: 'Generate Protobuf'
-
-- script: |
-    git config --global url.ssh://git@github.com/.insteadOf https://github.com/
-    make
-  displayName: 'Build'
-
-- script: |
-    make unittest
-  displayName: 'Unit Tests'
+jobs:
+- template: .pipelines/build.yaml
+- template: .pipelines/static.yaml
