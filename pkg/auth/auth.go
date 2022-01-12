@@ -12,14 +12,12 @@ import (
 	"net"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 
 	"github.com/microsoft/moc/pkg/certs"
 	"github.com/microsoft/moc/pkg/marshal"
 	wssdnet "github.com/microsoft/moc/pkg/net"
 	"github.com/microsoft/moc/rpc/common"
-	"github.com/pkg/errors"
 	"google.golang.org/grpc/credentials"
 )
 
@@ -82,7 +80,6 @@ type LoginConfig struct {
 	CloudFqdn     string     `json:"cloudfqdn,omitempty"`
 	CloudPort     int32      `json:"cloudport,omitempty"`
 	CloudAuthPort int32      `json:"cloudauthport,omitempty"`
-	CACertHash    string     `json:"cacerthash,omitempty"`
 	Location      string     `json:"location,omitempty"`
 	Type          LoginType  `json:"type,omitempty"`
 }
@@ -162,23 +159,6 @@ func NewAuthorizerForAuth(tokenString string, certificate string, server string)
 	transportCreds := credentials.NewTLS(&tls.Config{
 		ServerName: server,
 		RootCAs:    certPool,
-	})
-
-	return NewBearerAuthorizer(JwtTokenProvider{tokenString}, transportCreds), nil
-}
-
-func NewAuthorizerForAuthFromCACertHash(tokenString string, cacerthash string, server string) (Authorizer, error) {
-	pkv := NewPublicKeyVerifier()
-	err := pkv.Allow(cacerthash)
-	if err != nil {
-		return NewBearerAuthorizer(JwtTokenProvider{}, credentials.NewTLS(nil)), fmt.Errorf("could not marshal the server certificate")
-	}
-
-	transportCreds := credentials.NewTLS(&tls.Config{
-		ServerName:            server,
-		InsecureSkipVerify:    true,
-		VerifyPeerCertificate: pkv.VerifyPeerCertificate,
-		RootCAs:               x509.NewCertPool(),
 	})
 
 	return NewBearerAuthorizer(JwtTokenProvider{tokenString}, transportCreds), nil
@@ -521,48 +501,6 @@ func GenerateClientKeyWithName(loginconfig LoginConfig, subfolder, filename stri
 
 	accessFile.CloudCertificate = marshal.ToBase64(string(certBytes))
 	return accessFile.ClientCertificate, accessFile, nil
-}
-
-func GetServerCertificateFromHash(server, caCertHash string) (string, error) {
-	sp := strings.Split(server, ":")
-	if len(sp) != 2 {
-		return "", errors.Errorf("server must be the hostname + ':' + port, was %s", server)
-	}
-
-	if _, err := strconv.Atoi(sp[1]); err != nil {
-		return "", errors.Errorf("server must have integer after ':', had %s", sp[1])
-	}
-
-	nconn, err := net.Dial("tcp", server)
-	if err != nil {
-		return "", errors.Wrapf(err, "problem dialing %s", server)
-	}
-
-	pkv := NewPublicKeyVerifier()
-	err = pkv.Allow(caCertHash)
-	if err != nil {
-		return "", errors.Wrapf(err, "problem dialing %s", server)
-	}
-
-	config := &tls.Config{
-		ServerName:            server,
-		InsecureSkipVerify:    true,
-		VerifyPeerCertificate: pkv.VerifyPeerCertificate,
-		RootCAs:               x509.NewCertPool(),
-	}
-
-	tconn := tls.Client(nconn, config)
-	if err := tconn.Handshake(); err != nil {
-		return "", errors.Wrap(err, "problem with TLS handshake")
-	}
-
-	if len(tconn.ConnectionState().PeerCertificates) == 0 {
-		return "", errors.Errorf("unable to retieve certificates from %s ", server)
-	}
-
-	certBytesClient := certs.EncodeCertPEM(tconn.ConnectionState().PeerCertificates[0])
-
-	return marshal.ToBase64(string(certBytesClient)), nil
 }
 
 // PrintAccessFile stores wssdConfig in WssdConfigLocation
