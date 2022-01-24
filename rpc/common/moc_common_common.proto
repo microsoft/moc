@@ -147,6 +147,7 @@ enum ProviderType {
 	Recovery               = 33;
 	Debug                  = 34;
 	BareMetalHost          = 35;
+	Authentication         = 36;
 }
 
 extend google.protobuf.FieldOptions {
