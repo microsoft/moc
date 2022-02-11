@@ -8,6 +8,14 @@ package moc.cloudagent.storage;
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 
+enum HyperVGenerationType { 
+
+    	HyperVGenerationTypeV1 = 1; 
+
+	    HyperVGenerationTypeV2 = 2; 
+
+}
+
 message VirtualHardDiskRequest {
 	repeated VirtualHardDisk VirtualHardDisks = 1;
 	Operation OperationType = 2;
@@ -39,6 +47,7 @@ message VirtualHardDisk {
 	string attachedNodeName = 17;
 	string groupName = 18;
 	string locationName = 19;
+	HyperVGenerationType hyperVGeneration = 20;
 }
 
 service VirtualHardDiskAgent {
