@@ -15,6 +15,12 @@ enum VirtualHardDiskType {
 	DATADISK_VIRTUALHARDDISK = 1;
 }
 
+enum HyperVGenerationType { 
+    HyperVGenerationTypeV1 = 1; 
+	HyperVGenerationTypeV2 = 2; 
+
+}
+
 message VirtualHardDiskRequest {
 	repeated VirtualHardDisk VirtualHardDiskSystems = 1;
 	Operation OperationType = 2;
@@ -69,6 +75,7 @@ message VirtualHardDisk {
 	Entity entity = 18;
 	Tags tags = 19;
 	ImageSource sourceType = 20;
+	HyperVGenerationType hyperVGeneration = 21;
 }
 
 service VirtualHardDiskAgent {
