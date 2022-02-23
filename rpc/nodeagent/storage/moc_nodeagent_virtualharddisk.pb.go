@@ -44,6 +44,13 @@ var VirtualHardDiskType_value = map[string]int32{
 	"DATADISK_VIRTUALHARDDISK": 1,
 }
 
+type HyperVGenerationType int32
+
+const (
+	HyperVGenerationType_HyperVGenerationTypeV1      HyperVGenerationType = 1
+	HyperVGenerationType_HyperVGenerationTypeV2 HyperVGenerationType = 2
+)
+
 func (x VirtualHardDiskType) String() string {
 	return proto.EnumName(VirtualHardDiskType_name, int32(x))
 }
@@ -372,6 +379,7 @@ type VirtualHardDisk struct {
 	Entity               *common.Entity      `protobuf:"bytes,18,opt,name=entity,proto3" json:"entity,omitempty"`
 	Tags                 *common.Tags        `protobuf:"bytes,19,opt,name=tags,proto3" json:"tags,omitempty"`
 	SourceType           common.ImageSource  `protobuf:"varint,20,opt,name=sourceType,proto3,enum=moc.ImageSource" json:"sourceType,omitempty"`
+	Hypervgenerationtype HyperVGenerationType `protobuf:"varint,21,opt,name=hypervgenerationtype,proto3,enum=moc.nodeagent.storage.HyperVGenerationType" json:"hypervgenerationtype,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
 	XXX_unrecognized     []byte              `json:"-"`
 	XXX_sizecache        int32               `json:"-"`
@@ -540,6 +548,13 @@ func (m *VirtualHardDisk) GetSourceType() common.ImageSource {
 		return m.SourceType
 	}
 	return common.ImageSource_LOCAL_SOURCE
+}
+
+func (m *VirtualHardDisk) GetHypervgenerationtype() HyperVGenerationType {
+	if m != nil {
+		return m.Hypervgenerationtype
+	}
+	return HyperVGenerationType_HyperVGenerationTypeV2
 }
 
 func init() {
