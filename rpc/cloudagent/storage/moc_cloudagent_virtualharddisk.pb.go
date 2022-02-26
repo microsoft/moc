@@ -26,6 +26,14 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+type HyperVGenerationType int32
+
+const (
+	HyperVGenerationType_HyperVGenerationTypeV1 HyperVGenerationType = 1
+	HyperVGenerationType_HyperVGenerationTypeV2 HyperVGenerationType = 2
+)
+
+
 type VirtualHardDiskRequest struct {
 	VirtualHardDisks     []*VirtualHardDisk `protobuf:"bytes,1,rep,name=VirtualHardDisks,proto3" json:"VirtualHardDisks,omitempty"`
 	OperationType        common.Operation   `protobuf:"varint,2,opt,name=OperationType,proto3,enum=moc.Operation" json:"OperationType,omitempty"`
@@ -148,6 +156,7 @@ type VirtualHardDisk struct {
 	AttachedNodeName           string         `protobuf:"bytes,17,opt,name=attachedNodeName,proto3" json:"attachedNodeName,omitempty"`
 	GroupName                  string         `protobuf:"bytes,18,opt,name=groupName,proto3" json:"groupName,omitempty"`
 	LocationName               string         `protobuf:"bytes,19,opt,name=locationName,proto3" json:"locationName,omitempty"`
+	Hypervgenerationtype       HyperVGenerationType `protobuf:"varint,20,opt,name=hypervgenerationtype,proto3,enum=moc.cloudagent.storage.HyperVGenerationType" json:"hypervgenerationtype,omitempty"`
 	XXX_NoUnkeyedLiteral       struct{}       `json:"-"`
 	XXX_unrecognized           []byte         `json:"-"`
 	XXX_sizecache              int32          `json:"-"`

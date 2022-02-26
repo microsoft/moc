@@ -26,6 +26,12 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+const (
+	HyperVGenerationType_HyperVGenerationTypeV1 HyperVGenerationType = 1
+	HyperVGenerationType_HyperVGenerationTypeV2 HyperVGenerationType = 2
+)
+
+
 type VirtualMachineImageRequest struct {
 	VirtualMachineImages []*VirtualMachineImage `protobuf:"bytes,1,rep,name=VirtualMachineImages,proto3" json:"VirtualMachineImages,omitempty"`
 	OperationType        common.Operation       `protobuf:"varint,2,opt,name=OperationType,proto3,enum=moc.Operation" json:"OperationType,omitempty"`
@@ -138,6 +144,7 @@ type VirtualMachineImage struct {
 	GroupName            string         `protobuf:"bytes,18,opt,name=groupName,proto3" json:"groupName,omitempty"`
 	LocationName         string         `protobuf:"bytes,19,opt,name=locationName,proto3" json:"locationName,omitempty"`
 	Tags                 *common.Tags   `protobuf:"bytes,20,opt,name=tags,proto3" json:"tags,omitempty"`
+	Hypervgenerationtype HyperVGenerationType `protobuf:"varint,21,opt,name=hypervgenerationtype,proto3,enum=moc.cloudagent.compute.HyperVGenerationType" json:"hypervgenerationtype,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_unrecognized     []byte         `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
