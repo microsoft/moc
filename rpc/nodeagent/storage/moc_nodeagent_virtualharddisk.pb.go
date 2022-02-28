@@ -58,7 +58,7 @@ var HyperVGenerationType_name = map[int32]string{
 
 var HyperVGenerationType_value = map[string]int32{
 	"HyperVGenerationTypeV1":       1,
-	"HyperVGenerationTypeV1": 2,
+	"HyperVGenerationTypeV1":       2,
 }
 
 
