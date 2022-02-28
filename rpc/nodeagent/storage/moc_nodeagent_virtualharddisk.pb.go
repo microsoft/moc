@@ -51,6 +51,17 @@ const (
 	HyperVGenerationType_HyperVGenerationTypeV2 HyperVGenerationType = 2
 )
 
+var HyperVGenerationType_name = map[int32]string{
+	1: "HyperVGenerationTypeV1",
+	2: "HyperVGenerationTypeV2",
+}
+
+var HyperVGenerationType_value = map[string]int32{
+	"HyperVGenerationTypeV1":       1,
+	"HyperVGenerationTypeV1": 2,
+}
+
+
 func (x VirtualHardDiskType) String() string {
 	return proto.EnumName(VirtualHardDiskType_name, int32(x))
 }
