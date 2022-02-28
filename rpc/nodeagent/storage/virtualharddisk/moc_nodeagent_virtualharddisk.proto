@@ -69,6 +69,8 @@ message VirtualHardDisk {
 	Entity entity = 18;
 	Tags tags = 19;
 	ImageSource sourceType = 20;
+	CloudInitDataSource cloudInitDataSource = 21;
+	HyperVGeneration hyperVGeneration = 22;
 }
 
 service VirtualHardDiskAgent {

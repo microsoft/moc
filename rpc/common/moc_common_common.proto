@@ -160,3 +160,13 @@ enum ImageSource {
         HTTP_SOURCE  = 2;
         CLONE_SOURCE = 3;
 }
+
+enum CloudInitDataSource {
+	Azure = 0;
+	NoCloud = 1;
+}
+
+enum HyperVGeneration {
+	V1 = 0;
+	V2 = 1;
+}

@@ -59,6 +59,8 @@ message GalleryImage {
 	string sourcePath = 11;
 	Tags tags = 12;
 	ImageSource sourceType = 13;
+	CloudInitDataSource cloudInitDataSource = 14;
+	HyperVGeneration hyperVGeneration = 15;
 }
 
 service GalleryImageAgent {
