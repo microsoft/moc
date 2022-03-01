@@ -47,18 +47,18 @@ var VirtualHardDiskType_value = map[string]int32{
 type HyperVGenerationType int32
 
 const (
-	HyperVGenerationType_HyperVGenerationTypeV1 HyperVGenerationType = 1
-	HyperVGenerationType_HyperVGenerationTypeV2 HyperVGenerationType = 2
+	HyperVGenerationType_HyperVGenerationTypeV1 HyperVGenerationType = 0
+	HyperVGenerationType_HyperVGenerationTypeV2 HyperVGenerationType = 1
 )
 
 var HyperVGenerationType_name = map[int32]string{
-	1: "HyperVGenerationTypeV1",
-	2: "HyperVGenerationTypeV2",
+	0: "HyperVGenerationTypeV1",
+	1: "HyperVGenerationTypeV2",
 }
 
 var HyperVGenerationType_value = map[string]int32{
+	"HyperVGenerationTypeV1":       0,
 	"HyperVGenerationTypeV1":       1,
-	"HyperVGenerationTypeV1":       2,
 }
 
 

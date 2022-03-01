@@ -16,8 +16,8 @@ enum VirtualHardDiskType {
 }
 
 enum HyperVGenerationType { 
-    HyperVGenerationTypeV1 = 1; 
-	HyperVGenerationTypeV2 = 2; 
+    HyperVGenerationTypeV1 = 0; 
+	HyperVGenerationTypeV2 = 1; 
 
 }
 

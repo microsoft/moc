@@ -29,8 +29,8 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 type HyperVGenerationType int32
 
 const (
-	HyperVGenerationType_HyperVGenerationTypeV1 HyperVGenerationType = 1
-	HyperVGenerationType_HyperVGenerationTypeV2 HyperVGenerationType = 2
+	HyperVGenerationType_HyperVGenerationTypeV1 HyperVGenerationType = 0
+	HyperVGenerationType_HyperVGenerationTypeV2 HyperVGenerationType = 1
 )
 
 

@@ -10,9 +10,9 @@ import "moc_common_common.proto";
 
 enum HyperVGenerationType { 
 
-    	HyperVGenerationTypeV1 = 1; 
+    	HyperVGenerationTypeV1 = 0; 
 
-	    HyperVGenerationTypeV2 = 2; 
+	    HyperVGenerationTypeV2 = 1; 
 
 }
 
