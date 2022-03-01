@@ -62,6 +62,12 @@ message ProvisionStatus {
 	ProvisionState previousState = 2;
 }
 
+message DownloadStatus {
+	int64 progress = 1;
+	string state = 2;
+	Error errorDetails = 3; 
+}
+
 message Health {
 	HealthState currentState = 1;
 	HealthState previousState = 2;
@@ -74,8 +80,9 @@ message Version {
 message Status {
 	Health health = 1;
 	ProvisionStatus provisioningStatus = 2;
-	Error lastError = 3;
-	Version version = 4;
+	DownloadStatus downloadStatus = 3;
+	Error lastError = 4;
+	Version version = 5;
 }
 
 message Entity {

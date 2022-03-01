@@ -54,13 +54,14 @@ message GalleryImage {
 	string publisher = 7;
 	string sku = 8;
 	string offer = 9;
-	string containerName = 10;
+	string version = 10;
+	string containerName = 11;
 	// Source of the GalleryImage from where we can copy the image from.
-	string sourcePath = 11;
-	Tags tags = 12;
-	ImageSource sourceType = 13;
-	CloudInitDataSource cloudInitDataSource = 14;
-	HyperVGeneration hyperVGeneration = 15;
+	string sourcePath = 12;
+	Tags tags = 13;
+	ImageSource sourceType = 14;
+	CloudInitDataSource cloudInitDataSource = 15;
+	HyperVGeneration hyperVGeneration = 16;
 }
 
 service GalleryImageAgent {
