@@ -166,8 +166,10 @@ enum HyperVGeneration {
 	HyperVGenerationV2 = 1;
 } 
 
-enum DiskFileFormat {
-	DiskFileFormatVhd  = "vhd";
-	DiskFileFormatVhdx = "vhdx";
-}
+type DiskFileFormat string
+
+const (
+	VhdDiskFileFormat DiskFileFormat = "vhd"
+	VhdxDiskFileFormat DiskFileFormat = "vhdx"
+)
 
