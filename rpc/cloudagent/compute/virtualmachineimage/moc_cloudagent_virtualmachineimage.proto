@@ -8,14 +8,6 @@ package moc.cloudagent.compute;
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 
-enum HyperVGenerationType { 
-
-    	HyperVGenerationTypeV1 = 0; 
-
-	    HyperVGenerationTypeV2 = 1; 
-
-}
-
 message VirtualMachineImageRequest {
 	repeated VirtualMachineImage VirtualMachineImages = 1;
 	Operation OperationType = 2;
