@@ -70,6 +70,7 @@ message VirtualHardDisk {
 	Tags tags = 19;
 	ImageSource sourceType = 20;
 	HyperVGeneration hyperVGeneration = 21; 
+	DiskFileFormat diskFileFormat = 22;
 }
 
 service VirtualHardDiskAgent {

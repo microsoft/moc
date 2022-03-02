@@ -165,3 +165,9 @@ enum HyperVGeneration {
 	HyperVGenerationV1 = 0;
 	HyperVGenerationV2 = 1;
 } 
+
+enum DiskFileFormat {
+	DiskFileFormatVhd  = "vhd";
+	DiskFileFormatVhdx = "vhdx";
+}
+
