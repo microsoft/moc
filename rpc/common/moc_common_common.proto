@@ -81,9 +81,9 @@ message Version {
 message Status {
 	Health health = 1;
 	ProvisionStatus provisioningStatus = 2;
-	DownloadStatus downloadStatus = 3;
-	Error lastError = 4;
-	Version version = 5;
+	Error lastError = 3;
+	Version version = 4;
+	DownloadStatus downloadStatus = 5;
 }
 
 message Entity {
