@@ -170,11 +170,6 @@ enum ImageSource {
 }
 
 enum CloudInitDataSource {
-	Azure = 0;
-	NoCloud = 1;
-}
-
-enum HyperVGeneration {
-	HyperVGenerationV1 = 0;
-	HyperVGenerationV2 = 1;
+	NoCloud = 0;
+	Azure = 1;
 }

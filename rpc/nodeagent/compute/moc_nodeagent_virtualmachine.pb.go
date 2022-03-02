@@ -488,7 +488,7 @@ func (m *LinuxConfiguration) GetCloudInitDataSource() common.CloudInitDataSource
 	if m != nil {
 		return m.CloudInitDataSource
 	}
-	return common.CloudInitDataSource_Azure
+	return common.CloudInitDataSource_NoCloud
 }
 
 type WindowsConfiguration struct {
