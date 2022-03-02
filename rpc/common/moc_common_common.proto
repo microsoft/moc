@@ -160,3 +160,8 @@ enum ImageSource {
         HTTP_SOURCE  = 2;
         CLONE_SOURCE = 3;
 }
+
+enum HyperVGeneration {
+	HyperVGenerationV1 = 0;
+	HyperVGenerationV2 = 1;
+} 

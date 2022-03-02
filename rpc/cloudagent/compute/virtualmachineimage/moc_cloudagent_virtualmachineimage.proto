@@ -37,7 +37,7 @@ message VirtualMachineImage {
 	string groupName = 18;
 	string locationName = 19;
 	Tags tags = 20;
-	HyperVGenerationType hyperVGeneration = 21;
+	HyperVGeneration hyperVGeneration = 21;
 }
 
 service VirtualMachineImageAgent {
