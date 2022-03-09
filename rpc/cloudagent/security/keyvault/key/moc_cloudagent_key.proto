@@ -48,6 +48,7 @@ message Key {
 	JsonWebKeyCurveName curve = 10;
 	repeated KeyOperation keyOps = 11;
 	Tags tags = 12;
+	int64 keyRotationFrequencyInSeconds = 13;
 }
 
 service KeyAgent {
