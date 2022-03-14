@@ -47,6 +47,11 @@ message HttpImageProperties {
 	string httpURL = 1;
 }
 
+message AzureGalleryImageProperties {
+	string sasURI = 1;
+	string version = 2;
+}
+
 message VirtualHardDisk {
 	string name = 1;
 	string id = 2;
