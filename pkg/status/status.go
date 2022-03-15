@@ -77,10 +77,10 @@ func GetProvisioningState(status *common.ProvisionStatus) *string {
 }
 
 // SetDownloadStatus
-func SetDownloadStatus(s *common.Status, dProgress int64, dState, dBytesTransferred string, err ...error) {
+func SetDownloadStatus(s *common.Status, dProgress, dState string, dDownloadSizeInBytes int64, err ...error) {
 	s.DownloadStatus.Progress = dProgress
 	s.DownloadStatus.State = dState
-	s.DownloadStatus.BytesTransferred = dBytesTransferred
+	s.DownloadStatus.DownloadSizeInBytes = dDownloadSizeInBytes
 	if len(err) > 0 {
 		SetError(s, err[0])
 	}
