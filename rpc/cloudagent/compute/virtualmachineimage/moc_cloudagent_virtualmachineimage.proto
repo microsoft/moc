@@ -29,6 +29,7 @@ message VirtualMachineImage {
 	string groupName = 18;
 	string locationName = 19;
 	Tags tags = 20;
+	HyperVGeneration hyperVGeneration = 21;
 	CloudInitDataSource cloudInitDataSource = 22;
 }
 

@@ -63,6 +63,7 @@ message GalleryImage {
 	string sourcePath = 11;
 	Tags tags = 12;
 	ImageSource sourceType = 13;
+	HyperVGeneration hyperVGeneration = 14;
 	CloudInitDataSource cloudInitDataSource = 15;
 }
 
