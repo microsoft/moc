@@ -86,24 +86,6 @@ func SetDownloadStatus(s *common.Status, dProgress int64, dState, dBytesTransfer
 	}
 }
 
-// GetDownloadStatusState
-func GetDownladStatusState(status *common.DownloadStatus) *string {
-	stateString := status.GetState()
-	return &stateString
-}
-
-// GetDownlaodStatusProgress
-func GetDownloadStatusProgress(status *common.DownloadStatus) *int64 {
-	progressNum := status.GetProgress()
-	return &progressNum
-}
-
-// GetDownloadStatusBytesTransferred
-func GetDownloadStatusBytesTransferred(status *common.DownloadStatus) *string {
-	bytesTransferredString := status.GetBytesTransferred()
-	return &bytesTransferredString
-}
-
 // GetStatuses - converts status to map
 func GetStatuses(status *common.Status) map[string]*string {
 	statuses := map[string]*string{}
