@@ -55,11 +55,19 @@ enum HealthState {
 message Error {
 	string Message = 1;
 	int32 Code = 2;
+	string Parameters = 3;
 }
 
 message ProvisionStatus {
 	ProvisionState currentState = 1;
 	ProvisionState previousState = 2;
+}
+
+message DownloadStatus {
+	int64 progress = 1;
+	string bytesTransferred = 2;
+	string state = 3;
+	Error errorDetails = 4; 
 }
 
 message Health {
@@ -76,6 +84,7 @@ message Status {
 	ProvisionStatus provisioningStatus = 2;
 	Error lastError = 3;
 	Version version = 4;
+	DownloadStatus downloadStatus = 5;
 }
 
 message Entity {
@@ -159,4 +168,9 @@ enum ImageSource {
         SFS_SOURCE   = 1;
         HTTP_SOURCE  = 2;
         CLONE_SOURCE = 3;
+}
+
+enum CloudInitDataSource {
+	NoCloud = 0;
+	Azure = 1;
 }
