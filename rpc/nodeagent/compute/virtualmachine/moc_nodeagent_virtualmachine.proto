@@ -59,6 +59,7 @@ message RDPConfiguration {
 
 message LinuxConfiguration {
 	bool disablePasswordAuthentication = 1;
+	CloudInitDataSource cloudInitDataSource = 2;
 }
 
 message WindowsConfiguration {

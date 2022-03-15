@@ -42,6 +42,10 @@ message CloneImageProperties {
 message HttpImageProperties {
 	string httpURL = 1;
 }
+message AzureGalleryImageProperties {
+	string sasURI = 1;
+	string version = 2;
+}
 
 message GalleryImage {
 	string name = 1;
@@ -60,6 +64,7 @@ message GalleryImage {
 	Tags tags = 12;
 	ImageSource sourceType = 13;
 	HyperVGeneration hyperVGeneration = 14;
+	CloudInitDataSource cloudInitDataSource = 15;
 }
 
 service GalleryImageAgent {

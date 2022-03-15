@@ -47,6 +47,11 @@ message HttpImageProperties {
 	string httpURL = 1;
 }
 
+message AzureGalleryImageProperties {
+	string sasURI = 1;
+	string version = 2;
+}
+
 message VirtualHardDisk {
 	string name = 1;
 	string id = 2;
@@ -70,6 +75,7 @@ message VirtualHardDisk {
 	Tags tags = 19;
 	ImageSource sourceType = 20;
 	HyperVGeneration hyperVGeneration = 21; 
+	CloudInitDataSource cloudInitDataSource = 22;
 }
 
 service VirtualHardDiskAgent {
