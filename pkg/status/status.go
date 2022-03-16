@@ -82,6 +82,7 @@ func SetDownloadStatus(s *common.Status, dProgress, dState string, dDownloadSize
 	s.DownloadStatus.State = dState
 	s.DownloadStatus.DownloadSizeInBytes = dDownloadSizeInBytes
 	if len(err) > 0 {
+		s.DownloadStatus.ErrorDetails.Message = fmt.Sprintf("%+v", err)
 		SetError(s, err[0])
 	}
 }
