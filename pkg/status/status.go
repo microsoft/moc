@@ -18,6 +18,7 @@ func InitStatus() *common.Status {
 		ProvisioningStatus: &common.ProvisionStatus{},
 		LastError:          &common.Error{},
 		Version:            GenerateVersion(),
+		DownloadStatus:     &common.DownloadStatus{},
 	}
 }
 
@@ -75,6 +76,17 @@ func GetProvisioningState(status *common.ProvisionStatus) *string {
 	return &stateString
 }
 
+// SetDownloadStatus
+func SetDownloadStatus(s *common.Status, dProgress, dState string, dDownloadSizeInBytes int64, err ...error) {
+	s.DownloadStatus.Progress = dProgress
+	s.DownloadStatus.State = dState
+	s.DownloadStatus.DownloadSizeInBytes = dDownloadSizeInBytes
+	if len(err) > 0 {
+		s.DownloadStatus.ErrorDetails.Message = fmt.Sprintf("%+v", err)
+		SetError(s, err[0])
+	}
+}
+
 // GetStatuses - converts status to map
 func GetStatuses(status *common.Status) map[string]*string {
 	statuses := map[string]*string{}
@@ -86,6 +98,8 @@ func GetStatuses(status *common.Status) map[string]*string {
 	statuses["Error"] = &estate
 	version := status.GetVersion().Number
 	statuses["Version"] = &version
+	dstate := status.GetDownloadStatus().String()
+	statuses["DownloadStatus"] = &dstate
 	return statuses
 }
 
@@ -106,6 +120,11 @@ func GetFromStatuses(statuses map[string]*string) (status *common.Status) {
 		ps := common.Error{}
 		_ = marshal.FromJSON(*val, &ps)
 		status.LastError = &ps
+	}
+	if val, ok := statuses["DownloadStatus"]; ok {
+		ps := common.DownloadStatus{}
+		_ = marshal.FromJSON(*val, &ps)
+		status.DownloadStatus = &ps
 	}
 	return
 }
