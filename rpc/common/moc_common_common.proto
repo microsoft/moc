@@ -64,10 +64,8 @@ message ProvisionStatus {
 }
 
 message DownloadStatus {
-	string progress = 1;
+	int64 progress = 1;
 	int64 downloadSizeInBytes = 2;
-	string state = 3;
-	Error errorDetails = 4; 
 }
 
 message Health {
