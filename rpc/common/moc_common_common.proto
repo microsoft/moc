@@ -64,7 +64,7 @@ message ProvisionStatus {
 }
 
 message DownloadStatus {
-	int64 progress = 1;
+	int64 progressPercentage = 1;
 	int64 downloadSizeInBytes = 2;
 }
 
