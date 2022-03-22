@@ -42,6 +42,7 @@ message VirtualHardDisk {
 	string groupName = 18;
 	string locationName = 19;
 	HyperVGeneration hyperVGeneration = 20;
+	DiskFileFormat diskFileFormat = 21;
 }
 
 service VirtualHardDiskAgent {

@@ -173,6 +173,11 @@ enum HyperVGeneration {
 	HyperVGenerationV2 = 1;
 } 
 
+enum DiskFileFormat {
+	DiskFileFormatVHD =  0;
+	DiskFileFormatVHDX = 1;
+} 
+
 enum CloudInitDataSource {
 	NoCloud = 0;
 	Azure = 1;

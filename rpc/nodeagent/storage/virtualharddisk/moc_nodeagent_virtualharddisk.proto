@@ -76,6 +76,7 @@ message VirtualHardDisk {
 	ImageSource sourceType = 20;
 	HyperVGeneration hyperVGeneration = 21; 
 	CloudInitDataSource cloudInitDataSource = 22;
+	DiskFileFormat diskFileFormat = 23;
 }
 
 service VirtualHardDiskAgent {
