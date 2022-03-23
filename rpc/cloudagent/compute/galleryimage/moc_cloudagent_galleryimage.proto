@@ -65,6 +65,7 @@ message GalleryImage {
 	ImageSource sourceType = 13;
 	HyperVGeneration hyperVGeneration = 14;
 	CloudInitDataSource cloudInitDataSource = 15;
+	int64 sizeInBytes = 16;
 }
 
 service GalleryImageAgent {
