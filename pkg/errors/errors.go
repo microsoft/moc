@@ -45,6 +45,8 @@ var (
 	RunCommandFailed     error = errors.New("Run Command Failed")
 	InvalidToken         error = errors.New("InvalidToken")
 	Unknown              error = errors.New("Unknown Reason")
+	DeleteFailed         error = errors.New("Delete Failed")
+	DeletePending        error = errors.New("Delete Pending")
 )
 
 func GetErrorCode(err error) string {
@@ -110,6 +112,10 @@ func GetErrorCode(err error) string {
 		return "InvalidToken"
 	} else if IsUnknown(err) {
 		return "Unknown"
+	} else if IsDeleteFailed(err) {
+		return "Delete Failed"
+	} else if IsDeletePending(err) {
+		return "Delete Pending"
 	}
 
 	return "GenericError"
@@ -266,6 +272,12 @@ func IsTimeout(err error) bool {
 }
 func IsInvalidToken(err error) bool {
 	return checkError(err, InvalidToken)
+}
+func IsDeleteFailed(err error) bool {
+	return checkError(err, DeleteFailed)
+}
+func IsDeletePending(err error) bool {
+	return checkError(err, DeletePending)
 }
 
 func IsErrDeadlineExceeded(err error) bool {
