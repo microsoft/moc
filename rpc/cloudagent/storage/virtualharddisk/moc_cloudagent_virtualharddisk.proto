@@ -43,6 +43,7 @@ message VirtualHardDisk {
 	string locationName = 19;
 	HyperVGeneration hyperVGeneration = 20;
 	DiskFileFormat diskFileFormat = 21;
+	CloudInitDataSource cloudInitDataSource = 22;
 }
 
 service VirtualHardDiskAgent {
