@@ -543,7 +543,7 @@ func (m *GalleryImage) GetHyperVGeneration() common.HyperVGeneration {
 	if m != nil {
 		return m.HyperVGeneration
 	}
-	return common.HyperVGeneration_HyperVGenerationV1
+	return common.HyperVGeneration_HyperVGenerationV2
 }
 
 func (m *GalleryImage) GetCloudInitDataSource() common.CloudInitDataSource {

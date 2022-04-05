@@ -169,8 +169,8 @@ enum ImageSource {
 }
 
 enum HyperVGeneration {
-	HyperVGenerationV1 = 0;
-	HyperVGenerationV2 = 1;
+	HyperVGenerationV2 = 0;
+	HyperVGenerationV1 = 1;
 } 
 
 enum DiskFileFormat {
