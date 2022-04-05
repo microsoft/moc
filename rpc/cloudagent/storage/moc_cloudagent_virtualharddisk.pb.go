@@ -324,7 +324,7 @@ func (m *VirtualHardDisk) GetDiskFileFormat() common.DiskFileFormat {
 	if m != nil {
 		return m.DiskFileFormat
 	}
-	return common.DiskFileFormat_DiskFileFormatVHD
+	return common.DiskFileFormat_DiskFileFormatVHDX
 }
 
 func init() {
