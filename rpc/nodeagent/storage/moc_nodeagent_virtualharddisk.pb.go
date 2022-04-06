@@ -596,7 +596,7 @@ func (m *VirtualHardDisk) GetHyperVGeneration() common.HyperVGeneration {
 	if m != nil {
 		return m.HyperVGeneration
 	}
-	return common.HyperVGeneration_HyperVGenerationV1
+	return common.HyperVGeneration_HyperVGenerationV2
 }
 
 func (m *VirtualHardDisk) GetCloudInitDataSource() common.CloudInitDataSource {
@@ -610,7 +610,7 @@ func (m *VirtualHardDisk) GetDiskFileFormat() common.DiskFileFormat {
 	if m != nil {
 		return m.DiskFileFormat
 	}
-	return common.DiskFileFormat_DiskFileFormatVHD
+	return common.DiskFileFormat_DiskFileFormatVHDX
 }
 
 func init() {

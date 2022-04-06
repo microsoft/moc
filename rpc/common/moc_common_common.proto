@@ -170,13 +170,13 @@ enum ImageSource {
 }
 
 enum HyperVGeneration {
-	HyperVGenerationV1 = 0;
-	HyperVGenerationV2 = 1;
+	HyperVGenerationV2 = 0;
+	HyperVGenerationV1 = 1;
 } 
 
 enum DiskFileFormat {
-	DiskFileFormatVHD =  0;
-	DiskFileFormatVHDX = 1;
+	DiskFileFormatVHDX =  0;
+	DiskFileFormatVHD = 1;
 } 
 
 enum CloudInitDataSource {
