@@ -35,8 +35,8 @@ enum ProvisionState {
 	DEPROVISION_FAILED = 15;
 	DELETE_PENDING = 16;
 	IMPORTING = 17;
-    IMPORTED = 18;
-    IMPORT_FAILED = 19;
+	IMPORTED = 18;
+	IMPORT_FAILED = 19;
 }
 
 enum HighAvailabilityState {
