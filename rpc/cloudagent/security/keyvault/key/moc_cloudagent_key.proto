@@ -34,6 +34,12 @@ message KeyOperationResponse {
 	string  Error = 3;
 }
 
+message PrivateKeyWrappingInfo {
+	string WrappingKeyName = 1;
+	bytes WrappingKeyPublic = 2 [(sensitive) = true];
+	KeyWrappingAlgorithm WrappingAlgorithm = 3;
+}
+
 message Key {
 	string name = 1;
 	string id = 2;
@@ -51,7 +57,7 @@ message Key {
 	int64 keyRotationFrequencyInSeconds = 13;
 	// Private Key Value and wrapping information
 	bytes privateKey = 14 [(sensitive) = true];
-	bytes privateKeyWrappingInfo = 15 [(sensitive) = true];
+	PrivateKeyWrappingInfo privateKeyWrappingInfo = 15;
 }
 
 service KeyAgent {

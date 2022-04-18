@@ -58,6 +58,11 @@ enum IdentityCertificateOperation {
 	RENEW_CERTIFICATE = 1;
 }
 
+enum KeyWrappingAlgorithm {
+	None = 0;
+	CKM_RSA_AES_KEY_WRAP = 1;
+}
+
 message Scope {
 	string location = 1;
 	string resourceGroup = 2;
