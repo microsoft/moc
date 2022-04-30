@@ -8,7 +8,7 @@ package moc.common.admin;
 message VersionRequest {}
 
 message VersionResponse {
-	string verion = 1;
+	string version = 1;
     string mocversion = 2;
 	string error = 3;
 }
