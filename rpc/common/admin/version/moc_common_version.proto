@@ -1,0 +1,18 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/common/admin";
+package moc.common.admin;
+
+message VersionRequest {}
+
+message VersionResponse {
+	string version = 1;
+    string mocversion = 2;
+	string error = 3;
+}
+
+service VersionAgent {
+	rpc Get(VersionRequest) returns (stream VersionResponse) {}
+}
