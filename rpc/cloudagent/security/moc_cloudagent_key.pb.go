@@ -298,7 +298,7 @@ func (m *PrivateKeyWrappingInfo) GetWrappingAlgorithm() common.KeyWrappingAlgori
 	if m != nil {
 		return m.WrappingAlgorithm
 	}
-	return common.KeyWrappingAlgorithm_NO_KEY_WRAP
+	return common.KeyWrappingAlgorithm_CKM_RSA_AES_KEY_WRAP
 }
 
 type Key struct {
