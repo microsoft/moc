@@ -14,5 +14,5 @@ message VersionResponse {
 }
 
 service VersionAgent {
-	rpc Get(VersionRequest) returns (stream VersionResponse) {}
+	rpc Get(VersionRequest) returns (VersionResponse) {}
 }

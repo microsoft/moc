@@ -10,8 +10,8 @@ require (
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.5.1
-	golang.org/x/net v0.0.0-20220403103023-749bd193bc2b // indirect
-	golang.org/x/sys v0.0.0-20220405052023-b1e9470b6e64 // indirect
+	golang.org/x/net v0.0.0-20220425223048-2871e0cb64e4 // indirect
+	golang.org/x/sys v0.0.0-20220429233432-b5fbb4746d32 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/grpc v1.26.0
 	google.golang.org/protobuf v1.28.0 // indirect
