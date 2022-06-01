@@ -120,7 +120,7 @@ func init() {
 }
 
 var fileDescriptor_2cb73079ee2df4fc = []byte{
-	// 216 bytes of a gzipped FileDescriptorProto
+	// 214 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x52, 0x4b, 0x4c, 0xc9, 0xcd,
 	0xcc, 0xd3, 0x2f, 0x4b, 0x2d, 0x2a, 0xce, 0xcc, 0xcf, 0xd3, 0xcf, 0xcd, 0x4f, 0x8e, 0x4f, 0xce,
 	0xcf, 0xcd, 0xcd, 0xcf, 0x8b, 0x87, 0x0a, 0xe9, 0x15, 0x14, 0xe5, 0x97, 0xe4, 0x0b, 0x09, 0xe4,
@@ -128,13 +128,13 @@ var fileDescriptor_2cb73079ee2df4fc = []byte{
 	0x52, 0x0b, 0x4b, 0x53, 0x8b, 0x4b, 0x94, 0x12, 0xb9, 0xf8, 0xe1, 0x22, 0xc5, 0x05, 0xf9, 0x79,
 	0xc5, 0xa9, 0x42, 0x12, 0x5c, 0xec, 0x50, 0x73, 0x24, 0x18, 0x15, 0x18, 0x35, 0x38, 0x83, 0x60,
 	0x5c, 0x21, 0x39, 0x2e, 0xae, 0xdc, 0xfc, 0x64, 0x98, 0x24, 0x13, 0x58, 0x12, 0x49, 0x44, 0x48,
-	0x84, 0x8b, 0x35, 0xb5, 0xa8, 0x28, 0xbf, 0x48, 0x82, 0x19, 0x2c, 0x05, 0xe1, 0x18, 0xc5, 0x71,
-	0xf1, 0x40, 0xad, 0x70, 0x4c, 0x4f, 0xcd, 0x2b, 0x11, 0xf2, 0xe3, 0x62, 0x76, 0x4f, 0x2d, 0x11,
+	0x84, 0x8b, 0x35, 0xb5, 0xa8, 0x28, 0xbf, 0x48, 0x82, 0x19, 0x2c, 0x05, 0xe1, 0x18, 0xc5, 0x70,
+	0xf1, 0x40, 0xad, 0x70, 0x4c, 0x4f, 0xcd, 0x2b, 0x11, 0xf2, 0xe1, 0x62, 0x76, 0x4f, 0x2d, 0x11,
 	0x52, 0xd0, 0x43, 0x77, 0x9e, 0x1e, 0xaa, 0xdb, 0xa4, 0x14, 0xf1, 0xa8, 0x80, 0xb8, 0x55, 0x89,
-	0xc1, 0x80, 0xd1, 0x49, 0x3b, 0x4a, 0x33, 0x3d, 0xb3, 0x24, 0xa3, 0x34, 0x09, 0xa4, 0x54, 0x3f,
-	0x37, 0x33, 0xb9, 0x28, 0xbf, 0x38, 0x3f, 0xad, 0x04, 0x14, 0x2e, 0xfa, 0x45, 0x05, 0xc9, 0xfa,
-	0x10, 0x03, 0xf4, 0xc1, 0x06, 0x24, 0xb1, 0x81, 0x83, 0xc6, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff,
-	0x10, 0x81, 0xc9, 0x2a, 0x44, 0x01, 0x00, 0x00,
+	0xc1, 0x49, 0x3b, 0x4a, 0x33, 0x3d, 0xb3, 0x24, 0xa3, 0x34, 0x09, 0xa4, 0x50, 0x3f, 0x37, 0x33,
+	0xb9, 0x28, 0xbf, 0x38, 0x3f, 0xad, 0x04, 0x14, 0x2a, 0xfa, 0x45, 0x05, 0xc9, 0xfa, 0x10, 0xed,
+	0xfa, 0x60, 0xed, 0x49, 0x6c, 0xe0, 0x80, 0x31, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0xff, 0x17,
+	0x55, 0x37, 0x42, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -149,7 +149,7 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type VersionAgentClient interface {
-	Get(ctx context.Context, in *VersionRequest, opts ...grpc.CallOption) (VersionAgent_GetClient, error)
+	Get(ctx context.Context, in *VersionRequest, opts ...grpc.CallOption) (*VersionResponse, error)
 }
 
 type versionAgentClient struct {
@@ -160,86 +160,59 @@ func NewVersionAgentClient(cc *grpc.ClientConn) VersionAgentClient {
 	return &versionAgentClient{cc}
 }
 
-func (c *versionAgentClient) Get(ctx context.Context, in *VersionRequest, opts ...grpc.CallOption) (VersionAgent_GetClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_VersionAgent_serviceDesc.Streams[0], "/moc.common.admin.VersionAgent/Get", opts...)
+func (c *versionAgentClient) Get(ctx context.Context, in *VersionRequest, opts ...grpc.CallOption) (*VersionResponse, error) {
+	out := new(VersionResponse)
+	err := c.cc.Invoke(ctx, "/moc.common.admin.VersionAgent/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &versionAgentGetClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type VersionAgent_GetClient interface {
-	Recv() (*VersionResponse, error)
-	grpc.ClientStream
-}
-
-type versionAgentGetClient struct {
-	grpc.ClientStream
-}
-
-func (x *versionAgentGetClient) Recv() (*VersionResponse, error) {
-	m := new(VersionResponse)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
+	return out, nil
 }
 
 // VersionAgentServer is the server API for VersionAgent service.
 type VersionAgentServer interface {
-	Get(*VersionRequest, VersionAgent_GetServer) error
+	Get(context.Context, *VersionRequest) (*VersionResponse, error)
 }
 
 // UnimplementedVersionAgentServer can be embedded to have forward compatible implementations.
 type UnimplementedVersionAgentServer struct {
 }
 
-func (*UnimplementedVersionAgentServer) Get(req *VersionRequest, srv VersionAgent_GetServer) error {
-	return status.Errorf(codes.Unimplemented, "method Get not implemented")
+func (*UnimplementedVersionAgentServer) Get(ctx context.Context, req *VersionRequest) (*VersionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
 
 func RegisterVersionAgentServer(s *grpc.Server, srv VersionAgentServer) {
 	s.RegisterService(&_VersionAgent_serviceDesc, srv)
 }
 
-func _VersionAgent_Get_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(VersionRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+func _VersionAgent_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VersionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
 	}
-	return srv.(VersionAgentServer).Get(m, &versionAgentGetServer{stream})
-}
-
-type VersionAgent_GetServer interface {
-	Send(*VersionResponse) error
-	grpc.ServerStream
-}
-
-type versionAgentGetServer struct {
-	grpc.ServerStream
-}
-
-func (x *versionAgentGetServer) Send(m *VersionResponse) error {
-	return x.ServerStream.SendMsg(m)
+	if interceptor == nil {
+		return srv.(VersionAgentServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/moc.common.admin.VersionAgent/Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VersionAgentServer).Get(ctx, req.(*VersionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 var _VersionAgent_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "moc.common.admin.VersionAgent",
 	HandlerType: (*VersionAgentServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams: []grpc.StreamDesc{
+	Methods: []grpc.MethodDesc{
 		{
-			StreamName:    "Get",
-			Handler:       _VersionAgent_Get_Handler,
-			ServerStreams: true,
+			MethodName: "Get",
+			Handler:    _VersionAgent_Get_Handler,
 		},
 	},
+	Streams:  []grpc.StreamDesc{},
 	Metadata: "admin/version/moc_common_version.proto",
 }
