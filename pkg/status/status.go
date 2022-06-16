@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/microsoft/moc/pkg/marshal"
+	proto "github.com/golang/protobuf/proto"
 	common "github.com/microsoft/moc/rpc/common"
 )
 
@@ -106,24 +106,28 @@ func GetStatuses(status *common.Status) map[string]*string {
 func GetFromStatuses(statuses map[string]*string) (status *common.Status) {
 	status = &common.Status{}
 	if val, ok := statuses["ProvisionState"]; ok {
-		ps := common.ProvisionStatus{}
-		_ = marshal.FromJSON(*val, &ps)
-		status.ProvisioningStatus = &ps
+		ps := new(common.ProvisionStatus)
+		// _ = marshal.FromJSON(*val, &ps)
+		proto.UnmarshalText(*val, ps)
+		status.ProvisioningStatus = ps
 	}
 	if val, ok := statuses["HealthState"]; ok {
-		ps := common.Health{}
-		_ = marshal.FromJSON(*val, &ps)
-		status.Health = &ps
+		ps := new(common.Health)
+		// _ = marshal.FromJSON(*val, &ps)
+		proto.UnmarshalText(*val, ps)
+		status.Health = ps
 	}
 	if val, ok := statuses["Error"]; ok {
-		ps := common.Error{}
-		_ = marshal.FromJSON(*val, &ps)
-		status.LastError = &ps
+		ps := new(common.Error)
+		// _ = marshal.FromJSON(*val, &ps)
+		proto.UnmarshalText(*val, ps)
+		status.LastError = ps
 	}
 	if val, ok := statuses["DownloadStatus"]; ok {
-		ps := common.DownloadStatus{}
-		_ = marshal.FromJSON(*val, &ps)
-		status.DownloadStatus = &ps
+		ps := new(common.DownloadStatus)
+		// _ = marshal.FromJSON(*val, &ps)
+		proto.UnmarshalText(*val, ps)
+		status.DownloadStatus = ps
 	}
 	return
 }
