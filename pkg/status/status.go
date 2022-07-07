@@ -107,25 +107,21 @@ func GetFromStatuses(statuses map[string]*string) (status *common.Status) {
 	status = &common.Status{}
 	if val, ok := statuses["ProvisionState"]; ok {
 		ps := new(common.ProvisionStatus)
-		// _ = marshal.FromJSON(*val, &ps)
 		proto.UnmarshalText(*val, ps)
 		status.ProvisioningStatus = ps
 	}
 	if val, ok := statuses["HealthState"]; ok {
 		ps := new(common.Health)
-		// _ = marshal.FromJSON(*val, &ps)
 		proto.UnmarshalText(*val, ps)
 		status.Health = ps
 	}
 	if val, ok := statuses["Error"]; ok {
 		ps := new(common.Error)
-		// _ = marshal.FromJSON(*val, &ps)
 		proto.UnmarshalText(*val, ps)
 		status.LastError = ps
 	}
 	if val, ok := statuses["DownloadStatus"]; ok {
 		ps := new(common.DownloadStatus)
-		// _ = marshal.FromJSON(*val, &ps)
 		proto.UnmarshalText(*val, ps)
 		status.DownloadStatus = ps
 	}
