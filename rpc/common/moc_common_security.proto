@@ -21,6 +21,8 @@ enum KeyOperation {
 	DECRYPT = 1;
 	WRAPKEY = 2;
 	UNWRAPKEY = 3;
+	SIGN = 4;
+	VERIFY = 5;
 }
 
 // https://docs.microsoft.com/en-us/rest/api/keyvault/createkey/createkey#jsonwebkeytype
@@ -60,6 +62,35 @@ enum IdentityCertificateOperation {
 
 enum KeyWrappingAlgorithm {
 	CKM_RSA_AES_KEY_WRAP = 0;
+}
+
+
+enum SignaturePaddingAlgorithm {
+	PKCSv1 = 0;
+	PSS = 1;
+}
+
+enum CryptoSignatureAlgorithm{
+	unused = 0;
+	MD4 = 1 ;       
+	MD5 = 2 ;                         // import crypto/md5
+	SHA1 = 3;                        // import crypto/sha1
+	SHA224 = 4;                      // import crypto/sha256
+	SHA256 = 5;                      // import crypto/sha256
+	SHA384 = 6;                      // import crypto/sha512
+	SHA512 = 7;                      // import crypto/sha512
+	MD5SHA1 = 8;                     // no implementation; MD5+SHA1 used for TLS RSA
+	RIPEMD160 = 9;                   // import golang.org/x/crypto/ripemd160
+	SHA3_224 = 10;                    // import golang.org/x/crypto/sha3
+	SHA3_256 = 11;                    // import golang.org/x/crypto/sha3
+	SHA3_384 = 12;                    // import golang.org/x/crypto/sha3
+	SHA3_512 = 13 ;                    // import golang.org/x/crypto/sha3
+	SHA512_224 = 14;                  // import crypto/sha512
+	SHA512_256 = 15;                  // import crypto/sha512
+	BLAKE2s_256 = 16;                 // import golang.org/x/crypto/blake2s
+	BLAKE2b_256 = 17;                // import golang.org/x/crypto/blake2b
+	BLAKE2b_384 = 18;                // import golang.org/x/crypto/blake2b
+	BLAKE2b_512 = 19;                 // import golang.org/x/crypto/blake2b
 }
 
 message Scope {
