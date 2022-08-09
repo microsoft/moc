@@ -26,6 +26,7 @@ message KeyOperationRequest {
 	string Data = 2 [(sensitive) = true];
 	Algorithm algorithm = 3;
 	KeyOperation OperationType = 4;
+	SigningInfo signingInfo = 5;
 }
 
 message KeyOperationResponse {
@@ -38,6 +39,12 @@ message PrivateKeyWrappingInfo {
 	string WrappingKeyName = 1;
 	bytes WrappingKeyPublic = 2 [(sensitive) = true];
 	KeyWrappingAlgorithm WrappingAlgorithm = 3;
+}
+
+message SigningInfo {
+	SignaturePaddingAlgorithm Padding = 1;
+	CryptoSignatureAlgorithm Algorithm = 2;
+	int32 PSSSaltLength = 3; // Only for PSS
 }
 
 message Key {
