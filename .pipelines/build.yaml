@@ -18,7 +18,7 @@ jobs:
   steps:
   - task: GoTool@0
     inputs:
-      version: '1.17.x'
+      version: '1.18.x'
   - task: InstallSSHKey@0
     inputs:
       knownHostsEntry: '$(KNOWN_HOST)' 
