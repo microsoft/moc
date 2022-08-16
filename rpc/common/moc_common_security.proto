@@ -78,9 +78,6 @@ enum KeyWrappingAlgorithm {
 	CKM_RSA_AES_KEY_WRAP = 0;
 }
 
-
-
-
 message Scope {
 	string location = 1;
 	string resourceGroup = 2;
