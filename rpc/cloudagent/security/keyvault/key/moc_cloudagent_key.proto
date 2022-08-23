@@ -26,14 +26,12 @@ message KeyOperationRequest {
 	string Data = 2 [(sensitive) = true];
 	Algorithm algorithm = 3;
 	KeyOperation OperationType = 4;
-	SignVerifyParams  SignVerifyParams = 5;
 }
 
 message KeyOperationResponse {
 	string Data = 1 [(sensitive) = true];
 	google.protobuf.BoolValue Result = 2;
 	string  Error = 3;
-	bool KeyVerifyResult = 4;
 }
 
 message PrivateKeyWrappingInfo {
@@ -45,6 +43,7 @@ message PrivateKeyWrappingInfo {
 message SignVerifyParams {
 	JSONWebKeySignatureAlgorithm  algorithm  = 1;
 	string signature = 2  [(sensitive) = true];
+	string digest = 3  [(sensitive) = true];
 }
 
 
