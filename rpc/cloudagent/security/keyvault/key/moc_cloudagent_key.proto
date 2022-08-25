@@ -26,6 +26,7 @@ message KeyOperationRequest {
 	string Data = 2 [(sensitive) = true];
 	Algorithm algorithm = 3;
 	KeyOperation OperationType = 4;
+	SignVerifyParams  SignVerifyParams = 5;
 }
 
 message KeyOperationResponse {
@@ -43,9 +44,7 @@ message PrivateKeyWrappingInfo {
 message SignVerifyParams {
 	JSONWebKeySignatureAlgorithm  algorithm  = 1;
 	string signature = 2  [(sensitive) = true];
-	string digest = 3  [(sensitive) = true];
 }
-
 
 message Key {
 	string name = 1;
