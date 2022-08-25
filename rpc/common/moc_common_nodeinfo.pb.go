@@ -66,6 +66,7 @@ type Processor struct {
 	Type                 ProcessorType `protobuf:"varint,4,opt,name=type,proto3,enum=moc.ProcessorType" json:"type,omitempty"`
 	Virtualization       bool          `protobuf:"varint,5,opt,name=virtualization,proto3" json:"virtualization,omitempty"`
 	Logicalprocessors    uint32        `protobuf:"varint,6,opt,name=logicalprocessors,proto3" json:"logicalprocessors,omitempty"`
+	Manufacturer         string        `protobuf:"bytes,7,opt,name=manufacturer,proto3" json:"manufacturer,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
 	XXX_sizecache        int32         `json:"-"`
@@ -136,6 +137,13 @@ func (m *Processor) GetLogicalprocessors() uint32 {
 		return m.Logicalprocessors
 	}
 	return 0
+}
+
+func (m *Processor) GetManufacturer() string {
+	if m != nil {
+		return m.Manufacturer
+	}
+	return ""
 }
 
 type PhysicalMemory struct {

@@ -15,6 +15,7 @@ message Processor {
 	ProcessorType type = 4;
 	bool virtualization = 5;
 	uint32 logicalprocessors = 6;
+	string manufacturer = 7;
 }
 
 message PhysicalMemory {
