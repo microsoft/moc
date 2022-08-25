@@ -360,9 +360,9 @@ func (m *Resources) GetGpu() *GPU {
 	return nil
 }
 
-func (m *Resources) GetOperatingSystemInfo() *GPU {
+func (m *Resources) GetOperatingSystemInfo() *OperatingSystemInfo {
 	if m != nil {
-		return m.Gpu
+		return m.OperatingSystemInfo
 	}
 	return nil
 }
