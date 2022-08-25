@@ -52,6 +52,13 @@ func (m *OperatingSystemInfo) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_OperatingSystemInfo proto.InternalMessageInfo
 
+func (m *OperatingSystemInfo) GetOperatingSystemSKU() uint64 {
+	if m != nil {
+		return m.OperatingSystemSKU
+	}
+	return 0
+}
+
 type Processor struct {
 	Name                 string        `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Cores                uint32        `protobuf:"varint,2,opt,name=cores,proto3" json:"cores,omitempty"`
@@ -226,15 +233,16 @@ func (m *GPU) GetCount() uint32 {
 }
 
 type NodeInfo struct {
-	Name                 string              `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Id                   string              `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
-	Capability           *Resources          `protobuf:"bytes,3,opt,name=capability,proto3" json:"capability,omitempty"`
-	Availability         *Resources          `protobuf:"bytes,4,opt,name=availability,proto3" json:"availability,omitempty"`
-	Ostype               OperatingSystemType `protobuf:"varint,6,opt,name=ostype,proto3,enum=moc.OperatingSystemType" json:"ostype,omitempty"`
-	Status               *Status             `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
-	XXX_unrecognized     []byte              `json:"-"`
-	XXX_sizecache        int32               `json:"-"`
+	Name                 string               `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Id                   string               `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Capability           *Resources           `protobuf:"bytes,3,opt,name=capability,proto3" json:"capability,omitempty"`
+	Availability         *Resources           `protobuf:"bytes,4,opt,name=availability,proto3" json:"availability,omitempty"`
+	Ostype               OperatingSystemType  `protobuf:"varint,6,opt,name=ostype,proto3,enum=moc.OperatingSystemType" json:"ostype,omitempty"`
+	Status               *Status              `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"`
+	OperatingSystemInfo  *OperatingSystemInfo `protobuf:"bytes,8,opt,name=osInfo,proto3" json:"osInfo,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
+	XXX_sizecache        int32                `json:"-"`
 }
 
 func (m *NodeInfo) Reset()         { *m = NodeInfo{} }
@@ -304,14 +312,20 @@ func (m *NodeInfo) GetStatus() *Status {
 	return nil
 }
 
+func (m *NodeInfo) GetOperatingSystemInfo() *OperatingSystemInfo {
+	if m != nil {
+		return m.OperatingSystemInfo
+	}
+	return nil
+}
+
 type Resources struct {
-	Processor            *Processor           `protobuf:"bytes,1,opt,name=processor,proto3" json:"processor,omitempty"`
-	Memory               *PhysicalMemory      `protobuf:"bytes,2,opt,name=memory,proto3" json:"memory,omitempty"`
-	Gpu                  *GPU                 `protobuf:"bytes,3,opt,name=gpu,proto3" json:"gpu,omitempty"`
-	OperatingSystemInfo  *OperatingSystemInfo `protobuf:"bytes,4,opt,name=osInfo,proto3" json:"osInfo,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
-	XXX_unrecognized     []byte               `json:"-"`
-	XXX_sizecache        int32                `json:"-"`
+	Processor            *Processor      `protobuf:"bytes,1,opt,name=processor,proto3" json:"processor,omitempty"`
+	Memory               *PhysicalMemory `protobuf:"bytes,2,opt,name=memory,proto3" json:"memory,omitempty"`
+	Gpu                  *GPU            `protobuf:"bytes,3,opt,name=gpu,proto3" json:"gpu,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
 }
 
 func (m *Resources) Reset()         { *m = Resources{} }
@@ -356,13 +370,6 @@ func (m *Resources) GetMemory() *PhysicalMemory {
 func (m *Resources) GetGpu() *GPU {
 	if m != nil {
 		return m.Gpu
-	}
-	return nil
-}
-
-func (m *Resources) GetOperatingSystemInfo() *OperatingSystemInfo {
-	if m != nil {
-		return m.OperatingSystemInfo
 	}
 	return nil
 }

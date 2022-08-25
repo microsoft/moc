@@ -38,6 +38,7 @@ message NodeInfo {
 	Resources availability = 4;
 	OperatingSystemType ostype = 6;
 	Status status = 7;
+	OperatingSystemInfo osInfo = 8;
 }
 
 message Resources {   
