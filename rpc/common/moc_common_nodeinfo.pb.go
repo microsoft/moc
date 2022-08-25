@@ -371,6 +371,7 @@ func init() {
 	proto.RegisterType((*Processor)(nil), "moc.common.Processor")
 	proto.RegisterType((*PhysicalMemory)(nil), "moc.common.PhysicalMemory")
 	proto.RegisterType((*GPU)(nil), "moc.common.GPU")
+	proto.RegisterType((*OperatingSystemInfo)(nil), "moc.common.OperatingSystemInfo")
 	proto.RegisterType((*NodeInfo)(nil), "moc.common.NodeInfo")
 	proto.RegisterType((*Resources)(nil), "moc.common.Resources")
 }

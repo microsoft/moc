@@ -8,10 +8,6 @@ package moc.common;
 import "moc_common_common.proto";
 import "moc_common_computecommon.proto";
 
-message OperatingSystemInfo {
-	uint64 operatingsystemsku = 1;
-}
-
 message Processor {
 	string name = 1;
 	uint32 cores = 2;
@@ -29,6 +25,10 @@ message GPU {
 	string name = 1;
 	uint32 sizeBytes = 2;
 	uint32 count = 3;
+}
+
+message OperatingSystemInfo {
+	uint64 operatingsystemsku = 1;
 }
 
 message NodeInfo {
