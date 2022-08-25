@@ -20,6 +20,38 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+type OperatingSystemInfo struct {
+	OperatingSystemSKU   uint64   `protobuf:"varint,1,opt,name=operatingsystemsku,proto3" json:"operatingsystemsku,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *OperatingSystemInfo) Reset()         { *m = OperatingSystemInfo{} }
+func (m *OperatingSystemInfo) String() string { return proto.CompactTextString(m) }
+func (*OperatingSystemInfo) ProtoMessage()    {}
+func (*OperatingSystemInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7c83f03f7e6831a3, []int{0}
+}
+
+func (m *OperatingSystemInfo) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_OperatingSystemInfo.Unmarshal(m, b)
+}
+func (m *OperatingSystemInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_OperatingSystemInfo.Marshal(b, m, deterministic)
+}
+func (m *OperatingSystemInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OperatingSystemInfo.Merge(m, src)
+}
+func (m *OperatingSystemInfo) XXX_Size() int {
+	return xxx_messageInfo_OperatingSystemInfo.Size(m)
+}
+func (m *OperatingSystemInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_OperatingSystemInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OperatingSystemInfo proto.InternalMessageInfo
+
 type Processor struct {
 	Name                 string        `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Cores                uint32        `protobuf:"varint,2,opt,name=cores,proto3" json:"cores,omitempty"`
@@ -273,12 +305,13 @@ func (m *NodeInfo) GetStatus() *Status {
 }
 
 type Resources struct {
-	Processor            *Processor      `protobuf:"bytes,1,opt,name=processor,proto3" json:"processor,omitempty"`
-	Memory               *PhysicalMemory `protobuf:"bytes,2,opt,name=memory,proto3" json:"memory,omitempty"`
-	Gpu                  *GPU            `protobuf:"bytes,3,opt,name=gpu,proto3" json:"gpu,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
-	XXX_unrecognized     []byte          `json:"-"`
-	XXX_sizecache        int32           `json:"-"`
+	Processor            *Processor           `protobuf:"bytes,1,opt,name=processor,proto3" json:"processor,omitempty"`
+	Memory               *PhysicalMemory      `protobuf:"bytes,2,opt,name=memory,proto3" json:"memory,omitempty"`
+	Gpu                  *GPU                 `protobuf:"bytes,3,opt,name=gpu,proto3" json:"gpu,omitempty"`
+	OperatingSystemInfo  *OperatingSystemInfo `protobuf:"bytes,4,opt,name=osInfo,proto3" json:"osInfo,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
+	XXX_sizecache        int32                `json:"-"`
 }
 
 func (m *Resources) Reset()         { *m = Resources{} }
@@ -327,10 +360,18 @@ func (m *Resources) GetGpu() *GPU {
 	return nil
 }
 
+func (m *Resources) GetOperatingSystemInfo() *GPU {
+	if m != nil {
+		return m.Gpu
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*Processor)(nil), "moc.common.Processor")
 	proto.RegisterType((*PhysicalMemory)(nil), "moc.common.PhysicalMemory")
 	proto.RegisterType((*GPU)(nil), "moc.common.GPU")
+	proto.RegisterType((*OperatingSystemInfo)(nil), "moc.common.OperatingSystemInfo")
 	proto.RegisterType((*NodeInfo)(nil), "moc.common.NodeInfo")
 	proto.RegisterType((*Resources)(nil), "moc.common.Resources")
 }

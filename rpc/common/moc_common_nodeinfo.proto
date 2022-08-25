@@ -8,6 +8,10 @@ package moc.common;
 import "moc_common_common.proto";
 import "moc_common_computecommon.proto";
 
+message OperatingSystemInfo {
+	uint64 operatingsystemsku = 1;
+}
+
 message Processor {
 	string name = 1;
 	uint32 cores = 2;
@@ -40,5 +44,6 @@ message Resources {
 	Processor processor = 1;
 	PhysicalMemory memory = 2;
 	GPU gpu = 3;
+	OperatingSystemInfo osInfo = 4;
 }
 
