@@ -20,45 +20,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type OperatingSystemInfo struct {
-	OperatingSystemSKU   uint64   `protobuf:"varint,1,opt,name=operatingsystemsku,proto3" json:"operatingsystemsku,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *OperatingSystemInfo) Reset()         { *m = OperatingSystemInfo{} }
-func (m *OperatingSystemInfo) String() string { return proto.CompactTextString(m) }
-func (*OperatingSystemInfo) ProtoMessage()    {}
-func (*OperatingSystemInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7c83f03f7e6831a3, []int{0}
-}
-
-func (m *OperatingSystemInfo) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_OperatingSystemInfo.Unmarshal(m, b)
-}
-func (m *OperatingSystemInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_OperatingSystemInfo.Marshal(b, m, deterministic)
-}
-func (m *OperatingSystemInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperatingSystemInfo.Merge(m, src)
-}
-func (m *OperatingSystemInfo) XXX_Size() int {
-	return xxx_messageInfo_OperatingSystemInfo.Size(m)
-}
-func (m *OperatingSystemInfo) XXX_DiscardUnknown() {
-	xxx_messageInfo_OperatingSystemInfo.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_OperatingSystemInfo proto.InternalMessageInfo
-
-func (m *OperatingSystemInfo) GetOperatingSystemSKU() uint64 {
-	if m != nil {
-		return m.OperatingSystemSKU
-	}
-	return 0
-}
-
 type Processor struct {
 	Name                 string        `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Cores                uint32        `protobuf:"varint,2,opt,name=cores,proto3" json:"cores,omitempty"`
@@ -382,12 +343,52 @@ func (m *Resources) GetGpu() *GPU {
 	return nil
 }
 
+type OperatingSystemInfo struct {
+	OperatingSystemSKU   uint64   `protobuf:"varint,1,opt,name=operatingsystemsku,proto3" json:"operatingsystemsku,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *OperatingSystemInfo) Reset()         { *m = OperatingSystemInfo{} }
+func (m *OperatingSystemInfo) String() string { return proto.CompactTextString(m) }
+func (*OperatingSystemInfo) ProtoMessage()    {}
+func (*OperatingSystemInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7c83f03f7e6831a3, []int{5}
+}
+
+func (m *OperatingSystemInfo) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_OperatingSystemInfo.Unmarshal(m, b)
+}
+func (m *OperatingSystemInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_OperatingSystemInfo.Marshal(b, m, deterministic)
+}
+func (m *OperatingSystemInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OperatingSystemInfo.Merge(m, src)
+}
+func (m *OperatingSystemInfo) XXX_Size() int {
+	return xxx_messageInfo_OperatingSystemInfo.Size(m)
+}
+func (m *OperatingSystemInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_OperatingSystemInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OperatingSystemInfo proto.InternalMessageInfo
+
+func (m *OperatingSystemInfo) GetOperatingSystemSKU() uint64 {
+	if m != nil {
+		return m.OperatingSystemSKU
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*Processor)(nil), "moc.common.Processor")
 	proto.RegisterType((*PhysicalMemory)(nil), "moc.common.PhysicalMemory")
 	proto.RegisterType((*GPU)(nil), "moc.common.GPU")
 	proto.RegisterType((*NodeInfo)(nil), "moc.common.NodeInfo")
 	proto.RegisterType((*Resources)(nil), "moc.common.Resources")
+	proto.RegisterType((*OperatingSystemInfo)(nil), "moc.common.OperatingSystemInfo")
 }
 
 func init() { proto.RegisterFile("moc_common_nodeinfo.proto", fileDescriptor_7c83f03f7e6831a3) }
