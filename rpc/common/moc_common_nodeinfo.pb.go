@@ -25,6 +25,7 @@ type Processor struct {
 	Cores                uint32        `protobuf:"varint,2,opt,name=cores,proto3" json:"cores,omitempty"`
 	Speed                string        `protobuf:"bytes,3,opt,name=speed,proto3" json:"speed,omitempty"`
 	Type                 ProcessorType `protobuf:"varint,4,opt,name=type,proto3,enum=moc.ProcessorType" json:"type,omitempty"`
+	Virtualization       bool          `protobuf:"varint,5,opt,name=virtualization,proto3" json:"virtualization,omitempty"`
 	Hypervisorpresent    bool          `protobuf:"varint,6,opt,name=hypervisorpresent,proto3" json:"hypervisorpresent,omitempty"`
 	Logicalprocessors    uint32        `protobuf:"varint,7,opt,name=logicalprocessors,proto3" json:"logicalprocessors,omitempty"`
 	Manufacturer         string        `protobuf:"bytes,8,opt,name=manufacturer,proto3" json:"manufacturer,omitempty"`
@@ -84,6 +85,13 @@ func (m *Processor) GetType() ProcessorType {
 		return m.Type
 	}
 	return ProcessorType_None
+}
+
+func (m *Processor) GetVirtualization() bool {
+	if m != nil {
+		return m.Virtualization
+	}
+	return false
 }
 
 func (m *Processor) GetHypervisorpresent() bool {
