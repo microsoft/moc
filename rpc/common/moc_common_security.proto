@@ -16,11 +16,27 @@ enum Algorithm {
 	A256KW = 4;
 }
 
+enum JSONWebKeySignatureAlgorithm {
+	RSNULL = 0;
+	ES256 = 1;
+	ES256K = 2;
+	ES384 = 3; 
+	ES512 = 4; 
+	PS256 = 5;
+	PS384 = 6;
+	PS512 = 7;
+	RS256 = 8;
+	RS384 = 9;
+	RS512 = 10;
+}
+
 enum KeyOperation {
 	ENCRYPT = 0;
 	DECRYPT = 1;
 	WRAPKEY = 2;
 	UNWRAPKEY = 3;
+	SIGN = 4;
+	VERIFY = 5;
 }
 
 // https://docs.microsoft.com/en-us/rest/api/keyvault/createkey/createkey#jsonwebkeytype
