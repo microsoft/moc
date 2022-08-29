@@ -14,8 +14,9 @@ message Processor {
 	string speed = 3;
 	ProcessorType type = 4;
 	bool virtualization = 5;
-	uint32 logicalprocessors = 6;
-	string manufacturer = 7;
+	bool hypervisorpresent = 6;
+	uint32 logicalprocessors = 7;
+	string manufacturer = 8;
 }
 
 message PhysicalMemory {
