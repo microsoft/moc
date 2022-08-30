@@ -38,9 +38,8 @@ message NodeInfo {
 	string id = 2;
 	Resources capability = 3;
 	Resources availability = 4;
-	OperatingSystemType ostype = 6;
-	Status status = 7;
-	OperatingSystemInfo osInfo = 8;
+	OperatingSystemType ostype = 5;
+	Status status = 6;
 }
 
 message Resources {   
