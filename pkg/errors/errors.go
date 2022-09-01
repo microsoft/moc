@@ -47,6 +47,7 @@ var (
 	Unknown              error = errors.New("Unknown Reason")
 	DeleteFailed         error = errors.New("Delete Failed")
 	DeletePending        error = errors.New("Delete Pending")
+	AttachmentFailed     error = errors.New("Attachment Failed")
 )
 
 func GetErrorCode(err error) string {
@@ -116,6 +117,8 @@ func GetErrorCode(err error) string {
 		return "Delete Failed"
 	} else if IsDeletePending(err) {
 		return "Delete Pending"
+	} else if IsAttachmentFailed(err) {
+		return "Attachment Failed"
 	}
 
 	return "GenericError"
@@ -278,6 +281,9 @@ func IsDeleteFailed(err error) bool {
 }
 func IsDeletePending(err error) bool {
 	return checkError(err, DeletePending)
+}
+func IsAttachmentFailed(err error) bool {
+	return checkError(err, AttachmentFailed)
 }
 
 func IsErrDeadlineExceeded(err error) bool {
