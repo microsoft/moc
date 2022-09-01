@@ -17,8 +17,8 @@ message Processor {
 	bool hypervisorpresent = 6;
 	uint32 logicalprocessors = 7;
 	string manufacturer = 8;
-	uint16 cputype = 9;
-	uint16 architecture = 10;
+	uint32 cputype = 9;
+	uint32 architecture = 10;
 }
 
 message PhysicalMemory {
