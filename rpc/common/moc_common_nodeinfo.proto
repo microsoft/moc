@@ -14,8 +14,8 @@ message Processor {
 	string speed = 3;
 	ProcessorType type = 4;
 	bool virtualization = 5;
-	bool hypervisorpresent = 6;
-	uint32 logicalprocessors = 7;
+	uint32 logicalprocessors = 6;
+	bool hypervisorpresent = 7;
 	string manufacturer = 8;
 	uint32 cputype = 9;
 	uint32 architecture = 10;
@@ -40,8 +40,8 @@ message NodeInfo {
 	string id = 2;
 	Resources capability = 3;
 	Resources availability = 4;
-	OperatingSystemType ostype = 5;
-	Status status = 6;
+	OperatingSystemType ostype = 6;
+	Status status = 7;
 }
 
 message Resources {   
