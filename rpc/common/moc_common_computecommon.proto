@@ -61,6 +61,7 @@ enum VirtualMachineSizeType {
 	Standard_F4s_HPN = 27;
 	Standard_F8s_HPN = 28;
 	Standard_F16s_HPN = 29;
+	Custom_A2 = 95;
 	Custom_NK = 96;
 	Custom_Gpupv = 97;
 	Custom = 98;
