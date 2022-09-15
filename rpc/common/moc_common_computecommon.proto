@@ -135,8 +135,8 @@ enum Architecture {
 	MIPS = 1;
 	Alpha = 2;
 	PowerPC = 3;
-	ARM = 5;
+	ARM_Architecture = 5;
 	ia64 = 6;
 	x64 = 9;
-	ARM64 = 12;
+	ARM64_Architecture = 12;
 }
