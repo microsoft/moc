@@ -130,6 +130,10 @@ message VirtualMachineRunCommandInstanceView {
 	string Error = 4;
 }
 
+/* Values fetched from Win32_Processor class.
+Documentation here:
+https://docs.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor#properties */
+
 enum Architecture {
 	x86 = 0;
 	MIPS = 1;
