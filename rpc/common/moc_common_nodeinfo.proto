@@ -30,8 +30,9 @@ message GPU {
 	uint32 count = 3;
 }
 
-message OperatingSystemInfo {
+message OperatingSystem {
 	uint64 operatingsystemsku = 1;
+	OperatingSystemType ostype = 2;
 }
 
 message NodeInfo {
@@ -47,6 +48,6 @@ message Resources {
 	Processor processor = 1;
 	PhysicalMemory memory = 2;
 	GPU gpu = 3;
-	OperatingSystemInfo osInfo = 4;
+	OperatingSystem osInfo = 4;
 }
 
