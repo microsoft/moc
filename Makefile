@@ -24,7 +24,7 @@ format:
 
 bootstrap:
 	GOOS="linux" go get -u google.golang.org/grpc@v1.26.0
-	GOOS="linux" go install github.com/golang/protobuf/protoc-gen-go@v1.3.2
+	GOOS="linux" go get -u github.com/golang/protobuf/protoc-gen-go@v1.3.2
 
 test:
 	GOOS=windows go build ./...
