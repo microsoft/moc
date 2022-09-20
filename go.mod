@@ -22,5 +22,7 @@ require (
 
 replace (
 	github.com/golang/protobuf/protoc-gen-go => github.com/golang/protobuf/protoc-gen-go v1.3.2
+	golang.org/x/net => golang.org/x/net v0.0.0-20220822230855-b0a4917ee28c
+	golang.org/x/sys => golang.org/x/sys v0.0.0-20220823224334-20c2bfdbfe24
 	google.golang.org/grpc => google.golang.org/grpc v1.26.0
 )
