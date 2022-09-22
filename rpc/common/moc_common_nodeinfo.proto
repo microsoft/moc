@@ -15,6 +15,9 @@ message Processor {
 	ProcessorType type = 4;
 	bool virtualization = 5;
 	uint32 logicalprocessors = 6;
+	bool hypervisorpresent = 7;
+	string manufacturer = 8;
+	Architecture architecture = 9;
 }
 
 message PhysicalMemory {
@@ -25,6 +28,11 @@ message GPU {
 	string name = 1;
 	uint32 sizeBytes = 2;
 	uint32 count = 3;
+}
+
+message OperatingSystem {
+	uint64 operatingsystemsku = 1;
+	OperatingSystemType ostype = 2;
 }
 
 message NodeInfo {
@@ -40,5 +48,6 @@ message Resources {
 	Processor processor = 1;
 	PhysicalMemory memory = 2;
 	GPU gpu = 3;
+	OperatingSystem osInfo = 4;
 }
 
