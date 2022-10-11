@@ -31,10 +31,17 @@ message Disk {
 	string diskname = 1;
 }
 
+message SharedFolder {
+	// reference to the shared folder managed by storage
+	string sharedfolderreference = 1;
+	string guestmountpath = 2;
+}
+
 message StorageConfiguration {
 	Disk osdisk = 1;
 	repeated Disk datadisks = 2;
-	string vmConfigContainerName = 3; // Name of the storage container that hosts the VM configuration file 
+	string vmConfigContainerName = 3; // Name of the storage container that hosts the VM configuration file
+	repeated SharedFolder sharedFolders = 4;
 }
 
 message NetworkInterface {
