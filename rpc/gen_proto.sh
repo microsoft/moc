@@ -47,6 +47,7 @@ Module="storage"
 echo "Generating $Agent/$Module protoc"
 protoc -I $Agent/$Module/virtualharddisk -I ./common $Agent/$Module/virtualharddisk/moc_nodeagent_virtualharddisk.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/container -I ./common $Agent/$Module/container/moc_nodeagent_container.proto  --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/sharedfolder -I ./common $Agent/$Module/sharedfolder/moc_nodeagent_sharedfolder.proto  --go_out=plugins=grpc:../bld/gen/
 
 Module="security"
 echo "Generating $Agent/$Module protoc"

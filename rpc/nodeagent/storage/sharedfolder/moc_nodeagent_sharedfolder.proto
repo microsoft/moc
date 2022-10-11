@@ -1,0 +1,42 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/nodeagent/storage";
+package moc.nodeagent.storage;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_notification.proto";
+import "google/protobuf/empty.proto";
+
+message SharedFolderRequest {
+	repeated SharedFolder SharedFolderSystems = 1;
+	Operation OperationType = 2;
+}
+
+message SharedFolderResponse {
+	repeated SharedFolder SharedFolderSystems = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message SharedFolder {
+	string name = 1;
+	string id = 2;
+	string containerName = 3;
+	string folderName = 4;
+	bool readOnly = 5;
+	string path = 6;
+	string virtualmachineName = 7;
+	string guestMountPath = 8;
+	string mountTag = 9;
+	Status status = 10;
+	Entity entity = 11;
+	Tags tags = 12;
+}
+
+service SharedFolderAgent {
+	rpc Invoke(SharedFolderRequest) returns (SharedFolderResponse) {}
+	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
+}
