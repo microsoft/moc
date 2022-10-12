@@ -14,6 +14,7 @@ enum AccessOperation {
 	Write = 1;
 	Delete = 2;
 	All = 3;
+	ProviderAction = 4; 
 }
 
 message RoleRequest {
@@ -29,8 +30,9 @@ message RoleResponse {
 
 message Action {
 	AccessOperation operation = 1;
+	ProviderAccessOperation providerOperation = 2; 
 	// ProviderType the rule works on
-	ProviderType providerType = 2;
+	ProviderType providerType = 3;
 }
 
 message Permission {
