@@ -9,7 +9,7 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 import "moc_common_security.proto";
 
-enum AccessOperation {
+enum GeneralAccessOperation {
 	Read = 0;
 	Write = 1;
 	Delete = 2;
@@ -29,7 +29,7 @@ message RoleResponse {
 }
 
 message Action {
-	AccessOperation operation = 1;
+	GeneralAccessOperation operation = 1;
 	ProviderAccessOperation providerOperation = 2; 
 	// ProviderType the rule works on
 	ProviderType providerType = 3;

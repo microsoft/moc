@@ -399,7 +399,7 @@ func (ProviderType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_681f78e46755eb93, []int{6}
 }
 
-// Actions specific to a provider
+// Operations specific to a provider
 // Format is [Provider]_[Operation]
 type ProviderAccessOperation int32
 

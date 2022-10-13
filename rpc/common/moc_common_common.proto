@@ -163,7 +163,7 @@ enum ProviderType {
 	Authentication         = 36;
 }
 
-// Actions specific to a provider
+// Operations specific to a provider
 // Format is [Provider]_[Operation]
 enum ProviderAccessOperation {
 	Unspecified = 0;
