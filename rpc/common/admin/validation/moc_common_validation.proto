@@ -1,0 +1,23 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/common/admin";
+package moc.common.admin;
+
+import "google/protobuf/wrappers.proto";
+
+enum ValidationOperation {
+	VALIDATE = 0;
+}
+
+message ValidationRequest{}
+
+message ValidationResponse {
+	string  Error = 1;
+}
+
+service ValidationAgent {
+	rpc Invoke(ValidationRequest) returns (ValidationResponse) {}
+}
+
