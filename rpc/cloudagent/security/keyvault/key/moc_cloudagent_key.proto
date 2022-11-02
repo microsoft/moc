@@ -25,7 +25,7 @@ message KeyOperationRequest {
 	Key key = 1;
 	string Data = 2 [(sensitive) = true];
 	Algorithm algorithm = 3;
-	KeyOperation OperationType = 4;
+	ProviderAccessOperation OperationType = 4;
 	SignVerifyParams  SignVerifyParams = 5;
 }
 

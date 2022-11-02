@@ -142,7 +142,7 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 	}
 
 	renewRequest := &security.IdentityCertificateRequest{
-		OperationType: common.IdentityCertificateOperation_RENEW_CERTIFICATE,
+		OperationType: common.ProviderAccessOperation_Certificate_Renew,
 		IdentityName:  wssdConfig.IdentityName,
 		CSR:           []*security.CertificateSigningRequest{csr},
 	}
