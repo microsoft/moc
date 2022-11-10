@@ -56,7 +56,7 @@ message Identity {
 	AuthenticationType authType = 18;
 	bool revoked = 19;
 	bool autoRotate = 20;
-	string filePath = 21;
+	string loginFilePath = 21;
 	int64 tokenExpiryInSeconds = 22;
 }
 
