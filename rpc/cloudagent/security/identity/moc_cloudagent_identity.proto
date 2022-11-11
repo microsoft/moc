@@ -55,6 +55,9 @@ message Identity {
 	int32 cloudAuthPort = 17;
 	AuthenticationType authType = 18;
 	bool revoked = 19;
+	bool autoRotate = 20;
+	string loginFilePath = 21;
+	int64 tokenExpiryInSeconds = 22;
 }
 
 service IdentityAgent {
