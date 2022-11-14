@@ -1,7 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the Apache v2.0 license.
 
-//+build windows
+//go:build windows
+// +build windows
+
 package logging
 
 import (
