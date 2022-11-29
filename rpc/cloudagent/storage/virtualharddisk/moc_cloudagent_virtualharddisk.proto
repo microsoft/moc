@@ -44,6 +44,7 @@ message VirtualHardDisk {
 	HyperVGeneration hyperVGeneration = 20;
 	DiskFileFormat diskFileFormat = 21;
 	CloudInitDataSource cloudInitDataSource = 22;
+	Tags tags = 23;
 }
 
 service VirtualHardDiskAgent {
