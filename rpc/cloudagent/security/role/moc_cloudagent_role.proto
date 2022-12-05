@@ -17,6 +17,13 @@ enum GeneralAccessOperation {
 	ProviderAction = 4; 
 }
 
+enum AccessOperation {
+	oldRead = 0 [deprecated=true];
+	oldWrite = 1 [deprecated=true];
+	oldDelete = 2 [deprecated=true];
+	oldAll = 3 [deprecated=true];
+}
+
 message RoleRequest {
 	repeated Role Roles = 1;
 	Operation OperationType = 2;
@@ -29,12 +36,13 @@ message RoleResponse {
 }
 
 message Action {
-	// General access permissions
-	GeneralAccessOperation operation = 1;
+	AccessOperation oldOperation = 1 [deprecated=true];
 	// ProviderType the rule works on
 	ProviderType providerType = 2;
+	// General access permissions
+	GeneralAccessOperation operation = 3;
 	// Provider specific access permissions
-	ProviderAccessOperation providerOperation = 3; 
+	ProviderAccessOperation providerOperation = 4; 
 }
 
 message Permission {
