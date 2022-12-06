@@ -18,10 +18,10 @@ enum GeneralAccessOperation {
 }
 
 enum AccessOperation {
-	oldRead = 0 [deprecated=true];
-	oldWrite = 1 [deprecated=true];
-	oldDelete = 2 [deprecated=true];
-	oldAll = 3 [deprecated=true];
+	OBSOLETE_Read = 0 [deprecated=true];
+	OBSOLETE_Write = 1 [deprecated=true];
+	OBSOLETE_Delete = 2 [deprecated=true];
+	OBSOLETE_All = 3 [deprecated=true];
 }
 
 message RoleRequest {
@@ -36,7 +36,7 @@ message RoleResponse {
 }
 
 message Action {
-	AccessOperation oldOperation = 1 [deprecated=true];
+	AccessOperation OBSOLETE_Operation = 1 [deprecated=true];
 	// ProviderType the rule works on
 	ProviderType providerType = 2;
 	// General access permissions

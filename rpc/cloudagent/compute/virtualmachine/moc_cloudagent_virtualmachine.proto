@@ -122,7 +122,8 @@ message VirtualMachine {
 
 message VirtualMachineOperationRequest {
 	repeated VirtualMachine VirtualMachines = 1;
-	ProviderAccessOperation OperationType = 2;
+	VirtualMachineOperation OBSOLETE_OperationType = 2 [deprecated=true];
+	ProviderAccessOperation OperationType = 3;
 }
 
 message VirtualMachineOperationResponse {

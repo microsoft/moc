@@ -8,6 +8,7 @@ package moc.cloudagent.security;
 import "google/protobuf/wrappers.proto";
 import "moc_cloudagent_certificate.proto";
 import "moc_common_common.proto";
+import "moc_common_security.proto";
 
 message IdentityRequest {
 	repeated Identity Identitys = 1;
@@ -22,13 +23,15 @@ message IdentityResponse {
 
 message IdentityOperationRequest {
 	repeated Identity Identities = 1;
-	ProviderAccessOperation OperationType = 2;
+	IdentityOperation OBSOLETE_OperationType = 2 [deprecated=true];
+	ProviderAccessOperation OperationType = 3;
 }
 
 message IdentityCertificateRequest {
 	string IdentityName = 1;
 	repeated CertificateSigningRequest CSR = 2;
-	ProviderAccessOperation OperationType = 3;
+	IdentityCertificateOperation OBSOLETE_OperationType = 3 [deprecated=true];
+	ProviderAccessOperation OperationType = 4;
 }
 
 message IdentityCertificateResponse {

@@ -13,9 +13,10 @@ enum DebugOperation {
 
 message DebugRequest{
 	// Operation Type
-	ProviderAccessOperation OperationType = 1;
+	DebugOperation OBSOLETE_OperationType = 1 [deprecated=true];
 	// Artibraty data
 	string Data = 2;
+	ProviderAccessOperation OperationType = 3;
 }
 
 message DebugResponse {

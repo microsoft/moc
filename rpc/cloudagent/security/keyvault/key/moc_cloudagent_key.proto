@@ -25,8 +25,9 @@ message KeyOperationRequest {
 	Key key = 1;
 	string Data = 2 [(sensitive) = true];
 	Algorithm algorithm = 3;
-	ProviderAccessOperation OperationType = 4;
+	KeyOperation OBSOLETE_OperationType = 4 [deprecated=true];
 	SignVerifyParams  SignVerifyParams = 5;
+	ProviderAccessOperation OperationType = 6;
 }
 
 message KeyOperationResponse {
