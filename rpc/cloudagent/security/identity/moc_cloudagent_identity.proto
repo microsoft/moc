@@ -48,7 +48,7 @@ message Identity {
 	string locationName = 10;
 	Tags tags = 11;
 	map<string, string> certificates = 12 [(sensitive) = true];
-	int64 tokenExpiry = 13;
+	int64 tokenExpiry = 13 [deprecated = true];
 	ClientType clientType = 14;
 	string cloudFqdn = 15;
 	int32 cloudPort = 16;
