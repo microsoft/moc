@@ -47,6 +47,7 @@ var (
 	Unknown              error = errors.New("Unknown Reason")
 	DeleteFailed         error = errors.New("Delete Failed")
 	DeletePending        error = errors.New("Delete Pending")
+	WMIError             error = errors.New("WMI Error")
 )
 
 func GetErrorCode(err error) string {
@@ -116,6 +117,8 @@ func GetErrorCode(err error) string {
 		return "Delete Failed"
 	} else if IsDeletePending(err) {
 		return "Delete Pending"
+	} else if IsWMIError(err) {
+		return "WMI Error"
 	}
 
 	return "GenericError"
@@ -282,6 +285,10 @@ func IsDeletePending(err error) bool {
 
 func IsErrDeadlineExceeded(err error) bool {
 	return checkError(err, os.ErrDeadlineExceeded)
+}
+
+func IsWMIError(err error) bool {
+	return checkError(err, WMIError)
 }
 
 func checkError(wrappedError, err error) bool {
