@@ -35,7 +35,7 @@ message Container {
 	Status status = 5;
 	string locationName = 6;
 	StorageContainerInfo info = 7;
-          
+	Tags tags = 8;
 }
 
 service ContainerAgent {
