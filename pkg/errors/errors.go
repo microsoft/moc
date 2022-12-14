@@ -118,7 +118,7 @@ func GetErrorCode(err error) string {
 	} else if IsDeletePending(err) {
 		return "Delete Pending"
 	} else if wmi.IsInvalidType(err) {
-		return "Invalid Input"
+		return "Invalid Type"
 	} else if wmi.IsWMIError(err) {
 		return err.Error()
 	}
