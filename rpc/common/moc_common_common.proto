@@ -14,6 +14,7 @@ enum Operation {
 	UPDATE = 3;
 	IMPORT = 4;
 	EXPORT = 5;
+	VALIDATE = 6;
 }
 
 enum ProvisionState {
@@ -79,6 +80,25 @@ message Health {
 	HealthState previousState = 2;
 }
 
+enum ValidationStateCode {
+	NODE_UNREACHABLE = 0;
+	ENTITY_MISSING = 1;
+	CLIENT_CREATION_FAILURE = 2;
+	FORMAT_INVALID = 3;
+	INFO_MISSING = 4;
+	INFO_MISMATCH = 5;
+}
+
+message ValidationState {
+	ValidationStateCode code = 1;
+	string message = 2;
+	string recommendation = 3;
+}
+
+message ValidationStatus {
+	repeated ValidationState validationState = 1;
+}
+
 message Version {
 	string number = 1;
 }
@@ -89,6 +109,7 @@ message Status {
 	Error lastError = 3;
 	Version version = 4;
 	DownloadStatus downloadStatus = 5;
+	ValidationStatus validationStatus = 6;
 }
 
 message Entity {
