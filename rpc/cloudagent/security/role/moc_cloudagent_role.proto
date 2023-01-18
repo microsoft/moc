@@ -9,11 +9,19 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 import "moc_common_security.proto";
 
-enum AccessOperation {
+enum GeneralAccessOperation {
 	Read = 0;
 	Write = 1;
 	Delete = 2;
 	All = 3;
+	ProviderAction = 4; 
+}
+
+enum AccessOperation {
+	OBSOLETE_Read = 0 [deprecated=true];
+	OBSOLETE_Write = 1 [deprecated=true];
+	OBSOLETE_Delete = 2 [deprecated=true];
+	OBSOLETE_All = 3 [deprecated=true];
 }
 
 message RoleRequest {
@@ -28,9 +36,13 @@ message RoleResponse {
 }
 
 message Action {
-	AccessOperation operation = 1;
+	AccessOperation OBSOLETE_Operation = 1 [deprecated=true];
 	// ProviderType the rule works on
 	ProviderType providerType = 2;
+	// General access permissions
+	GeneralAccessOperation operation = 3;
+	// Provider specific access permissions
+	ProviderAccessOperation providerOperation = 4; 
 }
 
 message Permission {
