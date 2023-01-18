@@ -184,6 +184,37 @@ enum ProviderType {
 	Authentication         = 36;
 }
 
+// Operations specific to a provider
+// Format is [Provider]_[Operation]
+enum ProviderAccessOperation {
+	Unspecified 					= 0;
+	Authentication_Login 			= 1;
+	Certificate_CreateOrUpdate 		= 2; 
+	Certificate_Get 				= 3; 
+	Certificate_Delete 				= 4; 
+	Certificate_Sign 				= 5; 
+	Certificate_Renew 				= 6; 
+	Identity_Revoke 				= 7; 
+	Identity_Rotate 				= 8;  
+	IdentityCertificate_Create		= 9;
+	IdentityCertificate_Renew 		= 10;
+	Key_Encrypt 					= 11; 
+	Key_Decrypt 					= 12; 
+	Key_WrapKey 					= 13; 
+	Key_UnwrapKey					= 14; 
+	Key_Sign 						= 15; 
+	Key_Verify 						= 16; 
+	VirtualMachine_Start 			= 17;
+	VirtualMachine_Stop 			= 18;
+	VirtualMachine_Reset 			= 19;
+	Cluster_LoadCluster 			= 20; 
+	Cluster_UnloadCluster 			= 21; 
+	Cluster_GetCluster 				= 22; 
+	Cluster_GetNodes 				= 23; 
+	Debug_DebugServer				= 24; 
+	Debug_StackTrace				= 25;
+}
+
 extend google.protobuf.FieldOptions {
 	bool sensitive = 50001;
 }
