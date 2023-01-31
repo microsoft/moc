@@ -213,6 +213,8 @@ enum ProviderAccessOperation {
 	Cluster_GetNodes 				= 23; 
 	Debug_DebugServer				= 24; 
 	Debug_StackTrace				= 25;
+	VirtualMachine_Attach			= 26; 
+	VirtualMachine_Detach 			= 27; 
 }
 
 extend google.protobuf.FieldOptions {
