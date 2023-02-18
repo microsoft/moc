@@ -28,7 +28,7 @@ var (
 	InvalidVersion       error = errors.New("InvalidVersion")
 	OldVersion           error = errors.New("OldVersion")
 	OutOfCapacity        error = errors.New("OutOfCapacity")
-	NodeOutOfCapacity    error = errors.New("NodeOutOfCapacity")
+	OutOfNodeCapacity    error = errors.New("OutOfNodeCapacity")
 	OutOfMemory          error = errors.New("OutOfMemory")
 	UpdateFailed         error = errors.New("Update Failed")
 	NotInitialized       error = errors.New("Not Initialized")
@@ -80,8 +80,8 @@ func GetErrorCode(err error) string {
 		return "OldVersion"
 	} else if IsOutOfCapacity(err) {
 		return "OutOfCapacity"
-	} else if IsNodeOutOfCapacity(err) {
-		return "NodeOutOfCapacity"
+	} else if IsOutOfNodeCapacity(err) {
+		return "OutOfNodeCapacity"
 	} else if IsOutOfMemory(err) {
 		return "OutOfMemory"
 	} else if IsUpdateFailed(err) {
@@ -224,8 +224,8 @@ func IsOutOfRange(err error) bool {
 func IsOutOfCapacity(err error) bool {
 	return checkError(err, OutOfCapacity)
 }
-func IsNodeOutOfCapacity(err error) bool {
-	return checkError(err, NodeOutOfCapacity)
+func IsOutOfNodeCapacity(err error) bool {
+	return checkError(err, OutOfNodeCapacity)
 }
 func IsAlreadySet(err error) bool {
 	return checkError(err, AlreadySet)
