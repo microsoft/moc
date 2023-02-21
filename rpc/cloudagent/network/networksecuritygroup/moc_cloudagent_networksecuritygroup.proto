@@ -31,8 +31,8 @@ message NetworkSecurityGroupResponse {
 }
 
 message NetworkSecurityGroupRule {
-    string name = 1;
-    Action action = 2;
+	string name = 1;
+	Action action = 2;
 	Direction direction = 3;
 	string sourceIpAddress = 4;
 	string destinationIpAddress = 5;
