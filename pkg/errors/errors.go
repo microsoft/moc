@@ -48,6 +48,7 @@ var (
 	Unknown              error = errors.New("Unknown Reason")
 	DeleteFailed         error = errors.New("Delete Failed")
 	DeletePending        error = errors.New("Delete Pending")
+	InvalidParameter     error = errors.New("InvalidParameter")
 )
 
 func GetErrorCode(err error) string {
@@ -121,6 +122,8 @@ func GetErrorCode(err error) string {
 		return "Invalid Type"
 	} else if wmi.IsWMIError(err) {
 		return err.Error()
+	} else if IsInvalidParameter(err) {
+		return "InvalidParameter"
 	}
 
 	return "GenericError"
@@ -287,6 +290,10 @@ func IsDeletePending(err error) bool {
 
 func IsErrDeadlineExceeded(err error) bool {
 	return checkError(err, os.ErrDeadlineExceeded)
+}
+
+func IsInvalidParameter(err error) bool {
+	return checkError(err, InvalidParameter)
 }
 
 func checkError(wrappedError, err error) bool {
