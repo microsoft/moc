@@ -1,0 +1,58 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/network";
+package moc.cloudagent.network;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_networkcommon.proto";
+
+enum Action {
+	Allow = 0;
+	Deny = 1;
+}
+
+enum Direction {
+	Inbound = 0;
+	Outbound = 1; //TODO: Do we allow Both as an option? and add separate inbound/outbound rules?
+}
+
+message NetworkSecurityGroupRequest {
+	repeated NetworkSecurityGroup NetworkSecurityGroups = 1;
+	Operation OperationType = 2;
+}
+
+message NetworkSecurityGroupResponse {
+	repeated NetworkSecurityGroup NetworkSecurityGroups = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message NetworkSecurityGroupRule {
+    string name = 1;
+    Action action = 2;
+	Direction direction = 3;
+	string sourceIpAddress = 4;
+	string destinationIpAddress = 5;
+	string sourcePort = 6;
+	string destinationPort = 7;
+	Protocol protocol = 8;   //TODO: do we need to add ICMP? or All works?
+	uint32 priority = 9;
+}
+
+message NetworkSecurityGroup {
+	string name = 1;
+	string id = 2;
+	repeated NetworkSecurityGroupRule networksecuritygrouprules = 3;
+	string groupName = 4;
+	string locationName = 5;
+	Status status = 6;
+	Tags tags = 7;
+}
+
+service NetworkSecurityGroupAgent {
+	rpc Invoke(NetworkSecurityGroupRequest) returns (NetworkSecurityGroupResponse) {}
+}
+
