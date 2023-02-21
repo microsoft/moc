@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the Apache v2.0 license.
 
+//+build unix
 package logging
 
 import (
