@@ -4,7 +4,6 @@
 syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/common/admin";
 package moc.common.admin;
-import "moc_common_common.proto";
 
 enum DebugOperation {
 	DEBUGSERVER = 0;
@@ -13,10 +12,9 @@ enum DebugOperation {
 
 message DebugRequest{
 	// Operation Type
-	DebugOperation OBSOLETE_OperationType = 1 [deprecated=true];
+	DebugOperation OperationType = 1;
 	// Artibraty data
 	string Data = 2;
-	ProviderAccessOperation OperationType = 3;
 }
 
 message DebugResponse {
