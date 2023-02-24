@@ -5,6 +5,7 @@ syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/common";
 
 package moc;
+import "google/protobuf/descriptor.proto";
 
 enum UserType {
 	ROOT = 0;
@@ -115,11 +116,11 @@ enum VirtualMachineRunCommandExecutionState {
 
 message VirtualMachineRunCommandInputParameter {
     string Name = 1;
-    string Value = 2;
+    string Value = 2 [(sensitivecompute) = true];
 }
 
 message VirtualMachineRunCommandScriptSource {
-	string Script = 1;
+	string Script = 1 [(sensitivecompute) = true];
 	string ScriptURI = 2;
 	string CommandID = 3;
 }
@@ -144,4 +145,8 @@ enum Architecture {
 	ia64 = 6;
 	x64 = 9;
 	ARM64_Architecture = 12;
+}
+
+extend google.protobuf.FieldOptions {
+	bool sensitivecompute = 50002;
 }
