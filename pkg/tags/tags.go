@@ -20,7 +20,7 @@ func AddTag(key, value string, tags *common.Tags) {
 	tags.Tags = append(tags.GetTags(), InitTag(key, value))
 }
 
-//DeleteTag
+// DeleteTag
 func DeleteTag(key string, tags *common.Tags) {
 	index := -1
 	tagsList := tags.GetTags()
@@ -37,7 +37,7 @@ func DeleteTag(key string, tags *common.Tags) {
 	return
 }
 
-//GetTagValue
+// GetTagValue
 func GetTagValue(key string, tags *common.Tags) (string, error) {
 	for _, tag := range tags.GetTags() {
 		if tag.GetKey() == key {
@@ -47,7 +47,7 @@ func GetTagValue(key string, tags *common.Tags) (string, error) {
 	return "", errors.Wrapf(errors.NotFound, "Missing tag %s", key)
 }
 
-//AddTagValue
+// AddTagValue
 func AddTagValue(key, value string, tags *common.Tags) {
 	for _, tag := range tags.GetTags() {
 		if tag.GetKey() == key {
@@ -59,7 +59,7 @@ func AddTagValue(key, value string, tags *common.Tags) {
 	return
 }
 
-//ProtoToMap
+// ProtoToMap
 func ProtoToMap(prototags *common.Tags) map[string]*string {
 	tags := make(map[string]*string, len(prototags.GetTags()))
 	for _, prototag := range prototags.GetTags() {
@@ -68,7 +68,7 @@ func ProtoToMap(prototags *common.Tags) map[string]*string {
 	return tags
 }
 
-//MapToProto
+// MapToProto
 func MapToProto(tags map[string]*string) *common.Tags {
 	prototags := common.Tags{}
 	for key, value := range tags {
