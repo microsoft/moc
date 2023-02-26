@@ -31,8 +31,10 @@ message LogFileResponse {
 
 message SetResponse {
 	bool                        done     = 1;	
+	string 						error    = 2;
 }
 
 message SetRequest {
 	uint32 settracelevel = 1;
+	string location      = 2;
 }
