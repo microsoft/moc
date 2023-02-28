@@ -20,6 +20,13 @@ message LoadBalancerResponse {
 	string  Error = 3;
 }
 
+message LoadbalancerInboundNatRule {
+	string name = 1;
+	uint32 frontendPort = 2;
+	uint32 backendPort = 3;
+	Protocol protocol = 4;
+}
+
 message LoadBalancingRule {
 	uint32 frontendPort = 1;
 	uint32 backendPort = 2;
@@ -39,6 +46,7 @@ message LoadBalancer {
 	Status status = 10;
 	Tags tags = 11;
 	uint32 replicationCount = 12;
+	repeated LoadbalancerInboundNatRule inboundNatRules = 13;
 }
 
 service LoadBalancerAgent {
