@@ -20,6 +20,10 @@ message NetworkInterfaceResponse {
 	string  Error = 3;
 }
 
+message InboundNatRule {
+	string name = 1;
+}
+
 message IpConfiguration {
 	string ipaddress = 1;
 	string prefixlength = 2;
@@ -28,6 +32,7 @@ message IpConfiguration {
 	repeated string loadbalanceraddresspool = 5;
 	IPAllocationMethod allocation = 6;
 	string gateway = 7;
+	repeated InboundNatRule inboundNatRules = 8;
 }
 
 message NetworkInterface {
