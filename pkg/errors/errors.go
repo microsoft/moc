@@ -124,6 +124,8 @@ func GetErrorCode(err error) string {
 		return "Invalid Type"
 	} else if wmi.IsWMIError(err) {
 		return err.Error()
+	} else if IsRunCommandFailed(err) {
+		return "RunCommandFailed"
 	}
 
 	return "GenericError"
@@ -293,6 +295,10 @@ func IsDeletePending(err error) bool {
 
 func IsErrDeadlineExceeded(err error) bool {
 	return checkError(err, os.ErrDeadlineExceeded)
+}
+
+func IsRunCommandFailed(err error) bool {
+	return checkError(err, RunCommandFailed)
 }
 
 func checkError(wrappedError, err error) bool {
