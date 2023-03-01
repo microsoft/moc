@@ -32,14 +32,16 @@ message NetworkSecurityGroupResponse {
 
 message NetworkSecurityGroupRule {
 	string name = 1;
-	Action action = 2;
-	Direction direction = 3;
-	string sourceIpAddress = 4;
-	string destinationIpAddress = 5;
-	string sourcePort = 6;
-	string destinationPort = 7;
-	Protocol protocol = 8;   //TODO: do we need to add ICMP? or All works?
-	uint32 priority = 9;
+	string description = 2;
+	Action action = 3;
+	Direction direction = 4;
+	repeated string sourceAddressPrefix = 5;
+	repeated string destinationAddressPrefix = 6;
+	repeated string sourcePortRange = 7;
+	repeated string destinationPortRange = 8;
+	Protocol protocol = 9;
+	uint32 priority = 10;
+	bool logging = 11;
 }
 
 message NetworkSecurityGroup {
