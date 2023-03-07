@@ -112,6 +112,7 @@ protoc -I $Agent/$Module/loadbalancer -I ./common $Agent/$Module/loadbalancer/mo
 protoc -I $Agent/$Module/networkinterface -I ./common $Agent/$Module/networkinterface/moc_cloudagent_networkinterface.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/vippool -I ./common $Agent/$Module/vippool/moc_cloudagent_vippool.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/macpool -I ./common $Agent/$Module/macpool/moc_cloudagent_macpool.proto --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/networksecuritygroup -I ./common $Agent/$Module/networksecuritygroup/moc_cloudagent_networksecuritygroup.proto --go_out=plugins=grpc:../bld/gen/
 
 # Generate compute agent protoc
 Module="compute"

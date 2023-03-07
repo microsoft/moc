@@ -33,7 +33,7 @@ message IpConfiguration {
 	IPAllocationMethod allocation = 6;
 	string gateway = 7;
 	repeated InboundNatRule inboundNatRules = 8;
-	string networksecuritygroup = 8;
+	string networksecuritygroup = 9;
 }
 
 message NetworkInterface {

@@ -35,13 +35,17 @@ message NetworkSecurityGroupRule {
 	string description = 2;
 	Action action = 3;
 	Direction direction = 4;
-	repeated string sourceAddressPrefix = 5;
-	repeated string destinationAddressPrefix = 6;
-	repeated string sourcePortRange = 7;
-	repeated string destinationPortRange = 8;
-	Protocol protocol = 9;
-	uint32 priority = 10;
-	bool logging = 11;
+	string sourceAddressPrefix = 5;
+	string destinationAddressPrefix = 6;
+	repeated string sourceAddressPrefixes = 7;
+	repeated string destinationAddressPrefixes = 8;
+	string sourcePortRange = 9;
+	string destinationPortRange = 10;
+	repeated string sourcePortRanges = 11;
+	repeated string destinationPortRanges = 12;
+	Protocol protocol = 13;
+	uint32 priority = 14;
+	bool logging = 15;
 }
 
 message NetworkSecurityGroup {
