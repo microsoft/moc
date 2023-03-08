@@ -3,12 +3,13 @@
 
 syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/cloudagent/admin";
+import "google/protobuf/wrappers.proto";
 package moc.cloudagent.admin;
 
 
 service LogAgent {
 	rpc Get(LogRequest) returns (stream LogFileResponse) {}
-	rpc Set(SetRequest) returns (stream SetResponse) {};
+	rpc Set(SetRequest) returns (SetResponse) {};
 }
 
 enum GetLogType {
@@ -30,11 +31,12 @@ message LogFileResponse {
 }
 
 message SetResponse {
-	bool                        done     = 1;	
-	string 						error    = 2;
+	bool                        Done     = 1;	
+	string 						Error    = 2;
 }
 
 message SetRequest {
-	uint32 settracelevel = 1;
-	string location      = 2;
+	string  verbositylevel         = 1;
+	uint32  leveltype              = 2;
+	string  location               = 3;
 }
