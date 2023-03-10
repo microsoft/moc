@@ -7,7 +7,6 @@ import (
 	"os"
 	"strings"
 
-	wmi "github.com/microsoft/wmi/pkg/errors"
 	perrors "github.com/pkg/errors"
 	"google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -18,6 +17,7 @@ var (
 	Degraded             error = errors.New("Degraded")
 	InvalidConfiguration error = errors.New("Invalid Configuration")
 	InvalidInput         error = errors.New("Invalid Input")
+	InvalidType          error = errors.New("Invalid Type")
 	NotSupported         error = errors.New("Not Supported")
 	AlreadyExists        error = errors.New("Already Exists")
 	InUse                error = errors.New("In Use")
@@ -43,7 +43,7 @@ var (
 	NoActionTaken        error = errors.New("No Action Taken")
 	Expired              error = errors.New("Expired")
 	Revoked              error = errors.New("Revoked")
-	Timeout              error = errors.New("The operation has timed out")
+	Timeout              error = errors.New("Timedout")
 	RunCommandFailed     error = errors.New("Run Command Failed")
 	InvalidToken         error = errors.New("InvalidToken")
 	Unknown              error = errors.New("Unknown Reason")
@@ -52,28 +52,30 @@ var (
 )
 
 func GetErrorCode(err error) string {
-	if IsNotFound(err) || wmi.IsNotFound(err) {
+	if IsNotFound(err) {
 		return "NotFound"
 	} else if IsDegraded(err) {
 		return "Degraded"
 	} else if IsInvalidConfiguration(err) {
 		return "InvalidConfiguration"
-	} else if IsInvalidInput(err) || wmi.IsInvalidInput(err) {
+	} else if IsInvalidInput(err) {
 		return "InvalidInput"
-	} else if IsNotSupported(err) || wmi.IsNotSupported(err) {
+	} else if IsNotSupported(err) {
 		return "NotSupported"
-	} else if IsAlreadyExists(err) || wmi.IsAlreadyExists(err) {
+	} else if IsAlreadyExists(err) {
 		return "AlreadyExists"
 	} else if IsInUse(err) {
 		return "InUse"
 	} else if IsDuplicates(err) {
 		return "Duplicates"
-	} else if IsInvalidFilter(err) || wmi.IsInvalidFilter(err) {
+	} else if IsInvalidFilter(err) {
 		return "InvalidFilter"
-	} else if IsFailed(err) || wmi.IsFailed(err) {
+	} else if IsFailed(err) {
 		return "Failed"
 	} else if IsInvalidGroup(err) {
 		return "InvalidGroup"
+	} else if IsInvalidType(err) {
+		return "InvalidType"
 	} else if IsInvalidVersion(err) {
 		return "InvalidVersion"
 	} else if IsOldVersion(err) {
@@ -88,7 +90,7 @@ func GetErrorCode(err error) string {
 		return "UpdateFailed"
 	} else if IsNotInitialized(err) {
 		return "NotInitialized"
-	} else if IsNotImplemented(err) || wmi.IsNotImplemented(err) {
+	} else if IsNotImplemented(err) {
 		return "NotImplemented"
 	} else if IsOutOfRange(err) {
 		return "OutOfRange"
@@ -110,25 +112,23 @@ func GetErrorCode(err error) string {
 		return "Expired"
 	} else if IsRevoked(err) {
 		return "Revoked"
-	} else if IsTimeout(err) || wmi.IsTimedout(err) {
+	} else if IsTimeout(err) {
 		return "Timeout"
 	} else if IsInvalidToken(err) {
 		return "InvalidToken"
-	} else if IsUnknown(err) || wmi.IsUnknown(err) {
+	} else if IsUnknown(err) {
 		return "Unknown"
 	} else if IsDeleteFailed(err) {
 		return "Delete Failed"
 	} else if IsDeletePending(err) {
 		return "Delete Pending"
-	} else if wmi.IsInvalidType(err) {
-		return "Invalid Type"
-	} else if wmi.IsWMIError(err) {
-		return err.Error()
 	} else if IsRunCommandFailed(err) {
 		return "RunCommandFailed"
 	}
 
-	return "GenericError"
+	// We dont know the type of error.
+	// Returning the base error string
+	return err.Error()
 }
 
 func Wrap(cause error, message string) error {
@@ -216,6 +216,9 @@ func IsAlreadyExists(err error) bool {
 }
 func IsInvalidGroup(err error) bool {
 	return checkError(err, InvalidGroup)
+}
+func IsInvalidType(err error) bool {
+	return checkError(err, InvalidType)
 }
 func IsNotInitialized(err error) bool {
 	return checkError(err, NotInitialized)
