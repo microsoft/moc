@@ -18,6 +18,11 @@ enum GetLogType {
      Node  = 2;
 }
 
+enum SetLevelType {
+	 CloudAgent = 0;
+     NodeAndCloudAgent  = 1;
+}
+
 message LogRequest {
 	GetLogType type = 1;
 	string     location = 2;
@@ -31,12 +36,11 @@ message LogFileResponse {
 }
 
 message SetResponse {
-	bool                        Done     = 1;	
-	string 						Error    = 2;
+	string 						error    = 1;
 }
 
 message SetRequest {
 	string  verbositylevel         = 1;
-	uint32  leveltype              = 2;
+	SetLevelType  leveltype        = 2;
 	string  location               = 3;
 }
