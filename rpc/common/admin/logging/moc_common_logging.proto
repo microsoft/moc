@@ -40,8 +40,7 @@ service LogAgent {
 }
 
 message SetResponse {
-	bool   						Done     = 1;	
-	string 						Error    = 2;
+	string 						error    = 1;
 }
 
 message SetRequest {
