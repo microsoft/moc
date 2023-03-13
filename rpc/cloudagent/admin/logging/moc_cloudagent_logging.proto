@@ -6,7 +6,6 @@ option go_package = "github.com/microsoft/moc/rpc/cloudagent/admin";
 import "google/protobuf/wrappers.proto";
 package moc.cloudagent.admin;
 
-
 service LogAgent {
 	rpc Get(LogRequest) returns (stream LogFileResponse) {}
 	rpc Set(SetRequest) returns (SetResponse) {};
@@ -16,11 +15,6 @@ enum GetLogType {
      All   = 0;
      Cloud = 1;
      Node  = 2;
-}
-
-enum SetLevelType {
-	 CloudAgent = 0;
-     NodeAndCloudAgent  = 1;
 }
 
 message LogRequest {
@@ -41,6 +35,6 @@ message SetResponse {
 
 message SetRequest {
 	string  verbositylevel         = 1;
-	SetLevelType  leveltype        = 2;
+	bool    levelall              = 2;
 	string  location               = 3;
 }
