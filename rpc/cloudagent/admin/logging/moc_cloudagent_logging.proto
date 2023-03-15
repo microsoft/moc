@@ -17,6 +17,14 @@ enum GetLogType {
      Node  = 2;
 }
 
+enum VerbosityLevels {
+	 Verbose = 0;
+	 Debug   = 1;
+	 Info    = 2;
+	 Warn    = 3;
+	 Error   = 4;
+}
+
 message LogRequest {
 	GetLogType type = 1;
 	string     location = 2;
@@ -35,6 +43,6 @@ message SetResponse {
 
 message SetRequest {
 	string  verbositylevel         = 1;
-	bool    levelall              = 2;
+	bool    include_nodeagents     = 2;
 	string  location               = 3;
 }
