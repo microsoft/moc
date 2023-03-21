@@ -10,11 +10,12 @@ import "moc_common_common.proto";
 import "moc_common_security.proto";
 
 enum GeneralAccessOperation {
-	Read = 0;
-	Write = 1;
-	Delete = 2;
-	All = 3;
-	ProviderAction = 4; 
+	Unspecified = 0; 
+	Read = 1;
+	Write = 2;
+	Delete = 3;
+	All = 4;
+	ProviderAction = 5; 
 }
 
 enum AccessOperation {
@@ -36,11 +37,11 @@ message RoleResponse {
 }
 
 message Action {
-	AccessOperation OBSOLETE_Operation = 1 [deprecated=true];
+	AccessOperation operation = 1 [deprecated=true];
 	// ProviderType the rule works on
 	ProviderType providerType = 2;
 	// General access permissions
-	GeneralAccessOperation operation = 3;
+	GeneralAccessOperation newOperation = 3;
 	// Provider specific access permissions
 	ProviderAccessOperation providerOperation = 4; 
 }
