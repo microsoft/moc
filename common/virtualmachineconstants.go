@@ -15,6 +15,13 @@ const (
 	GpuAssignTypeGpuPv GpuAssignType = 2
 )
 
+//GPU Type names for Moc
+const (
+	NvidiaT4Name  = "NVIDIA Tesla T4"
+	NvidiaA2Name  = "NVIDIA A2"
+	NvidiaM60Name = "NVIDIA Tesla M60"
+)
+
 type VmSize struct {
 	CpuCount      int
 	GpuCount      int
@@ -105,28 +112,28 @@ var VirtualMachineSize_value = map[pb.VirtualMachineSizeType]VmSize{
 	pb.VirtualMachineSizeType_Standard_NK6: {
 		CpuCount:      6,
 		GpuCount:      1,
-		GpuName:       "NVIDIA Tesla T4",
+		GpuName:       NvidiaT4Name,
 		MemoryMB:      12288,
 		GpuAssignMode: GpuAssignTypeDDA,
 	},
 	pb.VirtualMachineSizeType_Standard_NK12: {
 		CpuCount:      12,
 		GpuCount:      2,
-		GpuName:       "NVIDIA Tesla T4",
+		GpuName:       NvidiaT4Name,
 		MemoryMB:      24576,
 		GpuAssignMode: GpuAssignTypeDDA,
 	},
 	pb.VirtualMachineSizeType_Standard_NV6: {
 		CpuCount:      6,
 		GpuCount:      1,
-		GpuName:       "NVIDIA Tesla M60",
+		GpuName:       NvidiaM60Name,
 		MemoryMB:      57344,
 		GpuAssignMode: GpuAssignTypeDDA,
 	},
 	pb.VirtualMachineSizeType_Standard_NV12: {
 		CpuCount:      12,
 		GpuCount:      2,
-		GpuName:       "NVIDIA Tesla M60",
+		GpuName:       NvidiaM60Name,
 		MemoryMB:      131072,
 		GpuAssignMode: GpuAssignTypeDDA,
 	},
