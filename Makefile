@@ -15,8 +15,8 @@ PKG :=
 
 all: format test unittest
 
-.PHONY: vendor
-vendor:
+.PHONY: tidy
+tidy:
 	go mod tidy
 
 format:
@@ -42,3 +42,18 @@ generate: bootstrap
 
 pipeline: bootstrap
 	(./gen.sh -c)
+
+
+MOCKGEN=$(shell command -v mockgen 2> /dev/null)
+## Install mockgen golang bin
+install-mockgen:
+ifeq ($(MOCKGEN),)
+        go install github.com/golang/mock/mockgen@v1.6.0
+endif
+	MOCKGEN=$(shell command -v mockgen 2> /dev/null)
+
+mocks:
+	go mod download github.com/golang/mock
+	go get github.com/golang/mock@v1.1.1
+	go generate ./...
+
