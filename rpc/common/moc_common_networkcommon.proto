@@ -17,7 +17,7 @@ enum Protocol {
 	Tcp = 1;
 	Udp = 2;
 	Icmpv4 = 3;
-	Icmpv4 = 4;
+	Icmpv6 = 4;
 }
 
 enum IPAllocationMethod {
