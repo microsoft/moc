@@ -4,6 +4,7 @@ GOCMD=GO111MODULE=on GOARCH=amd64 go
 GOBUILD=$(GOCMD) build -v #-mod=vendor
 GOTEST=$(GOCMD) test -v 
 GOHOSTOS=$(strip $(shell $(GOCMD) env get GOHOSTOS))
+MOCKGEN=$(shell command -v mockgen 2> /dev/null)
 
 # Private repo workaround
 export GOPRIVATE = github.com/microsoft
@@ -43,11 +44,10 @@ pipeline: bootstrap
 	(./gen.sh -c)
 
 
-MOCKGEN=$(shell command -v mockgen 2> /dev/null)
 ## Install mockgen golang bin
 install-mockgen:
 ifeq ($(MOCKGEN),)
-        go install github.com/golang/mock/mockgen@v1.6.0
+	go install github.com/golang/mock/mockgen@v1.6.0
 endif
 	MOCKGEN=$(shell command -v mockgen 2> /dev/null)
 
