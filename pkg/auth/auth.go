@@ -3,6 +3,7 @@
 
 package auth
 
+//go:generate mockgen -destination mock/auth_mock.go github.com/microsoft/moc/pkg/auth Authorizer
 import (
 	context "context"
 	"crypto/tls"

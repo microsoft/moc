@@ -46,6 +46,8 @@ func Test_RedactedMessage(t *testing.T) {
 			Name:          "testIdentity",
 			Id:            "123",
 			ResourceGroup: "testGroup",
+			Password:      "** Redacted **",
+			Token:         "** Redacted **",
 			LocationName:  "testLocation",
 			TokenExpiry:   30,
 			ClientType:    common.ClientType_ADMIN,

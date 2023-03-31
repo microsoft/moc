@@ -2,6 +2,8 @@
 // Licensed under the Apache v2.0 license.
 package certs
 
+//go:generate mockgen -destination mock/mock_certificateAuthority.go github.com/microsoft/moc/pkg/certs Revocation
+
 import (
 	"bytes"
 	"crypto/rand"
