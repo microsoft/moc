@@ -30,12 +30,7 @@ bootstrap:
 test: unittest
 
 unittest:
-	$(GOTEST) ./pkg/marshal
-	$(GOTEST) ./pkg/config
-	$(GOTEST) ./pkg/tags
-	$(GOTEST) ./pkg/net
-	$(GOTEST) ./pkg/certs
-	$(GOTEST) ./pkg/auth
+	$(GOTEST) ./...
 
 generate: bootstrap
 	(./gen.sh)
