@@ -16,6 +16,9 @@ import (
 	"time"
 
 	"github.com/microsoft/moc/pkg/errors"
+
+	gomock "github.com/golang/mock/gomock"
+	mock "github.com/microsoft/moc/pkg/certs/mock"
 )
 
 func createTestCertificate(before, after time.Time) (string, error) {
@@ -874,4 +877,14 @@ func Test_CalculateCertExpiry1(t *testing.T) {
 	if !expired {
 		t.Errorf("Certificate not expired")
 	}
+}
+
+func Test_Revocation_IsRevoked(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	ca, _, _ := GenerateClientCertificate("test CA")
+	m := mock.NewMockRevocation(ctrl)
+	m.EXPECT().IsRevoked(ca)
+	m.IsRevoked(ca)
 }

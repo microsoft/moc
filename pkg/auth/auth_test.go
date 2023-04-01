@@ -15,6 +15,9 @@ import (
 
 	"github.com/microsoft/moc/pkg/certs"
 	"github.com/microsoft/moc/pkg/errors"
+
+	gomock "github.com/golang/mock/gomock"
+	mock "github.com/microsoft/moc/pkg/auth/mock"
 )
 
 var key *rsa.PrivateKey
@@ -319,4 +322,13 @@ func Test_CertCheckEmpty(t *testing.T) {
 	if err := certCheck([]byte{}); err == nil || !errors.IsInvalidInput(err) {
 		t.Errorf("certCheck Expected:InvalidInput Actual:%v", err)
 	}
+}
+
+func Test_Authorizer_WithRPCAuthorization(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	m := mock.NewMockAuthorizer(ctrl)
+	m.EXPECT().WithRPCAuthorization()
+	m.WithRPCAuthorization()
 }
