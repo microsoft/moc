@@ -41,7 +41,7 @@ message Action {
 	// ProviderType the rule works on
 	ProviderType providerType = 2;
 	// General access permissions
-	GeneralAccessOperation newOperation = 3;
+	GeneralAccessOperation generalOperation = 3;
 	// Provider specific access permissions
 	ProviderAccessOperation providerOperation = 4; 
 }
