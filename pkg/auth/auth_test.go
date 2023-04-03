@@ -341,7 +341,7 @@ func Test_TLSInvalidCertificate(t *testing.T) {
 	assert.NoErrorf(t, err, "Failed to create TLS Credentials", err)
 	fmt.Println("Invalid certificate")
 	_, err = makeTlsCall(t, address, provider.GetTransportCredentials())
-	assert.True(t, strings.Contains(err.Error(), "tls: failed to verify certificate: x509: certificate signed by unknown authority"))
+	assert.True(t, strings.Contains(err.Error(), "certificate signed by unknown authority"), err.Error())
 }
 
 func Test_TLSServer(t *testing.T) {
