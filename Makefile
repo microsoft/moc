@@ -30,7 +30,7 @@ bootstrap:
 test: unittest
 
 unittest:
-	$(GOTEST) ./...
+	$(GOTEST) ./pkg/...
 
 generate: bootstrap
 	(./gen.sh)

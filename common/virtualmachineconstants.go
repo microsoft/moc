@@ -15,6 +15,13 @@ const (
 	GpuAssignTypeGpuPv GpuAssignType = 2
 )
 
+//GPU Type names for Moc
+const (
+	NvidiaT4Name  = "NVIDIA Tesla T4"
+	NvidiaA2Name  = "NVIDIA A2"
+	NvidiaM60Name = "NVIDIA Tesla M60"
+)
+
 type VmSize struct {
 	CpuCount      int
 	GpuCount      int
@@ -102,31 +109,60 @@ var VirtualMachineSize_value = map[pb.VirtualMachineSizeType]VmSize{
 		MemoryMB: 1024,
 	},
 	// Sizes with GPUs
+	pb.VirtualMachineSizeType_Standard_NC4_A2: {
+		CpuCount:      4,
+		GpuCount:      1,
+		GpuName:       NvidiaA2Name,
+		MemoryMB:      8192,
+		GpuAssignMode: GpuAssignTypeDDA,
+	},
+	pb.VirtualMachineSizeType_Standard_NC8_A2: {
+		CpuCount:      8,
+		GpuCount:      1,
+		GpuName:       NvidiaA2Name,
+		MemoryMB:      16384,
+		GpuAssignMode: GpuAssignTypeDDA,
+	},
+	pb.VirtualMachineSizeType_Standard_NC16_A2: {
+		CpuCount:      16,
+		GpuCount:      2,
+		GpuName:       NvidiaA2Name,
+		MemoryMB:      65536,
+		GpuAssignMode: GpuAssignTypeDDA,
+	},
+	pb.VirtualMachineSizeType_Standard_NC32_A2: {
+		CpuCount:      32,
+		GpuCount:      2,
+		GpuName:       NvidiaA2Name,
+		MemoryMB:      131072,
+		GpuAssignMode: GpuAssignTypeDDA,
+	},
+
 	pb.VirtualMachineSizeType_Standard_NK6: {
 		CpuCount:      6,
 		GpuCount:      1,
-		GpuName:       "NVIDIA Tesla T4",
+		GpuName:       NvidiaT4Name,
 		MemoryMB:      12288,
 		GpuAssignMode: GpuAssignTypeDDA,
 	},
 	pb.VirtualMachineSizeType_Standard_NK12: {
 		CpuCount:      12,
 		GpuCount:      2,
-		GpuName:       "NVIDIA Tesla T4",
+		GpuName:       NvidiaT4Name,
 		MemoryMB:      24576,
 		GpuAssignMode: GpuAssignTypeDDA,
 	},
 	pb.VirtualMachineSizeType_Standard_NV6: {
 		CpuCount:      6,
 		GpuCount:      1,
-		GpuName:       "NVIDIA Tesla M60",
+		GpuName:       NvidiaM60Name,
 		MemoryMB:      57344,
 		GpuAssignMode: GpuAssignTypeDDA,
 	},
 	pb.VirtualMachineSizeType_Standard_NV12: {
 		CpuCount:      12,
 		GpuCount:      2,
-		GpuName:       "NVIDIA Tesla M60",
+		GpuName:       NvidiaM60Name,
 		MemoryMB:      131072,
 		GpuAssignMode: GpuAssignTypeDDA,
 	},

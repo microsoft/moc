@@ -162,11 +162,10 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 	renewed = true
 
 	newWssdConfig := &WssdConfig{
-		CloudCertificate:      wssdConfig.CloudCertificate,
-		ClientCertificate:     marshal.ToBase64(response.Certificates[0].Certificate),
-		ClientKey:             marshal.ToBase64(string(newKey)),
-		ClientCertificateType: wssdConfig.ClientCertificateType,
-		IdentityName:          wssdConfig.IdentityName,
+		CloudCertificate:  wssdConfig.CloudCertificate,
+		ClientCertificate: marshal.ToBase64(response.Certificates[0].Certificate),
+		ClientKey:         marshal.ToBase64(string(newKey)),
+		IdentityName:      wssdConfig.IdentityName,
 	}
 	return newWssdConfig, renewed, nil
 }
@@ -181,15 +180,13 @@ func RenewCertificates(server string, wssdConfigLocation string) error {
 		}
 		return err
 	}
-	if accessFile.ClientCertificateType == CASigned {
-		retAccessFile, renewed, err := renewCertificate(server, &accessFile)
-		if err != nil {
+	retAccessFile, renewed, err := renewCertificate(server, &accessFile)
+	if err != nil {
+		return err
+	}
+	if renewed {
+		if err = marshal.ToJSONFile(*retAccessFile, wssdConfigLocation); err != nil {
 			return err
-		}
-		if renewed {
-			if err = marshal.ToJSONFile(*retAccessFile, wssdConfigLocation); err != nil {
-				return err
-			}
 		}
 	}
 
