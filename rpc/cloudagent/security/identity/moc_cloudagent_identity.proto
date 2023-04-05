@@ -53,7 +53,7 @@ message Identity {
 	string cloudFqdn = 15;
 	int32 cloudPort = 16;
 	int32 cloudAuthPort = 17;
-	AuthenticationType authType = 18;
+	AuthenticationType authType = 18 [deprecated = true];;
 	bool revoked = 19;
 	bool autoRotate = 20;
 	string loginFilePath = 21;
