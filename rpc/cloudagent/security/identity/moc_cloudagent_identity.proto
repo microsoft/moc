@@ -23,13 +23,15 @@ message IdentityResponse {
 
 message IdentityOperationRequest {
 	repeated Identity Identities = 1;
-	IdentityOperation OperationType = 2;
+	IdentityOperation OBSOLETE_OperationType = 2 [deprecated=true];
+	ProviderAccessOperation OperationType = 3;
 }
 
 message IdentityCertificateRequest {
 	string IdentityName = 1;
 	repeated CertificateSigningRequest CSR = 2;
-	IdentityCertificateOperation OperationType = 3;
+	IdentityCertificateOperation OBSOLETE_OperationType = 3 [deprecated=true];
+	ProviderAccessOperation OperationType = 4;
 }
 
 message IdentityCertificateResponse {
