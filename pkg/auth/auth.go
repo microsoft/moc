@@ -11,6 +11,7 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
+	"io/ioutil"
 
 	"github.com/microsoft/moc/pkg/config"
 	"github.com/microsoft/moc/pkg/marshal"
@@ -374,6 +375,13 @@ func TransportCredentialsFromNode(tlsCert tls.Certificate, serverCertificate []b
 	}
 	return credential.GetTransportCredentials()
 
+}
+
+func SaveToken(tokenStr string) error {
+	return ioutil.WriteFile(
+		getClientTokenLocation(),
+		[]byte(tokenStr),
+		0644)
 }
 
 // PrintAccessFile stores wssdConfig in WssdConfigLocation
