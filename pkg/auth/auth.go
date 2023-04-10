@@ -8,26 +8,47 @@ import (
 	context "context"
 	"crypto/tls"
 	"crypto/x509"
-	"errors"
 	"fmt"
-	"io/fs"
+	"io/ioutil"
+	"net"
+	"os"
+	"path/filepath"
+	"strings"
 
-	"github.com/microsoft/moc/pkg/config"
+	"github.com/microsoft/moc/pkg/certs"
 	"github.com/microsoft/moc/pkg/marshal"
+	wssdnet "github.com/microsoft/moc/pkg/net"
 	"github.com/microsoft/moc/rpc/common"
 	"google.golang.org/grpc/credentials"
 )
 
 const (
-	ServerName = "ServerName"
+	ClientTokenName       = ".token"
+	ClientCertName        = "wssd.pem"
+	ClientTokenPath       = "WSSD_CLIENT_TOKEN"
+	WssdConfigPath        = "WSSD_CONFIG_PATH"
+	AccessFileDirPath     = "ACCESSFILE_DIR_PATH"
+	DefaultWSSDFolder     = ".wssd"
+	AccessFileDefaultName = "cloudconfig"
+	ServerName            = "ServerName"
+)
+
+// LoginType
+type LoginType string
+
+const (
+	// SelfSigned ...
+	SelfSigned LoginType = "Self-Signed"
+	// CASigned ...
+	CASigned LoginType = "CA-Signed"
 )
 
 type WssdConfig struct {
 	CloudCertificate      string
 	ClientCertificate     string
 	ClientKey             string
+	ClientCertificateType LoginType
 	IdentityName          string
-	ClientCertificateType LoginType //Depricated : Needs to cleaned up after removing references
 }
 
 type Authorizer interface {
@@ -61,167 +82,7 @@ type LoginConfig struct {
 	CloudPort     int32      `json:"cloudport,omitempty"`
 	CloudAuthPort int32      `json:"cloudauthport,omitempty"`
 	Location      string     `json:"location,omitempty"`
-	Type          LoginType  `json:"type,omitempty"` //Depricated : Needs to cleaned up after removing references
-}
-
-// LoginType [Depricated : Needs to cleaned up after removing references]
-type LoginType string
-
-const (
-	// SelfSigned ...
-	SelfSigned LoginType = "Self-Signed"
-	// CASigned ...
-	CASigned LoginType = "CA-Signed"
-)
-
-func LoginTypeToAuthType(authType string) common.AuthenticationType {
-	switch authType {
-	case string(SelfSigned):
-		return common.AuthenticationType_SELFSIGNED
-	case string(CASigned):
-		return common.AuthenticationType_CASIGNED
-	}
-	return common.AuthenticationType_SELFSIGNED
-}
-
-func AuthTypeToLoginType(authType common.AuthenticationType) LoginType {
-	switch authType {
-	case common.AuthenticationType_SELFSIGNED:
-		return SelfSigned
-	case common.AuthenticationType_CASIGNED:
-		return CASigned
-	}
-	return SelfSigned
-}
-
-type JwtTokenProvider struct {
-	RawData string `json:"rawdata"`
-}
-
-func (c JwtTokenProvider) GetRequestMetadata(ctx context.Context, uri ...string) (map[string]string, error) {
-	return map[string]string{
-		"authorization": c.RawData,
-	}, nil
-}
-
-func (c JwtTokenProvider) RequireTransportSecurity() bool {
-	return true
-}
-
-func NewTokenCredentialProvider(token string) JwtTokenProvider {
-	return JwtTokenProvider{token}
-}
-
-func NewEmptyTokenCredentialProvider() JwtTokenProvider {
-	return JwtTokenProvider{}
-}
-
-type TransportCredentialsProvider struct {
-	serverName            string
-	certificate           []tls.Certificate
-	rootCAPool            *x509.CertPool
-	verifyPeerCertificate func(rawCerts [][]byte, verifiedChains [][]*x509.Certificate) error
-}
-
-func NewEmptyTransportCredential() *TransportCredentialsProvider {
-	return &TransportCredentialsProvider{}
-}
-
-func NewTransportCredentialFromAuthBase64(serverName string, rootCACertsBase64 string) (*TransportCredentialsProvider, error) {
-	caCertPem, err := marshal.FromBase64(rootCACertsBase64)
-	if err != nil {
-		return nil, fmt.Errorf("could not marshal the server certificate")
-	}
-
-	return NewTransportCredentialFromAuthFromPem(serverName, caCertPem)
-}
-
-func NewTransportCredentialFromAuthFromPem(serverName string, caCertPem []byte) (*TransportCredentialsProvider, error) {
-	certPool := x509.NewCertPool()
-	// Append the client certificates from the CA
-	if ok := certPool.AppendCertsFromPEM(caCertPem); !ok {
-		return nil, fmt.Errorf("could not append the server certificate")
-	}
-	return &TransportCredentialsProvider{
-		serverName: serverName,
-		rootCAPool: certPool,
-	}, nil
-}
-
-func NewTransportCredentialFromBase64(serverName, clientCertificateBase64, clientKeyBase64 string, rootCACertsBase64 string) (*TransportCredentialsProvider, error) {
-	transportCreds, err := NewTransportCredentialFromAuthBase64(serverName, rootCACertsBase64)
-	if err != nil {
-		return nil, err
-	}
-
-	clientPem, err := marshal.FromBase64(clientCertificateBase64)
-	if err != nil {
-		return nil, err
-	}
-	keyPem, err := marshal.FromBase64(clientKeyBase64)
-	if err != nil {
-		return nil, err
-	}
-	if err = certCheck(clientPem); err != nil {
-		return nil, err
-	}
-
-	tlsCert, err := tls.X509KeyPair(clientPem, keyPem)
-	if err != nil {
-		return nil, err
-	}
-
-	transportCreds.certificate = []tls.Certificate{tlsCert}
-
-	return transportCreds, nil
-}
-
-func NewTransportCredentialFromTlsCerts(serverName string, tlsCerts []tls.Certificate, rootCACertsPem []byte) (*TransportCredentialsProvider, error) {
-	transportCreds, err := NewTransportCredentialFromAuthFromPem(serverName, rootCACertsPem)
-	if err != nil {
-		return nil, err
-	}
-	transportCreds.certificate = tlsCerts
-	return transportCreds, nil
-}
-
-func NewTransportCredentialFromAccessFileLocation(serverName, accessFileLocation string) (*TransportCredentialsProvider, error) {
-	accessFile := WssdConfig{}
-	err := marshal.FromJSONFile(accessFileLocation, &accessFile)
-	if err != nil {
-		return nil, err
-	}
-	return NewTransportCredentialFromAccessFile(serverName, accessFile)
-}
-
-func NewTransportCredentialFromAccessFile(serverName string, accessFile WssdConfig) (*TransportCredentialsProvider, error) {
-	caCertPem, tlscerts, err := AccessFileToTls(accessFile)
-	if err != nil {
-		return nil, err
-	}
-	return NewTransportCredentialFromTlsCerts(serverName, []tls.Certificate{tlscerts}, caCertPem)
-}
-
-func (transportCredentials *TransportCredentialsProvider) GetTransportCredentials() credentials.TransportCredentials {
-	creds := &tls.Config{
-		ServerName: transportCredentials.serverName,
-	}
-	if len(transportCredentials.certificate) > 0 {
-		creds.Certificates = transportCredentials.certificate
-	}
-	if transportCredentials.rootCAPool != nil {
-		creds.RootCAs = transportCredentials.rootCAPool
-	}
-	if transportCredentials.verifyPeerCertificate != nil {
-		creds.VerifyPeerCertificate = transportCredentials.verifyPeerCertificate
-	}
-	return credentials.NewTLS(creds)
-}
-
-// BearerAuthorizer implements the bearer authorization
-type BearerAuthorizer struct {
-	tokenProvider        JwtTokenProvider
-	transportCredentials credentials.TransportCredentials
+	Type          LoginType  `json:"type,omitempty"`
 }
 
 func (ba *BearerAuthorizer) WithRPCAuthorization() credentials.PerRPCCredentials {
@@ -232,11 +93,14 @@ func (ba *BearerAuthorizer) WithTransportAuthorization() credentials.TransportCr
 	return ba.transportCredentials
 }
 
-func NewEmptyBearerAuthorizer() *BearerAuthorizer {
-	return &BearerAuthorizer{
-		tokenProvider:        NewEmptyTokenCredentialProvider(),
-		transportCredentials: NewEmptyBearerAuthorizer().transportCredentials,
-	}
+type JwtTokenProvider struct {
+	RawData string `json:"rawdata"`
+}
+
+// BearerAuthorizer implements the bearer authorization
+type BearerAuthorizer struct {
+	tokenProvider        JwtTokenProvider
+	transportCredentials credentials.TransportCredentials
 }
 
 // NewBearerAuthorizer crates a BearerAuthorizer using the given token provider
@@ -253,8 +117,11 @@ type EnvironmentSettings struct {
 }
 
 func NewAuthorizerFromEnvironment(serverName string) (Authorizer, error) {
-	settings := GetSettingsFromEnvironment(serverName)
-	err := RenewCertificates(settings.GetManagedIdentityConfig().ServerName, settings.GetManagedIdentityConfig().WssdConfigPath)
+	settings, err := GetSettingsFromEnvironment(serverName)
+	if err != nil {
+		return nil, err
+	}
+	err = RenewCertificates(settings.GetManagedIdentityConfig().ServerName, settings.GetManagedIdentityConfig().WssdConfigPath)
 	if err != nil {
 		return nil, err
 	}
@@ -275,19 +142,31 @@ func NewAuthorizerFromEnvironmentByName(serverName, subfolder, filename string) 
 
 func NewAuthorizerFromInput(tlsCert tls.Certificate, serverCertificate []byte, server string) (Authorizer, error) {
 	transportCreds := TransportCredentialsFromNode(tlsCert, serverCertificate, server)
-	return NewBearerAuthorizer(NewEmptyTokenCredentialProvider(), transportCreds), nil
+	return NewBearerAuthorizer(JwtTokenProvider{}, transportCreds), nil
 }
 
 func NewAuthorizerForAuth(tokenString string, certificate string, server string) (Authorizer, error) {
-	credentials, err := NewTransportCredentialFromAuthBase64(server, certificate)
+
+	serverPem, err := marshal.FromBase64(certificate)
 	if err != nil {
-		return NewEmptyBearerAuthorizer(), err
+		return NewBearerAuthorizer(JwtTokenProvider{}, credentials.NewTLS(nil)), fmt.Errorf("could not marshal the server certificate")
 	}
-	return NewBearerAuthorizer(NewTokenCredentialProvider(tokenString), credentials.GetTransportCredentials()), nil
+
+	certPool := x509.NewCertPool()
+	// Append the client certificates from the CA
+	if ok := certPool.AppendCertsFromPEM(serverPem); !ok {
+		return NewBearerAuthorizer(JwtTokenProvider{}, credentials.NewTLS(nil)), fmt.Errorf("could not append the server certificate")
+	}
+	transportCreds := credentials.NewTLS(&tls.Config{
+		ServerName: server,
+		RootCAs:    certPool,
+	})
+
+	return NewBearerAuthorizer(JwtTokenProvider{tokenString}, transportCreds), nil
 }
 
 // GetSettingsFromEnvironment Read settings from WssdConfigLocation
-func GetSettingsFromEnvironment(serverName string) (s EnvironmentSettings) {
+func GetSettingsFromEnvironment(serverName string) (s EnvironmentSettings, err error) {
 	s = EnvironmentSettings{
 		Values: map[string]string{},
 	}
@@ -306,6 +185,7 @@ func GetSettingsFromEnvironmentByName(serverName, subfolder, filename string) (s
 	}
 	s.Values[ClientTokenPath] = getClientTokenLocation()
 	s.Values[WssdConfigPath] = GetMocConfigLocationName(subfolder, filename)
+
 	s.Values[ServerName] = serverName
 
 	return
@@ -325,37 +205,47 @@ func (settings EnvironmentSettings) GetManagedIdentityConfig() ManagedIdentityCo
 
 func (mc ManagedIdentityConfig) Authorizer() (Authorizer, error) {
 
-	jwtCreds, err := TokenProviderFromFile(mc.ClientTokenPath)
-	if err != nil {
-		return nil, err
-	}
+	jwtCreds := TokenProviderFromFile(mc.ClientTokenPath)
 	transportCreds := TransportCredentialsFromFile(mc.WssdConfigPath, mc.ServerName)
 
 	return NewBearerAuthorizer(jwtCreds, transportCreds), nil
 }
 
-func TokenProviderFromFile(tokenLocation string) (JwtTokenProvider, error) {
-	if tokenLocation == "" {
-		return NewEmptyTokenCredentialProvider(), nil
-	}
-	loginconfig := LoginConfig{}
-	err := config.LoadYAMLFile(tokenLocation, &loginconfig)
+func TokenProviderFromFile(tokenLocation string) JwtTokenProvider {
+	data, err := ioutil.ReadFile(tokenLocation)
 	if err != nil {
-		// if File does not exist we return no error. This to prevent any breaking changes
-		if errors.Is(err, fs.ErrNotExist) {
-			err = nil
-		}
-		return NewEmptyTokenCredentialProvider(), err
+		// Call to open the token file most likely failed do to
+		// token not being set. This is expected when the an identity is not yet
+		// set. Log and continue
+		return JwtTokenProvider{}
 	}
-	return NewTokenCredentialProvider(loginconfig.Token), nil
+
+	return JwtTokenProvider{string(data)}
 }
 
 func TransportCredentialsFromFile(wssdConfigLocation string, server string) credentials.TransportCredentials {
-	credentials, err := NewTransportCredentialFromAccessFileLocation(server, wssdConfigLocation)
-	if err != nil {
-		return NewEmptyTransportCredential().GetTransportCredentials()
+	clientCerts := []tls.Certificate{}
+	certPool := x509.NewCertPool()
+
+	serverPem, tlsCert, err := ReadAccessFileToTls(wssdConfigLocation)
+	if err == nil {
+		clientCerts = append(clientCerts, tlsCert)
+		// Append the client certificates from the CA
+		if ok := certPool.AppendCertsFromPEM(serverPem); !ok {
+			return credentials.NewTLS(&tls.Config{})
+		}
 	}
-	return credentials.GetTransportCredentials()
+	verifyPeerCertificate := func(rawCerts [][]byte, verifiedChains [][]*x509.Certificate) error {
+		// This is the for extra verification
+		return nil
+	}
+
+	return credentials.NewTLS(&tls.Config{
+		ServerName:            server,
+		Certificates:          clientCerts,
+		RootCAs:               certPool,
+		VerifyPeerCertificate: verifyPeerCertificate,
+	})
 }
 
 func ReadAccessFileToTls(accessFileLocation string) ([]byte, tls.Certificate, error) {
@@ -368,12 +258,250 @@ func ReadAccessFileToTls(accessFileLocation string) ([]byte, tls.Certificate, er
 }
 func TransportCredentialsFromNode(tlsCert tls.Certificate, serverCertificate []byte, server string) credentials.TransportCredentials {
 
-	credential, err := NewTransportCredentialFromTlsCerts(server, []tls.Certificate{tlsCert}, serverCertificate)
-	if err != nil {
-		return NewEmptyTransportCredential().GetTransportCredentials()
+	certPool := x509.NewCertPool()
+	// Append the client certificates from the CA
+	if ok := certPool.AppendCertsFromPEM(serverCertificate); !ok {
+		return credentials.NewTLS(&tls.Config{})
 	}
-	return credential.GetTransportCredentials()
+	verifyPeerCertificate := func(rawCerts [][]byte, verifiedChains [][]*x509.Certificate) error {
+		// This is the for extra verification
+		return nil
+	}
 
+	return credentials.NewTLS(&tls.Config{
+		ServerName:            server,
+		Certificates:          []tls.Certificate{tlsCert},
+		RootCAs:               certPool,
+		VerifyPeerCertificate: verifyPeerCertificate,
+	})
+
+}
+
+func (c JwtTokenProvider) GetRequestMetadata(ctx context.Context, uri ...string) (map[string]string, error) {
+	return map[string]string{
+		"authorization": c.RawData,
+	}, nil
+}
+
+func (c JwtTokenProvider) RequireTransportSecurity() bool {
+	return true
+}
+
+func getClientTokenLocation() string {
+	clientTokenPath := os.Getenv(ClientTokenPath)
+	if clientTokenPath == "" {
+		wd, err := os.UserHomeDir()
+		if err != nil {
+			panic(err)
+		}
+
+		// Create the default token path and set the
+		// env variable
+		defaultPath := filepath.Join(wd, DefaultWSSDFolder)
+		os.MkdirAll(defaultPath, os.ModePerm)
+		clientTokenPath = filepath.Join(defaultPath, ClientTokenName)
+		os.Setenv(ClientTokenPath, clientTokenPath)
+	}
+	return clientTokenPath
+}
+
+func getExecutableName() (string, error) {
+	execPath, err := os.Executable()
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSuffix(filepath.Base(execPath), filepath.Ext(execPath)), nil
+}
+
+// GetWssdConfigLocation gets the path for access file from environment
+func GetWssdConfigLocation() string {
+	accessFileDirPath := os.Getenv(AccessFileDirPath)
+	wssdConfigPath := os.Getenv(WssdConfigPath)
+	defaultPath := accessFileDirPath
+
+	if accessFileDirPath == "" && wssdConfigPath != "" {
+		return wssdConfigPath
+	}
+
+	if accessFileDirPath == "" && wssdConfigPath == "" {
+		wd, err := os.UserHomeDir()
+		if err != nil {
+			panic(err)
+		}
+
+		// Create the default config path and set the
+		// env variable
+		defaultPath = filepath.Join(wd, DefaultWSSDFolder)
+		os.Setenv(AccessFileDirPath, defaultPath)
+	}
+
+	if execName, err := getExecutableName(); err == nil {
+		defaultPath = filepath.Join(defaultPath, execName)
+	}
+	os.MkdirAll(defaultPath, os.ModePerm)
+	accessFilePath := filepath.Join(defaultPath, AccessFileDefaultName)
+	return accessFilePath
+}
+
+// GetWssdConfigLocationName gets the path for access filename from environment + subfolder with file name fileName
+func GetMocConfigLocationName(subfolder, filename string) string {
+	wssdConfigPath := os.Getenv(WssdConfigPath)
+
+	file := AccessFileDefaultName
+	if filename != "" {
+		file = filename
+	}
+	wd, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
+	if wssdConfigPath == "" || !strings.HasSuffix(wssdConfigPath, filepath.Join(wd, subfolder, file)) {
+		// Create the default config path and set the
+		// env variable
+		defaultPath := filepath.Join(wd, DefaultWSSDFolder, subfolder)
+		os.MkdirAll(defaultPath, os.ModePerm)
+		wssdConfigPath = filepath.Join(defaultPath, file)
+		os.Setenv(WssdConfigPath, wssdConfigPath)
+	}
+	return wssdConfigPath
+}
+
+func SaveToken(tokenStr string) error {
+	return ioutil.WriteFile(
+		getClientTokenLocation(),
+		[]byte(tokenStr),
+		0644)
+}
+
+// GenerateClientKey generates key and self-signed cert if the file does not exist in WssdConfigLocation
+// If the file exists the values from the fie is returned
+func GenerateClientKey(loginconfig LoginConfig) (string, WssdConfig, error) {
+	certBytes, err := marshal.FromBase64(loginconfig.Certificate)
+	if err != nil {
+		return "", WssdConfig{}, err
+	}
+	accessFile, err := readAccessFile(GetWssdConfigLocation())
+	if err != nil {
+		x509CertClient, keyClient, err := certs.GenerateClientCertificate(loginconfig.Name)
+		if err != nil {
+			return "", WssdConfig{}, err
+		}
+
+		certBytesClient := certs.EncodeCertPEM(x509CertClient)
+		keyBytesClient := certs.EncodePrivateKeyPEM(keyClient)
+
+		accessFile = WssdConfig{
+			CloudCertificate:  "",
+			ClientCertificate: marshal.ToBase64(string(certBytesClient)),
+			ClientKey:         marshal.ToBase64(string(keyBytesClient)),
+		}
+	}
+
+	if accessFile.CloudCertificate != "" {
+		serverPem, err := marshal.FromBase64(accessFile.CloudCertificate)
+		if err != nil {
+			return "", WssdConfig{}, err
+		}
+
+		if string(certBytes) != string(serverPem) {
+			certBytes = append(certBytes, serverPem...)
+		}
+	}
+
+	accessFile.CloudCertificate = marshal.ToBase64(string(certBytes))
+	return accessFile.ClientCertificate, accessFile, nil
+}
+
+func GenerateClientCsr(loginconfig LoginConfig) (string, WssdConfig, error) {
+	certBytes, err := marshal.FromBase64(loginconfig.Certificate)
+	if err != nil {
+		return "", WssdConfig{}, err
+	}
+	accessFile, err := readAccessFile(GetWssdConfigLocation())
+	cloudAgentIpAddress, err := wssdnet.GetIPAddress()
+	if err != nil {
+		return "", WssdConfig{}, err
+	}
+
+	localHostName, err := os.Hostname()
+	if err != nil {
+		return "", WssdConfig{}, err
+	}
+
+	cloudAgentIPAddress := wssdnet.StringToNetIPAddress(cloudAgentIpAddress)
+	ipAddresses := []net.IP{wssdnet.StringToNetIPAddress(wssdnet.LOOPBACK_ADDRESS), cloudAgentIPAddress}
+	dnsNames := []string{"localhost", localHostName}
+
+	conf := &certs.Config{
+		CommonName: loginconfig.Name,
+		AltNames: certs.AltNames{
+			DNSNames: dnsNames,
+			IPs:      ipAddresses,
+		},
+	}
+	x509Csr, keyClient, err := certs.GenerateCertificateRequest(conf, nil)
+	if err != nil {
+		return "", WssdConfig{}, err
+	}
+
+	accessFile = WssdConfig{
+		CloudCertificate:  "",
+		ClientCertificate: "",
+		ClientKey:         marshal.ToBase64(string(keyClient)),
+	}
+
+	if accessFile.CloudCertificate != "" {
+		serverPem, err := marshal.FromBase64(accessFile.CloudCertificate)
+		if err != nil {
+			return "", WssdConfig{}, err
+		}
+
+		if string(certBytes) != string(serverPem) {
+			certBytes = append(certBytes, serverPem...)
+		}
+	}
+
+	accessFile.CloudCertificate = marshal.ToBase64(string(certBytes))
+	return string(x509Csr), accessFile, nil
+}
+
+// GenerateClientKeyWithName generates key and self-signed cert if the file does not exist in GetWssdConfigLocationName
+// If the file exists the values from the fie is returned
+func GenerateClientKeyWithName(loginconfig LoginConfig, subfolder, filename string) (string, WssdConfig, error) {
+	certBytes, err := marshal.FromBase64(loginconfig.Certificate)
+	if err != nil {
+		return "", WssdConfig{}, err
+	}
+	accessFile, err := readAccessFile(GetMocConfigLocationName(subfolder, filename))
+	if err != nil {
+		x509CertClient, keyClient, err := certs.GenerateClientCertificate(loginconfig.Name)
+		if err != nil {
+			return "", WssdConfig{}, err
+		}
+
+		certBytesClient := certs.EncodeCertPEM(x509CertClient)
+		keyBytesClient := certs.EncodePrivateKeyPEM(keyClient)
+
+		accessFile = WssdConfig{
+			CloudCertificate:  "",
+			ClientCertificate: marshal.ToBase64(string(certBytesClient)),
+			ClientKey:         marshal.ToBase64(string(keyBytesClient)),
+		}
+	}
+
+	if accessFile.CloudCertificate != "" {
+		serverPem, err := marshal.FromBase64(accessFile.CloudCertificate)
+		if err != nil {
+			return "", WssdConfig{}, err
+		}
+
+		if string(certBytes) != string(serverPem) {
+			certBytes = append(certBytes, serverPem...)
+		}
+	}
+
+	accessFile.CloudCertificate = marshal.ToBase64(string(certBytes))
+	return accessFile.ClientCertificate, accessFile, nil
 }
 
 // PrintAccessFile stores wssdConfig in WssdConfigLocation
@@ -384,6 +512,16 @@ func PrintAccessFile(accessFile WssdConfig) error {
 // PrintAccessFileByName stores wssdConfig in GetWssdConfigLocationName
 func PrintAccessFileByName(accessFile WssdConfig, subfolder, filename string) error {
 	return marshal.ToJSONFile(accessFile, GetMocConfigLocationName(subfolder, filename))
+}
+
+func readAccessFile(accessFileLocation string) (WssdConfig, error) {
+	accessFile := WssdConfig{}
+	err := marshal.FromJSONFile(accessFileLocation, &accessFile)
+	if err != nil {
+		return WssdConfig{}, err
+	}
+
+	return accessFile, nil
 }
 
 func AccessFileToTls(accessFile WssdConfig) ([]byte, tls.Certificate, error) {
@@ -410,4 +548,24 @@ func AccessFileToTls(accessFile WssdConfig) ([]byte, tls.Certificate, error) {
 	}
 
 	return serverPem, tlsCert, nil
+}
+
+func LoginTypeToAuthType(authType string) common.AuthenticationType {
+	switch authType {
+	case string(SelfSigned):
+		return common.AuthenticationType_SELFSIGNED
+	case string(CASigned):
+		return common.AuthenticationType_CASIGNED
+	}
+	return common.AuthenticationType_SELFSIGNED
+}
+
+func AuthTypeToLoginType(authType common.AuthenticationType) LoginType {
+	switch authType {
+	case common.AuthenticationType_SELFSIGNED:
+		return SelfSigned
+	case common.AuthenticationType_CASIGNED:
+		return CASigned
+	}
+	return SelfSigned
 }
