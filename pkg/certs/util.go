@@ -256,8 +256,6 @@ func GenerateCertificateRequest(conf *Config, privKey []byte) (csr []byte, retPr
 		IPAddresses:        conf.AltNames.IPs,
 	}
 
-	tmpl.Extensions
-
 	b, err := x509.CreateCertificateRequest(rand.Reader, &tmpl, key)
 	if err != nil {
 		return
