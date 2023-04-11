@@ -37,6 +37,7 @@ type SignConfig struct {
 	Offset     time.Duration
 	Identity   string
 	ServerAuth bool
+	IsCA       bool
 }
 
 // AltNames contains the domain names and IP addresses for a cert
@@ -254,6 +255,8 @@ func GenerateCertificateRequest(conf *Config, privKey []byte) (csr []byte, retPr
 		DNSNames:           conf.AltNames.DNSNames,
 		IPAddresses:        conf.AltNames.IPs,
 	}
+
+	tmpl.Extensions
 
 	b, err := x509.CreateCertificateRequest(rand.Reader, &tmpl, key)
 	if err != nil {

@@ -162,6 +162,10 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 		extKeyUsage = append(extKeyUsage, x509.ExtKeyUsageServerAuth)
 	}
 
+	if conf != nil && conf.IsCA {
+		keyUsage |= x509.KeyUsageCertSign
+	}
+
 	csr, err := DecodeCertRequestPEM(csrPem)
 	if err != nil {
 		return
@@ -201,6 +205,8 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 		BasicConstraintsValid: true,
 		DNSNames:              csr.DNSNames,
 		IPAddresses:           csr.IPAddresses,
+		IsCA:                  conf.IsCA,
+		MaxPathLenZero:        conf.IsCA, // Enable MaxPathLenZero only when IsCA
 	}
 
 	csrRenewCertsPEM := []byte{}
