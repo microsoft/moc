@@ -29,7 +29,7 @@ message LogicalNetwork {
 	string name = 1;
 	string id = 2;
 	repeated Subnet subnets = 3;
-    google.protobuf.BoolValue networkVirtualizationEnabled = 4;
+	google.protobuf.BoolValue networkVirtualizationEnabled = 4;
 	string nodefqdn = 5;
 	Status status = 6;
 	string locationName = 7;
