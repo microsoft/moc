@@ -44,8 +44,8 @@ message Subnet {
 	IPAllocationMethod allocation = 5;
 	uint32 vlan = 6;
 	repeated IPPool ipPools = 7;
-    repeated Dns dns = 8; // TODO: In Vnet, dns is per Vnet and not per subnet, however, NC REST resource shows dns per subnet for Lnet, hence moved it here, double check once.
-    google.protobuf.BoolValue isPublic = 9;
+	repeated Dns dns = 8; // TODO: In Vnet, dns is per Vnet and not per subnet, however, NC REST resource shows dns per subnet for Lnet, hence moved it here, double check once.
+	google.protobuf.BoolValue isPublic = 9;
 }
 
 message IPPoolInfo {
