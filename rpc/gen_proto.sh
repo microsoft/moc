@@ -145,6 +145,7 @@ protoc -I $Agent/$Module/logging -I ./common $Agent/$Module/logging/moc_cloudage
 Module="network"
 echo "Generating $Agent/$Module protoc"
 protoc -I $Agent/$Module/virtualnetwork -I ./common  $Agent/$Module/virtualnetwork/moc_cloudagent_virtualnetwork.proto --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/logicalnetwork -I ./common  $Agent/$Module/logicalnetwork/moc_cloudagent_logicalnetwork.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/loadbalancer -I ./common $Agent/$Module/loadbalancer/moc_cloudagent_loadbalancer.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/networkinterface -I ./common $Agent/$Module/networkinterface/moc_cloudagent_networkinterface.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/vippool -I ./common $Agent/$Module/vippool/moc_cloudagent_vippool.proto --go_out=plugins=grpc:../bld/gen/
