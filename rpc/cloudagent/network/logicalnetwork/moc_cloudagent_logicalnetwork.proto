@@ -9,10 +9,6 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 import "moc_common_networkcommon.proto";
 
-enum IPPoolType {
-	VM = 0;
-	VIPPool = 1;
-}
 message LogicalNetworkRequest {
 	repeated LogicalNetwork LogicalNetworks = 1;
 	Operation OperationType = 2;
@@ -25,10 +21,9 @@ message LogicalNetworkResponse {
 }
 
 message LogicalNetwork {
-	reserved 11; // TODO: Why is this reserved?
 	string name = 1;
 	string id = 2;
-	repeated Subnet subnets = 3;
+	repeated LogicalSubnet subnets = 3;
 	google.protobuf.BoolValue networkVirtualizationEnabled = 4;
 	string nodefqdn = 5;
 	Status status = 6;
@@ -36,7 +31,7 @@ message LogicalNetwork {
 	Tags tags = 8;
 }
 
-message Subnet {
+message LogicalSubnet {
 	string name = 1;
 	string id = 2;
 	string addressPrefix = 3;
@@ -44,27 +39,8 @@ message Subnet {
 	IPAllocationMethod allocation = 5;
 	uint32 vlan = 6;
 	repeated IPPool ipPools = 7;
-	repeated Dns dns = 8; // TODO: In Vnet, dns is per Vnet and not per subnet, however, NC REST resource shows dns per subnet for Lnet, hence moved it here, double check once.
+	repeated Dns dns = 8; 
 	google.protobuf.BoolValue isPublic = 9;
-}
-
-message IPPoolInfo {
-	string used = 1;
-	string available = 2;
-}
-
-message IPPool {
-	string name = 1;
-	IPPoolType type = 2;
-	string start = 3;
-	string end = 4;
-	IPPoolInfo info = 5;
-}
-
-message Route {
-	string nextHop = 1;
-	string destinationPrefix = 2;
-	uint32 metric = 3; // TODO: What is this? FabricRoute in official/rs_onecore_liof1_sdn does not have this property.
 }
 
 service LogicalNetworkAgent {
