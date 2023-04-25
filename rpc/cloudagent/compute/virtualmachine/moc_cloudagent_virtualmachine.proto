@@ -18,6 +18,7 @@ enum VMType {
 message VirtualMachineRequest {
 	repeated VirtualMachine VirtualMachines = 1;
 	Operation OperationType = 2;
+	ProviderAccessOperation providerOperation = 3; 
 }
 
 message VirtualMachineResponse {
