@@ -210,10 +210,12 @@ enum ProviderAccessOperation {
 	Key_Sign 						= 54; 
 	Key_Verify 						= 55; 
 
-	VirtualMachine_Get				= 60; 
-	VirtualMachine_Post				= 61; 
-	VirtualMachine_Delete			= 62; 
-	VirtualMachine_Validate			= 63; 
+	VirtualMachine_Create 			= 60; 
+	VirtualMachine_Update 			= 61; 
+	//VirtualMachine_Get				= 60; 
+	//VirtualMachine_Post				= 61; 
+	//VirtualMachine_Delete			= 62; 
+	//VirtualMachine_Validate			= 63; 
 	VirtualMachine_Start 			= 64;
 	VirtualMachine_Stop 			= 65;
 	VirtualMachine_Reset 			= 66;
