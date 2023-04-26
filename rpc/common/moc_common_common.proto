@@ -189,44 +189,48 @@ enum ProviderType {
 enum ProviderAccessOperation {
 	Unspecified 					= 0;
 
-	Authentication_Login 			= 10;
+	Authentication_Login 			= 100;
 
-	Certificate_CreateOrUpdate 		= 20; 
-	Certificate_Get 				= 21; 
-	Certificate_Delete 				= 22; 
-	Certificate_Sign 				= 23; 
-	Certificate_Renew 				= 24; 
+	Certificate_Create		 		= 200; 
+	Certificate_Update				= 201;
+	Certificate_Get 				= 202; 
+	Certificate_Delete 				= 203; 
+	Certificate_Sign 				= 204; 
+	Certificate_Renew 				= 205; 
 
-	Identity_Revoke 				= 30; 
-	Identity_Rotate 				= 31;  
+	Identity_Create					= 300; 
+	Identity_Update					= 301; 
+	Identity_Revoke 				= 302; 
+	Identity_Rotate 				= 303;  
 
-	IdentityCertificate_Create		= 40;
-	IdentityCertificate_Renew 		= 41;
+	IdentityCertificate_Create		= 400; 
+	IdentityCertificate_Update		= 401; 
+	IdentityCertificate_Renew 		= 402;
 
-	Key_Encrypt 					= 50; 
-	Key_Decrypt 					= 51; 
-	Key_WrapKey 					= 52; 
-	Key_UnwrapKey					= 53; 
-	Key_Sign 						= 54; 
-	Key_Verify 						= 55; 
+	Key_Encrypt 					= 500; 
+	Key_Decrypt 					= 501; 
+	Key_WrapKey 					= 502; 
+	Key_UnwrapKey					= 503; 
+	Key_Sign 						= 504; 
+	Key_Verify 						= 505; 
 
-	VirtualMachine_Create 			= 60; 
-	VirtualMachine_Update 			= 61; 
-	//VirtualMachine_Get				= 60; 
-	//VirtualMachine_Post				= 61; 
-	//VirtualMachine_Delete			= 62; 
-	//VirtualMachine_Validate			= 63; 
-	VirtualMachine_Start 			= 64;
-	VirtualMachine_Stop 			= 65;
-	VirtualMachine_Reset 			= 66;
+	VirtualMachine_Create 			= 600; 
+	VirtualMachine_Update 			= 601; 
+	VirtualMachine_Delete			= 602; 
+	VirtualMachine_Validate			= 603; 
+	VirtualMachine_Start 			= 604;
+	VirtualMachine_Stop 			= 605;
+	VirtualMachine_Reset 			= 606;
 
-	Cluster_LoadCluster 			= 70; 
-	Cluster_UnloadCluster 			= 71; 
-	Cluster_GetCluster 				= 72; 
-	Cluster_GetNodes 				= 73; 
+	Cluster_Create					= 700; 
+	Cluster_Update 					= 701; 
+	Cluster_LoadCluster 			= 702; 
+	Cluster_UnloadCluster 			= 703; 
+	Cluster_GetCluster 				= 704; 
+	Cluster_GetNodes 				= 705; 
 
-	Debug_DebugServer				= 80; 
-	Debug_StackTrace				= 81;
+	Debug_DebugServer				= 800; 
+	Debug_StackTrace				= 801;
 }
 
 extend google.protobuf.FieldOptions {
