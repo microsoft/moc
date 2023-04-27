@@ -6,11 +6,6 @@ option go_package = "github.com/microsoft/moc/rpc/common/admin";
 package moc.common.admin;
 import "google/protobuf/wrappers.proto";
 
-enum VerboseLevel {
-     Min_Level   = 0;
-     Max_Level   = 9;
-}
-
 message LogRotateRequest {
 	LogRotation logRotation = 1;
 }
@@ -41,21 +36,4 @@ message LogFileResponse {
 service LogAgent {
 	rpc Get(LogRequest) returns (stream LogFileResponse) {}
 	rpc Rotate(LogRotateRequest) returns (LogRotateResponse) {}
-	rpc Set(SetRequest) returns (SetResponse) {};
-	rpc GetLevel(GetRequest) returns (GetResponse) {}
-}
-
-message SetResponse {
-	string 						error    = 1;
-}
-
-message SetRequest {
-	int32 verbositylevel = 1;
-}
-
-message GetRequest {}
-
-message GetResponse {
-	string error =1;
-	string level =2;
 }
