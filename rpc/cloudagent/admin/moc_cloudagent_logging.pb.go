@@ -162,35 +162,210 @@ func (m *LogFileResponse) GetFilename() string {
 	return ""
 }
 
+type SetResponse struct {
+	Error                string   `protobuf:"bytes,1,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SetResponse) Reset()         { *m = SetResponse{} }
+func (m *SetResponse) String() string { return proto.CompactTextString(m) }
+func (*SetResponse) ProtoMessage()    {}
+func (*SetResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4a618ff824a32a95, []int{2}
+}
+
+func (m *SetResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SetResponse.Unmarshal(m, b)
+}
+func (m *SetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SetResponse.Marshal(b, m, deterministic)
+}
+func (m *SetResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetResponse.Merge(m, src)
+}
+func (m *SetResponse) XXX_Size() int {
+	return xxx_messageInfo_SetResponse.Size(m)
+}
+func (m *SetResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetResponse proto.InternalMessageInfo
+
+func (m *SetResponse) GetError() string {
+	if m != nil {
+		return m.Error
+	}
+	return ""
+}
+
+type SetRequest struct {
+	Verbositylevel       int32    `protobuf:"varint,1,opt,name=verbositylevel,proto3" json:"verbositylevel,omitempty"`
+	IncludeNodeagents    bool     `protobuf:"varint,2,opt,name=include_nodeagents,json=includeNodeagents,proto3" json:"include_nodeagents,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SetRequest) Reset()         { *m = SetRequest{} }
+func (m *SetRequest) String() string { return proto.CompactTextString(m) }
+func (*SetRequest) ProtoMessage()    {}
+func (*SetRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4a618ff824a32a95, []int{3}
+}
+
+func (m *SetRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SetRequest.Unmarshal(m, b)
+}
+func (m *SetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SetRequest.Marshal(b, m, deterministic)
+}
+func (m *SetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetRequest.Merge(m, src)
+}
+func (m *SetRequest) XXX_Size() int {
+	return xxx_messageInfo_SetRequest.Size(m)
+}
+func (m *SetRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetRequest proto.InternalMessageInfo
+
+func (m *SetRequest) GetVerbositylevel() int32 {
+	if m != nil {
+		return m.Verbositylevel
+	}
+	return 0
+}
+
+func (m *SetRequest) GetIncludeNodeagents() bool {
+	if m != nil {
+		return m.IncludeNodeagents
+	}
+	return false
+}
+
+type GetRequest struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetRequest) Reset()         { *m = GetRequest{} }
+func (m *GetRequest) String() string { return proto.CompactTextString(m) }
+func (*GetRequest) ProtoMessage()    {}
+func (*GetRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4a618ff824a32a95, []int{4}
+}
+
+func (m *GetRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetRequest.Unmarshal(m, b)
+}
+func (m *GetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetRequest.Marshal(b, m, deterministic)
+}
+func (m *GetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetRequest.Merge(m, src)
+}
+func (m *GetRequest) XXX_Size() int {
+	return xxx_messageInfo_GetRequest.Size(m)
+}
+func (m *GetRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetRequest proto.InternalMessageInfo
+
+type GetResponse struct {
+	Error                string   `protobuf:"bytes,1,opt,name=error,proto3" json:"error,omitempty"`
+	Level                string   `protobuf:"bytes,2,opt,name=level,proto3" json:"level,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetResponse) Reset()         { *m = GetResponse{} }
+func (m *GetResponse) String() string { return proto.CompactTextString(m) }
+func (*GetResponse) ProtoMessage()    {}
+func (*GetResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4a618ff824a32a95, []int{5}
+}
+
+func (m *GetResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetResponse.Unmarshal(m, b)
+}
+func (m *GetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetResponse.Marshal(b, m, deterministic)
+}
+func (m *GetResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetResponse.Merge(m, src)
+}
+func (m *GetResponse) XXX_Size() int {
+	return xxx_messageInfo_GetResponse.Size(m)
+}
+func (m *GetResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetResponse proto.InternalMessageInfo
+
+func (m *GetResponse) GetError() string {
+	if m != nil {
+		return m.Error
+	}
+	return ""
+}
+
+func (m *GetResponse) GetLevel() string {
+	if m != nil {
+		return m.Level
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterEnum("moc.cloudagent.admin.GetLogType", GetLogType_name, GetLogType_value)
 	proto.RegisterType((*LogRequest)(nil), "moc.cloudagent.admin.LogRequest")
 	proto.RegisterType((*LogFileResponse)(nil), "moc.cloudagent.admin.LogFileResponse")
+	proto.RegisterType((*SetResponse)(nil), "moc.cloudagent.admin.SetResponse")
+	proto.RegisterType((*SetRequest)(nil), "moc.cloudagent.admin.SetRequest")
+	proto.RegisterType((*GetRequest)(nil), "moc.cloudagent.admin.GetRequest")
+	proto.RegisterType((*GetResponse)(nil), "moc.cloudagent.admin.GetResponse")
 }
 
 func init() { proto.RegisterFile("moc_cloudagent_logging.proto", fileDescriptor_4a618ff824a32a95) }
 
 var fileDescriptor_4a618ff824a32a95 = []byte{
-	// 299 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x51, 0xcf, 0x4b, 0xfb, 0x30,
-	0x14, 0x5f, 0xb7, 0xee, 0xfb, 0xed, 0x1e, 0xa2, 0x23, 0xec, 0x50, 0x86, 0x87, 0x31, 0x10, 0xc6,
-	0xc0, 0x56, 0xa6, 0xff, 0xc0, 0x14, 0xdc, 0xa5, 0x78, 0x08, 0x9e, 0x3c, 0x6c, 0x74, 0xe9, 0x5b,
-	0x0c, 0x26, 0x79, 0xb5, 0xcd, 0x0e, 0xfb, 0xef, 0xa5, 0x29, 0x5a, 0x0f, 0xee, 0xf6, 0x3e, 0xc9,
-	0xe7, 0x47, 0x3e, 0x79, 0x70, 0x6d, 0x48, 0xec, 0x84, 0xa6, 0x63, 0x91, 0x4b, 0xb4, 0x6e, 0xa7,
-	0x49, 0x4a, 0x65, 0x65, 0x52, 0x56, 0xe4, 0x88, 0x4d, 0x0c, 0x89, 0xa4, 0xbb, 0x4d, 0xf2, 0xc2,
-	0x28, 0x3b, 0xdf, 0x02, 0x64, 0x24, 0x39, 0x7e, 0x1e, 0xb1, 0x76, 0xec, 0x01, 0x42, 0x77, 0x2a,
-	0x31, 0x0e, 0x66, 0xc1, 0xe2, 0x72, 0x35, 0x4b, 0xfe, 0x92, 0x24, 0x1b, 0x74, 0x19, 0xc9, 0xd7,
-	0x53, 0x89, 0xdc, 0xb3, 0xd9, 0x14, 0x22, 0x4d, 0x22, 0x77, 0x8a, 0x6c, 0xdc, 0x9f, 0x05, 0x8b,
-	0x11, 0xff, 0xc1, 0xf3, 0x0f, 0xb8, 0xca, 0x48, 0x3e, 0x2b, 0x8d, 0x1c, 0xeb, 0x92, 0x6c, 0x8d,
-	0x8c, 0x41, 0x78, 0x50, 0xba, 0x0d, 0xb9, 0xe0, 0x7e, 0x6e, 0xce, 0x0a, 0xb2, 0xe8, 0xe5, 0x11,
-	0xf7, 0x33, 0x9b, 0xc0, 0x10, 0xab, 0x8a, 0xaa, 0x78, 0xe0, 0x3d, 0x5b, 0xd0, 0x84, 0x35, 0x0a,
-	0x9b, 0x1b, 0x8c, 0xc3, 0x36, 0xec, 0x1b, 0x2f, 0x97, 0x00, 0xdd, 0xe3, 0xd8, 0x7f, 0x18, 0xac,
-	0xb5, 0x1e, 0xf7, 0xd8, 0x08, 0x86, 0x4f, 0x4d, 0x89, 0x71, 0xc0, 0x22, 0x08, 0x5f, 0xa8, 0xc0,
-	0x71, 0x7f, 0xb5, 0x85, 0x28, 0x23, 0xb9, 0x6e, 0x7a, 0x31, 0x0e, 0x83, 0x0d, 0x3a, 0x76, 0xa6,
-	0x6f, 0xf7, 0x3f, 0xd3, 0x9b, 0xb3, 0x8c, 0xdf, 0x0d, 0xe7, 0xbd, 0xbb, 0xe0, 0x31, 0x7d, 0xbb,
-	0x95, 0xca, 0xbd, 0x1f, 0xf7, 0x89, 0x20, 0x93, 0x1a, 0x25, 0x2a, 0xaa, 0xe9, 0xe0, 0x52, 0x43,
-	0x22, 0xad, 0x4a, 0x91, 0x76, 0x26, 0xa9, 0x37, 0xd9, 0xff, 0xf3, 0x6b, 0xba, 0xff, 0x0a, 0x00,
-	0x00, 0xff, 0xff, 0xe0, 0x93, 0x8d, 0xf3, 0xc6, 0x01, 0x00, 0x00,
+	// 413 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x53, 0xcf, 0x6f, 0xd3, 0x30,
+	0x14, 0x5e, 0xd6, 0x16, 0xb2, 0xb7, 0x69, 0x14, 0x6b, 0x87, 0xaa, 0xe2, 0x50, 0x82, 0x40, 0xd3,
+	0xa4, 0x25, 0x68, 0x70, 0xe1, 0x38, 0x90, 0xc8, 0x25, 0x42, 0xc2, 0xe3, 0xc4, 0x81, 0x2a, 0x75,
+	0xde, 0x8c, 0x85, 0xe3, 0x17, 0x12, 0x67, 0x52, 0xff, 0x7a, 0x90, 0x9d, 0x2e, 0xa9, 0x10, 0xd9,
+	0x6e, 0x7e, 0x7e, 0xdf, 0x8f, 0xe7, 0xef, 0x25, 0xf0, 0xa2, 0x24, 0xb1, 0x16, 0x9a, 0xda, 0x22,
+	0x97, 0x68, 0xec, 0x5a, 0x93, 0x94, 0xca, 0xc8, 0xb8, 0xaa, 0xc9, 0x12, 0x3b, 0x2b, 0x49, 0xc4,
+	0x43, 0x37, 0xce, 0x8b, 0x52, 0x99, 0xe8, 0x07, 0x40, 0x46, 0x92, 0xe3, 0xef, 0x16, 0x1b, 0xcb,
+	0xde, 0xc3, 0xd4, 0x6e, 0x2b, 0x5c, 0x04, 0xab, 0xe0, 0xfc, 0xf4, 0x6a, 0x15, 0xff, 0x8f, 0x12,
+	0xa7, 0x68, 0x33, 0x92, 0xdf, 0xb6, 0x15, 0x72, 0x8f, 0x66, 0x4b, 0x08, 0x35, 0x89, 0xdc, 0x2a,
+	0x32, 0x8b, 0xc3, 0x55, 0x70, 0x7e, 0xc4, 0xfb, 0x3a, 0xfa, 0x05, 0xcf, 0x32, 0x92, 0x9f, 0x95,
+	0x46, 0x8e, 0x4d, 0x45, 0xa6, 0x41, 0xc6, 0x60, 0x7a, 0xab, 0x74, 0x67, 0x72, 0xc2, 0xfd, 0xd9,
+	0xdd, 0x15, 0x64, 0xd0, 0xd3, 0x43, 0xee, 0xcf, 0xec, 0x0c, 0x66, 0x58, 0xd7, 0x54, 0x2f, 0x26,
+	0x5e, 0xb3, 0x2b, 0x9c, 0x99, 0x63, 0x98, 0xbc, 0xc4, 0xc5, 0xb4, 0x33, 0xbb, 0xaf, 0xa3, 0x57,
+	0x70, 0x7c, 0x83, 0xb6, 0x37, 0xea, 0x05, 0x82, 0x3d, 0x81, 0x48, 0x00, 0x78, 0x50, 0xf7, 0xe2,
+	0x37, 0x70, 0x7a, 0x87, 0xf5, 0x86, 0x1a, 0x65, 0xb7, 0x1a, 0xef, 0x50, 0x7b, 0xf0, 0x8c, 0xff,
+	0x73, 0xcb, 0x2e, 0x81, 0x29, 0x23, 0x74, 0x5b, 0xe0, 0xda, 0x50, 0x81, 0x3e, 0x8f, 0x66, 0x37,
+	0xee, 0xf3, 0x5d, 0xe7, 0x4b, 0xdf, 0x88, 0x4e, 0x00, 0xd2, 0xde, 0x24, 0xfa, 0x00, 0xc7, 0xe9,
+	0x63, 0x73, 0xb9, 0xdb, 0x6e, 0x80, 0x2e, 0xc2, 0xae, 0xb8, 0xb8, 0xf0, 0x42, 0xbb, 0xbc, 0xd9,
+	0x53, 0x98, 0x5c, 0x6b, 0x3d, 0x3f, 0x60, 0x47, 0x30, 0xfb, 0xe4, 0xf6, 0x32, 0x0f, 0x58, 0x08,
+	0x53, 0x67, 0x3c, 0x3f, 0xbc, 0xfa, 0x13, 0x40, 0x98, 0x91, 0xbc, 0x76, 0x23, 0x30, 0x0e, 0x93,
+	0x14, 0x2d, 0x1b, 0xd9, 0xe1, 0xb0, 0xf3, 0xe5, 0xeb, 0x51, 0xc4, 0xfe, 0xd6, 0xa2, 0x83, 0xb7,
+	0x01, 0xcb, 0x60, 0x72, 0x33, 0xae, 0x39, 0xa4, 0xba, 0x7c, 0xf9, 0x00, 0xe2, 0x5e, 0x8f, 0x7d,
+	0x85, 0xd0, 0x3d, 0xcd, 0xc7, 0x3b, 0xfe, 0xa9, 0x3d, 0x22, 0x99, 0xee, 0x4b, 0x7e, 0x4c, 0xbe,
+	0x5f, 0x4a, 0x65, 0x7f, 0xb6, 0x9b, 0x58, 0x50, 0x99, 0x94, 0x4a, 0xd4, 0xd4, 0xd0, 0xad, 0x4d,
+	0x4a, 0x12, 0x49, 0x5d, 0x89, 0x64, 0xa0, 0x27, 0x9e, 0xbe, 0x79, 0xe2, 0xff, 0x8d, 0x77, 0x7f,
+	0x03, 0x00, 0x00, 0xff, 0xff, 0x08, 0x4b, 0xe4, 0x4b, 0x3b, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -206,6 +381,8 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type LogAgentClient interface {
 	Get(ctx context.Context, in *LogRequest, opts ...grpc.CallOption) (LogAgent_GetClient, error)
+	Set(ctx context.Context, in *SetRequest, opts ...grpc.CallOption) (*SetResponse, error)
+	GetLevel(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 }
 
 type logAgentClient struct {
@@ -248,9 +425,29 @@ func (x *logAgentGetClient) Recv() (*LogFileResponse, error) {
 	return m, nil
 }
 
+func (c *logAgentClient) Set(ctx context.Context, in *SetRequest, opts ...grpc.CallOption) (*SetResponse, error) {
+	out := new(SetResponse)
+	err := c.cc.Invoke(ctx, "/moc.cloudagent.admin.LogAgent/Set", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *logAgentClient) GetLevel(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	out := new(GetResponse)
+	err := c.cc.Invoke(ctx, "/moc.cloudagent.admin.LogAgent/GetLevel", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LogAgentServer is the server API for LogAgent service.
 type LogAgentServer interface {
 	Get(*LogRequest, LogAgent_GetServer) error
+	Set(context.Context, *SetRequest) (*SetResponse, error)
+	GetLevel(context.Context, *GetRequest) (*GetResponse, error)
 }
 
 // UnimplementedLogAgentServer can be embedded to have forward compatible implementations.
@@ -259,6 +456,12 @@ type UnimplementedLogAgentServer struct {
 
 func (*UnimplementedLogAgentServer) Get(req *LogRequest, srv LogAgent_GetServer) error {
 	return status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (*UnimplementedLogAgentServer) Set(ctx context.Context, req *SetRequest) (*SetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Set not implemented")
+}
+func (*UnimplementedLogAgentServer) GetLevel(ctx context.Context, req *GetRequest) (*GetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLevel not implemented")
 }
 
 func RegisterLogAgentServer(s *grpc.Server, srv LogAgentServer) {
@@ -286,10 +489,55 @@ func (x *logAgentGetServer) Send(m *LogFileResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _LogAgent_Set_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LogAgentServer).Set(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/moc.cloudagent.admin.LogAgent/Set",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LogAgentServer).Set(ctx, req.(*SetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LogAgent_GetLevel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LogAgentServer).GetLevel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/moc.cloudagent.admin.LogAgent/GetLevel",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LogAgentServer).GetLevel(ctx, req.(*GetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _LogAgent_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "moc.cloudagent.admin.LogAgent",
 	HandlerType: (*LogAgentServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Set",
+			Handler:    _LogAgent_Set_Handler,
+		},
+		{
+			MethodName: "GetLevel",
+			Handler:    _LogAgent_GetLevel_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "Get",
