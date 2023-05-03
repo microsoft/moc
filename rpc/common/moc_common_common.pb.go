@@ -5,9 +5,10 @@ package common
 
 import (
 	fmt "fmt"
+	math "math"
+
 	proto "github.com/golang/protobuf/proto"
 	descriptor "github.com/golang/protobuf/protoc-gen-go/descriptor"
-	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -353,6 +354,7 @@ const (
 	ProviderType_BareMetalHost          ProviderType = 35
 	ProviderType_Authentication         ProviderType = 36
 	ProviderType_HealthMonitor          ProviderType = 37
+	ProviderType_LogicalNetwork         ProviderType = 38
 )
 
 var ProviderType_name = map[int32]string{
@@ -394,6 +396,7 @@ var ProviderType_name = map[int32]string{
 	35: "BareMetalHost",
 	36: "Authentication",
 	37: "HealthMonitor",
+	38: "LogicalNetwork",
 }
 
 var ProviderType_value = map[string]int32{
@@ -435,6 +438,7 @@ var ProviderType_value = map[string]int32{
 	"BareMetalHost":          35,
 	"Authentication":         36,
 	"HealthMonitor":          37,
+	"LogicalNetwork":         38,
 }
 
 func (x ProviderType) String() string {
