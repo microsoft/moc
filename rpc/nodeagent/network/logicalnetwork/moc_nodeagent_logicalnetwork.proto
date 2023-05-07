@@ -2,12 +2,14 @@
 // Licensed under the Apache v2.0 license.
 
 syntax = "proto3";
-option go_package = "github.com/microsoft/moc/rpc/cloudagent/network";
-package moc.cloudagent.network;
+option go_package = "github.com/microsoft/moc/rpc/nodeagent/network";
+package moc.nodeagent.network;
 
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
 import "moc_common_common.proto";
 import "moc_common_networkcommon.proto";
+import "moc_common_notification.proto";
 
 message LogicalNetworkRequest {
 	repeated LogicalNetwork LogicalNetworks = 1;
@@ -23,12 +25,10 @@ message LogicalNetworkResponse {
 message LogicalNetwork {
 	string name = 1;
 	string id = 2;
-	repeated LogicalSubnet subnets = 3;
-	google.protobuf.BoolValue networkVirtualizationEnabled = 4;
-	string nodefqdn = 5;
-	Status status = 6;
-	string locationName = 7;
-	Tags tags = 8;
+	repeated LogicalNetworkIpam ipams = 3;
+	Status status = 4;
+	Entity entity = 5;
+	Tags tags = 6;
 }
 
 message LogicalSubnet {
@@ -38,12 +38,15 @@ message LogicalSubnet {
 	repeated Route routes = 4;
 	IPAllocationMethod allocation = 5;
 	uint32 vlan = 6;
-	repeated IPPool ipPools = 7;
-	Dns dns = 8; 
-	google.protobuf.BoolValue isPublic = 9;
+	Dns dns = 7; 
+}
+message LogicalNetworkIpam {
+	string type = 1;
+	repeated LogicalSubnet subnets = 2;
 }
 
 service LogicalNetworkAgent {
 	rpc Invoke(LogicalNetworkRequest) returns (LogicalNetworkResponse) {}
+	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 }
 
