@@ -368,7 +368,7 @@ type Subnet struct {
 	Name                 string                    `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Id                   string                    `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
 	Cidr                 string                    `protobuf:"bytes,3,opt,name=cidr,proto3" json:"cidr,omitempty"`
-	Routes               []*Route                  `protobuf:"bytes,4,rep,name=routes,proto3" json:"routes,omitempty"`
+	Routes               []*common.Route           `protobuf:"bytes,4,rep,name=routes,proto3" json:"routes,omitempty"`
 	Allocation           common.IPAllocationMethod `protobuf:"varint,5,opt,name=allocation,proto3,enum=moc.IPAllocationMethod" json:"allocation,omitempty"`
 	Vlan                 uint32                    `protobuf:"varint,6,opt,name=vlan,proto3" json:"vlan,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                  `json:"-"`
@@ -422,7 +422,7 @@ func (m *Subnet) GetCidr() string {
 	return ""
 }
 
-func (m *Subnet) GetRoutes() []*Route {
+func (m *Subnet) GetRoutes() []*common.Route {
 	if m != nil {
 		return m.Routes
 	}
@@ -490,61 +490,6 @@ func (m *Ipam) GetSubnets() []*Subnet {
 	return nil
 }
 
-type Route struct {
-	Nexthop              string   `protobuf:"bytes,1,opt,name=nexthop,proto3" json:"nexthop,omitempty"`
-	Destinationprefix    string   `protobuf:"bytes,2,opt,name=destinationprefix,proto3" json:"destinationprefix,omitempty"`
-	Metric               uint32   `protobuf:"varint,3,opt,name=metric,proto3" json:"metric,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *Route) Reset()         { *m = Route{} }
-func (m *Route) String() string { return proto.CompactTextString(m) }
-func (*Route) ProtoMessage()    {}
-func (*Route) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f1b8ece8397de968, []int{7}
-}
-
-func (m *Route) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Route.Unmarshal(m, b)
-}
-func (m *Route) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Route.Marshal(b, m, deterministic)
-}
-func (m *Route) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Route.Merge(m, src)
-}
-func (m *Route) XXX_Size() int {
-	return xxx_messageInfo_Route.Size(m)
-}
-func (m *Route) XXX_DiscardUnknown() {
-	xxx_messageInfo_Route.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Route proto.InternalMessageInfo
-
-func (m *Route) GetNexthop() string {
-	if m != nil {
-		return m.Nexthop
-	}
-	return ""
-}
-
-func (m *Route) GetDestinationprefix() string {
-	if m != nil {
-		return m.Destinationprefix
-	}
-	return ""
-}
-
-func (m *Route) GetMetric() uint32 {
-	if m != nil {
-		return m.Metric
-	}
-	return 0
-}
-
 func init() {
 	proto.RegisterEnum("moc.nodeagent.network.VirtualNetworkType", VirtualNetworkType_name, VirtualNetworkType_value)
 	proto.RegisterType((*VirtualNetworkRequest)(nil), "moc.nodeagent.network.VirtualNetworkRequest")
@@ -554,7 +499,6 @@ func init() {
 	proto.RegisterType((*MacPool)(nil), "moc.nodeagent.network.MacPool")
 	proto.RegisterType((*Subnet)(nil), "moc.nodeagent.network.Subnet")
 	proto.RegisterType((*Ipam)(nil), "moc.nodeagent.network.Ipam")
-	proto.RegisterType((*Route)(nil), "moc.nodeagent.network.Route")
 }
 
 func init() {
