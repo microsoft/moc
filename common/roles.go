@@ -35,6 +35,8 @@ const (
 	NIContributorRoleName = "NetworkInterfaceContributor"
 	// VM Contributor Role - has permissions to run any operation on VMs
 	VMContributorRoleName = "VMContributor"
+	// VM Updater Role - has permissions to update VMs
+	VMUpdaterRoleName = "VMUpdater"
 	// VirtualMachineImage Contributor Role - has permissions to run any operation on VirtualMachineImages
 	VMIContributorRoleName = "VirtualMachineImageContributor"
 	// VirtualMachineScaleSet Contributor Role - has permissions to run any operation on VirtualMachineScaleSets
