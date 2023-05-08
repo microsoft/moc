@@ -43,6 +43,7 @@ message NodeInfo {
 	OperatingSystemType ostype = 6;
 	Status status = 7;
 	int64 uptime = 8;
+	bool isNodeHCI = 9;
 }
 
 message Resources {   
