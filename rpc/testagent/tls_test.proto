@@ -1,0 +1,12 @@
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/testagent";
+package testagent;
+
+
+message Hello {
+    string Name = 1;
+}
+
+service HelloAgent {
+    rpc PingHello(Hello) returns (Hello);
+}

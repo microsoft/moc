@@ -151,3 +151,9 @@ protoc -I $Agent/$Module/keyvault -I ./common -I $Agent/$Module/keyvault/secret 
 protoc -I $Agent/$Module/authentication -I ./common -I $Agent/$Module/identity -I $Agent/$Module/certificate $Agent/$Module/authentication/moc_cloudagent_authentication.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/certificate -I ./common $Agent/$Module/certificate/moc_cloudagent_certificate.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/role -I ./common $Agent/$Module/role/moc_cloudagent_role.proto --go_out=plugins=grpc:../bld/gen/
+
+Agent="testagent"
+echo "Generating Protoc for $Agent"
+protoc -I $Agent $Agent/auth_test.proto  --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent $Agent/tls_test.proto  --go_out=plugins=grpc:../bld/gen/
+
