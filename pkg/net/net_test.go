@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the Apache v2.0 license.
-//
 package net
 
 import (
@@ -259,8 +258,8 @@ func Test_IsRangeInCIDR(t *testing.T) {
 	require.True(t, IsRangeInCIDR(net.ParseIP("10.0.0.250"), net.ParseIP("10.0.0.255"), cidr))
 	require.True(t, IsRangeInCIDR(net.ParseIP("10.0.0.0"), net.ParseIP("10.0.0.255"), cidr))
 
-	require.True(t, IsRangeInCIDR(net.ParseIP("9.0.0.0"), net.ParseIP("10.0.0.1"), cidr))
-	require.True(t, IsRangeInCIDR(net.ParseIP("10.0.0.254"), net.ParseIP("11.0.0.0"), cidr))
+	require.False(t, IsRangeInCIDR(net.ParseIP("9.0.0.0"), net.ParseIP("10.0.0.1"), cidr))
+	require.False(t, IsRangeInCIDR(net.ParseIP("10.0.0.254"), net.ParseIP("11.0.0.0"), cidr))
 
 	require.False(t, IsRangeInCIDR(net.ParseIP("9.0.0.0"), net.ParseIP("9.255.255.255"), cidr))
 	require.False(t, IsRangeInCIDR(net.ParseIP("10.0.1.0"), net.ParseIP("10.0.1.255"), cidr))
