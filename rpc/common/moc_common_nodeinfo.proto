@@ -43,8 +43,7 @@ message NodeInfo {
 	Resources availability = 4;
 	OperatingSystemType ostype = 6;
 	Status status = 7;
-	int64 uptime = 8;
-	bool isHciNode = 9;
+	int64 uptime = 8;	
 }
 
 message Resources {   
