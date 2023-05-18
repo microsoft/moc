@@ -61,17 +61,13 @@ message Subnet {
 	string cidr = 3;
 	repeated Route routes = 4;
 	IPAllocationMethod allocation = 5;
-	Vlan vlan = 6;
+	uint32 vlan = 6;
+	TrunkVlan trunkvlan = 7;
 }
 
-message Vlan {
-	repeated uint32 id = 1;
-	VlanType type = 2;
-}
-
-enum VlanType {
-	Access = 0;
-	Trunk = 1;
+message TrunkVlan {
+	repeated uint32 allowedvlanidlist = 1;
+	uint32 nativevlanid = 2;
 }
 
 message Ipam {
