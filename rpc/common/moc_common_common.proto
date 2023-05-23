@@ -182,6 +182,7 @@ enum ProviderType {
 	Debug                  = 34;
 	BareMetalHost          = 35;
 	Authentication         = 36;
+	HealthMonitor          = 37;
 }
 
 // Operations specific to a provider

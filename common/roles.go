@@ -117,4 +117,6 @@ const (
 	KeyReaderRoleName = "KeyReader"
 	// Secret Reader role - has permissions to run read operations on Secrets
 	SecretReaderRoleName = "SecretReader"
+	// Health Reader role - has permissions to read agent health information
+	HealthReaderRoleName = "HealthReader"
 )
