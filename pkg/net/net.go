@@ -231,7 +231,7 @@ func RangesOverlap(range1start, range1end, range2start, range2end net.IP) bool {
 }
 
 func IsRangeInCIDR(start, end net.IP, cidr *net.IPNet) bool {
-	if cidr.Contains(start) || cidr.Contains(end) {
+	if cidr.Contains(start) && cidr.Contains(end) {
 		return true
 	}
 	return false
