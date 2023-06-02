@@ -96,7 +96,7 @@ message UefiSettings {
 	bool secureBootEnabled = 1;
 }
 
-enum {
+enum SecurityType {
         NOTCONFIGURED = 0;
         TRUSTEDLAUNCH = 1;
         CONFIDENTIALVM = 2;
