@@ -99,9 +99,16 @@ message UefiSettings {
 	bool secureBootEnabled = 1;
 }
 
+enum SecurityType {
+        NOTCONFIGURED = 0;
+        TRUSTEDLAUNCH = 1;
+        CONFIDENTIALVM = 2;
+}
+
 message SecurityConfiguration {
 	bool enableTPM = 1;
 	UefiSettings uefiSettings = 2;
+	SecurityType securityType = 3;
 }
 
 message VirtualMachine {
