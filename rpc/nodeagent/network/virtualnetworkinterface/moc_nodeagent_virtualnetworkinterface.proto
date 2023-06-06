@@ -23,7 +23,7 @@ message VirtualNetworkInterfaceResponse {
 }
 
 message IpConfiguration {
-	string ipaddress = 1;
+	string ipaddress = 1 [(sensitive) = true];
 	string prefixlength = 2;
 	string subnetid = 3;
 	bool primary = 4;
