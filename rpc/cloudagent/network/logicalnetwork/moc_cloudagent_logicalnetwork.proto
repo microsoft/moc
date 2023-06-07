@@ -24,7 +24,7 @@ message LogicalNetwork {
 	string name = 1;
 	string id = 2;
 	repeated LogicalSubnet subnets = 3;
-	google.protobuf.BoolValue networkVirtualizationEnabled = 4;
+	bool networkVirtualizationEnabled = 4;
 	string nodefqdn = 5;
 	Status status = 6;
 	string locationName = 7;
@@ -40,7 +40,7 @@ message LogicalSubnet {
 	uint32 vlan = 6;
 	repeated IPPool ipPools = 7;
 	Dns dns = 8; 
-	google.protobuf.BoolValue isPublic = 9;
+	bool isPublic = 9;
 }
 
 service LogicalNetworkAgent {
