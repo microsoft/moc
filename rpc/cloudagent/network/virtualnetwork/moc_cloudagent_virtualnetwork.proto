@@ -47,7 +47,7 @@ message VirtualNetwork {
 	string groupName = 7;
 	Status status = 8;
 	string locationName = 9;
-	string macPoolName = 10;
+	string macPoolName = 10 [(sensitive) = true];
 	Tags tags = 12;
 }
 

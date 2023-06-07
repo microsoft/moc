@@ -40,7 +40,7 @@ message VirtualNetworkInterface {
 	}
 	NetworkInterfaceType type = 3;
 	repeated IpConfiguration ipconfigs = 4;
-	string macaddress = 5;
+	string macaddress = 5 [(sensitive) = true];
 	Dns dnsSettings = 6;
 	string virtualMachineName = 7;
 	Status status = 8;
