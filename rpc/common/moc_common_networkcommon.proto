@@ -6,7 +6,7 @@ option go_package = "github.com/microsoft/moc/rpc/common";
 package moc;
 
 message Dns {
-	repeated string servers = 1;
+	repeated string servers = 1 [(sensitive) = true];
 	string domain = 2;
 	repeated string search = 3;
 	repeated string options = 4;

@@ -41,7 +41,7 @@ message VirtualNetwork {
 	string name = 1;
 	string id = 2;
 	repeated Subnet subnets = 3;
-	Dns dns = 4;
+	Dns dns = 4 [(sensitive) = true];
 	VirtualNetworkType type = 5;
 	string nodefqdn = 6;
 	string groupName = 7;

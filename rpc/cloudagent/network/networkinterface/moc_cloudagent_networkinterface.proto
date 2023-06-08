@@ -45,7 +45,7 @@ message NetworkInterface {
 	NetworkInterfaceType type = 3;
 	repeated IpConfiguration ipConfigurations = 4;
 	string macaddress = 5 [(sensitive) = true];
-	Dns dns = 6;
+	Dns dns = 6 [(sensitive) = true];
 	string nodeName = 7;
 	string groupName = 8;
 	string locationName = 9;
