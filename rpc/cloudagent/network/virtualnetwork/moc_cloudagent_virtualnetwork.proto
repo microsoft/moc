@@ -64,7 +64,7 @@ message Subnet {
 }
 
 message TrunkVlan {
-	repeated uint32 allowedvlanidlist = 1;
+	string allowedvlanidlist = 1;
 	uint32 nativevlanid = 2; 
 }
 
