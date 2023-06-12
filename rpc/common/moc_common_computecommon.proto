@@ -136,6 +136,12 @@ message VirtualMachineRunCommandInstanceView {
 	string Error = 4;
 }
 
+// describes the the capabilities of this node in terms of what type of VM can be created
+// In the future when CVM comes, another bool will be added to check hardware capability.
+message VirtualMachineCapabilities {
+	bool IsolatedVmCapable =  1;
+}
+
 /* Values fetched from Win32_Processor class.
 Documentation here:
 https://docs.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor#properties */

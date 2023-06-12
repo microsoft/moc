@@ -33,6 +33,7 @@ message GPU {
 message OperatingSystem {
 	uint64 operatingsystemsku = 1;
 	OperatingSystemType ostype = 2;
+	string operatingsystembuildnumber = 3;
 }
 
 message NodeInfo {
@@ -50,5 +51,6 @@ message Resources {
 	PhysicalMemory memory = 2;
 	GPU gpu = 3;
 	OperatingSystem osInfo = 4;
+	VirtualMachineCapabilities vmCapabilities = 5;
 }
 
