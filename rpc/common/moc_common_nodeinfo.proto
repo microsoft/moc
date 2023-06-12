@@ -8,6 +8,11 @@ package moc.common;
 import "moc_common_common.proto";
 import "moc_common_computecommon.proto";
 
+enum OsRegistrationStatus {
+	notRegistered = 0;
+	registered = 1;
+}
+
 message Processor {
 	string name = 1;
 	uint32 cores = 2;
@@ -33,7 +38,7 @@ message GPU {
 message OperatingSystem {
 	uint64 operatingsystemsku = 1;
 	OperatingSystemType ostype = 2;
-	string osRegistrationStatus = 3;
+	OsRegistrationStatus osRegistrationStatus = 3;
 }
 
 message NodeInfo {
