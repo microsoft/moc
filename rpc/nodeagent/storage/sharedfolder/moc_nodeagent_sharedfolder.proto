@@ -27,7 +27,7 @@ message SharedFolder {
 	string containerName = 3;
 	string folderName = 4;
 	bool readOnly = 5;
-	string path = 6;
+	string path = 6 [(sensitive) = true];
 	string virtualmachineName = 7;
 	string guestMountPath = 8;
 	string mountTag = 9;
