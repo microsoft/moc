@@ -151,10 +151,20 @@ message VirtualMachineRunCommandResponse {
 	VirtualMachineRunCommandInstanceView InstanceView = 2;
 }
 
+message VirtualMachineRepairGuestAgentRequest {
+	VirtualMachine VirtualMachine = 1;
+}
+
+message VirtualMachineRepairGuestAgentResponse {
+	google.protobuf.BoolValue Result = 1;
+	string Error = 2;
+}
+
 service VirtualMachineAgent {
 	rpc Invoke(VirtualMachineRequest) returns (VirtualMachineResponse) {}
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
 	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
+	rpc RepairGuestAgent(VirtualMachineRepairGuestAgentRequest) returns (VirtualMachineRepairGuestAgentResponse) {}
 }
 

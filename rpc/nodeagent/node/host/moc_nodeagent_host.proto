@@ -32,10 +32,12 @@ message Host {
 	string fqdn = 3; 
 	Status status = 4;
 	string certificate = 5 [(sensitive) = true];
-	int32  port = 6;
-	int32  authorizerPort = 7;
-	HostState runningState = 8;
-	Tags tags = 9;
+	string rootCACertificate = 6 [(sensitive) = true];
+	string intermediateCACertificate = 7 [(sensitive) = true];
+	int32 port = 8;
+	int32 authorizerPort = 9;
+	HostState runningState = 10;
+	Tags tags = 11;
 }
 
 service MocHostAgent {

@@ -133,6 +133,13 @@ ChildModule="virtualmachine"
 echo "Generating $Module/$ChildModule protoc"
 protoc -I $Agent/$Module -I ./common $Agent/$Module/$ChildModule/moc_mocguestagent_${ChildModule}.proto --go_out=plugins=grpc:../bld/gen/
 
+Module="security"
+echo "Generating $Agent/$Module protoc"
+protoc -I $Agent/$Module/keyvault/secret -I ./common $Agent/$Module/keyvault/secret/moc_mocguestagent_secret.proto  --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/keyvault -I ./common -I $Agent/$Module/keyvault/secret $Agent/$Module/keyvault/moc_mocguestagent_keyvault.proto  --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/certificate -I ./common -I $Agent/$Module/certificate $Agent/$Module/certificate/moc_mocguestagent_certificate.proto --go_out=plugins=grpc:../bld/gen/
+
+
 ####
 
 Agent="cloudagent"

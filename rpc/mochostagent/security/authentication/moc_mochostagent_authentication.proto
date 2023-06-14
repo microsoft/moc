@@ -16,7 +16,7 @@ message AuthenticationRequest {
 message AuthenticationResponse {
 	string Token = 1 [(sensitive) = true];
 	google.protobuf.BoolValue Result = 2;
-	string  Error = 3;
+    string  Error = 3;
 }
 
 service AuthenticationAgent {
