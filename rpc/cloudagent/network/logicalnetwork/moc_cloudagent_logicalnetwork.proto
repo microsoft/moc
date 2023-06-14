@@ -28,7 +28,8 @@ message LogicalNetwork {
 	string nodefqdn = 5;
 	Status status = 6;
 	string locationName = 7;
-	Tags tags = 8;
+	string macPoolName = 8;
+	Tags tags = 9;
 }
 
 message LogicalSubnet {
