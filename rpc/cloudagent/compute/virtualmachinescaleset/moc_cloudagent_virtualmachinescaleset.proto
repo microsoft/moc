@@ -37,6 +37,7 @@ message VirtualMachineProfile {
 	OperatingSystemConfiguration os = 4;
 	HardwareConfiguration hardware = 5;
 	SecurityConfiguration security = 6;
+	GuestAgentConfiguration guestAgent = 7;
 }
 
 message VirtualMachineScaleSet {

@@ -95,6 +95,10 @@ message HardwareConfiguration {
 	DynamicMemoryConfiguration dynamicMemoryConfiguration = 3;
 }
 
+message GuestAgentConfiguration {
+	bool enabled = 1;
+}
+
 message UefiSettings {
 	bool secureBootEnabled = 1;
 }
@@ -120,6 +124,8 @@ message VirtualMachine {
 	Entity entity = 12;
 	HighAvailabilityState highAvailabilityState = 13;
 	Tags tags = 14;
+	GuestAgentConfiguration guestAgent = 15;
+	VirtualMachineAgentInstanceView guestAgentInstanceView = 16;
 }
 
 message VirtualMachineOperationRequest {

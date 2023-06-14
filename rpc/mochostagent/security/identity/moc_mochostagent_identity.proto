@@ -1,0 +1,43 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/mochostagent/security";
+package moc.mochostagent.security;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+message IdentityRequest {
+	repeated Identity Identitys = 1;
+	Operation OperationType = 2;
+}
+
+message IdentityResponse {
+	repeated Identity Identitys = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message Identity {
+	string name = 1;
+	string id = 2;
+	string resourceGroup = 3;
+	string password = 4 [(sensitive) = true];
+	string token = 5 [(sensitive) = true];
+	string certificate = 6 [(sensitive) = true];
+	Status status = 7;
+	Entity entity = 8;
+	Tags tags = 9;
+	int64 tokenExpiry = 13;
+	ClientType clientType = 14;
+	string hostFqdn = 15;
+	int32 hostPort = 16;
+	int32 hostAuthPort = 17;
+	AuthenticationType authType = 18;
+	bool revoked = 19;
+}
+
+service IdentityAgent {
+	rpc Invoke(IdentityRequest) returns (IdentityResponse) {}
+}

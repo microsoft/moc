@@ -1,0 +1,45 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/mocguestagent/compute";
+package moc.mocguestagent.compute;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_computecommon.proto";
+import "moc_common_notification.proto";
+
+message VirtualMachineRunCommandRequest {
+	VirtualMachineRunCommandScriptSource Source = 1;
+	repeated VirtualMachineRunCommandInputParameter RunCommandInputParameters = 2;
+	string OperationID = 3;
+	string RunAsUser = 4 [(sensitive) = true];
+	string RunAsPassword = 5 [(sensitive) = true];
+}
+
+message VirtualMachineCommandResultRequest {
+	string OperationID = 1;
+}
+
+message VirtualMachineRunCommandResponse {
+	VirtualMachineRunCommandInstanceView InstanceView = 1;
+	string OperationID = 2;
+}
+
+message UpdateAgentRequest{
+	bytes AgentBinary = 1;
+}
+
+message UpdateAgentResponse{
+	google.protobuf.BoolValue Result = 1;
+	string Error = 2;
+}
+
+service VirtualMachineAgent {
+	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
+	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
+	rpc GetCommandResult(VirtualMachineCommandResultRequest) returns (VirtualMachineRunCommandResponse) {}
+	rpc UpdateAgent(UpdateAgentRequest) returns (UpdateAgentResponse) {}
+}
