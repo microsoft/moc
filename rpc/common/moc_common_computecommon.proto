@@ -154,7 +154,7 @@ message InstanceViewStatus {
 
 message VirtualMachineAgentInstanceView {
 	string vmAgentVersion = 1;
-	repeated InstanceViewStatus statuses = 3;
+	repeated InstanceViewStatus statuses = 2;
 }
 
 /* Values fetched from Win32_Processor class.
