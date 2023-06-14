@@ -3,10 +3,30 @@
 
 syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/mochostagent/compute";
-
 package moc.mochostagent.compute;
+
+import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 import "moc_common_computecommon.proto";
+
+message OperatingSystemConfiguration {
+	OperatingSystemType ostype = 1;
+}
+
+message VirtualMachine {
+	string name = 1;
+	string id = 2;
+	OperatingSystemConfiguration os = 3;
+	Entity entity = 4;
+	Tags tags = 5;
+	VirtualMachineAgentInstanceView guestAgentInstanceView = 6;
+}
+
+message GetVirtualMachineResponse {
+	VirtualMachine VirtualMachine = 1;
+	google.protobuf.BoolValue Result = 2;
+	string Error = 3;
+}
 
 message RegisterVirtualMachineRequest {
 	VirtualMachine VirtualMachine = 1;
@@ -33,19 +53,6 @@ message DeregisterVirtualMachineInstanceView {
 
 message DeregisterVirtualMachineResponse {
 	DeregisterVirtualMachineInstanceView InstanceView = 1;
-}
-
-message OperatingSystemConfiguration {
-	OperatingSystemType ostype = 1;
-}
-
-message VirtualMachine {
-	string name = 1;
-	string id = 2;
-	OperatingSystemConfiguration os = 3;
-	Entity entity = 4;
-	Tags tags = 5;
-	VirtualMachineAgentInstanceView guestAgentInstanceView = 6;
 }
 
 message VirtualMachineRunCommandRequest {
