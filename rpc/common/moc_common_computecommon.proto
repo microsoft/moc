@@ -116,6 +116,8 @@ enum VirtualMachineRunCommandExecutionState {
 	ExecutionState_UNKNOWN = 0;
 	ExecutionState_FAILED = 1;
 	ExecutionState_SUCCEEDED = 2;
+	ExecutionState_PENDING = 3;
+	ExecutionState_REBOOTING = 4;
 }
 
 message VirtualMachineRunCommandInputParameter {
@@ -134,6 +136,19 @@ message VirtualMachineRunCommandInstanceView {
 	int32 ExitCode = 2;
 	string Output = 3;
 	string Error = 4;
+}
+
+message InstanceViewStatus {
+	string code = 1;
+	string level = 2;
+	string displayStatus = 3;
+	string message = 4;
+	string time = 5;
+}
+
+message VirtualMachineAgentInstanceView {
+	string vmAgentVersion = 1;
+	repeated InstanceViewStatus statuses = 3;
 }
 
 /* Values fetched from Win32_Processor class.
