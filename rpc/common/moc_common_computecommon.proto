@@ -160,3 +160,9 @@ enum Architecture {
 extend google.protobuf.FieldOptions {
 	bool sensitivecompute = 50002;
 }
+
+enum SecurityType {
+        NOTCONFIGURED = 0;
+        TRUSTEDLAUNCH = 1;
+        CONFIDENTIALVM = 2;
+}

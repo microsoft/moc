@@ -33,7 +33,7 @@ message ContainerResponse {
 message Container {
 	string name = 1;
 	string id = 2;
-	string path = 4;
+	string path = 4 [(sensitive) = true];
 	Status status = 5;
 	Entity entity = 6;
 	Tags tags = 7;

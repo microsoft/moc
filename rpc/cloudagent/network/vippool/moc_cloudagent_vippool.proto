@@ -29,8 +29,8 @@ message VipPool {
 	string groupName = 6;
 	string locationName = 7;
 	Status status = 8;
-	string startip = 9;
-	string endip = 10;
+	string startip = 9 [(sensitive) = true];
+	string endip = 10 [(sensitive) = true];
 	Tags tags = 11;
 }
 

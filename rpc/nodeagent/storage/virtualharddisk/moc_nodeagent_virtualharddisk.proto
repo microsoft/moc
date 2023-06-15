@@ -36,7 +36,7 @@ message SFSImageProperties {
 }
 
 message LocalImageProperties {
-	string path = 1;
+	string path = 1 [(sensitive) = true];
 }
 
 message CloneImageProperties {
@@ -56,7 +56,7 @@ message VirtualHardDisk {
 	string name = 1;
 	string id = 2;
 	string source = 3;
-	string path = 4;
+	string path = 4 [(sensitive) = true];
 	// Storage container name to hold this vhd
 	string containerName = 5;
 	Status status = 6;
