@@ -8,13 +8,13 @@ package moc.common;
 import "moc_common_common.proto";
 import "moc_common_computecommon.proto";
 
-enum RegistrationStatus {
+enum OsRegistrationState {
 	notRegistered = 0;
 	registered = 1;
 }
 
 message OsRegistrationStatus {
-	RegistrationStatus status = 1;
+	OsRegistrationState status = 1;
 }
 
 message Processor {
