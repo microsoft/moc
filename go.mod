@@ -27,6 +27,7 @@ require (
 )
 
 replace (
+	github.com/gogo/protobuf => github.com/gogo/protobuf v1.3.2
 	github.com/golang/mock => github.com/golang/mock v1.6.0
 	github.com/golang/protobuf/protoc-gen-go => github.com/golang/protobuf/protoc-gen-go v1.3.2
 	golang.org/x/net => golang.org/x/net v0.0.0-20220822230855-b0a4917ee28c
