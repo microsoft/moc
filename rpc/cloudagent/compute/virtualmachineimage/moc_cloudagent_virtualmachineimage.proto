@@ -23,7 +23,7 @@ message VirtualMachineImage {
 	string name = 1;
 	string id = 2;
 	string imageReference = 3;
-	string path = 4;
+	string path = 4 [(sensitive) = true];
 	Status status = 5;
 	string containerName = 6;
 	string groupName = 18;

@@ -23,11 +23,11 @@ message VirtualNetworkInterfaceResponse {
 }
 
 message IpConfiguration {
-	string ipaddress = 1;
+	string ipaddress = 1 [(sensitive) = true];
 	string prefixlength = 2;
 	string subnetid = 3;
 	bool primary = 4;
-	string gateway = 5;
+	string gateway = 5 [(sensitive) = true];
 	IPAllocationMethod allocation = 6;
 }
 
@@ -40,8 +40,8 @@ message VirtualNetworkInterface {
 	}
 	NetworkInterfaceType type = 3;
 	repeated IpConfiguration ipconfigs = 4;
-	string macaddress = 5;
-	Dns dnsSettings = 6;
+	string macaddress = 5 [(sensitive) = true];
+	Dns dnsSettings = 6 [(sensitive) = true];
 	string virtualMachineName = 7;
 	Status status = 8;
 	Entity entity = 9;

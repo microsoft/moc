@@ -25,13 +25,13 @@ message InboundNatRule {
 }
 
 message IpConfiguration {
-	string ipaddress = 1;
+	string ipaddress = 1 [(sensitive) = true];
 	string prefixlength = 2;
 	string subnetid = 3;
 	bool primary = 4;
 	repeated string loadbalanceraddresspool = 5;
 	IPAllocationMethod allocation = 6;
-	string gateway = 7;
+	string gateway = 7 [(sensitive) = true];
 	repeated InboundNatRule inboundNatRules = 8;
 	Tags tags = 9;
 }
@@ -45,8 +45,8 @@ message NetworkInterface {
 	}
 	NetworkInterfaceType type = 3;
 	repeated IpConfiguration ipConfigurations = 4;
-	string macaddress = 5;
-	Dns dns = 6;
+	string macaddress = 5 [(sensitive) = true];
+	Dns dns = 6 [(sensitive) = true];
 	string nodeName = 7;
 	string groupName = 8;
 	string locationName = 9;
