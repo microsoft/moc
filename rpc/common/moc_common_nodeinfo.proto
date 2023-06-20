@@ -33,7 +33,7 @@ message GPU {
 message OperatingSystem {
 	uint64 operatingsystemsku = 1;
 	OperatingSystemType ostype = 2;
-	string operatingsystembuildnumber = 3;
+	string osversion = 3;
 }
 
 message NodeInfo {
