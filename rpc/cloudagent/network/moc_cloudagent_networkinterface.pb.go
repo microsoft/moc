@@ -26,6 +26,31 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+type NetworkType int32
+
+const (
+	NetworkType_VIRTUAL_NETWORK NetworkType = 0
+	NetworkType_LOGICAL_NETWORK NetworkType = 1
+)
+
+var NetworkType_name = map[int32]string{
+	0: "VIRTUAL_NETWORK",
+	1: "LOGICAL_NETWORK",
+}
+
+var NetworkType_value = map[string]int32{
+	"VIRTUAL_NETWORK": 0,
+	"LOGICAL_NETWORK": 1,
+}
+
+func (x NetworkType) String() string {
+	return proto.EnumName(NetworkType_name, int32(x))
+}
+
+func (NetworkType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_641284ba8360303c, []int{0}
+}
+
 type NetworkInterface_NetworkInterfaceType int32
 
 const (
@@ -202,6 +227,7 @@ type IpConfiguration struct {
 	Gateway                 string                    `protobuf:"bytes,7,opt,name=gateway,proto3" json:"gateway,omitempty"`
 	InboundNatRules         []*InboundNatRule         `protobuf:"bytes,8,rep,name=inboundNatRules,proto3" json:"inboundNatRules,omitempty"`
 	Tags                    *common.Tags              `protobuf:"bytes,9,opt,name=tags,proto3" json:"tags,omitempty"`
+	NetworkType             NetworkType               `protobuf:"varint,10,opt,name=networkType,proto3,enum=moc.cloudagent.network.NetworkType" json:"networkType,omitempty"`
 	XXX_NoUnkeyedLiteral    struct{}                  `json:"-"`
 	XXX_unrecognized        []byte                    `json:"-"`
 	XXX_sizecache           int32                     `json:"-"`
@@ -293,6 +319,13 @@ func (m *IpConfiguration) GetTags() *common.Tags {
 		return m.Tags
 	}
 	return nil
+}
+
+func (m *IpConfiguration) GetNetworkType() NetworkType {
+	if m != nil {
+		return m.NetworkType
+	}
+	return NetworkType_VIRTUAL_NETWORK
 }
 
 type NetworkInterface struct {
@@ -431,6 +464,7 @@ func (m *NetworkInterface) GetTags() *common.Tags {
 }
 
 func init() {
+	proto.RegisterEnum("moc.cloudagent.network.NetworkType", NetworkType_name, NetworkType_value)
 	proto.RegisterEnum("moc.cloudagent.network.NetworkInterface_NetworkInterfaceType", NetworkInterface_NetworkInterfaceType_name, NetworkInterface_NetworkInterfaceType_value)
 	proto.RegisterType((*NetworkInterfaceRequest)(nil), "moc.cloudagent.network.NetworkInterfaceRequest")
 	proto.RegisterType((*NetworkInterfaceResponse)(nil), "moc.cloudagent.network.NetworkInterfaceResponse")
