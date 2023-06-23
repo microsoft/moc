@@ -6,14 +6,16 @@ package network
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	proto "github.com/golang/protobuf/proto"
 	empty "github.com/golang/protobuf/ptypes/empty"
 	wrappers "github.com/golang/protobuf/ptypes/wrappers"
-	common "github.com/microsoft/moc/rpc/common"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	math "math"
+
+	common "github.com/microsoft/moc/rpc/common"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -26,6 +28,31 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
+
+type NetworkType int32
+
+const (
+	NetworkType_VIRTUAL_NETWORK NetworkType = 0
+	NetworkType_LOGICAL_NETWORK NetworkType = 1
+)
+
+var NetworkType_name = map[int32]string{
+	0: "VIRTUAL_NETWORK",
+	1: "LOGICAL_NETWORK",
+}
+
+var NetworkType_value = map[string]int32{
+	"VIRTUAL_NETWORK": 0,
+	"LOGICAL_NETWORK": 1,
+}
+
+func (x NetworkType) String() string {
+	return proto.EnumName(NetworkType_name, int32(x))
+}
+
+func (NetworkType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_031864a4497d6a65, []int{0}
+}
 
 type VirtualNetworkInterface_NetworkInterfaceType int32
 
@@ -161,6 +188,7 @@ type IpConfiguration struct {
 	Primary              bool                      `protobuf:"varint,4,opt,name=primary,proto3" json:"primary,omitempty"`
 	Gateway              string                    `protobuf:"bytes,5,opt,name=gateway,proto3" json:"gateway,omitempty"`
 	Allocation           common.IPAllocationMethod `protobuf:"varint,6,opt,name=allocation,proto3,enum=moc.IPAllocationMethod" json:"allocation,omitempty"`
+	NetworkType          NetworkType               `protobuf:"varint,7,opt,name=networkType,proto3,enum=moc.nodeagent.network.NetworkType" json:"networkType,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                  `json:"-"`
 	XXX_unrecognized     []byte                    `json:"-"`
 	XXX_sizecache        int32                     `json:"-"`
@@ -231,6 +259,13 @@ func (m *IpConfiguration) GetAllocation() common.IPAllocationMethod {
 		return m.Allocation
 	}
 	return common.IPAllocationMethod_Invalid
+}
+
+func (m *IpConfiguration) GetNetworkType() NetworkType {
+	if m != nil {
+		return m.NetworkType
+	}
+	return NetworkType_VIRTUAL_NETWORK
 }
 
 type VirtualNetworkInterface struct {
@@ -353,6 +388,7 @@ func (m *VirtualNetworkInterface) GetTags() *common.Tags {
 }
 
 func init() {
+	proto.RegisterEnum("moc.nodeagent.network.NetworkType", NetworkType_name, NetworkType_value)
 	proto.RegisterEnum("moc.nodeagent.network.VirtualNetworkInterface_NetworkInterfaceType", VirtualNetworkInterface_NetworkInterfaceType_name, VirtualNetworkInterface_NetworkInterfaceType_value)
 	proto.RegisterType((*VirtualNetworkInterfaceRequest)(nil), "moc.nodeagent.network.VirtualNetworkInterfaceRequest")
 	proto.RegisterType((*VirtualNetworkInterfaceResponse)(nil), "moc.nodeagent.network.VirtualNetworkInterfaceResponse")
