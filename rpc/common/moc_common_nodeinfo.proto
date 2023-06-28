@@ -60,7 +60,6 @@ message NodeInfo {
 message Resources {
 	Processor processor = 1;
 	PhysicalMemory memory = 2;
-	GPU gpu = 3;
-	OperatingSystem osInfo = 4;
-	VirtualMachineCapabilities vmCapabilities = 5;
+	GPU gpu = 3;	
+	VirtualMachineCapabilities vmCapabilities = 4;
 }
