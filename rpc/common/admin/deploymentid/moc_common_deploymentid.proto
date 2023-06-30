@@ -8,7 +8,7 @@ package moc.common.admin;
 message DeploymentIdRequest {}
 
 message DeploymentIdResponse {
-	string deploymentId = 1;
+    string deploymentId = 1;
     string error = 2;
 }
 
