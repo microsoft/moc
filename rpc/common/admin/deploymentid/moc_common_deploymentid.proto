@@ -1,0 +1,17 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/common/admin";
+package moc.common.admin;
+
+message DeploymentIdRequest {}
+
+message DeploymentIdResponse {
+	string deploymentId = 1;
+    string error = 2;
+}
+
+service DeploymentIdAgent {
+	rpc Get(DeploymentIdRequest) returns (DeploymentIdResponse) {}
+}

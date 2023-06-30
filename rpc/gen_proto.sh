@@ -20,6 +20,7 @@ protoc -I common common/admin/health/moc_common_health.proto --go_out=plugins=gr
 protoc -I common common/admin/recovery/moc_common_recovery.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I common common/admin/validation/moc_common_validation.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I common common/admin/version/moc_common_version.proto --go_out=plugins=grpc:../bld/gen/
+protoc -I common common/admin/deploymentid/moc_common_deploymentid.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I common common/moc_common_notification.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I common common/moc_common_security.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I common common/moc_common_storageinfo.proto --go_out=plugins=grpc:../bld/gen/
