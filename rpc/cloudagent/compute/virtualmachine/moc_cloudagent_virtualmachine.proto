@@ -92,10 +92,6 @@ message HardwareConfiguration {
 	DynamicMemoryConfiguration dynamicMemoryConfiguration = 3;
 }
 
-message GuestAgentConfiguration {
-	bool enabled = 1;
-}
-
 message UefiSettings {
 	bool secureBootEnabled = 1;
 }

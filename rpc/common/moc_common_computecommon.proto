@@ -169,6 +169,10 @@ message VirtualMachineAgentInstanceView {
 	repeated InstanceViewStatus statuses = 2;
 }
 
+message GuestAgentConfiguration {
+	bool enabled = 1;
+}
+
 /* Values fetched from Win32_Processor class.
 Documentation here:
 https://docs.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor#properties */

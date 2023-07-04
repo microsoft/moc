@@ -17,7 +17,7 @@ message ExecRequest {
 message ExecResponse {
 	repeated Exec Execs = 1;
 	google.protobuf.BoolValue Result = 2;
-	string  Error = 3;
+	string Error = 3;
 }
 
 message Exec {

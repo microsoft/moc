@@ -16,7 +16,7 @@ message HostRequest {
 message HostResponse {
 	repeated Host Hosts = 1;
 	google.protobuf.BoolValue Result = 2;
-	string  Error = 3;
+	string Error = 3;
 }
 
 enum HostState {

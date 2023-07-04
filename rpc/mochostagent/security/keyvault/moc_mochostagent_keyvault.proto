@@ -17,7 +17,7 @@ message KeyVaultRequest {
 message KeyVaultResponse {
 	repeated KeyVault KeyVaults = 1;
 	google.protobuf.BoolValue Result = 2;
-	string  Error = 3;
+	string Error = 3;
 }
 
 message KeyVault {

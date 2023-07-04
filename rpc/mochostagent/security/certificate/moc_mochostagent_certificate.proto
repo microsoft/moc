@@ -19,7 +19,7 @@ message CertificateRequest {
 message CertificateResponse {
 	repeated Certificate Certificates = 1;
 	google.protobuf.BoolValue Result = 2;
-    string  Error = 3;
+    string Error = 3;
 }
 
 message Certificate {

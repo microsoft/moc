@@ -16,7 +16,7 @@ message IdentityRequest {
 message IdentityResponse {
 	repeated Identity Identitys = 1;
 	google.protobuf.BoolValue Result = 2;
-	string  Error = 3;
+	string Error = 3;
 }
 
 message Identity {
