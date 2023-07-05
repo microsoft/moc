@@ -103,6 +103,7 @@ message UefiSettings {
 message SecurityConfiguration {
 	bool enableTPM = 1;
 	UefiSettings uefiSettings = 2;
+	SecurityType securityType = 3;
 }
 
 message VirtualMachine {
