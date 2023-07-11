@@ -76,6 +76,8 @@ enum IdentityCertificateOperation {
 
 enum KeyWrappingAlgorithm {
 	CKM_RSA_AES_KEY_WRAP = 0;
+	RSA_AES_KEY_WRAP_256 = 1;
+	RSA_AES_KEY_WRAP_384 = 2;
 }
 
 message Scope {
