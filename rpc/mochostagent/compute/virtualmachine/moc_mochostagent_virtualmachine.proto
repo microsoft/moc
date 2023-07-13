@@ -41,7 +41,8 @@ message RegisterVirtualMachineInstanceView {
 }
 
 message RegisterVirtualMachineResponse {
-	RegisterVirtualMachineInstanceView InstanceView = 1;
+	VirtualMachine VirtualMachine = 1;
+	RegisterVirtualMachineInstanceView InstanceView = 2;
 }
 
 message DeregisterVirtualMachineRequest {
