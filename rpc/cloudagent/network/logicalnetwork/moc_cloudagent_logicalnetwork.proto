@@ -25,11 +25,10 @@ message LogicalNetwork {
 	string id = 2;
 	repeated LogicalSubnet subnets = 3;
 	bool networkVirtualizationEnabled = 4;
-	string nodefqdn = 5;
-	Status status = 6;
-	string locationName = 7;
-	string macPoolName = 8;
-	Tags tags = 9;
+	Status status = 5;
+	string locationName = 6;
+	string macPoolName = 7 [(sensitive) = true];
+	Tags tags = 8;
 }
 
 message LogicalSubnet {
@@ -40,8 +39,8 @@ message LogicalSubnet {
 	IPAllocationMethod allocation = 5;
 	uint32 vlan = 6;
 	repeated IPPool ipPools = 7;
-	Dns dns = 8; 
-	bool isPublic = 9;
+	Dns dns = 8 [(sensitive) = true]; 
+	bool isPublic = 9; // Indicates whether this is a public subnet on a virtual machine.
 }
 
 service LogicalNetworkAgent {
