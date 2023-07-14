@@ -166,7 +166,11 @@ message InstanceViewStatus {
 
 message VirtualMachineAgentInstanceView {
 	string vmAgentVersion = 1;
-	repeated InstanceViewStatus statuses = 3;
+	repeated InstanceViewStatus statuses = 2;
+}
+
+message GuestAgentConfiguration {
+	bool enabled = 1;
 }
 
 /* Values fetched from Win32_Processor class.

@@ -41,7 +41,8 @@ message RegisterVirtualMachineInstanceView {
 }
 
 message RegisterVirtualMachineResponse {
-	RegisterVirtualMachineInstanceView InstanceView = 1;
+	VirtualMachine VirtualMachine = 1;
+	RegisterVirtualMachineInstanceView InstanceView = 2;
 }
 
 message DeregisterVirtualMachineRequest {
@@ -62,8 +63,6 @@ message VirtualMachineRunCommandRequest {
 	VirtualMachineRunCommandScriptSource Source = 2;
 	repeated VirtualMachineRunCommandInputParameter RunCommandInputParameters = 3;
 	string OperationID = 4;
-	string RunAsUser = 5 [(sensitive) = true];
-	string RunAsPassword = 6 [(sensitive) = true];
 }
 
 message VirtualMachineRunCommandResponse {

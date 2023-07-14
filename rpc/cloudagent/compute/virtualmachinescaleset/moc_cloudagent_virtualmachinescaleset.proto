@@ -8,6 +8,7 @@ package moc.cloudagent.compute;
 import "google/protobuf/wrappers.proto";
 import "moc_cloudagent_virtualmachine.proto";
 import "moc_common_common.proto";
+import "moc_common_computecommon.proto";
 import "moc_cloudagent_networkinterface.proto";
 
 message VirtualMachineScaleSetRequest {

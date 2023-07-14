@@ -8,6 +8,7 @@ package moc.nodeagent.compute;
 import "google/protobuf/wrappers.proto";
 import "moc_nodeagent_virtualmachine.proto";
 import "moc_common_common.proto";
+import "moc_common_computecommon.proto";
 import "moc_nodeagent_virtualnetworkinterface.proto";
 
 message VirtualMachineScaleSetRequest {
