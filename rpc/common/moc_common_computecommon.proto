@@ -157,9 +157,16 @@ message VirtualMachineCapabilities {
 }
 
 message InstanceViewStatus {
+	enum StatusLevelType {
+		Unknown = 0;
+		Info = 1 ;
+		Warning = 2;
+		Error = 3;
+	}
+
 	string code = 1;
 	string level = 2;
-	string displayStatus = 3;
+	StatusLevelType displayStatus = 3;
 	string message = 4;
 	string time = 5;
 }
