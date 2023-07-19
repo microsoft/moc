@@ -8,7 +8,6 @@ package moc.cloudagent.compute;
 import "google/protobuf/wrappers.proto";
 import "moc_cloudagent_virtualmachine.proto";
 import "moc_common_common.proto";
-import "moc_common_computecommon.proto";
 import "moc_cloudagent_networkinterface.proto";
 
 message VirtualMachineScaleSetRequest {
@@ -38,7 +37,6 @@ message VirtualMachineProfile {
 	OperatingSystemConfiguration os = 4;
 	HardwareConfiguration hardware = 5;
 	SecurityConfiguration security = 6;
-	GuestAgentConfiguration guestAgent = 7;
 }
 
 message VirtualMachineScaleSet {
