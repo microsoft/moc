@@ -121,6 +121,7 @@ message VirtualMachine {
 	Tags tags = 16;
 	GuestAgentConfiguration guestAgent = 17;
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 18;
+	HttpProxyConfiguration httpProxyConfiguration = 19;
 }
 
 message VirtualMachineOperationRequest {
@@ -152,4 +153,11 @@ service VirtualMachineAgent {
 	rpc Invoke(VirtualMachineRequest) returns (VirtualMachineResponse) {}
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
+}
+
+message HttpProxyConfiguration {
+	string httpProxy = 1;
+	string httpsProxy = 2;
+	repeated string noProxy = 3;
+	string trustedCa = 4;
 }
