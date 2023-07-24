@@ -189,9 +189,11 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 
 	offset := (time.Hour * 24 * 365)
 	accessIdentity := []byte{}
+	isCA := false
 	if conf != nil {
 		offset = conf.Offset
 		accessIdentity = []byte(conf.Identity)
+		isCA = conf.IsCA
 	}
 	now := time.Now().UTC()
 
@@ -205,8 +207,8 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 		BasicConstraintsValid: true,
 		DNSNames:              csr.DNSNames,
 		IPAddresses:           csr.IPAddresses,
-		IsCA:                  conf.IsCA,
-		MaxPathLenZero:        conf.IsCA, // Enable MaxPathLenZero only when IsCA
+		IsCA:                  isCA,
+		MaxPathLenZero:        isCA, // Enable MaxPathLenZero only when is CA
 	}
 
 	csrRenewCertsPEM := []byte{}
