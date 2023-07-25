@@ -128,6 +128,8 @@ enum VirtualMachineRunCommandExecutionState {
 	ExecutionState_UNKNOWN = 0;
 	ExecutionState_FAILED = 1;
 	ExecutionState_SUCCEEDED = 2;
+	ExecutionState_PENDING = 3;
+	ExecutionState_REBOOTING = 4;
 }
 
 message VirtualMachineRunCommandInputParameter {
@@ -152,6 +154,30 @@ message VirtualMachineRunCommandInstanceView {
 // In the future when CVM comes, another bool will be added to check hardware capability.
 message VirtualMachineCapabilities {
 	bool IsolatedVmCapable =  1;
+}
+
+message InstanceViewStatus {
+	enum StatusLevelType {
+		Unknown = 0;
+		Info = 1 ;
+		Warning = 2;
+		Error = 3;
+	}
+
+	string code = 1;
+	StatusLevelType level = 2;
+	string displayStatus = 3;
+	string message = 4;
+	string time = 5;
+}
+
+message VirtualMachineAgentInstanceView {
+	string vmAgentVersion = 1;
+	repeated InstanceViewStatus statuses = 2;
+}
+
+message GuestAgentConfiguration {
+	bool enabled = 1;
 }
 
 /* Values fetched from Win32_Processor class.
