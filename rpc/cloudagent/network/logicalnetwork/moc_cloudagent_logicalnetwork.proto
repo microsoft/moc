@@ -41,6 +41,7 @@ message LogicalSubnet {
 	repeated IPPool ipPools = 7;
 	Dns dns = 8 [(sensitive) = true]; 
 	bool isPublic = 9; // Indicates whether this is a public subnet on a virtual machine.
+	Tags tags = 10;
 }
 
 service LogicalNetworkAgent {
