@@ -9,12 +9,12 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 
 message HostRequest {
-	repeated Host Hosts = 1;
+	Host Host = 1;
 	Operation OperationType = 2;
 }
 
 message HostResponse {
-	repeated Host Hosts = 1;
+	Host Host = 1;
 	google.protobuf.BoolValue Result = 2;
 	string Error = 3;
 }
