@@ -28,11 +28,12 @@ message VirtualMachineRunCommandResponse {
 	string OperationID = 2;
 }
 
-message UpdateAgentRequest{
+message UpdateAgentRequest {
 	bytes AgentBinary = 1;
+	string MocVersion = 2;
 }
 
-message UpdateAgentResponse{
+message UpdateAgentResponse {
 	google.protobuf.BoolValue Result = 1;
 	string Error = 2;
 }
