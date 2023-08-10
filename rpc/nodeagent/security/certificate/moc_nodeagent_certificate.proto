@@ -10,6 +10,7 @@ import "moc_common_common.proto";
 enum CertificateType {
 	Client = 0;
 	Server = 1;
+	IntermediateCA = 2;
 }
 
 message CertificateRequest {
