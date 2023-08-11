@@ -208,7 +208,7 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 		DNSNames:              csr.DNSNames,
 		IPAddresses:           csr.IPAddresses,
 		IsCA:                  isCA,
-		MaxPathLenZero:        isCA, // Enable MaxPathLenZero only when IsCA
+		MaxPathLenZero:        isCA, // Enable MaxPathLenZero only when is CA
 	}
 
 	csrRenewCertsPEM := []byte{}
