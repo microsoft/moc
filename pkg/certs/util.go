@@ -37,6 +37,7 @@ type SignConfig struct {
 	Offset     time.Duration
 	Identity   string
 	ServerAuth bool
+	IsCA       bool
 }
 
 // AltNames contains the domain names and IP addresses for a cert

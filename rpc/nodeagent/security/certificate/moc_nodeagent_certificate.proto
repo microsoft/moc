@@ -10,6 +10,7 @@ import "moc_common_common.proto";
 enum CertificateType {
 	Client = 0;
 	Server = 1;
+	IntermediateCA = 2;
 }
 
 message CertificateRequest {
@@ -19,23 +20,39 @@ message CertificateRequest {
 message CertificateResponse {
 	repeated Certificate Certificates = 1;
 	google.protobuf.BoolValue Result = 2;
-    string  Error = 3;
+	string  Error = 3;
 }
 
 message Certificate {
-    string name = 1;
-    string id = 2;
-    int64 notBefore = 3; 
-    int64 notAfter = 4;
-    string certificate = 5 [(sensitive) = true];
-    Status status = 6;
-    CertificateType type = 7;
-    Entity entity = 8;
-    Tags tags = 9;
+	string name = 1;
+	string id = 2;
+	int64 notBefore = 3;
+	int64 notAfter = 4;
+	string certificate = 5 [(sensitive) = true];
+	Status status = 6;
+	CertificateType type = 7;
+	Entity entity = 8;
+	Tags tags = 9;
+}
+
+message CSRRequest {
+	repeated CertificateSigningRequest CSRs = 1;
+}
+
+message CertificateSigningRequest {
+	string name = 1;
+	string csr = 2 [(sensitive) = true];
+	string oldCertificate = 3 [(sensitive) = true];
+	Status status = 4;
+	string caName = 5;
+	int64 validity = 6;
+	google.protobuf.BoolValue serverAuth = 7;
 }
 
 service CertificateAgent {
-    rpc CreateOrUpdate(CertificateRequest) returns (CertificateResponse) {}
-    rpc Get(CertificateRequest) returns (CertificateResponse) {}
-    rpc Delete(CertificateRequest) returns (CertificateResponse) {}
+	rpc CreateOrUpdate(CertificateRequest) returns (CertificateResponse) {}
+	rpc Get(CertificateRequest) returns (CertificateResponse) {}
+	rpc Delete(CertificateRequest) returns (CertificateResponse) {}
+	rpc Sign(CSRRequest) returns (CertificateResponse) {}
+	rpc Renew(CSRRequest) returns (CertificateResponse) {}
 }
