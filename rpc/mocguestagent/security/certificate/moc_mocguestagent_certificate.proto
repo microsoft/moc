@@ -15,18 +15,18 @@ message CertificateRequest {
 message CertificateResponse {
 	repeated Certificate Certificates = 1;
 	google.protobuf.BoolValue Result = 2;
-    string  Error = 3;
+	string  Error = 3;
 }
 
 message Certificate {
-    string name = 1;
-    string id = 2;
-    int64 notBefore = 3; 
-    int64 notAfter = 4;
-    string certificate = 5 [(sensitive) = true];
-    Status status = 6;
-    Entity entity = 7;
-    Tags tags = 8;
+	string name = 1;
+	string id = 2;
+	int64 notBefore = 3; 
+	int64 notAfter = 4;
+	string certificate = 5 [(sensitive) = true];
+	Status status = 6;
+	Entity entity = 7;
+	Tags tags = 8;
 }
 
 message CSRRequest {
@@ -34,21 +34,21 @@ message CSRRequest {
 }
 
 message CertificateSigningRequest {
-    string name = 1;
-    string csr = 2 [(sensitive) = true];
-    string oldCertificate = 3 [(sensitive) = true];
-    Status status = 4;
-    string caName = 5;
-    int64 validity = 6;
+	string name = 1;
+	string csr = 2 [(sensitive) = true];
+	string oldCertificate = 3 [(sensitive) = true];
+	Status status = 4;
+	string caName = 5;
+	int64 validity = 6;
 }
 
 message RenewCSRResponse {
-    CertificateSigningRequest csr = 1;
-    google.protobuf.BoolValue Result = 2;
-    string Error = 3;
+	CertificateSigningRequest csr = 1;
+	google.protobuf.BoolValue Result = 2;
+	string Error = 3;
 }
 
 service CertificateAgent {
-    rpc GetRenewCSR(google.protobuf.Empty) returns (RenewCSRResponse) {}
-    rpc RotateCertificate(CertificateRequest) returns (CertificateResponse) {}
+	rpc GetRenewCSR(google.protobuf.Empty) returns (RenewCSRResponse) {}
+	rpc RotateCertificate(CertificateRequest) returns (CertificateResponse) {}
 }
