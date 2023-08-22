@@ -344,10 +344,6 @@ func checkError(wrappedError, err error) bool {
 
 	// Post this, this is a GRPC unknown error
 	// Try to parse the Message and match the error
-	if strings.Contains(wrappedError.Error(), err.Error()) {
-		return true
-	}
-
 	wrappedErrorLowercase := strings.ToLower(wrappedError.Error())
 	errLowercase := strings.ToLower(err.Error())
 	if strings.Contains(wrappedErrorLowercase, errLowercase) {
@@ -355,7 +351,6 @@ func checkError(wrappedError, err error) bool {
 	}
 
 	return false
-
 }
 
 func New(errString string) error {
