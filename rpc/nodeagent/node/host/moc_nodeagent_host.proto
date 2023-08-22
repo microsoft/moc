@@ -15,8 +15,10 @@ message HostRequest {
 
 message HostResponse {
 	Host Host = 1;
-	google.protobuf.BoolValue Result = 2;
-	string Error = 3;
+	string RootCACertificate = 2 [(sensitive) = true];
+	string IntermediateCACertificate = 3 [(sensitive) = true];
+	google.protobuf.BoolValue Result = 4;
+	string Error = 5;
 }
 
 enum HostState {
@@ -31,12 +33,10 @@ message Host {
 	string id = 2;
 	Status status = 3;
 	string certificate = 4 [(sensitive) = true];
-	string rootCACertificate = 5 [(sensitive) = true];
-	string intermediateCACertificate = 6 [(sensitive) = true];
-	int32 port = 7;
-	int32 authorizerPort = 8;
-	HostState runningState = 9;
-	Tags tags = 10;
+	int32 port = 5;
+	int32 authorizerPort = 6;
+	HostState runningState = 7;
+	Tags tags = 8;
 }
 
 service MocHostAgent {
