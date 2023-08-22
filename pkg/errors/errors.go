@@ -348,8 +348,8 @@ func checkError(wrappedError, err error) bool {
 		return true
 	}
 
-	wrappedErrorLowercase := wrappedError.Error()
-	errLowercase := err.Error()
+	wrappedErrorLowercase := strings.ToLower(wrappedError.Error())
+	errLowercase := strings.ToLower(err.Error())
 	if strings.Contains(wrappedErrorLowercase, errLowercase) {
 		return true
 	}
