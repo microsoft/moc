@@ -19,7 +19,6 @@ message HealthResponse {
 	string  Error = 3;
 	HealthState State = 4;
 	bool Rebooted = 5;
-	google.protobuf.BoolValue CertificateNeedsRenewal = 6;
 }
 
 message AgentInfoResponse{

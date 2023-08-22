@@ -1,0 +1,25 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/mocguestagent/admin";
+package moc.mocguestagent.admin;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+message HealthAgentRequest{
+	uint32 timeoutSeconds = 1;
+}
+
+message HealthAgentResponse {
+	google.protobuf.BoolValue Result = 1;
+	string  Error = 2;
+	HealthState State = 3;
+	google.protobuf.BoolValue CertificateNeedsRenewal = 4;
+}
+
+service HealthAgent {
+	rpc CheckHealth(HealthAgentRequest) returns (HealthAgentResponse) {}
+}
+
