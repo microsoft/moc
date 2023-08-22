@@ -347,8 +347,8 @@ func IsFileNotFound(err error) bool {
 	if err == FileNotFound {
 		return true
 	}
-	errLowercase := err.Error()
-	fileNotFoundLowercase := FileNotFound.Error()
+	errLowercase := strings.ToLower(err.Error())
+	fileNotFoundLowercase := strings.ToLower(FileNotFound.Error())
 
 	return strings.Contains(errLowercase, fileNotFoundLowercase)
 }
@@ -360,8 +360,8 @@ func IsPathNotFound(err error) bool {
 	if err == PathNotFound {
 		return true
 	}
-	errLowercase := err.Error()
-	pathNotFoundLowercase := PathNotFound.Error()
+	errLowercase := strings.ToLower(err.Error())
+	pathNotFoundLowercase := strings.ToLower(PathNotFound.Error())
 
 	return strings.Contains(errLowercase, pathNotFoundLowercase)
 }
@@ -373,8 +373,8 @@ func IsNotEnoughSpace(err error) bool {
 	if err == NotEnoughSpace {
 		return true
 	}
-	errLowercase := err.Error()
-	notEnoughSpaceLowercase := PathNotFound.Error()
+	errLowercase := strings.ToLower(err.Error())
+	notEnoughSpaceLowercase := strings.ToLower(NotEnoughSpace.Error())
 
 	return strings.Contains(errLowercase, notEnoughSpaceLowercase)
 }
@@ -386,8 +386,8 @@ func IsAccessDenied(err error) bool {
 	if err == AccessDenied {
 		return true
 	}
-	errLowercase := err.Error()
-	accessDeniedLowercase := AccessDenied.Error()
+	errLowercase := strings.ToLower(err.Error())
+	accessDeniedLowercase := strings.ToLower(AccessDenied.Error())
 
 	return strings.Contains(errLowercase, accessDeniedLowercase)
 }
