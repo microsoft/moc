@@ -8,11 +8,11 @@ package moc.mocguestagent.admin;
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 
-message HealthAgentRequest{
+message HealthRequest{
 	uint32 timeoutSeconds = 1;
 }
 
-message HealthAgentResponse {
+message HealthResponse {
 	google.protobuf.BoolValue Result = 1;
 	string  Error = 2;
 	HealthState State = 3;
@@ -20,6 +20,6 @@ message HealthAgentResponse {
 }
 
 service HealthAgent {
-	rpc CheckHealth(HealthAgentRequest) returns (HealthAgentResponse) {}
+	rpc CheckHealth(HealthRequest) returns (HealthResponse) {}
 }
 

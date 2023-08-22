@@ -225,7 +225,7 @@ enum ProviderAccessOperation {
 	VirtualMachine_Start 				= 604;
 	VirtualMachine_Stop 				= 605;
 	VirtualMachine_Reset 				= 606;
-	VirtualMachine_Repair_Guest_Agent 	= 607;
+	VirtualMachine_Repair_Guest_Agent	= 607;
 
 	Cluster_Create					= 700; 
 	Cluster_Update 					= 701; 
