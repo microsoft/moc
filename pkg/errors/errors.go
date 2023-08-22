@@ -310,6 +310,22 @@ func IsRunCommandFailed(err error) bool {
 	return checkError(err, RunCommandFailed)
 }
 
+func IsFileNotFound(err error) bool {
+	return checkError(err, FileNotFound)
+}
+
+func IsPathNotFound(err error) bool {
+	return checkError(err, PathNotFound)
+}
+
+func IsNotEnoughSpace(err error) bool {
+	return checkError(err, NotEnoughSpace)
+}
+
+func IsAccessDenied(err error) bool {
+	return checkError(err, AccessDenied)
+}
+
 func checkError(wrappedError, err error) bool {
 	if wrappedError == nil {
 		return false
@@ -332,62 +348,16 @@ func checkError(wrappedError, err error) bool {
 		return true
 	}
 
+	wrappedErrorLowercase := wrappedError.Error()
+	errLowercase := err.Error()
+	if strings.Contains(wrappedErrorLowercase, errLowercase) {
+		return true
+	}
+
 	return false
 
 }
 
 func New(errString string) error {
 	return errors.New(errString)
-}
-
-func IsFileNotFound(err error) bool {
-	if err == nil {
-		return false
-	}
-	if err == FileNotFound {
-		return true
-	}
-	errLowercase := strings.ToLower(err.Error())
-	fileNotFoundLowercase := strings.ToLower(FileNotFound.Error())
-
-	return strings.Contains(errLowercase, fileNotFoundLowercase)
-}
-
-func IsPathNotFound(err error) bool {
-	if err == nil {
-		return false
-	}
-	if err == PathNotFound {
-		return true
-	}
-	errLowercase := strings.ToLower(err.Error())
-	pathNotFoundLowercase := strings.ToLower(PathNotFound.Error())
-
-	return strings.Contains(errLowercase, pathNotFoundLowercase)
-}
-
-func IsNotEnoughSpace(err error) bool {
-	if err == nil {
-		return false
-	}
-	if err == NotEnoughSpace {
-		return true
-	}
-	errLowercase := strings.ToLower(err.Error())
-	notEnoughSpaceLowercase := strings.ToLower(NotEnoughSpace.Error())
-
-	return strings.Contains(errLowercase, notEnoughSpaceLowercase)
-}
-
-func IsAccessDenied(err error) bool {
-	if err == nil {
-		return false
-	}
-	if err == AccessDenied {
-		return true
-	}
-	errLowercase := strings.ToLower(err.Error())
-	accessDeniedLowercase := strings.ToLower(AccessDenied.Error())
-
-	return strings.Contains(errLowercase, accessDeniedLowercase)
 }
