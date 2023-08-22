@@ -49,10 +49,14 @@ var (
 	Unknown              error = errors.New("Unknown Reason")
 	DeleteFailed         error = errors.New("Delete Failed")
 	DeletePending        error = errors.New("Delete Pending")
+	FileNotFound         error = errors.New("The system cannot find the file specified")
+	PathNotFound         error = errors.New("The system cannot find the path specified")
+	NotEnoughSpace       error = errors.New("There is not enough space on the disk")
+	AccessDenied         error = errors.New("Access is denied")
 )
 
 func GetErrorCode(err error) string {
-	if IsNotFound(err) {
+	if IsNotFound(err) || IsFileNotFound(err) || IsPathNotFound(err) {
 		return "NotFound"
 	} else if IsDegraded(err) {
 		return "Degraded"
@@ -80,7 +84,7 @@ func GetErrorCode(err error) string {
 		return "InvalidVersion"
 	} else if IsOldVersion(err) {
 		return "OldVersion"
-	} else if IsOutOfCapacity(err) {
+	} else if IsOutOfCapacity(err) || IsNotEnoughSpace(err) {
 		return "OutOfCapacity"
 	} else if IsOutOfNodeCapacity(err) {
 		return "OutOfNodeCapacity"
@@ -124,6 +128,8 @@ func GetErrorCode(err error) string {
 		return "Delete Pending"
 	} else if IsRunCommandFailed(err) {
 		return "RunCommandFailed"
+	} else if IsAccessDenied(err) {
+		return "AccessDenied"
 	}
 
 	// We dont know the type of error.
@@ -332,4 +338,56 @@ func checkError(wrappedError, err error) bool {
 
 func New(errString string) error {
 	return errors.New(errString)
+}
+
+func IsFileNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
+	if err == FileNotFound {
+		return true
+	}
+	errLowercase := err.Error()
+	fileNotFoundLowercase := FileNotFound.Error()
+
+	return strings.Contains(errLowercase, fileNotFoundLowercase)
+}
+
+func IsPathNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
+	if err == PathNotFound {
+		return true
+	}
+	errLowercase := err.Error()
+	pathNotFoundLowercase := PathNotFound.Error()
+
+	return strings.Contains(errLowercase, pathNotFoundLowercase)
+}
+
+func IsNotEnoughSpace(err error) bool {
+	if err == nil {
+		return false
+	}
+	if err == NotEnoughSpace {
+		return true
+	}
+	errLowercase := err.Error()
+	notEnoughSpaceLowercase := PathNotFound.Error()
+
+	return strings.Contains(errLowercase, notEnoughSpaceLowercase)
+}
+
+func IsAccessDenied(err error) bool {
+	if err == nil {
+		return false
+	}
+	if err == AccessDenied {
+		return true
+	}
+	errLowercase := err.Error()
+	accessDeniedLowercase := AccessDenied.Error()
+
+	return strings.Contains(errLowercase, accessDeniedLowercase)
 }
