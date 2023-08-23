@@ -70,10 +70,20 @@ message VirtualMachineRunCommandResponse {
 	string OperationID = 2;
 }
 
+message VirtualMachineRepairGuestAgentRequest {
+	VirtualMachine VirtualMachine = 1;
+}
+
+message VirtualMachineRepairGuestAgentResponse {
+	google.protobuf.BoolValue Result = 1;
+	string Error = 2;
+}
+
 service VirtualMachineAgent {
 	rpc Get(VirtualMachine) returns (GetVirtualMachineResponse) {}
 	rpc RegisterVirtualMachine(RegisterVirtualMachineRequest) returns (RegisterVirtualMachineResponse) {}
 	rpc DeregisterVirtualMachine(DeregisterVirtualMachineRequest) returns (DeregisterVirtualMachineResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
 	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
+	rpc RepairGuestAgent(VirtualMachineRepairGuestAgentRequest) returns (VirtualMachineRepairGuestAgentResponse) {}
 }
