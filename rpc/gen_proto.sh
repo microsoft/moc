@@ -118,11 +118,20 @@ protoc -I $Agent/$Module -I ./common $Agent/$Module/$ChildModule/moc_guestagent_
 
 Agent="mocguestagent"
 echo "Generating Protoc for $Agent"
+
+Module="admin"
+echo "Generating $Agent/$Module protoc"
+protoc -I $Agent/$Module/health -I ./common $Agent/$Module/health/moc_mocguestagent_health.proto --go_out=plugins=grpc:../bld/gen/
+
 Module="compute"
 echo "Generating $Module protoc"
 ChildModule="virtualmachine"
 echo "Generating $Module/$ChildModule protoc"
 protoc -I $Agent/$Module -I ./common $Agent/$Module/$ChildModule/moc_mocguestagent_${ChildModule}.proto --go_out=plugins=grpc:../bld/gen/
+
+Module="security"
+echo "Generating $Agent/$Module protoc"
+protoc -I $Agent/$Module/certificate -I ./common -I $Agent/$Module/certificate $Agent/$Module/certificate/moc_mocguestagent_certificate.proto --go_out=plugins=grpc:../bld/gen/
 
 ####
 
