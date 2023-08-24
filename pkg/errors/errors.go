@@ -49,10 +49,14 @@ var (
 	Unknown              error = errors.New("Unknown Reason")
 	DeleteFailed         error = errors.New("Delete Failed")
 	DeletePending        error = errors.New("Delete Pending")
+	FileNotFound         error = errors.New("The system cannot find the file specified")
+	PathNotFound         error = errors.New("The system cannot find the path specified")
+	NotEnoughSpace       error = errors.New("There is not enough space on the disk")
+	AccessDenied         error = errors.New("Access is denied")
 )
 
 func GetErrorCode(err error) string {
-	if IsNotFound(err) {
+	if IsNotFound(err) || IsFileNotFound(err) || IsPathNotFound(err) {
 		return "NotFound"
 	} else if IsDegraded(err) {
 		return "Degraded"
@@ -80,7 +84,7 @@ func GetErrorCode(err error) string {
 		return "InvalidVersion"
 	} else if IsOldVersion(err) {
 		return "OldVersion"
-	} else if IsOutOfCapacity(err) {
+	} else if IsOutOfCapacity(err) || IsNotEnoughSpace(err) {
 		return "OutOfCapacity"
 	} else if IsOutOfNodeCapacity(err) {
 		return "OutOfNodeCapacity"
@@ -124,6 +128,8 @@ func GetErrorCode(err error) string {
 		return "Delete Pending"
 	} else if IsRunCommandFailed(err) {
 		return "RunCommandFailed"
+	} else if IsAccessDenied(err) {
+		return "AccessDenied"
 	}
 
 	// We dont know the type of error.
@@ -304,6 +310,22 @@ func IsRunCommandFailed(err error) bool {
 	return checkError(err, RunCommandFailed)
 }
 
+func IsFileNotFound(err error) bool {
+	return checkError(err, FileNotFound)
+}
+
+func IsPathNotFound(err error) bool {
+	return checkError(err, PathNotFound)
+}
+
+func IsNotEnoughSpace(err error) bool {
+	return checkError(err, NotEnoughSpace)
+}
+
+func IsAccessDenied(err error) bool {
+	return checkError(err, AccessDenied)
+}
+
 func checkError(wrappedError, err error) bool {
 	if wrappedError == nil {
 		return false
@@ -322,12 +344,13 @@ func checkError(wrappedError, err error) bool {
 
 	// Post this, this is a GRPC unknown error
 	// Try to parse the Message and match the error
-	if strings.Contains(wrappedError.Error(), err.Error()) {
+	wrappedErrorLowercase := strings.ToLower(wrappedError.Error())
+	errLowercase := strings.ToLower(err.Error())
+	if strings.Contains(wrappedErrorLowercase, errLowercase) {
 		return true
 	}
 
 	return false
-
 }
 
 func New(errString string) error {
