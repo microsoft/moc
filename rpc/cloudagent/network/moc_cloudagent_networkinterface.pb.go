@@ -201,6 +201,7 @@ type IpConfiguration struct {
 	Allocation              common.IPAllocationMethod `protobuf:"varint,6,opt,name=allocation,proto3,enum=moc.IPAllocationMethod" json:"allocation,omitempty"`
 	Gateway                 string                    `protobuf:"bytes,7,opt,name=gateway,proto3" json:"gateway,omitempty"`
 	InboundNatRules         []*InboundNatRule         `protobuf:"bytes,8,rep,name=inboundNatRules,proto3" json:"inboundNatRules,omitempty"`
+	Tags                    *common.Tags              `protobuf:"bytes,9,opt,name=tags,proto3" json:"tags,omitempty"`
 	XXX_NoUnkeyedLiteral    struct{}                  `json:"-"`
 	XXX_unrecognized        []byte                    `json:"-"`
 	XXX_sizecache           int32                     `json:"-"`
@@ -287,6 +288,13 @@ func (m *IpConfiguration) GetInboundNatRules() []*InboundNatRule {
 	return nil
 }
 
+func (m *IpConfiguration) GetTags() *common.Tags {
+	if m != nil {
+		return m.Tags
+	}
+	return nil
+}
+
 type NetworkInterface struct {
 	Name                 string                                `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Id                   string                                `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
@@ -355,6 +363,17 @@ func (m *NetworkInterface) GetType() NetworkInterface_NetworkInterfaceType {
 func (m *NetworkInterface) GetIpConfigurations() []*IpConfiguration {
 	if m != nil {
 		return m.IpConfigurations
+	}
+	return nil
+}
+
+func (m *NetworkInterface) GetPrimaryIpConfiguration() *IpConfiguration {
+	if m != nil {
+		for _, ipConfig := range m.IpConfigurations {
+			if ipConfig.Primary {
+				return ipConfig
+			}
+		}
 	}
 	return nil
 }
