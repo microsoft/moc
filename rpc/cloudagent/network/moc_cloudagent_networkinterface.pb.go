@@ -6,15 +6,13 @@ package network
 import (
 	context "context"
 	fmt "fmt"
-	math "math"
-
 	proto "github.com/golang/protobuf/proto"
 	wrappers "github.com/golang/protobuf/ptypes/wrappers"
+	common "github.com/microsoft/moc/rpc/common"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-
-	common "github.com/microsoft/moc/rpc/common"
+	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
