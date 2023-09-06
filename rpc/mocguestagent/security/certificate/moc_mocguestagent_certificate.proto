@@ -2,37 +2,30 @@
 // Licensed under the Apache v2.0 license.
 
 syntax = "proto3";
-option go_package = "github.com/microsoft/moc/rpc/nodeagent/security";
-package moc.nodeagent.security;
+option go_package = "github.com/microsoft/moc/rpc/mocguestagent/security";
+package moc.mocguestagent.security;
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
 import "moc_common_common.proto";
-
-enum CertificateType {
-	Client = 0;
-	Server = 1;
-	IntermediateCA = 2;
-}
 
 message CertificateRequest {
 	repeated Certificate Certificates = 1;
 }
 
 message CertificateResponse {
-	repeated Certificate Certificates = 1;
-	google.protobuf.BoolValue Result = 2;
-	string  Error = 3;
+	google.protobuf.BoolValue Result = 1;
+	string Error = 2;
 }
 
 message Certificate {
 	string name = 1;
 	string id = 2;
-	int64 notBefore = 3;
+	int64 notBefore = 3; 
 	int64 notAfter = 4;
 	string certificate = 5 [(sensitive) = true];
 	Status status = 6;
-	CertificateType type = 7;
-	Entity entity = 8;
-	Tags tags = 9;
+	Entity entity = 7;
+	Tags tags = 8;
 }
 
 message CSRRequest {
@@ -46,13 +39,15 @@ message CertificateSigningRequest {
 	Status status = 4;
 	string caName = 5;
 	int64 validity = 6;
-	google.protobuf.BoolValue serverAuth = 7;
+}
+
+message RenewCSRResponse {
+	CertificateSigningRequest csr = 1;
+	google.protobuf.BoolValue Result = 2;
+	string Error = 3;
 }
 
 service CertificateAgent {
-	rpc CreateOrUpdate(CertificateRequest) returns (CertificateResponse) {}
-	rpc Get(CertificateRequest) returns (CertificateResponse) {}
-	rpc Delete(CertificateRequest) returns (CertificateResponse) {}
-	rpc Sign(CSRRequest) returns (CertificateResponse) {}
-	rpc Renew(CSRRequest) returns (CertificateResponse) {}
+	rpc GetRenewCSR(google.protobuf.Empty) returns (RenewCSRResponse) {}
+	rpc RotateCertificate(CertificateRequest) returns (CertificateResponse) {}
 }

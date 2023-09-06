@@ -9,14 +9,16 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 
 message HostRequest {
-	repeated Host Hosts = 1;
+	Host Host = 1;
 	Operation OperationType = 2;
 }
 
 message HostResponse {
-	repeated Host Hosts = 1;
-	google.protobuf.BoolValue Result = 2;
-	string Error = 3;
+	Host Host = 1;
+	string RootCACertificate = 2 [(sensitive) = true];
+	string IntermediateCACertificate = 3 [(sensitive) = true];
+	google.protobuf.BoolValue Result = 4;
+	string Error = 5;
 }
 
 enum HostState {
@@ -29,13 +31,12 @@ enum HostState {
 message Host {
 	string name = 1;
 	string id = 2;
-	string fqdn = 3; 
-	Status status = 4;
-	string certificate = 5 [(sensitive) = true];
-	int32  port = 6;
-	int32  authorizerPort = 7;
-	HostState runningState = 8;
-	Tags tags = 9;
+	Status status = 3;
+	string certificate = 4 [(sensitive) = true];
+	int32 port = 5;
+	int32 authorizerPort = 6;
+	HostState runningState = 7;
+	Tags tags = 8;
 }
 
 service MocHostAgent {

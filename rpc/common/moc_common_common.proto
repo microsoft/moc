@@ -218,13 +218,14 @@ enum ProviderAccessOperation {
 	Key_Sign 						= 506; 
 	Key_Verify 						= 507; 
 
-	VirtualMachine_Create 			= 600; 
-	VirtualMachine_Update 			= 601; 
-	VirtualMachine_Delete			= 602; 
-	VirtualMachine_Validate			= 603; 
-	VirtualMachine_Start 			= 604;
-	VirtualMachine_Stop 			= 605;
-	VirtualMachine_Reset 			= 606;
+	VirtualMachine_Create 				= 600; 
+	VirtualMachine_Update 				= 601; 
+	VirtualMachine_Delete				= 602; 
+	VirtualMachine_Validate				= 603; 
+	VirtualMachine_Start 				= 604;
+	VirtualMachine_Stop 				= 605;
+	VirtualMachine_Reset 				= 606;
+	VirtualMachine_Repair_Guest_Agent		= 607;
 
 	Cluster_Create					= 700; 
 	Cluster_Update 					= 701; 
