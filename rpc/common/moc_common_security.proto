@@ -14,6 +14,10 @@ enum Algorithm {
 	RSAOAEP = 2;
 	RSAOAEP256 = 3;
 	A256KW = 4;
+	AES_128_CBC_HMAC_SHA256 = 5;
+	AES_128_CBC_HMAC_SHA512 = 6;
+	AES_256_CBC_HMAC_SHA256 = 7;
+	AES_256_CBC_HMAC_SHA512 = 8;
 }
 
 enum JSONWebKeySignatureAlgorithm {
