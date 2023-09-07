@@ -122,6 +122,7 @@ message VirtualMachine {
 	Tags tags = 14;
 	GuestAgentConfiguration guestAgent = 15;
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 16;
+	HttpProxyConfiguration httpProxyConfiguration = 17;
 }
 
 message VirtualMachineOperationRequest {
@@ -153,5 +154,12 @@ service VirtualMachineAgent {
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
 	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
+}
+
+message HttpProxyConfiguration {
+	string httpProxy = 1;
+	string httpsProxy = 2;
+	repeated string noProxy = 3;
+	string trustedCa = 4;
 }
 
