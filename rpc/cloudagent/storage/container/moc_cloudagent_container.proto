@@ -36,6 +36,7 @@ message Container {
 	string locationName = 6;
 	StorageContainerInfo info = 7;
 	Tags tags = 8;
+	bool isolated = 9;
 }
 
 service ContainerAgent {
