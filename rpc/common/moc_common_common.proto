@@ -137,6 +137,7 @@ enum ClientType {
 	ADMIN = 3;
 	BAREMETAL = 4;
 	LOADBALANCER = 5;
+	HOST = 6;
 }
 
 enum AuthenticationType {
@@ -182,7 +183,137 @@ enum ProviderType {
 	Debug                  = 34;
 	BareMetalHost          = 35;
 	Authentication         = 36;
-	NetworkSecurityGroup   = 37;
+	HealthMonitor          = 37;
+	NetworkSecurityGroup   = 38;
+}
+
+// Operations specific to a provider
+// Format is [Provider]_[Operation]
+enum ProviderAccessOperation {
+	Unspecified 					= 0;
+
+	Authentication_Login 			= 100;
+
+	Certificate_Create		 		= 200; 
+	Certificate_Update				= 201;
+	Certificate_Get 				= 202; 
+	Certificate_Delete 				= 203; 
+	Certificate_Sign 				= 204; 
+	Certificate_Renew 				= 205; 
+
+	Identity_Create					= 300; 
+	Identity_Update					= 301; 
+	Identity_Revoke 				= 302; 
+	Identity_Rotate 				= 303;  
+
+	IdentityCertificate_Create		= 400; 
+	IdentityCertificate_Update		= 401; 
+	IdentityCertificate_Renew 		= 402;
+
+	Key_Create						= 500; 
+	Key_Update						= 501; 
+	Key_Encrypt 					= 502; 
+	Key_Decrypt 					= 503; 
+	Key_WrapKey 					= 504; 
+	Key_UnwrapKey					= 505; 
+	Key_Sign 						= 506; 
+	Key_Verify 						= 507; 
+
+	VirtualMachine_Create 				= 600; 
+	VirtualMachine_Update 				= 601; 
+	VirtualMachine_Delete				= 602; 
+	VirtualMachine_Validate				= 603; 
+	VirtualMachine_Start 				= 604;
+	VirtualMachine_Stop 				= 605;
+	VirtualMachine_Reset 				= 606;
+	VirtualMachine_Repair_Guest_Agent		= 607;
+
+	Cluster_Create					= 700; 
+	Cluster_Update 					= 701; 
+	Cluster_LoadCluster 			= 702; 
+	Cluster_UnloadCluster 			= 703; 
+	Cluster_GetCluster 				= 704; 
+	Cluster_GetNodes 				= 705; 
+
+	Debug_DebugServer				= 800; 
+	Debug_StackTrace				= 801;
+
+	BaremetalHost_Create            = 900;
+	BaremetalHost_Update            = 901;
+
+	BaremetalMachine_Create         = 1000;
+	BaremetalMachine_Update         = 1001;
+
+	ControlPlane_Create             = 1100;
+	ControlPlane_Update             = 1101;
+
+	EtcdCluster_Create              = 1200;
+	EtcdCluster_Update              = 1201;
+
+	EtcdServer_Create               = 1300;
+	EtcdServer_Update               = 1301;
+
+	GalleryImage_Create             = 1400;
+	GalleryImage_Update             = 1401;
+
+	Group_Create            		= 1500;
+	Group_Update            		= 1501;
+
+	KeyVault_Create         		= 1600;
+	KeyVault_Update         		= 1601;
+
+	Kubernetes_Create               = 1700;
+	Kubernetes_Update               = 1701;
+
+	LoadBalancer_Create             = 1800;
+	LoadBalancer_Update             = 1801;
+
+	Location_Create         		= 1900;
+	Location_Update         		= 1901;
+
+	Macpool_Create          		= 2000;
+	Macpool_Update          		= 2001;
+
+	NetworkInterface_Create         = 2100;
+	NetworkInterface_Update         = 2101;
+
+	Node_Create             		= 2200;
+	Node_Update             		= 2201;
+
+	Recovery_Create         		= 2300;
+	Recovery_Update         		= 2301;
+
+	Role_Create             		= 2400;
+	Role_Update             		= 2401;
+
+	RoleAssignment_Create           = 2500;
+	RoleAssignment_Update           = 2501;
+
+	Secret_Create           		= 2600;
+	Secret_Update           		= 2601;
+
+	StorageContainer_Create         = 2700;
+	StorageContainer_Update         = 2701;
+
+	Subscription_Create             = 2800;
+	Subscription_Update             = 2801;
+
+	Validation_Validate             = 2900;
+
+	VipPool_Create          		= 3000;
+	VipPool_Update          		= 3001;
+
+	VirtualHardDisk_Create          = 3100;
+	VirtualHardDisk_Update          = 3101;
+
+	VirtualMachineImage_Create      = 3200;
+	VirtualMachineImage_Update      = 3201;
+
+	VirtualMachineScaleSet_Create   = 3300;
+	VirtualMachineScaleSet_Update   = 3301;
+
+	VirtualNetwork_Create           = 3400;
+	VirtualNetwork_Update           = 3401;
 }
 
 extend google.protobuf.FieldOptions {

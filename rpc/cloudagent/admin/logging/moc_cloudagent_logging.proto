@@ -7,6 +7,8 @@ package moc.cloudagent.admin;
 
 service LogAgent {
 	rpc Get(LogRequest) returns (stream LogFileResponse) {}
+	rpc Set(SetRequest) returns (SetResponse) {};
+	rpc GetLevel(GetRequest) returns (GetResponse) {}
 }
 
 enum GetLogType {
@@ -25,4 +27,20 @@ message LogFileResponse {
 	bool                        done     = 2;
 	string                      error    = 3;
 	string                      filename = 4;
+}
+
+message SetResponse {
+	string 						error    = 1;
+}
+
+message SetRequest {
+	int32   verbositylevel         = 1;
+	bool    include_nodeagents     = 2;
+}
+
+message GetRequest {}
+
+message GetResponse {
+	string error =1;
+	string level =2;
 }

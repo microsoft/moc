@@ -1,0 +1,44 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/nodeagent/node";
+package moc.nodeagent.host;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+message HostRequest {
+	Host Host = 1;
+	Operation OperationType = 2;
+}
+
+message HostResponse {
+	Host Host = 1;
+	string RootCACertificate = 2 [(sensitive) = true];
+	string IntermediateCACertificate = 3 [(sensitive) = true];
+	google.protobuf.BoolValue Result = 4;
+	string Error = 5;
+}
+
+enum HostState {
+	Unknown = 0;
+	Active = 1;
+	Inactive = 2;
+	Poweroff = 3;
+}
+
+message Host {
+	string name = 1;
+	string id = 2;
+	Status status = 3;
+	string certificate = 4 [(sensitive) = true];
+	int32 port = 5;
+	int32 authorizerPort = 6;
+	HostState runningState = 7;
+	Tags tags = 8;
+}
+
+service MocHostAgent {
+	rpc Invoke(HostRequest) returns (HostResponse) {}
+}

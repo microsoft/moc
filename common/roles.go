@@ -35,6 +35,8 @@ const (
 	NIContributorRoleName = "NetworkInterfaceContributor"
 	// VM Contributor Role - has permissions to run any operation on VMs
 	VMContributorRoleName = "VMContributor"
+	// VM Updater Role - has permissions to update VMs
+	VMUpdaterRoleName = "VMUpdater"
 	// VirtualMachineImage Contributor Role - has permissions to run any operation on VirtualMachineImages
 	VMIContributorRoleName = "VirtualMachineImageContributor"
 	// VirtualMachineScaleSet Contributor Role - has permissions to run any operation on VirtualMachineScaleSets
@@ -115,4 +117,8 @@ const (
 	KeyReaderRoleName = "KeyReader"
 	// Secret Reader role - has permissions to run read operations on Secrets
 	SecretReaderRoleName = "SecretReader"
+	// Health Reader role - has permissions to read agent health information
+	HealthReaderRoleName = "HealthReader"
+	// Certificate Signer Role - has permissions to run sign and renew operations on Certificates
+	CertSignerRoleName = "CertificateSigner"
 )

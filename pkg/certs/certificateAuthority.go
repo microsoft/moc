@@ -2,6 +2,8 @@
 // Licensed under the Apache v2.0 license.
 package certs
 
+//go:generate mockgen -destination mock/mock_certificateAuthority.go github.com/microsoft/moc/pkg/certs Revocation
+
 import (
 	"bytes"
 	"crypto/rand"
@@ -160,6 +162,10 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 		extKeyUsage = append(extKeyUsage, x509.ExtKeyUsageServerAuth)
 	}
 
+	if conf != nil && conf.IsCA {
+		keyUsage |= x509.KeyUsageCertSign
+	}
+
 	csr, err := DecodeCertRequestPEM(csrPem)
 	if err != nil {
 		return
@@ -183,9 +189,11 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 
 	offset := (time.Hour * 24 * 365)
 	accessIdentity := []byte{}
+	isCA := false
 	if conf != nil {
 		offset = conf.Offset
 		accessIdentity = []byte(conf.Identity)
+		isCA = conf.IsCA
 	}
 	now := time.Now().UTC()
 
@@ -199,6 +207,8 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 		BasicConstraintsValid: true,
 		DNSNames:              csr.DNSNames,
 		IPAddresses:           csr.IPAddresses,
+		IsCA:                  isCA,
+		MaxPathLenZero:        isCA, // Enable MaxPathLenZero only when is CA
 	}
 
 	csrRenewCertsPEM := []byte{}

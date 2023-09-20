@@ -99,6 +99,7 @@ message UefiSettings {
 message SecurityConfiguration {
 	bool enableTPM = 1;
 	UefiSettings uefiSettings = 2;
+	SecurityType securityType = 3;
 }
 
 message VirtualMachine {
@@ -118,11 +119,14 @@ message VirtualMachine {
 	PowerState powerState = 14;
 	SecurityConfiguration security = 15;
 	Tags tags = 16;
+	GuestAgentConfiguration guestAgent = 17;
+	VirtualMachineAgentInstanceView guestAgentInstanceView = 18;
 }
 
 message VirtualMachineOperationRequest {
 	repeated VirtualMachine VirtualMachines = 1;
-	VirtualMachineOperation OperationType = 2;
+	VirtualMachineOperation OBSOLETE_OperationType = 2 [deprecated=true];
+	ProviderAccessOperation OperationType = 3;
 }
 
 message VirtualMachineOperationResponse {

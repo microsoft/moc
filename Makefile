@@ -4,6 +4,7 @@ GOCMD=GO111MODULE=on GOARCH=amd64 go
 GOBUILD=$(GOCMD) build -v #-mod=vendor
 GOTEST=$(GOCMD) test -v 
 GOHOSTOS=$(strip $(shell $(GOCMD) env get GOHOSTOS))
+MOCKGEN=$(shell command -v mockgen 2> /dev/null)
 
 # Private repo workaround
 export GOPRIVATE = github.com/microsoft
@@ -15,8 +16,8 @@ PKG :=
 
 all: format test unittest
 
-.PHONY: vendor
-vendor:
+.PHONY: tidy
+tidy:
 	go mod tidy
 
 format:
@@ -26,19 +27,27 @@ bootstrap:
 	GOOS="linux" go get -u google.golang.org/grpc@v1.26.0
 	GOOS="linux" go install github.com/golang/protobuf/protoc-gen-go@v1.3.2
 
-test:
-	GOOS=windows go build ./...
+test: unittest
 
 unittest:
-	$(GOTEST) ./pkg/marshal
-	$(GOTEST) ./pkg/config
-	$(GOTEST) ./pkg/tags
-	$(GOTEST) ./pkg/net
-	$(GOTEST) ./pkg/certs
-	$(GOTEST) ./pkg/auth
+	$(GOTEST) ./pkg/...
 
 generate: bootstrap
 	(./gen.sh)
 
 pipeline: bootstrap
 	(./gen.sh -c)
+
+
+## Install mockgen golang bin
+install-mockgen:
+ifeq ($(MOCKGEN),)
+	go install github.com/golang/mock/mockgen@v1.6.0
+endif
+	MOCKGEN=$(shell command -v mockgen 2> /dev/null)
+
+mocks:
+	go mod download github.com/golang/mock
+	go get github.com/golang/mock@v1.6.0
+	go generate ./...
+

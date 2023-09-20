@@ -62,6 +62,22 @@ enum VirtualMachineSizeType {
 	Standard_F4s_HPN = 27;
 	Standard_F8s_HPN = 28;
 	Standard_F16s_HPN = 29;
+	Standard_NC4_A2 = 30;
+	Standard_NC8_A2 = 31;
+	Standard_NC16_A2 = 32;
+	Standard_NC32_A2 = 33;
+	Standard_NC4_A30 = 34;
+	Standard_NC8_A30 = 35;
+	Standard_NC16_A30 = 36;
+	Standard_NC32_A30 = 37;
+	Standard_NC4_A100_40 = 38;
+	Standard_NC8_A100_40 = 39;
+	Standard_NC16_A100_40 = 40;
+	Standard_NC32_A100_40 = 41;
+	Standard_NC4_A100_80 = 42;
+	Standard_NC8_A100_80 = 43;
+	Standard_NC16_A100_80 = 44;
+	Standard_NC32_A100_80 = 45;
 	Custom_A2 = 95;
 	Custom_NK = 96;
 	Custom_Gpupv = 97;
@@ -106,12 +122,15 @@ enum VirtualMachineOperation {
 	START = 0;
 	STOP = 1;
 	RESET = 2;
+	REPAIR_GUEST_AGENT = 3;
 }
 
 enum VirtualMachineRunCommandExecutionState {
 	ExecutionState_UNKNOWN = 0;
 	ExecutionState_FAILED = 1;
 	ExecutionState_SUCCEEDED = 2;
+	ExecutionState_PENDING = 3;
+	ExecutionState_REBOOTING = 4;
 }
 
 message VirtualMachineRunCommandInputParameter {
@@ -132,6 +151,36 @@ message VirtualMachineRunCommandInstanceView {
 	string Error = 4;
 }
 
+// describes the the capabilities of this node in terms of what type of VM can be created
+// In the future when CVM comes, another bool will be added to check hardware capability.
+message VirtualMachineCapabilities {
+	bool IsolatedVmCapable =  1;
+}
+
+message InstanceViewStatus {
+	enum StatusLevelType {
+		Unknown = 0;
+		Info = 1 ;
+		Warning = 2;
+		Error = 3;
+	}
+
+	string code = 1;
+	StatusLevelType level = 2;
+	string displayStatus = 3;
+	string message = 4;
+	string time = 5;
+}
+
+message VirtualMachineAgentInstanceView {
+	string vmAgentVersion = 1;
+	repeated InstanceViewStatus statuses = 2;
+}
+
+message GuestAgentConfiguration {
+	bool enabled = 1;
+}
+
 /* Values fetched from Win32_Processor class.
 Documentation here:
 https://docs.microsoft.com/en-us/windows/win32/cimwin32prov/win32-processor#properties */
@@ -149,4 +198,10 @@ enum Architecture {
 
 extend google.protobuf.FieldOptions {
 	bool sensitivecompute = 50002;
+}
+
+enum SecurityType {
+        NOTCONFIGURED = 0;
+        TRUSTEDLAUNCH = 1;
+        CONFIDENTIALVM = 2;
 }

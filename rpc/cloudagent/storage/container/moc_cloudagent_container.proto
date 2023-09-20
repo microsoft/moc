@@ -31,11 +31,12 @@ message ContainerResponse {
 message Container {
 	string name = 1;
 	string id = 2;
-	string path = 4;
+	string path = 4 [(sensitive) = true];
 	Status status = 5;
 	string locationName = 6;
 	StorageContainerInfo info = 7;
 	Tags tags = 8;
+	bool isolated = 9;
 }
 
 service ContainerAgent {

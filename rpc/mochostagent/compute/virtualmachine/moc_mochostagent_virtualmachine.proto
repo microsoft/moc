@@ -1,0 +1,89 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/mochostagent/compute";
+package moc.mochostagent.compute;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_computecommon.proto";
+import "moc_common_notification.proto";
+
+message OperatingSystemConfiguration {
+	OperatingSystemType ostype = 1;
+}
+
+message VirtualMachine {
+	string name = 1;
+	string id = 2;
+	OperatingSystemConfiguration os = 3;
+	Entity entity = 4;
+	Tags tags = 5;
+	VirtualMachineAgentInstanceView guestAgentInstanceView = 6;
+}
+
+message GetVirtualMachineResponse {
+	VirtualMachine VirtualMachine = 1;
+	google.protobuf.BoolValue Result = 2;
+	string Error = 3;
+}
+
+message RegisterVirtualMachineRequest {
+	VirtualMachine VirtualMachine = 1;
+	bool waitForConnection = 2;
+}
+
+message RegisterVirtualMachineInstanceView {
+	string Output = 1;
+	string Error = 2;
+}
+
+message RegisterVirtualMachineResponse {
+	VirtualMachine VirtualMachine = 1;
+	RegisterVirtualMachineInstanceView InstanceView = 2;
+}
+
+message DeregisterVirtualMachineRequest {
+	string VirtualMachineId = 1;
+}
+
+message DeregisterVirtualMachineInstanceView {
+	string Output = 1;
+	string Error = 2;
+}
+
+message DeregisterVirtualMachineResponse {
+	DeregisterVirtualMachineInstanceView InstanceView = 1;
+}
+
+message VirtualMachineRunCommandRequest {
+	VirtualMachine VirtualMachine = 1;
+	VirtualMachineRunCommandScriptSource Source = 2;
+	repeated VirtualMachineRunCommandInputParameter RunCommandInputParameters = 3;
+	string OperationID = 4;
+}
+
+message VirtualMachineRunCommandResponse {
+	VirtualMachineRunCommandInstanceView InstanceView = 1;
+	string OperationID = 2;
+}
+
+message VirtualMachineRepairGuestAgentRequest {
+	VirtualMachine VirtualMachine = 1;
+}
+
+message VirtualMachineRepairGuestAgentResponse {
+	google.protobuf.BoolValue Result = 1;
+	string Error = 2;
+}
+
+service VirtualMachineAgent {
+	rpc Get(VirtualMachine) returns (GetVirtualMachineResponse) {}
+	rpc RegisterVirtualMachine(RegisterVirtualMachineRequest) returns (RegisterVirtualMachineResponse) {}
+	rpc DeregisterVirtualMachine(DeregisterVirtualMachineRequest) returns (DeregisterVirtualMachineResponse) {}
+	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
+	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
+	rpc RepairGuestAgent(VirtualMachineRepairGuestAgentRequest) returns (VirtualMachineRepairGuestAgentResponse) {}
+}
