@@ -14,6 +14,7 @@ enum Algorithm {
 	RSAOAEP = 2;
 	RSAOAEP256 = 3;
 	A256KW = 4;
+	A256CBC = 5;
 }
 
 enum JSONWebKeySignatureAlgorithm {
