@@ -157,9 +157,8 @@ service VirtualMachineAgent {
 }
 
 message HttpProxyConfiguration {
-	string httpProxy = 1;
-	string httpsProxy = 2;
+	string httpProxy = 1 [(sensitive) = true];
+	string httpsProxy = 2 [(sensitive) = true];
 	repeated string noProxy = 3;
-	string trustedCa = 4;
+	string trustedCa = 4 [(sensitive) = true];
 }
-
