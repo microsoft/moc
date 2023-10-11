@@ -43,7 +43,7 @@ message HttpImageProperties {
 	string httpURL = 1;
 }
 message AzureGalleryImageProperties {
-	string sasURI = 1;
+	string sasURI = 1 [(sensitive) = true];
 	string version = 2;
 }
 
