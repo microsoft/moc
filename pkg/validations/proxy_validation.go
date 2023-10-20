@@ -7,19 +7,18 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-
 	"github.com/microsoft/moc/pkg/errors"
 )
 
 func ValidateProxyURL(proxyURL string) error {
-	parsedURL, err := url.ParseRequestURI(proxyURL)
+	parsedURL, err := url.Parse(proxyURL)
 
 	if err != nil {
-		return errors.Wrapf(errors.InvalidInput, err.Error())
+		return errors.Wrapf(errors.InvalidInput, err)
 	}
 
-	if parsedURL.Scheme != "http" {
-		return errors.Wrapf(errors.InvalidInput, "Invalid proxy URL. The URL scheme should be http")
+	if parsedURL.Scheme != "http"{
+		return errors.Wrapf(errors.InvalidInput, "Invalid proxy URL. The URL scheme should be http")	
 	}
 
 	// Create a transport
@@ -35,7 +34,7 @@ func ValidateProxyURL(proxyURL string) error {
 	// Test the HTTP GET request
 	response, err := client.Get("http://bing.com")
 	if err != nil {
-		return errors.Wrapf(errors.InvalidInput, err.Error())
+		return errors.Wrapf(errors.InvalidInput, err)
 	} else {
 		defer response.Body.Close()
 		fmt.Println("Connected successfully to the proxy server")
