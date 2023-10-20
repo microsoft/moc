@@ -87,6 +87,7 @@ message OperatingSystemConfiguration {
 	OperatingSystemBootstrapEngine osBootstrapEngine = 7;
 	LinuxConfiguration linuxConfiguration = 8;
 	WindowsConfiguration windowsConfiguration = 9;
+	ProxyConfiguration proxyConfiguration = 10;
 }
 
 message HardwareConfiguration {
@@ -122,7 +123,6 @@ message VirtualMachine {
 	Tags tags = 14;
 	GuestAgentConfiguration guestAgent = 15;
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 16;
-	HttpProxyConfiguration httpProxyConfiguration = 17;
 }
 
 message VirtualMachineOperationRequest {
@@ -156,7 +156,7 @@ service VirtualMachineAgent {
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
 }
 
-message HttpProxyConfiguration {
+message ProxyConfiguration {
 	string httpProxy = 1 [(sensitive) = true];
 	string httpsProxy = 2 [(sensitive) = true];
 	repeated string noProxy = 3;
