@@ -25,3 +25,11 @@ func Test_ValidateProxyURL(t *testing.T) {
 		t.Fatalf("Test_ValidateProxyURL test case failed. Expected result was %s", expectedResult)
 	}
 }
+
+func Test_ValidateCertFormatIsBase64(t *testing.T) {
+	certContent := "-----BEGIN CERTIFICATE-----\\nMIIDETCCAfkCFAjEhG/xypxPKN1URzLmLISCPuTVMA0GCSqGSIb3DQEBCwUAMEUx\\n-----END CERTIFICATE-----"
+	err := ValidateCertFormatIsBase64(certContent)
+	if err != nil {
+		t.Fatalf("Test_ValidateCertFormat test case failed - Certificate content is not base64 encoded")
+	}
+}

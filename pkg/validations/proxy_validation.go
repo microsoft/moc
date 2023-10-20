@@ -4,9 +4,11 @@
 package validations
 
 import (
+	"encoding/base64"
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/microsoft/moc/pkg/errors"
 )
@@ -41,5 +43,16 @@ func ValidateProxyURL(proxyURL string) error {
 		fmt.Println("Connected successfully to the proxy server")
 	}
 
+	return nil
+}
+
+func ValidateCertFormatIsBase64(certContent string) error {
+
+	certContent = strings.Replace(certContent, "-----BEGIN CERTIFICATE-----\\n", "", -1)
+	certContent = strings.Replace(certContent, "\\n-----END CERTIFICATE-----", "", -1)
+	_, err := base64.StdEncoding.DecodeString(certContent)
+	if err != nil {
+		return errors.Wrapf(errors.InvalidInput, err.Error())
+	}
 	return nil
 }
