@@ -47,10 +47,7 @@ func ValidateProxyURL(proxyURL string) error {
 }
 
 func ValidateCertFormatIsBase64(certContent string) error {
-
-	certContent = strings.Replace(certContent, "-----BEGIN CERTIFICATE-----\\n", "", -1)
 	certContent = strings.Replace(certContent, "-----BEGIN CERTIFICATE-----", "", -1)
-	certContent = strings.Replace(certContent, "\\n-----END CERTIFICATE-----", "", -1)
 	certContent = strings.Replace(certContent, "-----END CERTIFICATE-----", "", -1)
 	_, err := base64.StdEncoding.DecodeString(certContent)
 	if err != nil {
