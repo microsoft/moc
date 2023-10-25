@@ -4,6 +4,8 @@
 package validations
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/base64"
 	"fmt"
 	"net/http"
@@ -13,20 +15,27 @@ import (
 	"github.com/microsoft/moc/pkg/errors"
 )
 
-func ValidateProxyURL(proxyURL string) error {
+func ValidateProxyURL(proxyURL string, certContent string) error {
 	parsedURL, err := url.ParseRequestURI(proxyURL)
 
 	if err != nil {
 		return errors.Wrapf(errors.InvalidInput, err.Error())
 	}
 
-	if parsedURL.Scheme != "http" {
-		return errors.Wrapf(errors.InvalidInput, "Invalid proxy URL. The URL scheme should be http")
+	if parsedURL.Scheme != "http" && parsedURL.Scheme != "https" {
+		return errors.Wrapf(errors.InvalidInput, "Invalid proxy URL. The URL scheme should be http or https")
 	}
+
+	// Create a certificate pool
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM([]byte(certContent))
 
 	// Create a transport
 	transport := &http.Transport{
 		Proxy: http.ProxyURL(parsedURL),
+		TLSClientConfig: &tls.Config{
+			RootCAs: caCertPool,
+		},
 	}
 
 	// Create a client
@@ -35,7 +44,7 @@ func ValidateProxyURL(proxyURL string) error {
 	}
 
 	// Test the HTTP GET request
-	response, err := client.Get("http://bing.com")
+	response, err := client.Get("https://mcr.microsoft.com")
 	if err != nil {
 		return errors.Wrapf(errors.InvalidInput, err.Error())
 	} else {
