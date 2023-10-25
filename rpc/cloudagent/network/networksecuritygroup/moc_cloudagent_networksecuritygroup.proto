@@ -61,4 +61,3 @@ message NetworkSecurityGroup {
 service NetworkSecurityGroupAgent {
 	rpc Invoke(NetworkSecurityGroupRequest) returns (NetworkSecurityGroupResponse) {}
 }
-

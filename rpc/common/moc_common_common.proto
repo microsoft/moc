@@ -314,6 +314,9 @@ enum ProviderAccessOperation {
 
 	VirtualNetwork_Create           = 3400;
 	VirtualNetwork_Update           = 3401;
+
+	NetworkSecurityGroup_Create 	= 3500;
+	NetworkSecurityGroup_Update 	= 3501;
 }
 
 extend google.protobuf.FieldOptions {
