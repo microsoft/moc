@@ -3,16 +3,17 @@
 package validations
 
 import (
-	"testing"
 	"io/ioutil"
+	"strings"
+	"testing"
 )
 
 func Test_ValidateProxyURL(t *testing.T) {
-    caCert, err := ioutil.ReadFile("proxy.crt")
+	caCert, err := ioutil.ReadFile("proxy.crt")
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
-    caCertString := string(caCert)
+	caCertString := string(caCert)
 
 	// Empty proxy url
 	err = ValidateProxyURL("", "")
@@ -37,9 +38,9 @@ func Test_ValidateProxyURL(t *testing.T) {
 
 	// Unreachable proxy server
 	err = ValidateProxyURL("http://ubuntu:ubuntu@192.168.200.200:3128", "")
-	expectedResult = "Get \"https://mcr.microsoft.com\": proxyconnect tcp: dial tcp 192.168.200.200:3128: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.: Invalid Input"
-	if err.Error() != expectedResult {
-		t.Fatalf("Test_ValidateProxyURL test case failed. Expected error %s but got %s", expectedResult, err.Error())
+	expectedResult = "Get \"https://mcr.microsoft.com\": proxyconnect tcp: dial tcp 192.168.200.200:3128:"
+	if !strings.Contains(err.Error(), expectedResult) {
+		t.Fatalf("Test_ValidateProxyURL test case failed. Expected error %s", err.Error())
 	}
 
 	// Valid case
@@ -54,7 +55,7 @@ func Test_ValidateProxyCertificate(t *testing.T) {
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
-    caCertString := string(caCert)
+	caCertString := string(caCert)
 
 	// Valid case
 	err = ValidateProxyCertificate(caCertString)

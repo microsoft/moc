@@ -11,8 +11,9 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"github.com/microsoft/moc/pkg/errors"
 	"time"
+
+	"github.com/microsoft/moc/pkg/errors"
 )
 
 func ValidateProxyURL(proxyURL string, certContent string) error {
@@ -35,7 +36,7 @@ func ValidateProxyURL(proxyURL string, certContent string) error {
 	transport := &http.Transport{
 		Proxy: http.ProxyURL(parsedURL),
 		TLSClientConfig: &tls.Config{
-			RootCAs: caCertPool,
+			RootCAs:            caCertPool,
 			InsecureSkipVerify: true,
 		},
 	}
