@@ -36,8 +36,7 @@ func ValidateProxyURL(proxyURL string, certContent string) error {
 	transport := &http.Transport{
 		Proxy: http.ProxyURL(parsedURL),
 		TLSClientConfig: &tls.Config{
-			RootCAs:            caCertPool,
-			InsecureSkipVerify: true,
+			RootCAs: caCertPool,
 		},
 	}
 
