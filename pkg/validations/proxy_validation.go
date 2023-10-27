@@ -62,16 +62,11 @@ func ValidateProxyCertificate(certContent string) error {
 	certContent = strings.Replace(certContent, "-----END CERTIFICATE-----", "", -1)
 
 	// Check if certificate is base64-encoded
-	_, err := base64.StdEncoding.DecodeString(certContent)
+	certBytes, err := base64.StdEncoding.DecodeString(certContent)
 	if err != nil {
 		return errors.Wrapf(errors.InvalidInput, "Proxy server certificate is not base64 encoded. Please provide a base64 encoded certificate.")
 	}
 
-	// Decode the base64-encoded certificate
-	certBytes, _ := base64.StdEncoding.DecodeString(certContent)
-	if certBytes == nil {
-		return errors.Wrapf(errors.InvalidInput, "Failed to decode certificate")
-	}
 	// Parse the decoded certificate
 	caCert, err := x509.ParseCertificate(certBytes)
 	if err != nil {
