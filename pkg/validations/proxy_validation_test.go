@@ -8,7 +8,7 @@ import (
 )
 
 func Test_ValidateProxyURL(t *testing.T) {
-	caCert, err := ioutil.ReadFile("proxy.crt")
+	caCert, err := ioutil.ReadFile("../proxycert/proxy.crt")
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
@@ -52,7 +52,7 @@ func Test_ValidateProxyURL(t *testing.T) {
 }
 
 func Test_ValidateProxyCertificate(t *testing.T) {
-	caCert, err := ioutil.ReadFile("proxy.crt")
+	caCert, err := ioutil.ReadFile("../proxycert/proxy.crt")
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
@@ -65,7 +65,7 @@ func Test_ValidateProxyCertificate(t *testing.T) {
 	}
 
 	// Invalid certificate
-	caCert, err = ioutil.ReadFile("sample-invalidCertificate.crt")
+	caCert, err = ioutil.ReadFile("../proxycert/sample-invalidCertificate.crt")
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
@@ -77,7 +77,7 @@ func Test_ValidateProxyCertificate(t *testing.T) {
 	}
 
 	// Expired certificate
-	caCert, err = ioutil.ReadFile("sample-expiredCertificate.crt")
+	caCert, err = ioutil.ReadFile("../proxycert/sample-expiredCertificate.crt")
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
