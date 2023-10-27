@@ -6,11 +6,10 @@ package validations
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"encoding/base64"
+	"encoding/pem"
 	"fmt"
 	"net/http"
 	"net/url"
-	"strings"
 	"time"
 
 	"github.com/microsoft/moc/pkg/errors"
@@ -58,17 +57,13 @@ func ValidateProxyURL(proxyURL string, certContent string) error {
 }
 
 func ValidateProxyCertificate(certContent string) error {
-	certContent = strings.Replace(certContent, "-----BEGIN CERTIFICATE-----", "", -1)
-	certContent = strings.Replace(certContent, "-----END CERTIFICATE-----", "", -1)
-
-	// Check if certificate is base64-encoded
-	certBytes, err := base64.StdEncoding.DecodeString(certContent)
-	if err != nil {
+	block, _ := pem.Decode([]byte(certContent))
+	if block == nil {
 		return errors.Wrapf(errors.InvalidInput, "Proxy server certificate is not base64 encoded. Please provide a base64 encoded certificate.")
 	}
 
 	// Parse the decoded certificate
-	caCert, err := x509.ParseCertificate(certBytes)
+	caCert, err := x509.ParseCertificate(block.Bytes)
 	if err != nil {
 		return errors.Wrapf(errors.InvalidInput, err.Error())
 	}

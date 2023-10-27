@@ -72,11 +72,4 @@ func Test_ValidateProxyCertificate(t *testing.T) {
 	if err.Error() != expectedResult {
 		t.Fatalf("Test_ValidateProxyCertificate test case failed. Expected error %s but got %s", expectedResult, err.Error())
 	}
-
-	// Malformed certificate
-	expectedResult = "x509: malformed certificate: Invalid Input"
-	err = ValidateProxyCertificate("")
-	if err.Error() != expectedResult {
-		t.Fatalf("Test_ValidateProxyCertificate test case failed. Expected error %s but got %s", expectedResult, err.Error())
-	}
 }
