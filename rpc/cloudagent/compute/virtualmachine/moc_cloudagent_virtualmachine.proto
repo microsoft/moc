@@ -154,10 +154,3 @@ service VirtualMachineAgent {
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
 }
-
-message ProxyConfiguration {
-	string httpProxy = 1 [(sensitive) = true];
-	string httpsProxy = 2 [(sensitive) = true];
-	repeated string noProxy = 3;
-	string trustedCa = 4 [(sensitive) = true];
-}
