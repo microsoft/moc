@@ -3,16 +3,18 @@
 package validations
 
 import (
-	"io/ioutil"
 	"testing"
+
+	"github.com/microsoft/moc/pkg/certs"
 )
 
 func Test_ValidateProxyURL(t *testing.T) {
-	caCert, err := ioutil.ReadFile("../proxycert/proxy.crt")
+	caCert, _, err := certs.GenerateClientCertificate("ValidCertificate")
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
-	caCertString := string(caCert)
+	certBytes := certs.EncodeCertPEM(caCert)
+	caCertString := string(certBytes)
 
 	// Empty proxy url
 	err = ValidateProxyURL("", "")
@@ -37,11 +39,12 @@ func Test_ValidateProxyURL(t *testing.T) {
 }
 
 func Test_ValidateProxyCertificate(t *testing.T) {
-	caCert, err := ioutil.ReadFile("../proxycert/proxy.crt")
+	caCert, _, err := certs.GenerateClientCertificate("ValidCertificate")
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
-	caCertString := string(caCert)
+	certBytes := certs.EncodeCertPEM(caCert)
+	caCertString := string(certBytes)
 
 	// Valid case
 	err = ValidateProxyCertificate(caCertString)
@@ -50,11 +53,8 @@ func Test_ValidateProxyCertificate(t *testing.T) {
 	}
 
 	// Invalid certificate
-	caCert, err = ioutil.ReadFile("../proxycert/sample-invalidCertificate.crt")
-	if err != nil {
-		t.Fatalf(err.Error())
-	}
-	caCertString = string(caCert)
+	certBytes[0] ^= 0xff // flip a bit to invalidate the certificate
+	caCertString = string(certBytes)
 	err = ValidateProxyCertificate(caCertString)
 	expectedResult := "Proxy server certificate is not base64 encoded. Please provide a base64 encoded certificate.: Invalid Input"
 	if err.Error() != expectedResult {
@@ -62,11 +62,12 @@ func Test_ValidateProxyCertificate(t *testing.T) {
 	}
 
 	// Expired certificate
-	caCert, err = ioutil.ReadFile("../proxycert/sample-expiredCertificate.crt")
+	caCert, _, err = certs.GenerateExpiredClientCertificate("ExpiredCertificate")
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
-	caCertString = string(caCert)
+	certBytes = certs.EncodeCertPEM(caCert)
+	caCertString = string(certBytes)
 	err = ValidateProxyCertificate(caCertString)
 	expectedResult = "Proxy server SSL/TLS certificate has expired: Invalid Input"
 	if err.Error() != expectedResult {

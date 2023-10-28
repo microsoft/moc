@@ -418,3 +418,51 @@ func GenerateCertificateRenewRequestSameKey(cert *tls.Certificate) (retCsr []byt
 	retCsr = EncodeCertRequestPEM(x509CertReq)
 	return
 }
+
+func GenerateExpiredClientCertificate(name string) (*x509.Certificate, *rsa.PrivateKey, error) {
+	key, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		return nil, key, err
+	}
+
+	nodeFqdn, err := wssdnet.GetIPAddress()
+	if err != nil {
+		return nil, key, err
+	}
+
+	now := time.Now().UTC()
+
+	serial, err := rand.Int(rand.Reader, new(big.Int).SetInt64(math.MaxInt64))
+	if err != nil {
+		return nil, key, err
+	}
+
+	tmpl := x509.Certificate{
+		SerialNumber: serial,
+		Subject: pkix.Name{
+			CommonName:   name,
+			Organization: []string{"microsoft"},
+		},
+		NotBefore:             now.Add(-time.Hour * 24 * 365 * 2), // 2 years ago
+		NotAfter:              now.Add(-time.Hour * 24 * 365),     // 1 year ago
+		KeyUsage:              x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign,
+		MaxPathLenZero:        true,
+		BasicConstraintsValid: true,
+		MaxPathLen:            0,
+		IsCA:                  true,
+		DNSNames:              []string{"localhost"},
+		IPAddresses:           []net.IP{wssdnet.StringToNetIPAddress(wssdnet.LOOPBACK_ADDRESS), wssdnet.StringToNetIPAddress(nodeFqdn)},
+	}
+
+	b, err := x509.CreateCertificate(rand.Reader, &tmpl, &tmpl, key.Public(), key)
+	if err != nil {
+		return nil, key, err
+	}
+
+	x509Cert, err := x509.ParseCertificate(b)
+	if err != nil {
+		return nil, key, err
+	}
+
+	return x509Cert, key, nil
+}
