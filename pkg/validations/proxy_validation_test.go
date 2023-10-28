@@ -8,7 +8,7 @@ import (
 	"github.com/microsoft/moc/pkg/certs"
 )
 
-func Test_ValidateProxyURL(t *testing.T) {
+func Test_ValidateProxyURLAndTestConnection(t *testing.T) {
 	caCert, _, err := certs.GenerateClientCertificate("ValidCertificate")
 	if err != nil {
 		t.Fatalf(err.Error())
