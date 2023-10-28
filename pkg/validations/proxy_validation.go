@@ -6,11 +6,9 @@ package validations
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"encoding/pem"
 	"fmt"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/microsoft/moc/pkg/errors"
 )
@@ -55,27 +53,6 @@ func ValidateProxyURLAndTestConnection(proxyURL string, certContent string, getR
 	} else {
 		defer response.Body.Close()
 		fmt.Println("Connected successfully to the proxy server")
-	}
-
-	return nil
-}
-
-func ValidateProxyCertificate(certContent string) error {
-	block, _ := pem.Decode([]byte(certContent))
-	if block == nil {
-		return errors.Wrapf(errors.InvalidInput, "Proxy server certificate is not base64 encoded. Please provide a base64 encoded certificate.")
-	}
-
-	// Parse the decoded certificate
-	caCert, err := x509.ParseCertificate(block.Bytes)
-	if err != nil {
-		return errors.Wrapf(errors.InvalidInput, err.Error())
-	}
-
-	// Check for the expiry of certificate
-	currentTime := time.Now()
-	if currentTime.After(caCert.NotAfter) {
-		return errors.Wrapf(errors.InvalidInput, "Proxy server SSL/TLS certificate has expired")
 	}
 
 	return nil

@@ -163,7 +163,7 @@ func NewTransportCredentialFromBase64(serverName, clientCertificateBase64, clien
 	if err != nil {
 		return nil, err
 	}
-	if err = certCheck(clientPem); err != nil {
+	if err = CertCheck(clientPem); err != nil {
 		return nil, err
 	}
 
@@ -408,7 +408,7 @@ func AccessFileToTls(accessFile WssdConfig) ([]byte, tls.Certificate, error) {
 		return []byte{}, tls.Certificate{}, err
 	}
 
-	if err = certCheck(clientPem); err != nil {
+	if err = CertCheck(clientPem); err != nil {
 		return []byte{}, tls.Certificate{}, err
 	}
 
