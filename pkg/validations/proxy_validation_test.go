@@ -17,21 +17,21 @@ func Test_ValidateProxyURL(t *testing.T) {
 	caCertString := string(certBytes)
 
 	// Empty proxy url
-	err = ValidateProxyURL("", "")
+	err = ValidateProxyURLAndTestConnection("", "", "")
 	expectedResult := "parse \"\": empty url: Invalid Input"
 	if err.Error() != expectedResult {
 		t.Fatalf("Test_ValidateProxyURL test case failed. Expected error %s but got %s", expectedResult, err.Error())
 	}
 
 	// Invalid proxy url
-	err = ValidateProxyURL("//akse2e:akse2e@skyproxy.ceccloud1.selfhost.corp.microsoft.com:3128", caCertString)
+	err = ValidateProxyURLAndTestConnection("//akse2e:akse2e@skyproxy.ceccloud1.selfhost.corp.microsoft.com:3128", caCertString, "")
 	expectedResult = "Invalid proxy URL. The URL scheme should be http or https: Invalid Input"
 	if err.Error() != expectedResult {
 		t.Fatalf("Test_ValidateProxyURL test case failed. Expected error %s but got %s", expectedResult, err.Error())
 	}
 
 	// Invalid hostname
-	err = ValidateProxyURL("http://akse2e:akse2e@.ceccloud1.selfhost.corp.microsoft.com:3128", caCertString)
+	err = ValidateProxyURLAndTestConnection("http://akse2e:akse2e@.ceccloud1.selfhost.corp.microsoft.com:3128", caCertString, "")
 	expectedResult = "Get \"https://mcr.microsoft.com\": proxyconnect tcp: dial tcp: lookup .ceccloud1.selfhost.corp.microsoft.com: no such host: Invalid Input"
 	if err.Error() != expectedResult {
 		t.Fatalf("Test_ValidateProxyURL test case failed. Expected error %s but got %s", expectedResult, err.Error())

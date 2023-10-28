@@ -15,7 +15,7 @@ import (
 	"github.com/microsoft/moc/pkg/errors"
 )
 
-func ValidateProxyURL(proxyURL string, certContent string) error {
+func ValidateProxyURLAndTestConnection(proxyURL string, certContent string, getRequestUrl string) error {
 	parsedURL, err := url.ParseRequestURI(proxyURL)
 
 	if err != nil {
@@ -44,8 +44,12 @@ func ValidateProxyURL(proxyURL string, certContent string) error {
 		Transport: transport,
 	}
 
+	if getRequestUrl == "" {
+		getRequestUrl = "https://mcr.microsoft.com"
+	}
+
 	// Test the HTTP GET request
-	response, err := client.Get("https://mcr.microsoft.com")
+	response, err := client.Get(getRequestUrl)
 	if err != nil {
 		return errors.Wrapf(errors.InvalidInput, err.Error())
 	} else {
