@@ -3,6 +3,8 @@
 package validations
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/microsoft/moc/pkg/certs"
@@ -39,4 +41,24 @@ func Test_TestProxyUrlConnection(t *testing.T) {
 	if err.Error() != expectedResult {
 		t.Fatalf("Test_ValidateProxyURL test case failed. Expected error %s but got %s", expectedResult, err.Error())
 	}
+
+	// Valid case
+	proxy := NewProxy()
+	defer proxy.Target.Close()
+	parsedUrl, _ = ValidateProxyURL(proxy.Target.URL)
+	err = TestProxyUrlConnection(parsedUrl, "", "http://www.bing.com")
+	if err != nil {
+		t.Fatalf("Test_ValidateProxyURL test case failed. %s", err.Error())
+	}
+}
+
+// Proxy is a simple proxy server for unit tests.
+type Proxy struct {
+	Target *httptest.Server
+}
+
+// NewProxy creates a new proxy server for unit tests.
+func NewProxy() *Proxy {
+	target := httptest.NewServer(http.DefaultServeMux)
+	return &Proxy{Target: target}
 }
