@@ -13,18 +13,22 @@ import (
 	"github.com/microsoft/moc/pkg/errors"
 )
 
-func ValidateProxyURLAndTestConnection(proxyURL string, certContent string, getRequestUrl string) error {
+func ValidateProxyURL(proxyURL string) (*url.URL, error) {
 	parsedURL, err := url.ParseRequestURI(proxyURL)
 
 	if err != nil {
-		return errors.Wrapf(errors.InvalidInput, err.Error())
+		return nil, errors.Wrapf(errors.InvalidInput, err.Error())
 	}
 
 	// Check if url scheme is http or https
 	if parsedURL.Scheme != "http" && parsedURL.Scheme != "https" {
-		return errors.Wrapf(errors.InvalidInput, "Invalid proxy URL. The URL scheme should be http or https")
+		return nil, errors.Wrapf(errors.InvalidInput, "Invalid proxy URL. The URL scheme should be http or https")
 	}
 
+	return parsedURL, nil
+}
+
+func TestProxyUrlConnection(parsedURL *url.URL, certContent string, getRequestUrl string) error {
 	// Create a certificate pool
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM([]byte(certContent))
