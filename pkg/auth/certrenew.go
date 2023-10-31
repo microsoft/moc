@@ -71,7 +71,7 @@ func renewRequired(x509Cert *x509.Certificate) bool {
 	return true
 }
 
-func certCheck(pemCert []byte) error {
+func CertCheck(pemCert []byte) error {
 
 	x509Cert, err := certs.DecodeCertPEM([]byte(pemCert))
 	if err != nil {
@@ -113,7 +113,7 @@ func renewCertificate(server string, wssdConfig *WssdConfig) (retConfig *WssdCon
 		return
 	}
 
-	if err = certCheck(pemCert); err != nil {
+	if err = CertCheck(pemCert); err != nil {
 		return
 	}
 

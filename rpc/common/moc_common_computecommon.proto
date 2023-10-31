@@ -205,3 +205,10 @@ enum SecurityType {
         TRUSTEDLAUNCH = 1;
         CONFIDENTIALVM = 2;
 }
+
+message ProxyConfiguration {
+	string httpProxy = 1 [(sensitivecompute) = true];
+	string httpsProxy = 2 [(sensitivecompute) = true];
+	repeated string noProxy = 3;
+	string trustedCa = 4 [(sensitivecompute) = true];
+}
