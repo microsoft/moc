@@ -6,13 +6,15 @@ package network
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	proto "github.com/golang/protobuf/proto"
 	wrappers "github.com/golang/protobuf/ptypes/wrappers"
-	common "github.com/microsoft/moc/rpc/common"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	math "math"
+
+	common "github.com/microsoft/moc/rpc/common"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -396,6 +398,17 @@ func (m *NetworkInterface) GetType() NetworkInterface_NetworkInterfaceType {
 func (m *NetworkInterface) GetIpConfigurations() []*IpConfiguration {
 	if m != nil {
 		return m.IpConfigurations
+	}
+	return nil
+}
+
+func (m *NetworkInterface) GetPrimaryIpConfiguration() *IpConfiguration {
+	if m != nil {
+		for _, ipConfig := range m.IpConfigurations {
+			if ipConfig.Primary {
+				return ipConfig
+			}
+		}
 	}
 	return nil
 }
