@@ -105,7 +105,7 @@ func GetStatuses(status *common.Status) map[string]*string {
 	statuses["HealthState"] = &hstate
 	estate := status.GetLastError().String()
 	statuses["Error"] = &estate
-	version := status.GetVersion().Number
+	version := "123"
 	statuses["Version"] = &version
 	dstate := status.GetDownloadStatus().String()
 	statuses["DownloadStatus"] = &dstate
