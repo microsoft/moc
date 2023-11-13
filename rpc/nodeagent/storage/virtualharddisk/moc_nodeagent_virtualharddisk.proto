@@ -55,7 +55,7 @@ message AzureGalleryImageProperties {
 message VirtualHardDisk {
 	string name = 1;
 	string id = 2;
-	string source = 3;
+	string source = 3 [(sensitive) = true];
 	string path = 4 [(sensitive) = true];
 	// Storage container name to hold this vhd
 	string containerName = 5;
