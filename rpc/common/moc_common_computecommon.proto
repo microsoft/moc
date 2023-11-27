@@ -127,6 +127,8 @@ enum VirtualMachineOperation {
 	STOP = 1;
 	RESET = 2;
 	REPAIR_GUEST_AGENT = 3;
+	PAUSE = 4;
+	SAVE = 5;
 }
 
 enum VirtualMachineRunCommandExecutionState {
