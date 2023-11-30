@@ -120,6 +120,7 @@ enum PowerState {
 	Off = 2;
 	Paused = 3;
 	Critical = 4;
+	Saved = 5;
 }
 
 enum VirtualMachineOperation {
