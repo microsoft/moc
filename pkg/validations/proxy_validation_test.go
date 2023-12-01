@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/microsoft/moc/pkg/certs"
+	commonproto "github.com/microsoft/moc/rpc/common"
 )
 
 func Test_ValidateProxyURL(t *testing.T) {
@@ -49,6 +50,26 @@ func Test_TestProxyUrlConnection(t *testing.T) {
 	err = TestProxyUrlConnection(parsedUrl, "", "http://www.bing.com")
 	if err != nil {
 		t.Fatalf("Test_TestProxyUrlConnection test case failed. %s", err.Error())
+	}
+}
+
+func Test_ValidateProxyParameters(t *testing.T) {
+	config := commonproto.ProxyConfiguration{}
+	proxy := NewProxy()
+	defer proxy.Target.Close()
+	config.HttpProxy = proxy.Target.URL
+	config.HttpsProxy = proxy.Target.URL
+
+	err := ValidateProxyParameters(&config)
+	if err != nil {
+		t.Fatalf("Test_ValidateProxyParameters test case failed. %s", err.Error())
+	}
+
+	config.HttpProxy = "//akse2e:akse2e@skyproxy.ceccloud1.selfhost.corp.microsoft.com:3128"
+	err = ValidateProxyParameters(&config)
+	expectedResult := "Invalid proxy URL. The URL scheme should be http or https: Invalid Input"
+	if err.Error() != expectedResult {
+		t.Fatalf("Test_ValidateProxyParameters test case failed. Expected error %s but got %s", expectedResult, err.Error())
 	}
 }
 
