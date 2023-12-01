@@ -66,7 +66,7 @@ func Test_ValidateProxyParameters(t *testing.T) {
 		t.Fatalf("Test_ValidateProxyParameters test case failed. %s", err.Error())
 	}
 
-	// invalid url
+	// invalid case - invalid url
 	config.HttpProxy = "//akse2e:akse2e@skyproxy.ceccloud1.selfhost.corp.microsoft.com:3128"
 	err = ValidateProxyParameters(&config)
 	expectedResult := "Invalid proxy URL. The URL scheme should be http or https: Invalid Input"
