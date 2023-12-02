@@ -11,6 +11,7 @@ import (
 	"net/url"
 
 	"github.com/microsoft/moc/pkg/errors"
+	commonproto "github.com/microsoft/moc/rpc/common"
 )
 
 func ValidateProxyURL(proxyURL string) (*url.URL, error) {
@@ -57,6 +58,28 @@ func TestProxyUrlConnection(parsedURL *url.URL, certContent string, getRequestUr
 	} else {
 		defer response.Body.Close()
 		fmt.Println("Connected successfully to the proxy server")
+	}
+
+	return nil
+}
+
+func ValidateProxyParameters(proxyConfig *commonproto.ProxyConfiguration) error {
+	if proxyConfig == nil {
+		return nil
+	}
+	// Validations for proxy parameters
+	if len(proxyConfig.HttpProxy) > 0 {
+		_, err := ValidateProxyURL(proxyConfig.HttpProxy)
+		if err != nil {
+			return err
+		}
+	}
+
+	if len(proxyConfig.HttpsProxy) > 0 {
+		_, err := ValidateProxyURL(proxyConfig.HttpsProxy)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
