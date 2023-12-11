@@ -59,6 +59,7 @@ message Subnet {
 	IPAllocationMethod allocation = 5;
 	uint32 vlan = 6;
 	repeated IPPool ippools = 7;
+	string networkSecurityGroup = 8;
 }
 
 message IPPoolInfo {
