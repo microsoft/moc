@@ -78,6 +78,10 @@ enum VirtualMachineSizeType {
 	Standard_NC8_A100_80 = 43;
 	Standard_NC16_A100_80 = 44;
 	Standard_NC32_A100_80 = 45;
+	Standard_NC4_A16 = 46;
+	Standard_NC8_A16 = 47;
+	Standard_NC16_A16 = 48;
+	Standard_NC32_A16 = 49;
 	Custom_A2 = 95;
 	Custom_NK = 96;
 	Custom_Gpupv = 97;
@@ -204,4 +208,11 @@ enum SecurityType {
         NOTCONFIGURED = 0;
         TRUSTEDLAUNCH = 1;
         CONFIDENTIALVM = 2;
+}
+
+message ProxyConfiguration {
+	string httpProxy = 1 [(sensitivecompute) = true];
+	string httpsProxy = 2 [(sensitivecompute) = true];
+	repeated string noProxy = 3;
+	string trustedCa = 4 [(sensitivecompute) = true];
 }

@@ -60,7 +60,7 @@ message GalleryImage {
 	string offer = 9;
 	string containerName = 10;
 	// Source of the GalleryImage from where we can copy the image from.
-	string sourcePath = 11;
+	string sourcePath = 11 [(sensitive) = true];
 	Tags tags = 12;
 	ImageSource sourceType = 13;
 	HyperVGeneration hyperVGeneration = 14;

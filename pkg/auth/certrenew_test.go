@@ -178,7 +178,7 @@ func Test_CertCheckNotExpired(t *testing.T) {
 	}
 
 	certPem := certs.EncodeCertPEM(x509Cert)
-	if err = certCheck(certPem); err != nil {
+	if err = CertCheck(certPem); err != nil {
 		if errors.IsExpired(err) {
 			t.Errorf("certCheck return certificate expired %v: Expected Valid Certificate", err)
 		} else {
@@ -210,14 +210,14 @@ func Test_CertCheckExpired(t *testing.T) {
 	}
 
 	certPem := certs.EncodeCertPEM(x509Cert)
-	if err = certCheck(certPem); err == nil || !errors.IsExpired(err) {
+	if err = CertCheck(certPem); err == nil || !errors.IsExpired(err) {
 		t.Errorf("certCheck Expected:Expired Actual:%v", err)
 	}
 }
 
 func Test_CertCheckEmpty(t *testing.T) {
 
-	if err := certCheck([]byte{}); err == nil || !errors.IsInvalidInput(err) {
+	if err := CertCheck([]byte{}); err == nil || !errors.IsInvalidInput(err) {
 		t.Errorf("certCheck Expected:InvalidInput Actual:%v", err)
 	}
 }

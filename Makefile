@@ -24,7 +24,7 @@ format:
 	gofmt -s -w rpc/ pkg/ 
 
 bootstrap:
-	GOOS="linux" go get -u google.golang.org/grpc@v1.26.0
+	GOOS="linux" go get -u google.golang.org/grpc@v1.56.3
 	GOOS="linux" go install github.com/golang/protobuf/protoc-gen-go@v1.3.2
 
 test: unittest
