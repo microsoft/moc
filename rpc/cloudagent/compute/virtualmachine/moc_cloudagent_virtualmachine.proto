@@ -122,6 +122,7 @@ message VirtualMachine {
 	Tags tags = 16;
 	GuestAgentConfiguration guestAgent = 17;
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 18;
+	AffinityConfiguration affinity = 19;
 }
 
 message VirtualMachineOperationRequest {
