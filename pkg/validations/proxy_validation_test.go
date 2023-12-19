@@ -41,8 +41,7 @@ func Test_TestProxyUrlConnection(t *testing.T) {
 	expectedResult := "Get \"https://mcr.microsoft.com\": proxyconnect tcp: dial tcp: lookup w3proxy.netscape.com: no such host: Invalid Input"
 
 	if err.Error() != expectedResult {
-		// For some reason error case is failing for me, just skip it
-		//t.Fatalf("Test_TestProxyUrlConnection test case failed. Expected error %s but got %s", expectedResult, err.Error())
+		t.Fatalf("Test_TestProxyUrlConnection test case failed. Expected error %s but got %s", expectedResult, err.Error())
 	}
 
 	// Valid case
