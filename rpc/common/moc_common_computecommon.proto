@@ -120,6 +120,7 @@ enum PowerState {
 	Off = 2;
 	Paused = 3;
 	Critical = 4;
+	Saved = 5;
 }
 
 enum VirtualMachineOperation {
@@ -127,6 +128,8 @@ enum VirtualMachineOperation {
 	STOP = 1;
 	RESET = 2;
 	REPAIR_GUEST_AGENT = 3;
+	PAUSE = 4;
+	SAVE = 5;
 }
 
 enum VirtualMachineRunCommandExecutionState {
