@@ -9,14 +9,14 @@ require (
 	github.com/jmespath/go-jmespath v0.3.0
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.3
-	golang.org/x/net v0.19.0 // indirect
+	golang.org/x/net v0.20.0 // indirect
 	google.golang.org/grpc v1.56.3
 	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
 	github.com/golang/mock v1.6.0
-	google.golang.org/protobuf v1.31.0 // indirect
+	google.golang.org/protobuf v1.32.0 // indirect
 )
 
 replace (

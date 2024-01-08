@@ -124,7 +124,6 @@ enum PowerState {
 
 enum VirtualMachineOperation {
 	START = 0;
-	STOP = 1;
 	RESET = 2;
 	REPAIR_GUEST_AGENT = 3;
 }
