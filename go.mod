@@ -23,4 +23,5 @@ replace (
 	gopkg.in/yaml.v2 => gopkg.in/yaml.v2 v2.2.8
 )
 
+// Brought in by google.golang.org/grpc bump to 1.56.3, but uses CC-BY-SA-3.0 copyleft license
 exclude github.com/ajstarks/deck/generate v0.0.0-20210309230005-c3f852c02e19
