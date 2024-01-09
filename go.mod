@@ -9,8 +9,9 @@ require (
 	github.com/hectane/go-acl v0.0.0-20190604041725-da78bae5fc95
 	github.com/jmespath/go-jmespath v0.3.0
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.8.3
-	golang.org/x/net v0.19.0 // indirect
+	github.com/stretchr/testify v1.8.4
+	golang.org/x/net v0.20.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240108191215-35c7eff3a6b1 // indirect
 	google.golang.org/grpc v1.60.1
 	gopkg.in/yaml.v3 v3.0.1
 )
