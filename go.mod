@@ -9,10 +9,8 @@ require (
 	github.com/hectane/go-acl v0.0.0-20190604041725-da78bae5fc95
 	github.com/jmespath/go-jmespath v0.3.0
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.8.4
-	golang.org/x/net v0.20.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240108191215-35c7eff3a6b1 // indirect
-	google.golang.org/grpc v1.60.1
+	github.com/stretchr/testify v1.8.3
+	google.golang.org/grpc v1.56.3
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -21,7 +19,7 @@ replace (
 	golang.org/x/crypto => golang.org/x/crypto v0.17.0
 	golang.org/x/image => golang.org/x/image v0.10.0
 	golang.org/x/sys => golang.org/x/sys v0.0.0-20220823224334-20c2bfdbfe24
-	google.golang.org/grpc => google.golang.org/grpc v1.60.1
+	google.golang.org/grpc => google.golang.org/grpc v1.56.3
 	gopkg.in/yaml.v2 => gopkg.in/yaml.v2 v2.2.8
 )
 
