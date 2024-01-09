@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/golang/mock v1.6.0
 	github.com/golang/protobuf v1.5.3
 	github.com/hectane/go-acl v0.0.0-20190604041725-da78bae5fc95
 	github.com/jmespath/go-jmespath v0.3.0
@@ -14,16 +15,13 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 )
 
-require github.com/golang/mock v1.6.0
-
 replace (
-	github.com/gogo/protobuf => github.com/gogo/protobuf v1.5.3
 	github.com/golang/mock => github.com/golang/mock v1.6.0
-	github.com/golang/protobuf/protoc-gen-go => github.com/golang/protobuf/protoc-gen-go v1.3.2
-	golang.org/x/crypto => golang.org/x/crypto v0.0.0-20211202192323-5770296d904e
+	golang.org/x/crypto => golang.org/x/crypto v0.17.0
+	golang.org/x/image => golang.org/x/image v0.10.0
 	golang.org/x/sys => golang.org/x/sys v0.0.0-20220823224334-20c2bfdbfe24
 	google.golang.org/grpc => google.golang.org/grpc v1.60.1
-	gopkg.in/yaml.v2 => gopkg.in/yaml.v2 v2.2.4
+	gopkg.in/yaml.v2 => gopkg.in/yaml.v2 v2.2.8
 )
 
 exclude github.com/ajstarks/deck/generate v0.0.0-20210309230005-c3f852c02e19
