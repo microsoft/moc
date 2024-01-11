@@ -43,6 +43,7 @@ Module="compute"
 echo "Generating $Agent/$Module protoc"
 protoc -I $Agent/$Module/virtualmachine -I ./common $Agent/$Module/virtualmachine/moc_nodeagent_virtualmachine.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/virtualmachinescaleset -I $Agent/$Module/virtualmachine -I $Agent/network/virtualnetworkinterface -I ./common $Agent/$Module/virtualmachinescaleset/moc_nodeagent_virtualmachinescaleset.proto --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/availabilityset -I $Agent/$Module/virtualmachine -I ./common $Agent/$Module/availabilityset/moc_nodeagent_availabilityset.proto --go_out=plugins=grpc:../bld/gen/
 
 Module="storage"
 echo "Generating $Agent/$Module protoc"

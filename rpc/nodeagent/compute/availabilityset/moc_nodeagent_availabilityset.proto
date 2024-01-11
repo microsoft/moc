@@ -1,0 +1,40 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/nodeagent/compute";
+package moc.nodeagent.compute;
+
+import "google/protobuf/wrappers.proto";
+import "moc_nodeagent_virtualmachine.proto";
+import "moc_common_common.proto";
+
+message AvailabilitySetRequest {
+	AvailabilitySet AvailabilitySet = 1;
+	Operation OperationType = 2;
+}
+
+message AvailabilitySetResponse {
+	AvailabilitySet AvailabilitySet = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message AvailabilitySet {
+    // identifier fields
+    string name = 1;
+    string id = 2;
+    string locationName = 3;
+    string groupName = 4;
+    // common fields
+    Status status = 5;
+    Tags tags = 6;
+    // avset fields
+    uint32 platformFaultDomainCount = 7;
+	repeated VirtualMachine virtualMachines = 8;
+}
+
+
+service AvailabilitySetAgent {
+	rpc Invoke(AvailabilitySetRequest) returns (AvailabilitySetResponse) {}
+}
