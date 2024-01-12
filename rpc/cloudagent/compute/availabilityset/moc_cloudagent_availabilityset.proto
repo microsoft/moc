@@ -10,12 +10,12 @@ import "moc_common_common.proto";
 import "moc_cloudagent_virtualmachine.proto";
 
 message AvailabilitySetRequest {
-	repeated AvailabilitySet AvailabilitySet = 1;
+	repeated AvailabilitySet AvailabilitySets = 1;
 	Operation OperationType = 2;
 }
 
 message AvailabilitySetResponse {
-	repeated AvailabilitySet AvailabilitySet = 1;
+	repeated AvailabilitySet AvailabilitySets = 1;
 	google.protobuf.BoolValue Result = 2;
 	string  Error = 3;
 }
