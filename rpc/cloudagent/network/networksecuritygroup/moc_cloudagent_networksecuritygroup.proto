@@ -16,7 +16,7 @@ enum Action {
 
 enum Direction {
 	Inbound = 0;
-	Outbound = 1; //TODO: Do we allow Both as an option? and add separate inbound/outbound rules?
+	Outbound = 1;
 }
 
 message NetworkSecurityGroupRequest {
