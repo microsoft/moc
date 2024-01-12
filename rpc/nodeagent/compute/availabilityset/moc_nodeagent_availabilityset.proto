@@ -10,12 +10,16 @@ import "moc_nodeagent_virtualmachine.proto";
 import "moc_common_common.proto";
 
 message AvailabilitySetRequest {
-	AvailabilitySet AvailabilitySet = 1;
+	// avset field
+	repeated AvailabilitySet AvailabilitySets = 1;
+	// common field
 	Operation OperationType = 2;
 }
 
 message AvailabilitySetResponse {
-	AvailabilitySet AvailabilitySet = 1;
+	// avset field
+	repeated AvailabilitySet AvailabilitySets = 1;
+	// common fields
 	google.protobuf.BoolValue Result = 2;
 	string  Error = 3;
 }

@@ -27,11 +27,13 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type AvailabilitySetRequest struct {
-	AvailabilitySets     []*AvailabilitySet `protobuf:"bytes,1,rep,name=AvailabilitySets,proto3" json:"AvailabilitySets,omitempty"`
-	OperationType        common.Operation   `protobuf:"varint,2,opt,name=OperationType,proto3,enum=moc.Operation" json:"OperationType,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
-	XXX_unrecognized     []byte             `json:"-"`
-	XXX_sizecache        int32              `json:"-"`
+	// avset field
+	AvailabilitySets []*AvailabilitySet `protobuf:"bytes,1,rep,name=AvailabilitySets,proto3" json:"AvailabilitySets,omitempty"`
+	// common field
+	OperationType        common.Operation `protobuf:"varint,2,opt,name=OperationType,proto3,enum=moc.Operation" json:"OperationType,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *AvailabilitySetRequest) Reset()         { *m = AvailabilitySetRequest{} }
@@ -74,7 +76,9 @@ func (m *AvailabilitySetRequest) GetOperationType() common.Operation {
 }
 
 type AvailabilitySetResponse struct {
-	AvailabilitySets     []*AvailabilitySet  `protobuf:"bytes,1,rep,name=AvailabilitySets,proto3" json:"AvailabilitySets,omitempty"`
+	// avset field
+	AvailabilitySets []*AvailabilitySet `protobuf:"bytes,1,rep,name=AvailabilitySets,proto3" json:"AvailabilitySets,omitempty"`
+	// common fields
 	Result               *wrappers.BoolValue `protobuf:"bytes,2,opt,name=Result,proto3" json:"Result,omitempty"`
 	Error                string              `protobuf:"bytes,3,opt,name=Error,proto3" json:"Error,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
