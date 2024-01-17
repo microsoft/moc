@@ -31,9 +31,10 @@ message AvailabilitySet {
     // common fields
     Status status = 5;
     Tags tags = 6;
+	Entity entity = 7;
     // avset fields
-    uint32 platformFaultDomainCount = 7;
-	repeated VirtualMachine virtualMachines = 8;
+    uint32 platformFaultDomainCount = 8;
+	repeated VirtualMachine virtualMachines = 9;
 }
 
 
