@@ -28,8 +28,6 @@ message AvailabilitySet {
     // identifier fields
     string name = 1;
     string id = 2;
-    string locationName = 3;
-    string groupName = 4;
     // common fields
     Status status = 5;
     Tags tags = 6;
