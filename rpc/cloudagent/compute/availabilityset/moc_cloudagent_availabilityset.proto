@@ -7,7 +7,6 @@ package moc.cloudagent.compute;
 
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
-import "moc_cloudagent_virtualmachine.proto";
 
 message AvailabilitySetRequest {
 	// avset field
@@ -36,6 +35,13 @@ message AvailabilitySet {
     // avset fields
     uint32 platformFaultDomainCount = 7;
 	repeated VirtualMachine virtualMachines = 8;
+}
+
+// These are the only fields used in the cloudagent Virtual Machine provider to decide
+// if a VM POST request is a create or update.
+message VirtualMachine {
+	string name = 1;
+	string groupName = 2;
 }
 
 
