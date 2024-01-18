@@ -112,6 +112,10 @@ message Status {
 	ValidationStatus validationStatus = 6;
 }
 
+message SubResource {
+	string id = 1;
+}
+
 message Entity {
 	bool IsPlaceholder = 1; // On a multi-node system, the entity (such as a VM) is created on a node where 
 							// IsPlacehoder is false. On all the other nodes, IsPlaceholder is set to true.

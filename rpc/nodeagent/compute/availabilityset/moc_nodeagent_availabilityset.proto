@@ -28,20 +28,20 @@ message AvailabilitySet {
     string name = 1;
     string id = 2;
     // common fields
-    Status status = 5;
     Tags tags = 6;
 	Entity entity = 7;
     // avset fields
-    uint32 platformFaultDomainCount = 8;
-	repeated VirtualMachine virtualMachines = 9; // need to replace with minimum association information
+	AvailabilitySetProperties properties = 8;
 }
 
-// This is the only field used in the nodeagent Virtual Machine provider to decide
-// if a VM POST request is a create or update.
-message VirtualMachine {
-	string name = 1;
+message AvailabilitySetProperties {
+	string platformFaultDomainCount = 1;
+	// The ID of the SubResource in this instance is simply the virtual machine name.
+	// The vm name is the only field used in the nodeagent vm provider to decide if a 
+	// VM POST request is a create or update.
+	repeated SubResource virtualMachines = 2;
+	Status status = 3;
 }
-
 
 service AvailabilitySetAgent {
 	rpc Invoke(AvailabilitySetRequest) returns (AvailabilitySetResponse) {}
