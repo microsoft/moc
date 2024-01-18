@@ -9,37 +9,29 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 
 message AvailabilitySetRequest {
-	// avset field
 	repeated AvailabilitySet AvailabilitySets = 1;
-	// common field
 	Operation OperationType = 2;
 }
 
 message AvailabilitySetResponse {
-	// avset field
 	repeated AvailabilitySet AvailabilitySets = 1;
-	// common fields
 	google.protobuf.BoolValue Result = 2;
 	string  Error = 3;
 }
 
+// avset structure is modeled after the Azure sdk for go at
+// https://github.com/Azure/azure-sdk-for-go/blob/main/sdk/resourcemanager/compute/armcompute/models.go
 message AvailabilitySet {
-    // identifier fields
     string name = 1;
     string id = 2;
-    // common fields
     Tags tags = 6;
 	Entity entity = 7;
-    // avset fields
 	AvailabilitySetProperties properties = 8;
 }
 
 message AvailabilitySetProperties {
 	string platformFaultDomainCount = 1;
-	// The ID of the SubResource in this instance is simply the virtual machine name.
-	// The vm name is the only field used in the nodeagent vm provider to decide if a 
-	// VM POST request is a create or update.
-	repeated SubResource virtualMachines = 2;
+	repeated NodeSubResource virtualMachines = 2;
 	Status status = 3;
 }
 

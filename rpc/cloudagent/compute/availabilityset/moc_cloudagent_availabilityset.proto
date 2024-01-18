@@ -9,41 +9,33 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 
 message AvailabilitySetRequest {
-	// avset field
 	repeated AvailabilitySet AvailabilitySets = 1;
-	// common field
 	Operation OperationType = 2;
 }
 
 message AvailabilitySetResponse {
-	// avset field
 	repeated AvailabilitySet AvailabilitySets = 1;
-	// common fields
 	google.protobuf.BoolValue Result = 2;
 	string  Error = 3;
 }
 
+// avset structure is modeled after the Azure sdk for go at
+// https://github.com/Azure/azure-sdk-for-go/blob/main/sdk/resourcemanager/compute/armcompute/models.go
 message AvailabilitySet {
-    // identifier fields
     string name = 1;
     string id = 2;
     string locationName = 3;
     string groupName = 4;
-    // common fields
     Status status = 5;
     Tags tags = 6;
-    // avset fields
-    uint32 platformFaultDomainCount = 7;
-	repeated VirtualMachine virtualMachines = 8;
+	AvailabilitySetProperties properties = 7;
 }
 
-// These are the only fields used in the cloudagent Virtual Machine provider to decide
-// if a VM POST request is a create or update.
-message VirtualMachine {
-	string name = 1;
-	string groupName = 2;
+message AvailabilitySetProperties {
+	string platformFaultDomainCount = 1;
+	repeated CloudSubResource virtualMachines = 2;
+	Status status = 3;
 }
-
 
 service AvailabilitySetAgent {
 	rpc Invoke(AvailabilitySetRequest) returns (AvailabilitySetResponse) {}
