@@ -28,7 +28,7 @@ message AvailabilitySet {
     string groupName = 4;
     Status status = 5;
     Tags tags = 6;
-	string platformFaultDomainCount = 7;
+	int32 platformFaultDomainCount = 7;
 	repeated CloudSubResource virtualMachines = 8;
 }
 

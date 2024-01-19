@@ -27,7 +27,7 @@ message AvailabilitySet {
 	Status status = 3;
     Tags tags = 4;
 	Entity entity = 5;
-	string platformFaultDomainCount = 6;
+	int32 platformFaultDomainCount = 6;
 	repeated NodeSubResource virtualMachines = 7;
 }
 
