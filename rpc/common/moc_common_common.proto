@@ -184,6 +184,7 @@ enum ProviderType {
 	BareMetalHost          = 35;
 	Authentication         = 36;
 	HealthMonitor          = 37;
+	LogicalNetwork         = 38;
 }
 
 // Operations specific to a provider

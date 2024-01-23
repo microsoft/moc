@@ -14,6 +14,8 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 )
 
+require google.golang.org/protobuf v1.32.0 // indirect
+
 replace (
 	github.com/golang/mock => github.com/golang/mock v1.6.0
 	golang.org/x/crypto => golang.org/x/crypto v0.17.0

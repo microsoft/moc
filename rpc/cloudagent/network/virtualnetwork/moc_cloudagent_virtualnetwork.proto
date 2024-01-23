@@ -21,10 +21,6 @@ enum VirtualNetworkType {
     Mirrored = 8;
 }
 
-enum IPPoolType {
-	VM = 0;
-	VIPPool = 1;
-}
 message VirtualNetworkRequest {
 	repeated VirtualNetwork VirtualNetworks = 1;
 	Operation OperationType = 2;
@@ -61,27 +57,9 @@ message Subnet {
 	repeated IPPool ippools = 7;
 }
 
-message IPPoolInfo {
-	string used = 1;
-	string available = 2;
-}
-
-message IPPool {
-	string name = 1;
-	IPPoolType type = 2;
-	string start = 3;
-	string end = 4;
-	IPPoolInfo info = 5;
-}
-
 message Ipam {
 	string type = 1;
 	repeated Subnet subnets = 2;
-}
-message Route {
-	string nexthop = 1;
-	string destinationprefix = 2;
-	uint32 metric = 3;
 }
 
 service VirtualNetworkAgent {
