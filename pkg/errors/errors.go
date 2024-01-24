@@ -61,7 +61,7 @@ var (
 )
 
 func GetErrorCode(err error) string {
-	if IsNotFound(err) || IsFileNotFound(err) || IsPathNotFound(err) || IsBlobNotFound(err) || IsNoAuthenticationInformation(err) {
+	if IsNotFound(err) || IsFileNotFound(err) || IsPathNotFound(err) || IsBlobNotFound(err) {
 		return "NotFound"
 	} else if IsDegraded(err) {
 		return "Degraded"
@@ -101,7 +101,7 @@ func GetErrorCode(err error) string {
 		return "NotInitialized"
 	} else if IsNotImplemented(err) {
 		return "NotImplemented"
-	} else if IsOutOfRange(err) || IsMeasurementUnitError(err) {
+	} else if IsOutOfRange(err) {
 		return "OutOfRange"
 	} else if IsAlreadySet(err) {
 		return "AlreadySet"
@@ -125,7 +125,7 @@ func GetErrorCode(err error) string {
 		return "Timeout"
 	} else if IsInvalidToken(err) {
 		return "InvalidToken"
-	} else if IsUnknown(err) || IsGenericFailure(err) || IsQuotaViolation(err) {
+	} else if IsUnknown(err) || IsGenericFailure(err) {
 		return "Unknown"
 	} else if IsDeleteFailed(err) {
 		return "Delete Failed"
@@ -135,6 +135,12 @@ func GetErrorCode(err error) string {
 		return "RunCommandFailed"
 	} else if IsAccessDenied(err) {
 		return "AccessDenied"
+	} else if IsNoAuthenticationInformation(err) {
+		return "NoAuthenticationInformation"
+	} else if IsQuotaViolation(err) {
+		return "QuotaViolation"
+	} else if IsMeasurementUnitError(err) {
+		return "MeasurementUnitError"
 	}
 
 	// We dont know the type of error.
