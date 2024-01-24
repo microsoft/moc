@@ -53,10 +53,11 @@ var (
 	PathNotFound         error = errors.New("The system cannot find the path specified")
 	NotEnoughSpace       error = errors.New("There is not enough space on the disk")
 	AccessDenied         error = errors.New("Access is denied")
+	BlobNotFound         error = errors.New("BlobNotFound")
 )
 
 func GetErrorCode(err error) string {
-	if IsNotFound(err) || IsFileNotFound(err) || IsPathNotFound(err) {
+	if IsNotFound(err) || IsFileNotFound(err) || IsPathNotFound(err) || IsBlobNotFound(err) {
 		return "NotFound"
 	} else if IsDegraded(err) {
 		return "Degraded"
@@ -324,6 +325,10 @@ func IsNotEnoughSpace(err error) bool {
 
 func IsAccessDenied(err error) bool {
 	return checkError(err, AccessDenied)
+}
+
+func IsBlobNotFound(err error) bool {
+	return checkError(err, BlobNotFound)
 }
 
 func checkError(wrappedError, err error) bool {
