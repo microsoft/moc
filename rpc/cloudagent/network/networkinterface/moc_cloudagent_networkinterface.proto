@@ -24,6 +24,11 @@ message InboundNatRule {
 	string name = 1;
 }
 
+enum NetworkType {
+	VIRTUAL_NETWORK = 0;
+	LOGICAL_NETWORK = 1;
+}
+
 message IpConfiguration {
 	string ipaddress = 1 [(sensitive) = true];
 	string prefixlength = 2;
@@ -34,7 +39,8 @@ message IpConfiguration {
 	string gateway = 7 [(sensitive) = true];
 	repeated InboundNatRule inboundNatRules = 8;
 	Tags tags = 9;
-	string networksecuritygroup = 10;
+	NetworkType networkType = 10;
+	string networksecuritygroup = 11;
 }
 
 message NetworkInterface {

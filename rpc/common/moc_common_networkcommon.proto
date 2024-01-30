@@ -5,6 +5,8 @@ syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/common";
 package moc;
 
+import "moc_common_common.proto";
+
 message Dns {
 	repeated string servers = 1;
 	string domain = 2;
@@ -24,4 +26,29 @@ enum IPAllocationMethod {
 	Invalid = 0;
 	Dynamic = 1;
 	Static = 2;
+}
+
+enum IPPoolType {
+	VM = 0;
+	VIPPool = 1;
+}
+
+message IPPoolInfo {
+	string used = 1;
+	string available = 2;
+}
+
+message IPPool {
+	string name = 1;
+	IPPoolType type = 2;
+	string start = 3;
+	string end = 4;
+	IPPoolInfo info = 5;
+	Tags tags = 6;
+}
+
+message Route {
+	string nextHop = 1;
+	string destinationPrefix = 2;
+	uint32 metric = 3;
 }
