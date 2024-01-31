@@ -58,6 +58,7 @@ var (
 	NoAuthenticationInformation error = errors.New("NoAuthenticationInformation")
 	MeasurementUnitError        error = errors.New("byte quantity must be a positive integer with a unit of measurement like")
 	QuotaViolation              error = errors.New("Quota violation")
+	IPOutOfRange                error = errors.New("IP is out of range")
 )
 
 func GetErrorCode(err error) string {
@@ -141,6 +142,8 @@ func GetErrorCode(err error) string {
 		return "QuotaViolation"
 	} else if IsMeasurementUnitError(err) {
 		return "MeasurementUnitError"
+	} else if IsIPOutOfRange(err) {
+		return "IPOutOfRange"
 	}
 
 	// We dont know the type of error.
@@ -355,6 +358,10 @@ func IsMeasurementUnitError(err error) bool {
 
 func IsQuotaViolation(err error) bool {
 	return checkError(err, QuotaViolation)
+}
+
+func IsIPOutOfRange(err error) bool {
+	return checkError(err, IPOutOfRange)
 }
 
 func checkError(wrappedError, err error) bool {
