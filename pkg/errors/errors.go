@@ -13,50 +13,56 @@ import (
 )
 
 var (
-	NotFound             error = errors.New("Not Found")
-	Degraded             error = errors.New("Degraded")
-	InvalidConfiguration error = errors.New("Invalid Configuration")
-	InvalidInput         error = errors.New("Invalid Input")
-	InvalidType          error = errors.New("Invalid Type")
-	NotSupported         error = errors.New("Not Supported")
-	AlreadyExists        error = errors.New("Already Exists")
-	InUse                error = errors.New("In Use")
-	Duplicates           error = errors.New("Duplicates")
-	InvalidFilter        error = errors.New("Invalid Filter")
-	Failed               error = errors.New("Failed")
-	InvalidGroup         error = errors.New("InvalidGroup")
-	InvalidVersion       error = errors.New("InvalidVersion")
-	OldVersion           error = errors.New("OldVersion")
-	OutOfCapacity        error = errors.New("OutOfCapacity")
-	OutOfNodeCapacity    error = errors.New("OutOfNodeCapacity")
-	OutOfMemory          error = errors.New("OutOfMemory")
-	UpdateFailed         error = errors.New("Update Failed")
-	NotInitialized       error = errors.New("Not Initialized")
-	NotImplemented       error = errors.New("Not Implemented")
-	OutOfRange           error = errors.New("Out of range")
-	AlreadySet           error = errors.New("Already Set")
-	NotSet               error = errors.New("Not Set")
-	InconsistentState    error = errors.New("Inconsistent state")
-	PendingState         error = errors.New("Pending state")
-	WrongHost            error = errors.New("Wrong host")
-	PoolFull             error = errors.New("The pool is full")
-	NoActionTaken        error = errors.New("No Action Taken")
-	Expired              error = errors.New("Expired")
-	Revoked              error = errors.New("Revoked")
-	Timeout              error = errors.New("Timedout")
-	RunCommandFailed     error = errors.New("Run Command Failed")
-	InvalidToken         error = errors.New("InvalidToken")
-	Unknown              error = errors.New("Unknown Reason")
-	DeleteFailed         error = errors.New("Delete Failed")
-	DeletePending        error = errors.New("Delete Pending")
-	FileNotFound         error = errors.New("The system cannot find the file specified")
-	PathNotFound         error = errors.New("The system cannot find the path specified")
-	NotEnoughSpace       error = errors.New("There is not enough space on the disk")
-	AccessDenied         error = errors.New("Access is denied")
+	NotFound                    error = errors.New("Not Found")
+	Degraded                    error = errors.New("Degraded")
+	InvalidConfiguration        error = errors.New("Invalid Configuration")
+	InvalidInput                error = errors.New("Invalid Input")
+	InvalidType                 error = errors.New("Invalid Type")
+	NotSupported                error = errors.New("Not Supported")
+	AlreadyExists               error = errors.New("Already Exists")
+	InUse                       error = errors.New("In Use")
+	Duplicates                  error = errors.New("Duplicates")
+	InvalidFilter               error = errors.New("Invalid Filter")
+	Failed                      error = errors.New("Failed")
+	InvalidGroup                error = errors.New("InvalidGroup")
+	InvalidVersion              error = errors.New("InvalidVersion")
+	OldVersion                  error = errors.New("OldVersion")
+	OutOfCapacity               error = errors.New("OutOfCapacity")
+	OutOfNodeCapacity           error = errors.New("OutOfNodeCapacity")
+	OutOfMemory                 error = errors.New("OutOfMemory")
+	UpdateFailed                error = errors.New("Update Failed")
+	NotInitialized              error = errors.New("Not Initialized")
+	NotImplemented              error = errors.New("Not Implemented")
+	OutOfRange                  error = errors.New("Out of range")
+	AlreadySet                  error = errors.New("Already Set")
+	NotSet                      error = errors.New("Not Set")
+	InconsistentState           error = errors.New("Inconsistent state")
+	PendingState                error = errors.New("Pending state")
+	WrongHost                   error = errors.New("Wrong host")
+	PoolFull                    error = errors.New("The pool is full")
+	NoActionTaken               error = errors.New("No Action Taken")
+	Expired                     error = errors.New("Expired")
+	Revoked                     error = errors.New("Revoked")
+	Timeout                     error = errors.New("Timedout")
+	RunCommandFailed            error = errors.New("Run Command Failed")
+	InvalidToken                error = errors.New("InvalidToken")
+	Unknown                     error = errors.New("Unknown Reason")
+	DeleteFailed                error = errors.New("Delete Failed")
+	DeletePending               error = errors.New("Delete Pending")
+	FileNotFound                error = errors.New("The system cannot find the file specified")
+	PathNotFound                error = errors.New("The system cannot find the path specified")
+	NotEnoughSpace              error = errors.New("There is not enough space on the disk")
+	AccessDenied                error = errors.New("Access is denied")
+	BlobNotFound                error = errors.New("BlobNotFound")
+	GenericFailure              error = errors.New("Generic failure")
+	NoAuthenticationInformation error = errors.New("NoAuthenticationInformation")
+	MeasurementUnitError        error = errors.New("byte quantity must be a positive integer with a unit of measurement like")
+	QuotaViolation              error = errors.New("Quota violation")
+	IPOutOfRange                error = errors.New("IP is out of range")
 )
 
 func GetErrorCode(err error) string {
-	if IsNotFound(err) || IsFileNotFound(err) || IsPathNotFound(err) {
+	if IsNotFound(err) || IsFileNotFound(err) || IsPathNotFound(err) || IsBlobNotFound(err) {
 		return "NotFound"
 	} else if IsDegraded(err) {
 		return "Degraded"
@@ -120,7 +126,7 @@ func GetErrorCode(err error) string {
 		return "Timeout"
 	} else if IsInvalidToken(err) {
 		return "InvalidToken"
-	} else if IsUnknown(err) {
+	} else if IsUnknown(err) || IsGenericFailure(err) {
 		return "Unknown"
 	} else if IsDeleteFailed(err) {
 		return "Delete Failed"
@@ -130,6 +136,14 @@ func GetErrorCode(err error) string {
 		return "RunCommandFailed"
 	} else if IsAccessDenied(err) {
 		return "AccessDenied"
+	} else if IsNoAuthenticationInformation(err) {
+		return "NoAuthenticationInformation"
+	} else if IsQuotaViolation(err) {
+		return "QuotaViolation"
+	} else if IsMeasurementUnitError(err) {
+		return "MeasurementUnitError"
+	} else if IsIPOutOfRange(err) {
+		return "IPOutOfRange"
 	}
 
 	// We dont know the type of error.
@@ -324,6 +338,30 @@ func IsNotEnoughSpace(err error) bool {
 
 func IsAccessDenied(err error) bool {
 	return checkError(err, AccessDenied)
+}
+
+func IsBlobNotFound(err error) bool {
+	return checkError(err, BlobNotFound)
+}
+
+func IsGenericFailure(err error) bool {
+	return checkError(err, GenericFailure)
+}
+
+func IsNoAuthenticationInformation(err error) bool {
+	return checkError(err, NoAuthenticationInformation)
+}
+
+func IsMeasurementUnitError(err error) bool {
+	return checkError(err, MeasurementUnitError)
+}
+
+func IsQuotaViolation(err error) bool {
+	return checkError(err, QuotaViolation)
+}
+
+func IsIPOutOfRange(err error) bool {
+	return checkError(err, IPOutOfRange)
 }
 
 func checkError(wrappedError, err error) bool {
