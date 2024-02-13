@@ -45,6 +45,8 @@ const (
 	BMMContributorRoleName = "BareMetalMachineContributor"
 	// VirtualNetwork Contributor Role - has permissions to run any operation on VirtualNetworks
 	VNetContributorRoleName = "VirtualNetworkContributor"
+	// LogicalNetwork Contributor Role - has permissions to run any operation on LogicalNetworks
+	LNetContributorRoleName = "LogicalNetworkContributor"
 	// VirtualHardDisk Contributor Role - has permissions to run any operation on VirtualHardDisks
 	VHDContributorRoleName = "VirtualHardDiskContributor"
 	// Kubernetes Contributor Role - has permissions to run any operation on Kubernetes resources
@@ -97,6 +99,8 @@ const (
 	BMMReaderRoleName = "BareMetalMachineReader"
 	// VirtualNetwork Reader Role - has permissions to run read operations on VirtualNetworks
 	VNetReaderRoleName = "VirtualNetworkReader"
+	// LogicalNetwork Reader Role - has permissions to run read operations on LogicalNetworks
+	LNetReaderRoleName = "LogicalNetworkReader"
 	// VirtualHardDisk Reader Role - has permissions to run read operations on VirtualHardDisks
 	VHDReaderRoleName = "VirtualHardDiskReader"
 	// Kubernetes Reader Role - has permissions to run read operations on Kubernetes resources

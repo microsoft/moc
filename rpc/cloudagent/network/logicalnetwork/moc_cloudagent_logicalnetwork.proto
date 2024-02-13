@@ -1,0 +1,50 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/network";
+package moc.cloudagent.network;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_networkcommon.proto";
+
+message LogicalNetworkRequest {
+	repeated LogicalNetwork LogicalNetworks = 1;
+	Operation OperationType = 2;
+}
+
+message LogicalNetworkResponse {
+	repeated LogicalNetwork LogicalNetworks = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message LogicalNetwork {
+	string name = 1;
+	string id = 2;
+	repeated LogicalSubnet subnets = 3;
+	bool networkVirtualizationEnabled = 4;
+	Status status = 5;
+	string locationName = 6;
+	string macPoolName = 7 [(sensitive) = true];
+	Tags tags = 8;
+}
+
+message LogicalSubnet {
+	string name = 1;
+	string id = 2;
+	string addressPrefix = 3;
+	repeated Route routes = 4;
+	IPAllocationMethod allocation = 5;
+	uint32 vlan = 6;
+	repeated IPPool ipPools = 7;
+	Dns dns = 8 [(sensitive) = true]; 
+	bool isPublic = 9; // Indicates IPPools from this subnet can be used to allocate public IP address by SDN.
+	Tags tags = 10;
+}
+
+service LogicalNetworkAgent {
+	rpc Invoke(LogicalNetworkRequest) returns (LogicalNetworkResponse) {}
+}
+

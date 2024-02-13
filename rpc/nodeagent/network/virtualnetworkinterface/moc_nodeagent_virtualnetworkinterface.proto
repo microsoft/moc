@@ -22,6 +22,11 @@ message VirtualNetworkInterfaceResponse {
 	string  Error = 3;
 }
 
+enum NetworkType {
+	VIRTUAL_NETWORK = 0;
+	LOGICAL_NETWORK = 1;
+}
+
 message IpConfiguration {
 	string ipaddress = 1 [(sensitive) = true];
 	string prefixlength = 2;
@@ -29,6 +34,7 @@ message IpConfiguration {
 	bool primary = 4;
 	string gateway = 5 [(sensitive) = true];
 	IPAllocationMethod allocation = 6;
+	NetworkType networkType = 7;
 }
 
 message VirtualNetworkInterface {
