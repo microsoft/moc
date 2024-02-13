@@ -13,6 +13,7 @@ const (
 	GpuAssignTypeNone  GpuAssignType = 0
 	GpuAssignTypeDDA   GpuAssignType = 1
 	GpuAssignTypeGpuPv GpuAssignType = 2
+	GpuAssignTypeGpuP  GpuAssignType = 3
 )
 
 // GPU Type names for Moc
@@ -26,12 +27,18 @@ const (
 	NvidiaM60Name     = "NVIDIA Tesla M60"
 )
 
+type Gpu struct {
+	Assignment      GpuAssignType
+	PartitionSizeGB int
+}
+
 type VmSize struct {
 	CpuCount      int
 	GpuCount      int
 	GpuName       string
 	MemoryMB      int
 	GpuAssignMode GpuAssignType
+	GpuList	      []Gpu
 }
 
 // innerMap is captured in the closure returned below
