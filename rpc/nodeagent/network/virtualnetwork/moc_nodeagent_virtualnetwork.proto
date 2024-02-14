@@ -11,17 +11,6 @@ import "moc_common_common.proto";
 import "moc_common_networkcommon.proto";
 import "moc_common_notification.proto";
 
-enum VirtualNetworkType {
-    NAT = 0;
-    Transparent = 1;
-    L2Bridge = 2;
-    L2Tunnel = 3;
-    ICS = 4;
-    Private = 5;
-    Overlay = 6;
-    Internal = 7;
-    Mirrored = 8;
-}
 
 message VirtualNetworkRequest {
 	repeated VirtualNetwork VirtualNetworks = 1;
@@ -40,7 +29,7 @@ message VirtualNetwork {
 	string id = 2;
 	repeated Ipam ipams = 3;
 	Dns dns = 4 [(sensitive) = true];
-	VirtualNetworkType type = 5;
+	NetworkType type = 5;
 	MacPool macPool = 6;
 	Status status = 8;
 	Entity entity = 9;

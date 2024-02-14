@@ -343,3 +343,15 @@ enum CloudInitDataSource {
 	NoCloud = 0;
 	Azure = 1;
 }
+
+enum NetworkType {
+	NAT = 0;
+    Transparent = 1;
+    L2Bridge = 2;
+    L2Tunnel = 3;
+    ICS = 4;
+    Private = 5;
+    Overlay = 6;
+    Internal = 7;
+    Mirrored = 8;
+}
