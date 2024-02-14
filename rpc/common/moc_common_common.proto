@@ -15,6 +15,7 @@ enum Operation {
 	IMPORT = 4;
 	EXPORT = 5;
 	VALIDATE = 6;
+	HYDRATE = 7;
 }
 
 enum ProvisionState {
