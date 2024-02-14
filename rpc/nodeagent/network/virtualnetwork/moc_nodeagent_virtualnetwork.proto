@@ -67,11 +67,6 @@ message Ipam {
 	string type = 1;
 	repeated Subnet subnets = 2;
 }
-message Route {
-	string nexthop = 1;
-	string destinationprefix = 2;
-	uint32 metric = 3;
-}
 
 service VirtualNetworkAgent {
 	rpc Invoke(VirtualNetworkRequest) returns (VirtualNetworkResponse) {}
