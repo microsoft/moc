@@ -31,6 +31,7 @@ const (
 	Operation_IMPORT   Operation = 4
 	Operation_EXPORT   Operation = 5
 	Operation_VALIDATE Operation = 6
+	Operation_HYDRATE  Operation = 7
 )
 
 var Operation_name = map[int32]string{
@@ -41,6 +42,7 @@ var Operation_name = map[int32]string{
 	4: "IMPORT",
 	5: "EXPORT",
 	6: "VALIDATE",
+	7: "HYDRATE",
 }
 
 var Operation_value = map[string]int32{
@@ -51,6 +53,7 @@ var Operation_value = map[string]int32{
 	"IMPORT":   4,
 	"EXPORT":   5,
 	"VALIDATE": 6,
+	"HYDRATE":  7,
 }
 
 func (x Operation) String() string {
