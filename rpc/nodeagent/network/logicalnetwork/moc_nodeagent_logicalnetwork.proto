@@ -28,9 +28,9 @@ message LogicalNetwork {
 	string id = 2;
 	repeated LogicalNetworkIpam ipams = 3;
 	Status status = 4;
-	NetworkType type = 5;
-	Entity entity = 6;
-	Tags tags = 7;
+	Entity entity = 5;
+	Tags tags = 6;
+	NetworkType type = 7;
 }
 
 message LogicalSubnet {
