@@ -11,6 +11,7 @@ import "moc_common_common.proto";
 import "moc_common_networkcommon.proto";
 import "moc_common_notification.proto";
 
+
 message LogicalNetworkRequest {
 	repeated LogicalNetwork LogicalNetworks = 1;
 	Operation OperationType = 2;
@@ -29,6 +30,7 @@ message LogicalNetwork {
 	Status status = 4;
 	Entity entity = 5;
 	Tags tags = 6;
+	NetworkType type = 7;
 }
 
 message LogicalSubnet {
