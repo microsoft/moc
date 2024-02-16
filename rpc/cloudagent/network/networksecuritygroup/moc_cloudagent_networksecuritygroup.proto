@@ -37,15 +37,11 @@ message NetworkSecurityGroupRule {
 	Direction direction = 4;
 	string sourceAddressPrefix = 5;
 	string destinationAddressPrefix = 6;
-	repeated string sourceAddressPrefixes = 7;
-	repeated string destinationAddressPrefixes = 8;
-	string sourcePortRange = 9;
-	string destinationPortRange = 10;
-	repeated string sourcePortRanges = 11;
-	repeated string destinationPortRanges = 12;
-	Protocol protocol = 13;
-	uint32 priority = 14;
-	bool logging = 15;
+	string sourcePortRange = 7;
+	string destinationPortRange = 8;
+	Protocol protocol = 9;
+	uint32 priority = 10;
+	bool logging = 11;
 }
 
 message NetworkSecurityGroup {
