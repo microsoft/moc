@@ -49,8 +49,9 @@ message NetworkSecurityGroup {
 	string id = 2;
 	repeated NetworkSecurityGroupRule networksecuritygrouprules = 3;
 	string groupName = 4;
-	Status status = 5;
-	Tags tags = 6;
+	string locationName = 5;
+	Status status = 6;
+	Tags tags = 7;
 }
 
 service NetworkSecurityGroupAgent {
