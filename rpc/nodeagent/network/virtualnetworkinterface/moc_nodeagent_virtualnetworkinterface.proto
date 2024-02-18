@@ -53,6 +53,7 @@ message VirtualNetworkInterface {
 	Entity entity = 9;
 	uint32 iovWeight = 10;
 	Tags tags = 11;
+	bool sdnDisabled = 12;
 }
 
 service VirtualNetworkInterfaceAgent {
