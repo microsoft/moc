@@ -42,16 +42,17 @@ message NetworkSecurityGroupRule {
 	Protocol protocol = 9;
 	uint32 priority = 10;
 	bool logging = 11;
+	bool isDefaultRule = 12;
 }
 
 message NetworkSecurityGroup {
 	string name = 1;
 	string id = 2;
 	repeated NetworkSecurityGroupRule networksecuritygrouprules = 3;
-	string groupName = 4;
-	string locationName = 5;
-	Status status = 6;
-	Tags tags = 7;
+	string groupName = 5;
+	string locationName = 6;
+	Status status = 7;
+	Tags tags = 8;
 }
 
 service NetworkSecurityGroupAgent {
