@@ -19,6 +19,10 @@ message AvailabilitySetResponse {
 	string  Error = 3;
 }
 
+message VirtualMachineReference {
+	string name = 1;
+}
+
 // avset structure is a flattened version of the model in the Azure sdk for go at
 // https://github.com/Azure/azure-sdk-for-go/blob/main/sdk/resourcemanager/compute/armcompute/models.go
 message AvailabilitySet {
@@ -28,7 +32,7 @@ message AvailabilitySet {
     Tags tags = 4;
 	Entity entity = 5;
 	int32 platformFaultDomainCount = 6;
-	repeated NodeSubResource virtualMachines = 7;
+	repeated VirtualMachineReference virtualMachines = 7;
 }
 
 service AvailabilitySetAgent {

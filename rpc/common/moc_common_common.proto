@@ -112,21 +112,6 @@ message Status {
 	ValidationStatus validationStatus = 6;
 }
 
-// in the current implementation, cloudagent objects are generally identified by their group name 
-// and name. These fields are used to identify if a POST request should be treated as a create or 
-// an update
-message CloudSubResource {
-	string groupName = 1;
-	string name = 2;
-	string realizedName = 3;
-}
-
-// in the current implementation, nodeagent objects are generally identified by their name
-// this field is used to identify if a POST request should be treated as a create or an update
-message NodeSubResource {
-	string name = 1;
-}
-
 message Entity {
 	bool IsPlaceholder = 1; // On a multi-node system, the entity (such as a VM) is created on a node where 
 							// IsPlacehoder is false. On all the other nodes, IsPlaceholder is set to true.
