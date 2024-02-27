@@ -61,7 +61,6 @@ message NetworkInterface {
 	string virtualMachineName = 11;
 	uint32 iovWeight = 12;
 	Tags tags = 13;
-	bool sdnDisabled = 14;
 }
 
 service NetworkInterfaceAgent {

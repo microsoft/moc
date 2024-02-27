@@ -350,7 +350,6 @@ type NetworkInterface struct {
 	VirtualMachineName   string                                `protobuf:"bytes,11,opt,name=virtualMachineName,proto3" json:"virtualMachineName,omitempty"`
 	IovWeight            uint32                                `protobuf:"varint,12,opt,name=iovWeight,proto3" json:"iovWeight,omitempty"`
 	Tags                 *common.Tags                          `protobuf:"bytes,13,opt,name=tags,proto3" json:"tags,omitempty"`
-	SdnDisabled          bool                                  `protobuf:"varint,14,opt,name=sdnDisabled,proto3" json:"sdnDisabled,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                              `json:"-"`
 	XXX_unrecognized     []byte                                `json:"-"`
 	XXX_sizecache        int32                                 `json:"-"`
@@ -470,13 +469,6 @@ func (m *NetworkInterface) GetTags() *common.Tags {
 		return m.Tags
 	}
 	return nil
-}
-
-func (m *NetworkInterface) GetSdnDisabled() bool {
-	if m != nil {
-		return m.SdnDisabled
-	}
-	return false
 }
 
 func init() {
