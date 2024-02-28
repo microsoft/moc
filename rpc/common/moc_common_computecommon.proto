@@ -142,7 +142,7 @@ enum VirtualMachineRunCommandExecutionState {
 
 message VirtualMachineRunCommandInputParameter {
     string Name = 1;
-    string Value = 2 [(sensitivecompute) = true];
+    string Value = 2 [(sensitivejson) = true];
 }
 
 message VirtualMachineRunCommandScriptSource {
@@ -205,6 +205,7 @@ enum Architecture {
 
 extend google.protobuf.FieldOptions {
 	bool sensitivecompute = 50002;
+	bool sensitivejson = 50003;
 }
 
 enum SecurityType {
