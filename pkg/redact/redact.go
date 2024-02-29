@@ -75,7 +75,7 @@ func redactMessage(msg interface{}, val reflect.Value) {
 		}
 		if field.Options != nil {
 			ex, err := proto.GetExtension(field.Options, common.E_Sensitivejson)
-			if err != proto.ErrMissingExtension && (err != nil || *ex.(*bool)) {
+			if err != proto.ErrMissingExtension && err == nil && *ex.(*bool) {
 				if fieldVal.Kind() == reflect.String {
 					redactJsonSensitiveField(fieldVal)
 				} else {
@@ -90,7 +90,7 @@ func redactMessage(msg interface{}, val reflect.Value) {
 				continue
 			}
 
-			if err != nil || *ex.(*bool) {
+			if err == nil && *ex.(*bool) {
 				if fieldVal.Kind() == reflect.String {
 					fieldVal.SetString(RedactedString)
 				} else {
