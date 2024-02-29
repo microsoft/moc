@@ -29,6 +29,7 @@ message LogicalNetwork {
 	string locationName = 6;
 	string macPoolName = 7 [(sensitive) = true];
 	Tags tags = 8;
+	NetworkType type = 9;
 }
 
 message LogicalSubnet {
