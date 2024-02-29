@@ -29,6 +29,7 @@ message LogicalNetwork {
 	Status status = 4;
 	Entity entity = 5;
 	Tags tags = 6;
+	NetworkType type = 7;
 }
 
 message LogicalSubnet {

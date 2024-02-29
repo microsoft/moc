@@ -14,7 +14,10 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 )
 
-require google.golang.org/protobuf v1.32.0 // indirect
+require (
+	golang.org/x/net v0.21.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240228224816-df926f6c8641 // indirect
+)
 
 replace (
 	github.com/golang/mock => github.com/golang/mock v1.6.0
