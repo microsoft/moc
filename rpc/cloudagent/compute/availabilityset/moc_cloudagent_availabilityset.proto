@@ -34,8 +34,8 @@ message AvailabilitySet {
     string groupName = 4;
     Status status = 5;
     Tags tags = 6;
-	int32 platformFaultDomainCount = 7;
-	repeated VirtualMachineReference virtualMachines = 8;
+    int32 platformFaultDomainCount = 7;
+    repeated VirtualMachineReference virtualMachines = 8;
 }
 
 service AvailabilitySetAgent {

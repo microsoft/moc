@@ -28,11 +28,11 @@ message VirtualMachineReference {
 message AvailabilitySet {
     string name = 1;
     string id = 2;
-	Status status = 3;
+    Status status = 3;
     Tags tags = 4;
-	Entity entity = 5;
-	int32 platformFaultDomainCount = 6;
-	repeated VirtualMachineReference virtualMachines = 7;
+    Entity entity = 5;
+    int32 platformFaultDomainCount = 6;
+    repeated VirtualMachineReference virtualMachines = 7;
 }
 
 service AvailabilitySetAgent {
