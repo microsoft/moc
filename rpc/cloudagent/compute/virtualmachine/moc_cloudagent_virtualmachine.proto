@@ -106,7 +106,6 @@ message SecurityConfiguration {
 message AvailabilitySetReference {
 	string groupName = 1;
 	string name = 2;
-	string realizedName = 3;
 }
 
 message VirtualMachine {
