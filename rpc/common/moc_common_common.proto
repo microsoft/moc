@@ -185,6 +185,7 @@ enum ProviderType {
 	Authentication         = 36;
 	HealthMonitor          = 37;
 	LogicalNetwork         = 38;
+	AvailabilitySet		   = 39;
 }
 
 // Operations specific to a provider
@@ -316,6 +317,9 @@ enum ProviderAccessOperation {
 
 	VirtualNetwork_Create           = 3400;
 	VirtualNetwork_Update           = 3401;
+
+	AvailabilitySet_Create		    = 3500;
+	AvailabilitySet_Delete		    = 3501;
 }
 
 extend google.protobuf.FieldOptions {

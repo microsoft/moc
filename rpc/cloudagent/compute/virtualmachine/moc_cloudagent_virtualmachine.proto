@@ -103,6 +103,11 @@ message SecurityConfiguration {
 	SecurityType securityType = 3;
 }
 
+message AvailabilitySetReference {
+	string groupName = 1;
+	string name = 2;
+}
+
 message VirtualMachine {
 	string name = 1;
 	string id = 2;
@@ -122,6 +127,7 @@ message VirtualMachine {
 	Tags tags = 16;
 	GuestAgentConfiguration guestAgent = 17;
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 18;
+	AvailabilitySetReference availabilitySet = 19;
 }
 
 message VirtualMachineOperationRequest {
