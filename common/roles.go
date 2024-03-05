@@ -69,6 +69,8 @@ const (
 	KeyContributorRoleName = "KeyContributor"
 	// Secret Contributor role - has permissions to run any operation on Secrets
 	SecretContributorRoleName = "SecretContributor"
+	// AvailabilitySet Contributor Role - has permissions to run any operations on AvailabilitySets
+	AvailabilitySetContributorRoleName = "AvailabilitySetContributor"
 	// Location Reader role - has permissions to run read operations on locations
 	LocationReaderRoleName = "LocationReader"
 	// Group Reader Role - has permissions to run read operations on the group resource
@@ -127,6 +129,8 @@ const (
 	SecretReaderRoleName = "SecretReader"
 	// Health Reader role - has permissions to read agent health information
 	HealthReaderRoleName = "HealthReader"
+	// AvailabilitySet Reader Role - has permissions to run read operations on AvailabilitySets
+	AvailabilitySetReaderRoleName = "AvailabilitySetReader"
 	// Certificate Signer Role - has permissions to run sign and renew operations on Certificates
 	CertSignerRoleName = "CertificateSigner"
 )
