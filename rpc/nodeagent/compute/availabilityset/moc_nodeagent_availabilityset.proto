@@ -1,0 +1,40 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/nodeagent/compute";
+package moc.nodeagent.compute;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+message AvailabilitySetRequest {
+	repeated AvailabilitySet AvailabilitySets = 1;
+	Operation OperationType = 2;
+}
+
+message AvailabilitySetResponse {
+	repeated AvailabilitySet AvailabilitySets = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message VirtualMachineReference {
+	string name = 1;
+}
+
+// avset structure is a flattened version of the model in the Azure sdk for go at
+// https://github.com/Azure/azure-sdk-for-go/blob/main/sdk/resourcemanager/compute/armcompute/models.go
+message AvailabilitySet {
+    string name = 1;
+    string id = 2;
+    Status status = 3;
+    Tags tags = 4;
+    Entity entity = 5;
+    int32 platformFaultDomainCount = 6;
+    repeated VirtualMachineReference virtualMachines = 7;
+}
+
+service AvailabilitySetAgent {
+	rpc Invoke(AvailabilitySetRequest) returns (AvailabilitySetResponse) {}
+}

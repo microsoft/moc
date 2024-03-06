@@ -4,7 +4,9 @@
 package redact
 
 import (
+	"encoding/json"
 	"reflect"
+	"strings"
 
 	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/proto"
@@ -72,12 +74,23 @@ func redactMessage(msg interface{}, val reflect.Value) {
 			}
 		}
 		if field.Options != nil {
-			ex, err := proto.GetExtension(field.Options, common.E_Sensitive)
+			ex, err := proto.GetExtension(field.Options, common.E_Sensitivejson)
+			if err != proto.ErrMissingExtension && err == nil && *ex.(*bool) {
+				if fieldVal.Kind() == reflect.String {
+					redactJsonSensitiveField(fieldVal)
+				} else {
+					t := fieldVal.Type()
+					fieldVal.Set(reflect.Zero(t))
+				}
+				continue
+			}
+
+			ex, err = proto.GetExtension(field.Options, common.E_Sensitive)
 			if err == proto.ErrMissingExtension {
 				continue
 			}
 
-			if err != nil || *ex.(*bool) {
+			if err == nil && *ex.(*bool) {
 				if fieldVal.Kind() == reflect.String {
 					fieldVal.SetString(RedactedString)
 				} else {
@@ -90,5 +103,23 @@ func redactMessage(msg interface{}, val reflect.Value) {
 		if field.GetType() == descriptorpb.FieldDescriptorProto_TYPE_MESSAGE {
 			Redact(fieldVal.Interface(), reflect.ValueOf(fieldVal.Interface()))
 		}
+	}
+}
+
+func redactJsonSensitiveField(val reflect.Value) {
+	var jsonData map[string]interface{}
+	validJsonString := strings.ReplaceAll(val.String(), `\`, `"`)
+	if err := json.Unmarshal([]byte(validJsonString), &jsonData); err != nil {
+		return
+	}
+	for key := range jsonData {
+		// This can be extended to an array of sensitive keys if needed
+		if key == "private-key" {
+			jsonData[key] = RedactedString
+		}
+	}
+	redactedJson, err := json.Marshal(jsonData)
+	if err == nil {
+		val.SetString(string(redactedJson))
 	}
 }

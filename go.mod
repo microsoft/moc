@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang/mock v1.6.0
-	github.com/golang/protobuf v1.5.3
+	github.com/golang/protobuf v1.5.4
 	github.com/hectane/go-acl v0.0.0-20230122075934-ca0b05cb1adb
 	github.com/jmespath/go-jmespath v0.4.0
 	github.com/pkg/errors v0.9.1
@@ -15,8 +15,8 @@ require (
 )
 
 require (
-	golang.org/x/net v0.21.0 // indirect
-	google.golang.org/protobuf v1.32.0 // indirect
+	golang.org/x/net v0.22.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240304212257-790db918fca8 // indirect
 )
 
 replace (
