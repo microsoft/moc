@@ -39,6 +39,7 @@ func Test_TestProxyUrlConnection(t *testing.T) {
 	// Invalid hostname
 	err = TestProxyUrlConnection(parsedUrl, caCertString, "")
 	expectedResult := "Get \"https://mcr.microsoft.com\": proxyconnect tcp: dial tcp: lookup w3proxy.netscape.com: no such host: Invalid Input"
+
 	if err.Error() != expectedResult {
 		t.Fatalf("Test_TestProxyUrlConnection test case failed. Expected error %s but got %s", expectedResult, err.Error())
 	}
