@@ -42,7 +42,7 @@ message LogicalSubnet {
 	Dns dns = 8 [(sensitive) = true]; 
 	bool isPublic = 9; // Indicates IPPools from this subnet can be used to allocate public IP address by SDN.
 	Tags tags = 10;
-	string networksecuritygroup = 11;
+	NsgGroup networkSecurityGroup = 11;
 }
 
 service LogicalNetworkAgent {
