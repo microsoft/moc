@@ -86,7 +86,8 @@ enum VirtualMachineSizeType {
 	Custom_NK = 96;
 	Custom_Gpupv = 97;
 	Custom = 98;
-	Unsupported = 99;
+	Custom_MSK8S = 99;
+	Unsupported = 100;
 }
 
 enum WinRMProtocolType {
@@ -106,6 +107,7 @@ message VirtualMachineCustomSize {
 	int32 cpuCount = 1;
 	int32 memoryMB = 2;
 	int32 gpuCount = 3;
+	map<string, string> vmCustomCapabilities = 4;
 }
 
 message DynamicMemoryConfiguration {
@@ -162,6 +164,7 @@ message VirtualMachineRunCommandInstanceView {
 // In the future when CVM comes, another bool will be added to check hardware capability.
 message VirtualMachineCapabilities {
 	bool IsolatedVmCapable =  1;
+	map<string, string> HardwareCapabilities = 2;
 }
 
 message InstanceViewStatus {

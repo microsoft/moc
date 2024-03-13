@@ -13,6 +13,7 @@ const (
 	GpuAssignTypeNone  GpuAssignType = 0
 	GpuAssignTypeDDA   GpuAssignType = 1
 	GpuAssignTypeGpuPv GpuAssignType = 2
+	GpuAssignTypeGpuP  GpuAssignType = 3
 )
 
 // GPU Type names for Moc
@@ -27,11 +28,12 @@ const (
 )
 
 type VmSize struct {
-	CpuCount      int
-	GpuCount      int
-	GpuName       string
-	MemoryMB      int
-	GpuAssignMode GpuAssignType
+	CpuCount             int
+	GpuCount             int
+	GpuName              string
+	MemoryMB             int
+	GpuAssignMode        GpuAssignType
+	VmCustomCapabilities map[string]string
 }
 
 // innerMap is captured in the closure returned below
