@@ -136,6 +136,18 @@ message VirtualMachineOperationResponse {
 	string  Error = 3;
 }
 
+message VirtualMachineCheckpointOperationRequest {
+	repeated VirtualMachine VirtualMachines = 1;
+	VirtualMachineCheckpointOperation CheckpointOperationType = 2;
+	string CheckpointName = 3;
+}
+
+message VirtualMachineCheckpointOperationResponse {
+	repeated VirtualMachine VirtualMachines = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
 message VirtualMachineRunCommandRequest {
 	VirtualMachine VirtualMachine = 1;
 	VirtualMachineRunCommandScriptSource Source = 2;
@@ -152,6 +164,7 @@ message VirtualMachineRunCommandResponse {
 service VirtualMachineAgent {
 	rpc Invoke(VirtualMachineRequest) returns (VirtualMachineResponse) {}
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
+	rpc CheckpointOperate(VirtualMachineCheckpointOperationRequest) returns (VirtualMachineCheckpointOperationResponse) {}
 	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
 }

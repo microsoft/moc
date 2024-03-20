@@ -132,6 +132,13 @@ enum VirtualMachineOperation {
 	SAVE = 5;
 }
 
+enum VirtualMachineCheckpointOperation {
+	CREATE = 0;
+	DESTROY = 1;
+	RESTORE = 2;
+	RENAME = 3;
+}
+
 enum VirtualMachineRunCommandExecutionState {
 	ExecutionState_UNKNOWN = 0;
 	ExecutionState_FAILED = 1;
