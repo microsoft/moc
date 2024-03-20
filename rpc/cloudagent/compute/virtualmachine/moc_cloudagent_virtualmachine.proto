@@ -144,7 +144,7 @@ message VirtualMachineOperationResponse {
 
 message VirtualMachineCheckpointOperationRequest {
 	repeated VirtualMachine VirtualMachines = 1;
-	VirtualMachineCheckpointOperation CheckpointOperationType = 2;
+	ProviderAccessOperation CheckpointOperationType = 2;
 	string CheckpointName = 3;
 }
 

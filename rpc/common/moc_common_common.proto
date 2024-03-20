@@ -324,6 +324,11 @@ enum ProviderAccessOperation {
 
 	NetworkSecurityGroup_Create 	= 3600;
 	NetworkSecurityGroup_Update 	= 3601;
+
+	Checkpoint_Create 				= 3700;
+	Checkpoint_Destroy 				= 3701;
+	Checkpoint_Restore 				= 3702;
+	Checkpoint_Rename 				= 3703;
 }
 
 extend google.protobuf.FieldOptions {
