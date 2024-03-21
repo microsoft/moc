@@ -53,6 +53,8 @@ message NetworkSecurityGroup {
 	string locationName = 6;
 	Status status = 7;
 	Tags tags = 8;
+	repeated string subnetRefs = 9;
+	repeated string nicRefs = 10;
 }
 
 service NetworkSecurityGroupAgent {
