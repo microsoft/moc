@@ -91,6 +91,7 @@ message HardwareConfiguration {
 	VirtualMachineSizeType VMSize = 1;
 	VirtualMachineCustomSize customSize = 2;
 	DynamicMemoryConfiguration dynamicMemoryConfiguration = 3;
+	int32 gpuCount = 4;
 }
 
 message UefiSettings {

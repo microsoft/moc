@@ -102,13 +102,14 @@ message WinRMConfiguration {
 	repeated WinRMListener Listeners = 1;
 }
 
-message Gpu {
-	enum AssignmentType {
-		GpuDDA = 0;
-		GpuP = 1;
-	}
+enum GPUAssignmentType {
+	GpuDDA = 0;
+	GpuP = 1;
+	GpuPV = 2;
+}
 
-	AssignmentType assignment = 1;
+message Gpu {
+	GPUAssignmentType assignment = 1;
 	int32 partitionSizeGB = 2;
 }
 

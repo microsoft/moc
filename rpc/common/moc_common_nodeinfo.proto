@@ -37,6 +37,7 @@ message GPU {
 	string name = 1;
 	uint32 sizeBytes = 2;
 	uint32 count = 3;
+	GPUAssignmentType assignType = 4;
 }
 
 message OperatingSystem {
