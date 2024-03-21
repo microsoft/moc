@@ -227,3 +227,10 @@ message ProxyConfiguration {
 	repeated string noProxy = 3;
 	string trustedCa = 4 [(sensitivecompute) = true];
 }
+
+enum CheckpointType {
+	Production = 0;
+	Disabled = 1;
+	ProductionOnly = 2;
+	Standard = 3;
+}

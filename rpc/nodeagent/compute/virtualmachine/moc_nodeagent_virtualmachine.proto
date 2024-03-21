@@ -123,6 +123,7 @@ message VirtualMachine {
 	Tags tags = 14;
 	GuestAgentConfiguration guestAgent = 15;
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 16;
+	CheckpointType checkpointType = 17;
 }
 
 message VirtualMachineOperationRequest {
