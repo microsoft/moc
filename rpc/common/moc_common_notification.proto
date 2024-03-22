@@ -19,6 +19,8 @@ message Notification {
 	string parentEntityName = 4;
 	// Optional flag to specify if the notification is async
 	bool async = 5;
+	//Unique identifier for the notification
+	string id = 6;
 }
 
 message NotificationResponse {

@@ -63,4 +63,5 @@ message Resources {
 	PhysicalMemory memory = 2;
 	GPU gpu = 3;	
 	VirtualMachineCapabilities vmCapabilities = 5;
+	repeated Gpu gpuList = 6;
 }
