@@ -102,14 +102,16 @@ message WinRMConfiguration {
 	repeated WinRMListener Listeners = 1;
 }
 
-message Gpu {
-	enum AssignmentType {
-		GpuDDA = 0;
-		GpuP = 1;
-	}
+enum GpuAssignmentType {
+	GpuDDA = 0;
+	GpuP = 1;
+	GpuPV = 2;
+}
 
-	AssignmentType assignment = 1;
+message Gpu {
+	GpuAssignmentType assignment = 1;
 	int32 partitionSizeGB = 2;
+	int32 gpuCount = 3;
 }
 
 message VirtualMachineCustomSize {
