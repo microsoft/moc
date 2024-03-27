@@ -61,7 +61,7 @@ message Resources {
 	reserved 4;
 	Processor processor = 1;
 	PhysicalMemory memory = 2;
-	GPU gpu = 3;	
+	GPU gpu = 3;	// delete it after gpuList is applied
 	VirtualMachineCapabilities vmCapabilities = 5;
 	repeated Gpu gpuList = 6;
 }
