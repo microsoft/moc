@@ -52,8 +52,3 @@ message Route {
 	string destinationPrefix = 2;
 	uint32 metric = 3;
 }
-
-message NsgGroup {
-	string nsgName = 1;
-	string groupName = 2;
-}

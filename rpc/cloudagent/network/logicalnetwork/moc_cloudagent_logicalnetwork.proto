@@ -8,6 +8,7 @@ package moc.cloudagent.network;
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 import "moc_common_networkcommon.proto";
+import "moc_cloudagent_networksecuritygroup.proto";
 
 message LogicalNetworkRequest {
 	repeated LogicalNetwork LogicalNetworks = 1;
@@ -42,7 +43,7 @@ message LogicalSubnet {
 	Dns dns = 8 [(sensitive) = true]; 
 	bool isPublic = 9; // Indicates IPPools from this subnet can be used to allocate public IP address by SDN.
 	Tags tags = 10;
-	NsgGroup networkSecurityGroup = 11;
+	NetworkSecurityGroup networkSecurityGroup = 11;
 }
 
 service LogicalNetworkAgent {
