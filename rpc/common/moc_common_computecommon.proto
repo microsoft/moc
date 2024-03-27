@@ -106,6 +106,7 @@ enum GpuAssignmentType {
 	GpuDDA = 0;
 	GpuP = 1;
 	GpuPV = 2;
+	GpuDefault = 4; // default is used when customer do not pass GPU Assign Type and moc will decide the assign type based on the underlying configuration.
 }
 
 message Gpu {
