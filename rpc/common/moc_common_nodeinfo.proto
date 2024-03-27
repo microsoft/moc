@@ -37,7 +37,6 @@ message GPU {
 	string name = 1;
 	uint32 sizeBytes = 2;
 	uint32 count = 3;
-	GpuAssignmentType assignType = 4;
 }
 
 message OperatingSystem {
@@ -64,5 +63,5 @@ message Resources {
 	PhysicalMemory memory = 2;
 	GPU gpu = 3;	// delete it after gpuList is applied
 	VirtualMachineCapabilities vmCapabilities = 5;
-	repeated GPU gpuList = 6;
+	repeated Gpu gpuList = 6;
 }

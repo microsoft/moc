@@ -111,14 +111,12 @@ enum GpuAssignmentType {
 message Gpu {
 	GpuAssignmentType assignment = 1;
 	int32 partitionSizeGB = 2;
-	int32 gpuCount = 3;
 }
 
 message VirtualMachineCustomSize {
 	int32 cpuCount = 1;
 	int32 memoryMB = 2;
 	int32 gpuCount = 3;
-	repeated Gpu gpuList = 4;
 }
 
 message DynamicMemoryConfiguration {
