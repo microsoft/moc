@@ -52,3 +52,9 @@ message Route {
 	string destinationPrefix = 2;
 	uint32 metric = 3;
 }
+
+message ResourceReference {
+	string Name = 1;
+	string Location = 2;
+	string Group = 3;
+}
