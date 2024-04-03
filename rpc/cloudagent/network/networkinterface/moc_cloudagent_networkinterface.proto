@@ -40,7 +40,6 @@ message IpConfiguration {
 	repeated InboundNatRule inboundNatRules = 8;
 	Tags tags = 9;
 	NetworkType networkType = 10;
-	ResourceReference networksecuritygroup = 11;
 }
 
 message NetworkInterface {
@@ -61,6 +60,7 @@ message NetworkInterface {
 	string virtualMachineName = 11;
 	uint32 iovWeight = 12;
 	Tags tags = 13;
+	ResourceReference networkSecurityGroup = 14;
 }
 
 service NetworkInterfaceAgent {
