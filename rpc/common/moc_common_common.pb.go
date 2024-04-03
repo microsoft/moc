@@ -24,15 +24,14 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 type Operation int32
 
 const (
-	Operation_GET        Operation = 0
-	Operation_POST       Operation = 1
-	Operation_DELETE     Operation = 2
-	Operation_UPDATE     Operation = 3
-	Operation_IMPORT     Operation = 4
-	Operation_EXPORT     Operation = 5
-	Operation_VALIDATE   Operation = 6
-	Operation_HYDRATE    Operation = 7
-	Operation_DISCOVERVM Operation = 8
+	Operation_GET      Operation = 0
+	Operation_POST     Operation = 1
+	Operation_DELETE   Operation = 2
+	Operation_UPDATE   Operation = 3
+	Operation_IMPORT   Operation = 4
+	Operation_EXPORT   Operation = 5
+	Operation_VALIDATE Operation = 6
+	Operation_HYDRATE  Operation = 7
 )
 
 var Operation_name = map[int32]string{
@@ -44,19 +43,17 @@ var Operation_name = map[int32]string{
 	5: "EXPORT",
 	6: "VALIDATE",
 	7: "HYDRATE",
-	8: "DISCOVERVM",
 }
 
 var Operation_value = map[string]int32{
-	"GET":        0,
-	"POST":       1,
-	"DELETE":     2,
-	"UPDATE":     3,
-	"IMPORT":     4,
-	"EXPORT":     5,
-	"VALIDATE":   6,
-	"HYDRATE":    7,
-	"DISCOVERVM": 8,
+	"GET":      0,
+	"POST":     1,
+	"DELETE":   2,
+	"UPDATE":   3,
+	"IMPORT":   4,
+	"EXPORT":   5,
+	"VALIDATE": 6,
+	"HYDRATE":  7,
 }
 
 func (x Operation) String() string {
