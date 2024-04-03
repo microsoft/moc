@@ -32,7 +32,7 @@ type VmSize struct {
 	GpuName       string
 	MemoryMB      int
 	GpuAssignMode GpuAssignType
-	GpuList	      []*pb.Gpu
+	GpuList       []*pb.Gpu
 }
 
 // innerMap is captured in the closure returned below
@@ -112,6 +112,10 @@ var VirtualMachineSize_value = map[pb.VirtualMachineSizeType]VmSize{
 	pb.VirtualMachineSizeType_Standard_K8S5_v1: {
 		CpuCount: 2,
 		MemoryMB: 1024,
+	},
+	pb.VirtualMachineSizeType_Standard_F16s_HPN: {
+		CpuCount: 16,
+		MemoryMB: 32768,
 	},
 	// Sizes with GPUs
 	pb.VirtualMachineSizeType_Standard_NK6: {
