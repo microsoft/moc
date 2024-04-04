@@ -53,8 +53,11 @@ message Route {
 	uint32 metric = 3;
 }
 
+// Resource reference is intended to be used as a general component of specific, named resource references
 message ResourceReference {
-	string Name = 1;
-	string Location = 2;
-	string Group = 3;
+	string name = 1;
+}
+
+message NetworkSecurityGroupReference {
+	ResourceReference resourceRef = 1;
 }

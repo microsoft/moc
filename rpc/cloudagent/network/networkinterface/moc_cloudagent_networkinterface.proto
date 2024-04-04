@@ -40,7 +40,7 @@ message IpConfiguration {
 	repeated InboundNatRule inboundNatRules = 8;
 	Tags tags = 9;
 	NetworkType networkType = 10;
-	ResourceReference networksecuritygroup = 11;
+	NetworkSecurityGroupReference networksecuritygroup = 11;
 }
 
 message NetworkInterface {

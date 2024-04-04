@@ -55,7 +55,7 @@ message Subnet {
 	IPAllocationMethod allocation = 5;
 	uint32 vlan = 6;
 	repeated IPPool ippools = 7;
-	ResourceReference networkSecurityGroup = 8;
+	NetworkSecurityGroupReference networkSecurityGroup = 8;
 }
 
 message Ipam {
