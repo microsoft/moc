@@ -52,3 +52,12 @@ message Route {
 	string destinationPrefix = 2;
 	uint32 metric = 3;
 }
+
+// Resource reference is intended to be used as a general component of specific, named resource references
+message ResourceReference {
+	string name = 1;
+}
+
+message NetworkSecurityGroupReference {
+	ResourceReference resourceRef = 1;
+}
