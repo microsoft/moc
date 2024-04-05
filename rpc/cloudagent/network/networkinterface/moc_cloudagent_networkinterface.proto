@@ -30,7 +30,7 @@ enum NetworkType {
 }
 
 message IpConfiguration {
-	reserved 11; // Deprecated string version of network securiy group
+	reserved 11; // deprecated string version of networkSecurityGroup
 	string ipaddress = 1 [(sensitive) = true];
 	string prefixlength = 2;
 	string subnetid = 3;

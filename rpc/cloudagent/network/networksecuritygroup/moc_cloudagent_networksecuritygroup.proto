@@ -46,7 +46,7 @@ message NetworkSecurityGroupRule {
 }
 
 message NetworkSecurityGroup {
-	reserved 5; // deprecated group name for NSG (now parented to location)
+	reserved 5; // deprecated group name (now parented to location)
 	string name = 1;
 	string id = 2;
 	repeated NetworkSecurityGroupRule networksecuritygrouprules = 3;
