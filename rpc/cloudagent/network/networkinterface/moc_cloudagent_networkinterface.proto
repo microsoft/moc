@@ -44,6 +44,7 @@ message IpConfiguration {
 }
 
 message NetworkInterface {
+	reserved 14; // Deprecated string version of network securiy group
 	string name = 1;
 	string id = 2;
 	enum NetworkInterfaceType {
@@ -61,6 +62,7 @@ message NetworkInterface {
 	string virtualMachineName = 11;
 	uint32 iovWeight = 12;
 	Tags tags = 13;
+	NetworkSecurityGroupReference networkSecurityGroup = 15;
 }
 
 service NetworkInterfaceAgent {
