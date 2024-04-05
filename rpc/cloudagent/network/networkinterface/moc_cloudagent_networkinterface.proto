@@ -30,6 +30,7 @@ enum NetworkType {
 }
 
 message IpConfiguration {
+	reserved 11; // Deprecated string version of network securiy group
 	string ipaddress = 1 [(sensitive) = true];
 	string prefixlength = 2;
 	string subnetid = 3;
@@ -40,11 +41,10 @@ message IpConfiguration {
 	repeated InboundNatRule inboundNatRules = 8;
 	Tags tags = 9;
 	NetworkType networkType = 10;
-	NetworkSecurityGroupReference networksecuritygroup = 11;
+	NetworkSecurityGroupReference networksecuritygroup = 12;
 }
 
 message NetworkInterface {
-	reserved 14; // Deprecated string version of network securiy group
 	string name = 1;
 	string id = 2;
 	enum NetworkInterfaceType {
@@ -62,7 +62,6 @@ message NetworkInterface {
 	string virtualMachineName = 11;
 	uint32 iovWeight = 12;
 	Tags tags = 13;
-	NetworkSecurityGroupReference networkSecurityGroup = 15;
 }
 
 service NetworkInterfaceAgent {
