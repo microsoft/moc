@@ -110,8 +110,9 @@ enum GpuAssignmentType {
 }
 
 message Gpu {
-	GpuAssignmentType assignment = 1;
-	int32 partitionSizeGB = 2;
+	string name = 1;
+	GpuAssignmentType assignment = 2;
+	int32 partitionSizeGB = 3;
 }
 
 message VirtualMachineCustomSize {

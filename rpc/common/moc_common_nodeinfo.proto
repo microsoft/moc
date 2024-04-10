@@ -33,10 +33,12 @@ message PhysicalMemory {
 	uint64 sizeBytes = 1;
 }
 
-message GPU {
+message HostGPU {
 	string name = 1;
 	uint32 sizeBytes = 2;
-	uint32 count = 3;
+	uint64 partitionSizeBytes = 3;
+	GpuAssignmentType assignment = 4;
+	string id = 5;
 }
 
 message OperatingSystem {
@@ -61,7 +63,6 @@ message Resources {
 	reserved 4;
 	Processor processor = 1;
 	PhysicalMemory memory = 2;
-	GPU gpu = 3;	// delete it after gpuList is applied
+	repeated HostGPU gpuList = 3;
 	VirtualMachineCapabilities vmCapabilities = 5;
-	repeated Gpu gpuList = 6;
 }
