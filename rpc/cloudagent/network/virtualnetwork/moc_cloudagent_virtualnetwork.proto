@@ -48,6 +48,7 @@ message VirtualNetwork {
 }
 
 message Subnet {
+	reserved 8; // deprecated string version of networkSecurityGroup 
 	string name = 1;
 	string id = 2;
 	string cidr = 3;
@@ -55,7 +56,7 @@ message Subnet {
 	IPAllocationMethod allocation = 5;
 	uint32 vlan = 6;
 	repeated IPPool ippools = 7;
-	string networkSecurityGroup = 8;
+	NetworkSecurityGroupReference networksecuritygroupref = 9;
 }
 
 message Ipam {
