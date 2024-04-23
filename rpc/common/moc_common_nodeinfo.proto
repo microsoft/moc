@@ -36,9 +36,10 @@ message PhysicalMemory {
 message HostGPU {
 	string name = 1;
 	uint32 sizeBytes = 2;
-	uint64 partitionSizeBytes = 3;
-	GpuAssignmentType assignment = 4;
-	string id = 5;
+	uint32 count = 3;
+	uint64 partitionSizeBytes = 4;
+	GpuAssignmentType assignment = 5;
+	string id = 6;
 }
 
 message OperatingSystem {
@@ -63,6 +64,7 @@ message Resources {
 	reserved 4;
 	Processor processor = 1;
 	PhysicalMemory memory = 2;
-	repeated HostGPU gpuList = 3;
+	HostGPU gpu = 3;
 	VirtualMachineCapabilities vmCapabilities = 5;
+	repeated HostGPU gpuList = 6;
 }
