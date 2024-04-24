@@ -106,6 +106,13 @@ message SecurityConfiguration {
 	SecurityType securityType = 3;
 }
 
+message Checkpoint {
+	string checkpointName = 1;
+	string checkpointId = 2;
+	string parentCheckointId = 3;
+	string creationTime = 4;
+}
+
 message VirtualMachine {
 	string name = 1;
 	string id = 2;
@@ -124,6 +131,7 @@ message VirtualMachine {
 	GuestAgentConfiguration guestAgent = 15;
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 16;
 	CheckpointType checkpointType = 17;
+	repeated Checkpoint checkpoints = 18;
 }
 
 message VirtualMachineOperationRequest {
