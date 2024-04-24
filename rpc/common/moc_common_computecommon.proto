@@ -103,10 +103,10 @@ message WinRMConfiguration {
 }
 
 enum GpuAssignmentType {
-	GpuDDA = 0;
-	GpuP = 1;
-	GpuPV = 2;
-	GpuDefault = 4; // default is used when customer do not pass GPU Assign Type and moc will decide the assign type based on the underlying configuration.
+	GpuDefault = 0; // default is used when customer do not pass GPU Assign Type and moc will decide the assign type based on the underlying configuration.
+	GpuDDA = 1;
+	GpuP = 2;
+	GpuPV = 3;
 }
 
 message Gpu {

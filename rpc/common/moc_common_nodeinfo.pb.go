@@ -287,7 +287,7 @@ func (m *HostGPU) GetAssignment() GpuAssignmentType {
 	if m != nil {
 		return m.Assignment
 	}
-	return GpuAssignmentType_GpuDDA
+	return GpuAssignmentType_GpuDefault
 }
 
 func (m *HostGPU) GetId() string {
