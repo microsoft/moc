@@ -38,7 +38,7 @@ message HostGPU {
 	uint32 sizeBytes = 2;
 	uint32 count = 3;
 	uint64 partitionSizeBytes = 4;
-	GpuAssignmentType assignment = 5;
+	AssignmentType assignment = 5;
 	string id = 6;
 }
 
