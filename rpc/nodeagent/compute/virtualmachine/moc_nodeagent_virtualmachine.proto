@@ -109,7 +109,7 @@ message SecurityConfiguration {
 message Checkpoint {
 	string checkpointName = 1;
 	string checkpointId = 2;
-	string parentCheckointId = 3;
+	string parentCheckpointId = 3;
 	string creationTime = 4;
 }
 
