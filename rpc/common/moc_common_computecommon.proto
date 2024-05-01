@@ -110,12 +110,14 @@ enum AssignmentType {
 }
 
 message Gpu {
+	reserved 2;
 	AssignmentType assignment = 1;
-	uint64 partitionSizeMB = 2;
-	string name = 3;
+	uint64 partitionSizeMB = 3;
+	string name = 4;
 }
 
 message VirtualMachineCustomSize {
+	reserved 4;
 	int32 cpuCount = 1;
 	int32 memoryMB = 2;
 	int32 gpuCount = 3;
