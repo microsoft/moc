@@ -63,8 +63,9 @@ message NodeInfo {
 message Resources {
 	reserved 3;
 	reserved 4;
+	reserved 6;
 	Processor processor = 1;
 	PhysicalMemory memory = 2;
 	VirtualMachineCapabilities vmCapabilities = 5;
-	repeated HostGPU gpuList = 6;
+	repeated HostGPU gpuList = 7;
 }
