@@ -67,5 +67,5 @@ message Resources {
 	Processor processor = 1;
 	PhysicalMemory memory = 2;
 	VirtualMachineCapabilities vmCapabilities = 5;
-	repeated HostGPU gpuList = 7;
+	repeated HostGPU hostGPUs = 7;
 }
