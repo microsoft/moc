@@ -34,12 +34,10 @@ message PhysicalMemory {
 }
 
 message HostGPU {
-	string name = 1;
-	uint32 sizeBytes = 2;
-	uint32 count = 3;
-	uint64 partitionSizeBytes = 4;
-	AssignmentType assignment = 5;
-	string id = 6;
+	string id = 1;
+	string name = 2;
+	uint64 partitionSizeMB = 3;
+	AssignmentType assignment = 4;
 }
 
 message OperatingSystem {
