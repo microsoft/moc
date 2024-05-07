@@ -32,7 +32,7 @@ type VmSize struct {
 	GpuName       string
 	MemoryMB      int
 	GpuAssignMode GpuAssignType
-	GpuList       []*pb.Gpu
+	GpuList       []*pb.VirtualMachineGPU
 }
 
 // innerMap is captured in the closure returned below

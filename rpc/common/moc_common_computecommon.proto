@@ -102,21 +102,24 @@ message WinRMConfiguration {
 	repeated WinRMListener Listeners = 1;
 }
 
-message Gpu {
-	enum AssignmentType {
-		GpuDDA = 0;
-		GpuP = 1;
-	}
+enum AssignmentType {
+	GpuDDA = 0;
+	GpuP = 1;
+	GpuPV = 2;
+	GpuDefault = 3; // default is used when customer do not pass GPU Assign Type and moc will decide the assign type based on the underlying configuration.
+}
 
+message VirtualMachineGPU {
 	AssignmentType assignment = 1;
-	int32 partitionSizeGB = 2;
+	uint64 partitionSizeMB = 2;
+	string name = 3;
 }
 
 message VirtualMachineCustomSize {
+	reserved 4;
 	int32 cpuCount = 1;
 	int32 memoryMB = 2;
 	int32 gpuCount = 3;
-	repeated Gpu gpuList = 4;
 }
 
 message DynamicMemoryConfiguration {
