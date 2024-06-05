@@ -1,0 +1,55 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/network";
+package moc.cloudagent.network;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_networkcommon.proto";
+
+message PublicIPAddressRequest {
+	repeated PublicIPAddress PublicIPAddresss = 1;
+	Operation OperationType = 2;
+}
+
+message PublicIPAddressResponse {
+	repeated PublicIPAddress PublicIPAddresss = 1;
+	google.protobuf.BoolValue Result = 2;
+	string Error = 3;
+}
+
+    IPAddress *string `json:"ipAddress,omitempty"` 
+
+    PublicIPAllocationMethod IPAllocationMethod `json:"publicIPAllocationMethod,omitempty"` 
+
+    PublicIPAddressVersion IPVersion `json:"publicIPAddressVersion,omitempty"` 
+
+    IPConfiguration *IPConfiguration `json:"ipConfiguration,omitempty"` 
+
+    DNSSettings *PublicIPAddressDNSSettings `json:"dnsSettings,omitempty"` 
+
+    IdleTimeoutInMinutes *int32 `json:"idleTimeoutInMinutes,omitempty"` 
+
+    DNSSettings *PublicIPAddressDNSSettings `json:"dnsSettings,omitempty"` 
+
+message PublicIPAddress {
+	string name = 1;
+	string id = 2;
+	string ipAddress = 3 [(sensitive) = true];
+	IPAllocationMethod allocation = 4;
+	IPVersion ipVersion = 5;
+    uint32 idleTimeoutInMinutes = 6;
+    string domainNameLabel = 7;
+	string fqdn = 8;
+    string reverseFqdn = 9;
+	string locationName = 10;
+	Status status = 11;
+	Tags tags = 12;
+}
+
+service PublicIPAddressAgent {
+	rpc Invoke(PublicIPAddressRequest) returns (PublicIPAddressResponse) {}
+}
+
