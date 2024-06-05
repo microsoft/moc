@@ -39,10 +39,30 @@ message LoadbalancerInboundNatRule {
 	Protocol protocol = 4;
 }
 
+message LoadbalancerOutboundNatRule {
+	string name = 1;
+	uint32 frontendPort = 2;
+	uint32 backendPort = 3;
+	Protocol protocol = 4;
+}
+
 message LoadBalancingRule {
 	uint32 frontendPort = 1;
 	uint32 backendPort = 2;
 	Protocol protocol = 3;
+}
+
+message FrontEndIpConfiguration {
+	string privateIPAddress; // required if using subnet
+	IPAllocationMethod allocationMethod; // required
+	string subnetRef; // required if using privateIPAddress. Pass just the name or fully qualified ref? 
+	PublicIPAddressReference publicIPAddress; // required if not using privateIP and a subnet. resourceRef to publicIPAddress
+	
+	repeated LoadbalancerInboundNatRule inboundNatRules = 13; //read-only
+	repeated LoadbalancerOutboundNatRule outboundNatRules = 6; //read-only
+	repeated LoadBalancingRule loadbalancingrules = 6; //read-only
+
+	LoadBalancerVipConfigurationState ConfigurationState // Do we need to surface this?
 }
 
 message LoadBalancer {
@@ -59,6 +79,8 @@ message LoadBalancer {
 	Tags tags = 11;
 	uint32 replicationCount = 12;
 	repeated LoadbalancerInboundNatRule inboundNatRules = 13;
+	repeated FrontEndIpConfiguration = 14;
+	string useSDN = 15;
 }
 
 service LoadBalancerAgent {
