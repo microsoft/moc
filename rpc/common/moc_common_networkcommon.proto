@@ -96,3 +96,8 @@ message AdvancedNetworkPolicy {
 	NetworkPolicyType type = 1;
 	bool enabled = 2;
 }
+
+
+message ProbeReference {
+	ResourceReference resourceRef = 1;
+}
