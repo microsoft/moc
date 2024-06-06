@@ -70,3 +70,7 @@ message NetworkSecurityGroupReference {
 message PublicIPAddressReference {
 	ResourceReference resourceRef = 1;
 }
+
+message ProbeReference {
+	ResourceReference resourceRef = 1;
+}
