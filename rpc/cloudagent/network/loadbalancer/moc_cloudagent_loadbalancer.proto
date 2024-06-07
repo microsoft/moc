@@ -92,6 +92,7 @@ message LoadBalancer {
 	repeated FrontEndIpConfiguration frontendIpConfigurations = 15;
 	repeated Probe probes = 16; // Need more discussion around probes
 	string useSDN = 17; // To indicate SDN optionality
+	string apiVersion = 18; 
 }
 
 service LoadBalancerAgent {
