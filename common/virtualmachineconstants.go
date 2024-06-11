@@ -23,6 +23,7 @@ const (
 	NvidiaA30Name     = "NVIDIA A30"
 	NvidiaA100_40Name = "NVIDIA A100 40GB"
 	NvidiaA100_80Name = "NVIDIA A100 80GB"
+	NvidiaH100Name    = "NVIDIA H100"
 	NvidiaM60Name     = "NVIDIA Tesla M60"
 )
 
@@ -283,6 +284,34 @@ var VirtualMachineSize_value = map[pb.VirtualMachineSizeType]VmSize{
 		CpuCount:      32,
 		GpuCount:      2,
 		GpuName:       NvidiaA100_80Name,
+		MemoryMB:      131072,
+		GpuAssignMode: GpuAssignTypeDDA,
+	},
+	pb.VirtualMachineSizeType_Standard_NC4_H100: {
+		CpuCount:      4,
+		GpuCount:      1,
+		GpuName:       NvidiaH100Name,
+		MemoryMB:      8192,
+		GpuAssignMode: GpuAssignTypeDDA,
+	},
+	pb.VirtualMachineSizeType_Standard_NC8_H100: {
+		CpuCount:      8,
+		GpuCount:      1,
+		GpuName:       NvidiaH100Name,
+		MemoryMB:      16384,
+		GpuAssignMode: GpuAssignTypeDDA,
+	},
+	pb.VirtualMachineSizeType_Standard_NC16_H100: {
+		CpuCount:      16,
+		GpuCount:      2,
+		GpuName:       NvidiaH100Name,
+		MemoryMB:      65536,
+		GpuAssignMode: GpuAssignTypeDDA,
+	},
+	pb.VirtualMachineSizeType_Standard_NC32_H100: {
+		CpuCount:      32,
+		GpuCount:      2,
+		GpuName:       NvidiaH100Name,
 		MemoryMB:      131072,
 		GpuAssignMode: GpuAssignTypeDDA,
 	},
