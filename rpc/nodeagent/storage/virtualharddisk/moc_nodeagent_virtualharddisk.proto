@@ -77,6 +77,7 @@ message VirtualHardDisk {
 	HyperVGeneration hyperVGeneration = 21; 
 	CloudInitDataSource cloudInitDataSource = 22;
 	DiskFileFormat diskFileFormat = 23;
+	bool disableHighAvailability = 24;
 }
 
 service VirtualHardDiskAgent {

@@ -38,6 +38,7 @@ message Container {
 	Entity entity = 6;
 	Tags tags = 7;
 	StorageContainerInfo info = 8;
+	bool disableHighAvailability = 9;
 }
 
 service ContainerAgent {

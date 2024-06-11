@@ -45,6 +45,7 @@ message VirtualHardDisk {
 	DiskFileFormat diskFileFormat = 21;
 	CloudInitDataSource cloudInitDataSource = 22;
 	Tags tags = 23;
+	bool disableHighAvailability = 24;
 }
 
 service VirtualHardDiskAgent {
