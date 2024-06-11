@@ -37,6 +37,7 @@ message Container {
 	StorageContainerInfo info = 7;
 	Tags tags = 8;
 	bool isolated = 9;
+	bool disableHighAvailability = 10;
 }
 
 service ContainerAgent {
