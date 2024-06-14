@@ -156,7 +156,18 @@ message VirtualMachineRunCommandResponse {
 	VirtualMachineRunCommandInstanceView InstanceView = 2;
 }
 
+message VirtualMachineCapacityCheckRequest {
+	repeated VirtualMachine VirtualMachines = 1;
+}
+
+message VirtualMachineCapacityCheckResponse {
+	google.protobuf.BoolValue Result = 1;
+	string Error = 2;
+	map<string, string> Placement = 3;
+}
+
 service VirtualMachineAgent {
+	rpc CheckCapacity(VirtualMachineCapacityCheckRequest) returns (VirtualMachineCapacityCheckResponse) {}
 	rpc Invoke(VirtualMachineRequest) returns (VirtualMachineResponse) {}
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}

@@ -47,8 +47,17 @@ message VirtualHardDisk {
 	Tags tags = 23;
 }
 
-service VirtualHardDiskAgent {
-	rpc Invoke(VirtualHardDiskRequest) returns (VirtualHardDiskResponse) {}
+message VirtualHardDiskCapacityCheckRequest {
+	repeated VirtualHardDisk VirtualHardDisks = 1;
 }
 
+message VirtualHardDiskCapacityCheckResponse {
+	google.protobuf.BoolValue Result = 1;
+	string  Error = 2;
+	map<string, string> Placement = 3;
+}
 
+service VirtualHardDiskAgent {
+	rpc CheckCapacity(VirtualHardDiskCapacityCheckRequest) returns (VirtualHardDiskCapacityCheckResponse) {}
+	rpc Invoke(VirtualHardDiskRequest) returns (VirtualHardDiskResponse) {}
+}
