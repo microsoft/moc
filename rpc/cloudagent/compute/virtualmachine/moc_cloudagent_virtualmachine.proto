@@ -156,19 +156,27 @@ message VirtualMachineRunCommandResponse {
 	VirtualMachineRunCommandInstanceView InstanceView = 2;
 }
 
-message VirtualMachineCapacityCheckRequest {
+message VirtualMachinePrecheckRequest {
 	repeated VirtualMachine VirtualMachines = 1;
 }
 
-message VirtualMachineCapacityCheckResponse {
+message VirtualMachinePrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
 	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
 	string Error = 2;
+
+	// The placement of virtual machines during precheck, in mapping from virtual machine names to node names.
 	map<string, string> Placement = 3;
 }
 
 service VirtualMachineAgent {
-	rpc CheckCapacity(VirtualMachineCapacityCheckRequest) returns (VirtualMachineCapacityCheckResponse) {}
 	rpc Invoke(VirtualMachineRequest) returns (VirtualMachineResponse) {}
+
+	// Prechecks whether the system is able to create specified virtual machines (but does not actually create them).
+	rpc Precheck(VirtualMachinePrecheckRequest) returns (VirtualMachinePrecheckResponse) {}
+
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
 }

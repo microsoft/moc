@@ -47,17 +47,24 @@ message VirtualHardDisk {
 	Tags tags = 23;
 }
 
-message VirtualHardDiskCapacityCheckRequest {
+message VirtualHardDiskPrecheckRequest {
 	repeated VirtualHardDisk VirtualHardDisks = 1;
 }
 
-message VirtualHardDiskCapacityCheckResponse {
+message VirtualHardDiskPrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
 	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
 	string  Error = 2;
+
+	// The placement of virtual hard disks, in mapping from virtual hard disk names to storage container names
 	map<string, string> Placement = 3;
 }
 
 service VirtualHardDiskAgent {
-	rpc CheckCapacity(VirtualHardDiskCapacityCheckRequest) returns (VirtualHardDiskCapacityCheckResponse) {}
 	rpc Invoke(VirtualHardDiskRequest) returns (VirtualHardDiskResponse) {}
+
+	// Prechecks whether the system is able to create specified virtual hard disks (but does not actually create them).
+	rpc Precheck(VirtualHardDiskPrecheckRequest) returns (VirtualHardDiskPrecheckResponse) {}
 }
