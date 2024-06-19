@@ -57,9 +57,6 @@ message VirtualHardDiskPrecheckResponse {
 
 	// The error message if the precheck is not passed; otherwise, empty string
 	string  Error = 2;
-
-	// The placement of virtual hard disks, in mapping from virtual hard disk names to storage container names
-	map<string, string> Placement = 3;
 }
 
 service VirtualHardDiskAgent {
