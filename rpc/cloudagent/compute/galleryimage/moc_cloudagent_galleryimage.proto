@@ -25,6 +25,18 @@ message GalleryImageResponse {
 	string  Error = 3;
 }
 
+message GalleryImagePrecheckRequest {
+	repeated GalleryImage GalleryImages = 1;
+}
+
+message GalleryImagePrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
+	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
+	string Error = 2;
+}
+
 message SFSImageProperties {
 	string catalogName = 1;
 	string audience = 2;
@@ -69,4 +81,7 @@ message GalleryImage {
 
 service GalleryImageAgent {
 	rpc Invoke(GalleryImageRequest) returns (GalleryImageResponse) {}
+
+	// Prechecks whether the system is able to create specified gallery images (but does not actually create them).
+	rpc Precheck(GalleryImagePrecheckRequest) returns (GalleryImagePrecheckResponse) {}
 }
