@@ -40,6 +40,18 @@ message IdentityCertificateResponse {
 	string  Error = 3;
 }
 
+message IdentityPrecheckRequest {
+	repeated Identity Identitys = 1;
+}
+
+message IdentityPrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
+	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
+	string Error = 2;
+}
+
 message Identity {
 	string name = 1;
 	string id = 2;
@@ -66,4 +78,7 @@ service IdentityAgent {
 	rpc Invoke(IdentityRequest) returns (IdentityResponse) {}
 	rpc Operate(IdentityOperationRequest) returns (IdentityResponse) {}
 	rpc OperateCertificates(IdentityCertificateRequest) returns (IdentityCertificateResponse) {}
+
+	// Prechecks whether the system is able to create specified identities (but does not actually create them).
+	rpc Precheck(IdentityPrecheckRequest) returns (IdentityPrecheckResponse) {}
 }

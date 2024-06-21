@@ -54,7 +54,7 @@ service AvailabilitySetAgent {
 	rpc Invoke(AvailabilitySetRequest) returns (AvailabilitySetResponse) {}
 
 	// Prechecks whether the system is able to create specified availability set (but does not actually create them).
-	rpc Precheck(VirtualMachinePrecheckRequest) returns (VirtualMachinePrecheckResponse) {}
+	rpc Precheck(AvailabilitySetPrecheckRequest) returns (AvailabilitySetPrecheckResponse) {}
 }
 
 
