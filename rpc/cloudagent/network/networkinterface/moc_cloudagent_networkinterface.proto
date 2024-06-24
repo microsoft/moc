@@ -30,6 +30,7 @@ enum NetworkType {
 }
 
 message IpConfiguration {
+	reserved 11; // deprecated string version of networkSecurityGroup
 	string ipaddress = 1 [(sensitive) = true];
 	string prefixlength = 2;
 	string subnetid = 3;
@@ -40,6 +41,7 @@ message IpConfiguration {
 	repeated InboundNatRule inboundNatRules = 8;
 	Tags tags = 9;
 	NetworkType networkType = 10;
+	NetworkSecurityGroupReference networkSecurityGroupRef = 12;
 }
 
 message NetworkInterface {

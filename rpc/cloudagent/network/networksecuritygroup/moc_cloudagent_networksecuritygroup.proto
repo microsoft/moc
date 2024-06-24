@@ -1,0 +1,60 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/network";
+package moc.cloudagent.network;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+import "moc_common_networkcommon.proto";
+
+enum Action {
+	Allow = 0;
+	Deny = 1;
+}
+
+enum Direction {
+	Inbound = 0;
+	Outbound = 1;
+}
+
+message NetworkSecurityGroupRequest {
+	repeated NetworkSecurityGroup NetworkSecurityGroups = 1;
+	Operation OperationType = 2;
+}
+
+message NetworkSecurityGroupResponse {
+	repeated NetworkSecurityGroup NetworkSecurityGroups = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message NetworkSecurityGroupRule {
+	string name = 1;
+	string description = 2;
+	Action action = 3;
+	Direction direction = 4;
+	string sourceAddressPrefix = 5;
+	string destinationAddressPrefix = 6;
+	string sourcePortRange = 7;
+	string destinationPortRange = 8;
+	Protocol protocol = 9;
+	uint32 priority = 10;
+	bool logging = 11;
+	bool isDefaultRule = 12;
+}
+
+message NetworkSecurityGroup {
+	reserved 5; // deprecated group name (now parented to location)
+	string name = 1;
+	string id = 2;
+	repeated NetworkSecurityGroupRule networksecuritygrouprules = 3;
+	string locationName = 6;
+	Status status = 7;
+	Tags tags = 8;
+}
+
+service NetworkSecurityGroupAgent {
+	rpc Invoke(NetworkSecurityGroupRequest) returns (NetworkSecurityGroupResponse) {}
+}

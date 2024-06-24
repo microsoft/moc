@@ -360,6 +360,8 @@ const (
 	ProviderType_Authentication         ProviderType = 36
 	ProviderType_HealthMonitor          ProviderType = 37
 	ProviderType_LogicalNetwork         ProviderType = 38
+	ProviderType_AvailabilitySet        ProviderType = 39
+	ProviderType_NetworkSecurityGroup   ProviderType = 40
 )
 
 var ProviderType_name = map[int32]string{
@@ -402,6 +404,8 @@ var ProviderType_name = map[int32]string{
 	36: "Authentication",
 	37: "HealthMonitor",
 	38: "LogicalNetwork",
+	39: "AvailabilitySet",
+	40: "NetworkSecurityGroup",
 }
 
 var ProviderType_value = map[string]int32{
@@ -444,6 +448,8 @@ var ProviderType_value = map[string]int32{
 	"Authentication":         36,
 	"HealthMonitor":          37,
 	"LogicalNetwork":         38,
+	"AvailabilitySet":        39,
+	"NetworkSecurityGroup":   40,
 }
 
 func (x ProviderType) String() string {
@@ -551,6 +557,10 @@ const (
 	ProviderAccessOperation_VirtualMachineScaleSet_Update     ProviderAccessOperation = 3301
 	ProviderAccessOperation_VirtualNetwork_Create             ProviderAccessOperation = 3400
 	ProviderAccessOperation_VirtualNetwork_Update             ProviderAccessOperation = 3401
+	ProviderAccessOperation_AvailabilitySet_Create            ProviderAccessOperation = 3500
+	ProviderAccessOperation_AvailabilitySet_Delete            ProviderAccessOperation = 3501
+	ProviderAccessOperation_NetworkSecurityGroup_Create       ProviderAccessOperation = 3600
+	ProviderAccessOperation_NetworkSecurityGroup_Update       ProviderAccessOperation = 3601
 )
 
 var ProviderAccessOperation_name = map[int32]string{
@@ -646,6 +656,10 @@ var ProviderAccessOperation_name = map[int32]string{
 	3301: "VirtualMachineScaleSet_Update",
 	3400: "VirtualNetwork_Create",
 	3401: "VirtualNetwork_Update",
+	3500: "AvailabilitySet_Create",
+	3501: "AvailabilitySet_Delete",
+	3600: "NetworkSecurityGroup_Create",
+	3601: "NetworkSecurityGroup_Update",
 }
 
 var ProviderAccessOperation_value = map[string]int32{
@@ -741,6 +755,10 @@ var ProviderAccessOperation_value = map[string]int32{
 	"VirtualMachineScaleSet_Update":     3301,
 	"VirtualNetwork_Create":             3400,
 	"VirtualNetwork_Update":             3401,
+	"AvailabilitySet_Create":            3500,
+	"AvailabilitySet_Delete":            3501,
+	"NetworkSecurityGroup_Create":       3600,
+	"NetworkSecurityGroup_Update":       3601,
 }
 
 func (x ProviderAccessOperation) String() string {

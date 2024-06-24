@@ -33,10 +33,11 @@ message PhysicalMemory {
 	uint64 sizeBytes = 1;
 }
 
-message GPU {
-	string name = 1;
-	uint32 sizeBytes = 2;
-	uint32 count = 3;
+message HostGPU {
+	string id = 1;
+	string name = 2;
+	uint64 partitionSizeMB = 3;
+	AssignmentType assignment = 4;
 }
 
 message OperatingSystem {
@@ -58,9 +59,11 @@ message NodeInfo {
 }
 
 message Resources {
+	reserved 3;
 	reserved 4;
+	reserved 6;
 	Processor processor = 1;
 	PhysicalMemory memory = 2;
-	GPU gpu = 3;	
 	VirtualMachineCapabilities vmCapabilities = 5;
+	repeated HostGPU hostGPUs = 7;
 }

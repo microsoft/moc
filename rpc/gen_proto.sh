@@ -44,6 +44,7 @@ Module="compute"
 echo "Generating $Agent/$Module protoc"
 protoc -I $Agent/$Module/virtualmachine -I ./common $Agent/$Module/virtualmachine/moc_nodeagent_virtualmachine.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/virtualmachinescaleset -I $Agent/$Module/virtualmachine -I $Agent/network/virtualnetworkinterface -I ./common $Agent/$Module/virtualmachinescaleset/moc_nodeagent_virtualmachinescaleset.proto --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/availabilityset -I ./common $Agent/$Module/availabilityset/moc_nodeagent_availabilityset.proto --go_out=plugins=grpc:../bld/gen/
 
 Module="storage"
 echo "Generating $Agent/$Module protoc"
@@ -151,6 +152,7 @@ protoc -I $Agent/$Module/loadbalancer -I ./common $Agent/$Module/loadbalancer/mo
 protoc -I $Agent/$Module/networkinterface -I ./common $Agent/$Module/networkinterface/moc_cloudagent_networkinterface.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/vippool -I ./common $Agent/$Module/vippool/moc_cloudagent_vippool.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/macpool -I ./common $Agent/$Module/macpool/moc_cloudagent_macpool.proto --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/networksecuritygroup -I ./common $Agent/$Module/networksecuritygroup/moc_cloudagent_networksecuritygroup.proto --go_out=plugins=grpc:../bld/gen/
 
 # Generate compute agent protoc
 Module="compute"
@@ -161,6 +163,7 @@ protoc -I $Agent/$Module/virtualmachineimage -I ./common $Agent/$Module/virtualm
 protoc -I $Agent/$Module/galleryimage -I ./common $Agent/$Module/galleryimage/moc_cloudagent_galleryimage.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/baremetalhost -I ./common -I $Agent/$Module/virtualmachine $Agent/$Module/baremetalhost/moc_cloudagent_baremetalhost.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/baremetalmachine -I ./common -I $Agent/$Module/virtualmachine $Agent/$Module/baremetalmachine/moc_cloudagent_baremetalmachine.proto --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/availabilityset -I ./common $Agent/$Module/availabilityset/moc_cloudagent_availabilityset.proto  --go_out=plugins=grpc:../bld/gen/
 
 Module="storage"
 echo "Generating $Agent/$Module protoc"
