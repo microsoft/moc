@@ -18,6 +18,7 @@ enum VirtualHardDiskType {
 message VirtualHardDiskRequest {
 	repeated VirtualHardDisk VirtualHardDiskSystems = 1;
 	Operation OperationType = 2;
+	uint32 NumOfRetries = 3;
 }
 
 message VirtualHardDiskResponse {
