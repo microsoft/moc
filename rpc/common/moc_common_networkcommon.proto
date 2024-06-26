@@ -74,3 +74,7 @@ message PublicIPAddressReference {
 message ProbeReference {
 	ResourceReference resourceRef = 1;
 }
+
+message SubnetReference {
+	ResourceReference resourceRef = 1;
+}
