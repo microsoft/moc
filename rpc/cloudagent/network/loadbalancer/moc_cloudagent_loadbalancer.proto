@@ -51,27 +51,28 @@ message LoadBalancingRule {
 	uint32 backendPort = 2;
 	Protocol protocol = 3;
 	ProbeReference probeRef = 4; // Update based on chat with Nithin
+	string name = 5;
 }
 
 message Probe {
-	uint32 intervalInSeconds = 1;
-	uint32 numberOfProbes = 2;
-	Protocol protocol = 3;
-	uint32 port = 4; 
-	repeated LoadBalancingRule loadbalancingrules = 5; //read-only
+	string name = 1;
+	uint32 intervalInSeconds = 2;
+	uint32 numberOfProbes = 3;
+	Protocol protocol = 4;
+	uint32 port = 5; 
+	repeated LoadBalancingRule loadbalancingrules = 6; //read-only
 }
 
 message FrontEndIpConfiguration {
-	string privateIPAddress = 1; // required if using subnet
-	IPAllocationMethod allocationMethod = 2; // required
-	string subnetRef = 3; // required if using privateIPAddress. Pass just the name or fully qualified ref? 
-	PublicIPAddressReference publicIPAddress = 4; // required if not using privateIP and a subnet. resourceRef to publicIPAddress
+	string name = 1;
+	string privateIPAddress = 2; // required if using subnet
+	IPAllocationMethod allocationMethod = 3; // required
+	SubnetReference subnetRef = 4; // required if using privateIPAddress.
+	PublicIPAddressReference publicIPAddress = 5; // required if not using privateIP and a subnet. resourceRef to publicIPAddress
 	
-	repeated LoadbalancerInboundNatRule inboundNatRules = 5; //read-only
-	repeated LoadbalancerOutboundNatRule outboundNatRules = 6; //read-only
-	repeated LoadBalancingRule loadbalancingrules = 7; //read-only
-
-	LoadBalancerVipConfigurationState configurationState = 8; // Do we need to surface this? how is it different from Probes?
+	repeated LoadbalancerInboundNatRule inboundNatRules = 6; //read-only
+	repeated LoadbalancerOutboundNatRule outboundNatRules = 7; //read-only
+	repeated LoadBalancingRule loadbalancingrules = 8; //read-only
 }
 
 message LoadBalancer {
@@ -88,7 +89,7 @@ message LoadBalancer {
 	Tags tags = 11;
 	uint32 replicationCount = 12;
 	repeated LoadbalancerInboundNatRule inboundNatRules = 13;
-	repeated LoadbalancerInboundNatRule outboundNatRules = 14;
+	repeated LoadbalancerOutboundNatRule outboundNatRules = 14;
 	repeated FrontEndIpConfiguration frontendIpConfigurations = 15;
 	repeated Probe probes = 16; // Need more discussion around probes
 	string useSDN = 17; // To indicate SDN optionality
