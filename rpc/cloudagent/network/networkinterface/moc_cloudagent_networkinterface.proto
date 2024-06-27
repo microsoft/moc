@@ -20,6 +20,18 @@ message NetworkInterfaceResponse {
 	string  Error = 3;
 }
 
+message NetworkInterfacePrecheckRequest {
+	repeated NetworkInterface NetworkInterfaces = 1;
+}
+
+message NetworkInterfacePrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
+	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
+	string Error = 2;
+}
+
 message InboundNatRule {
 	string name = 1;
 }
@@ -66,4 +78,7 @@ message NetworkInterface {
 
 service NetworkInterfaceAgent {
 	rpc Invoke(NetworkInterfaceRequest) returns (NetworkInterfaceResponse) {}
+
+	// Prechecks whether the system is able to create specified network interfaces (but does not actually create them).
+	rpc Precheck(NetworkInterfacePrecheckRequest) returns (NetworkInterfacePrecheckResponse) {}
 }

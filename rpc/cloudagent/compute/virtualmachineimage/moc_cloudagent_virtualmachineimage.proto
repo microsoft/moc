@@ -19,6 +19,18 @@ message VirtualMachineImageResponse {
 	string  Error = 3;
 }
 
+message VirtualMachineImagePrecheckRequest {
+	repeated VirtualMachineImage VirtualMachineImages = 1;
+}
+
+message VirtualMachineImagePrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
+	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
+	string Error = 2;
+}
+
 message VirtualMachineImage {
 	string name = 1;
 	string id = 2;
@@ -35,6 +47,9 @@ message VirtualMachineImage {
 
 service VirtualMachineImageAgent {
 	rpc Invoke(VirtualMachineImageRequest) returns (VirtualMachineImageResponse) {}
+
+	// Prechecks whether the system is able to create specified virtual machine images (but does not actually create them).
+	rpc Precheck(VirtualMachineImagePrecheckRequest) returns (VirtualMachineImagePrecheckResponse) {}
 }
 
 
