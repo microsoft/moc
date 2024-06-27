@@ -26,6 +26,18 @@ message CertificateResponse {
     string  Error = 3;
 }
 
+message CertificatePrecheckRequest {
+	repeated Certificate Certificates = 1;
+}
+
+message CertificatePrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
+	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
+	string Error = 2;
+}
+
 message CertificateSigningRequest {
     string name = 1;
     string csr = 2 [(sensitive) = true];
@@ -60,4 +72,7 @@ service CertificateAgent {
     rpc Delete(CertificateRequest) returns (CertificateResponse) {}
     rpc Sign(CSRRequest) returns (CertificateResponse) {}
     rpc Renew(CSRRequest) returns (CertificateResponse) {}
+
+	// Prechecks whether the system is able to create specified certificates (but does not actually create them).
+	rpc Precheck(CertificatePrecheckRequest) returns (CertificatePrecheckResponse) {}
 }

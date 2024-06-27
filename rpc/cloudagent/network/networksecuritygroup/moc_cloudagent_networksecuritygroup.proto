@@ -30,6 +30,18 @@ message NetworkSecurityGroupResponse {
 	string  Error = 3;
 }
 
+message NetworkSecurityGroupPrecheckRequest {
+	repeated NetworkSecurityGroup NetworkSecurityGroups = 1;
+}
+
+message NetworkSecurityGroupPrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
+	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
+	string Error = 2;
+}
+
 message NetworkSecurityGroupRule {
 	string name = 1;
 	string description = 2;
@@ -57,4 +69,7 @@ message NetworkSecurityGroup {
 
 service NetworkSecurityGroupAgent {
 	rpc Invoke(NetworkSecurityGroupRequest) returns (NetworkSecurityGroupResponse) {}
+
+	// Prechecks whether the system is able to create specified network security groups (but does not actually create them).
+	rpc Precheck(NetworkSecurityGroupPrecheckRequest) returns (NetworkSecurityGroupPrecheckResponse) {}
 }

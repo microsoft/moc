@@ -20,6 +20,18 @@ message LoadBalancerResponse {
 	string  Error = 3;
 }
 
+message LoadBalancerPrecheckRequest {
+	repeated LoadBalancer LoadBalancers = 1;
+}
+
+message LoadBalancerPrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
+	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
+	string Error = 2;
+}
+
 message LoadbalancerInboundNatRule {
 	string name = 1;
 	uint32 frontendPort = 2;
@@ -51,5 +63,8 @@ message LoadBalancer {
 
 service LoadBalancerAgent {
 	rpc Invoke(LoadBalancerRequest) returns (LoadBalancerResponse) {}
+
+	// Prechecks whether the system is able to create specified load balancers (but does not actually create them).
+	rpc Precheck(LoadBalancerPrecheckRequest) returns (LoadBalancerPrecheckResponse) {}
 }
 

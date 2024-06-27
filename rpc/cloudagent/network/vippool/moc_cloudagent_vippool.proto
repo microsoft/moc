@@ -20,6 +20,18 @@ message VipPoolResponse {
 	string  Error = 3;
 }
 
+message VipPoolPrecheckRequest {
+	repeated VipPool VipPools = 1;
+}
+
+message VipPoolPrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
+	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
+	string Error = 2;
+}
+
 message VipPool {
 	string name = 1;
 	string id = 2;
@@ -36,5 +48,8 @@ message VipPool {
 
 service VipPoolAgent {
 	rpc Invoke(VipPoolRequest) returns (VipPoolResponse) {}
+
+	// Prechecks whether the system is able to create specified vip pools (but does not actually create them).
+	rpc Precheck(VipPoolPrecheckRequest) returns (VipPoolPrecheckResponse) {}
 }
 
