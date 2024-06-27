@@ -220,6 +220,8 @@ enum ProviderAccessOperation {
 	Key_UnwrapKey					= 505; 
 	Key_Sign 						= 506; 
 	Key_Verify 						= 507; 
+	Key_WrapKey_NoRollover   		= 508;
+	Key_Status                      = 509;
 
 	VirtualMachine_Create 				= 600; 
 	VirtualMachine_Update 				= 601; 
