@@ -20,6 +20,18 @@ message LogicalNetworkResponse {
 	string  Error = 3;
 }
 
+message LogicalNetworkPrecheckRequest {
+	repeated LogicalNetwork LogicalNetworks = 1;
+}
+
+message LogicalNetworkPrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
+	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
+	string Error = 2;
+}
+
 message LogicalNetwork {
 	string name = 1;
 	string id = 2;
@@ -47,5 +59,8 @@ message LogicalSubnet {
 
 service LogicalNetworkAgent {
 	rpc Invoke(LogicalNetworkRequest) returns (LogicalNetworkResponse) {}
+	
+	// Prechecks whether the system is able to create specified logical networks (but does not actually create them).
+	rpc Precheck(LogicalNetworkPrecheckRequest) returns (LogicalNetworkPrecheckResponse) {}
 }
 

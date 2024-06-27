@@ -19,6 +19,18 @@ message MacPoolResponse {
 	string  Error = 3;
 }
 
+message MacPoolPrecheckRequest {
+	repeated MacPool MacPools = 1;
+}
+
+message MacPoolPrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
+	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
+	string Error = 2;
+}
+
 message MacRange {
 	string startMacAddress = 1;
 	string endMacAddress = 2;
@@ -35,5 +47,8 @@ message MacPool {
 
 service MacPoolAgent {
 	rpc Invoke(MacPoolRequest) returns (MacPoolResponse) {}
+
+	// Prechecks whether the system is able to create specified MAC pools (but does not actually create them).
+	rpc Precheck(MacPoolPrecheckRequest) returns (MacPoolPrecheckResponse) {}
 }
 
