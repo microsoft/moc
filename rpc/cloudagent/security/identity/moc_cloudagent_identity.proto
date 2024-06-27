@@ -41,7 +41,7 @@ message IdentityCertificateResponse {
 }
 
 message IdentityPrecheckRequest {
-	repeated Identity Identitys = 1;
+	repeated Identity Identities = 1;
 }
 
 message IdentityPrecheckResponse {
