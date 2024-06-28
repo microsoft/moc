@@ -126,6 +126,12 @@ message VirtualMachine {
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 16;
 }
 
+message VirtualMachineDiscovery {
+	string name = 1;
+	string id = 2;
+	PowerState powerState = 3;
+}
+
 message VirtualMachineOperationRequest {
 	repeated VirtualMachine VirtualMachines = 1;
 	VirtualMachineOperation OperationType = 2;
@@ -150,10 +156,17 @@ message VirtualMachineRunCommandResponse {
 	VirtualMachineRunCommandInstanceView InstanceView = 2;
 }
 
+message VirtualMachineDiscoveryResponse {
+	repeated VirtualMachineDiscovery VirtualMachines = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
 service VirtualMachineAgent {
 	rpc Invoke(VirtualMachineRequest) returns (VirtualMachineResponse) {}
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
 	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
+	rpc DiscoverVm(google.protobuf.Empty) returns (VirtualMachineDiscoveryResponse) {}
 }
 
