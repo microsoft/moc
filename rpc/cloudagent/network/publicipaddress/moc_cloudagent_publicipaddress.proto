@@ -10,29 +10,27 @@ import "moc_common_common.proto";
 import "moc_common_networkcommon.proto";
 
 message PublicIPAddressRequest {
-	repeated PublicIPAddress PublicIPAddresss = 1;
+	repeated PublicIPAddress PublicIPAddresses = 1;
 	Operation OperationType = 2;
 }
 
 message PublicIPAddressResponse {
-	repeated PublicIPAddress PublicIPAddresss = 1;
+	repeated PublicIPAddress PublicIPAddresses = 1;
 	google.protobuf.BoolValue Result = 2;
 	string Error = 3;
 }
 
-    IPAddress *string `json:"ipAddress,omitempty"` 
+message PublicIPAddressPrecheckRequest {
+	repeated PublicIPAddress PublicIPAddresses = 1;
+}
 
-    PublicIPAllocationMethod IPAllocationMethod `json:"publicIPAllocationMethod,omitempty"` 
+message PublicIPAddressPrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
+	google.protobuf.BoolValue Result = 1;
 
-    PublicIPAddressVersion IPVersion `json:"publicIPAddressVersion,omitempty"` 
-
-    IPConfiguration *IPConfiguration `json:"ipConfiguration,omitempty"` 
-
-    DNSSettings *PublicIPAddressDNSSettings `json:"dnsSettings,omitempty"` 
-
-    IdleTimeoutInMinutes *int32 `json:"idleTimeoutInMinutes,omitempty"` 
-
-    DNSSettings *PublicIPAddressDNSSettings `json:"dnsSettings,omitempty"` 
+	// The error message if the precheck is not passed; otherwise, empty string
+	string Error = 2;
+}
 
 message PublicIPAddress {
 	string name = 1;
@@ -41,15 +39,20 @@ message PublicIPAddress {
 	IPAllocationMethod allocation = 4;
 	IPVersion ipVersion = 5;
     uint32 idleTimeoutInMinutes = 6;
-    string domainNameLabel = 7;
-	string fqdn = 8;
-    string reverseFqdn = 9;
-	string locationName = 10;
-	Status status = 11;
-	Tags tags = 12;
+	string groupName = 7;
+	string locationName = 8;
+	Status status = 9;
+	Tags tags = 10;
+	
+	// No DNS support for now
+	//string domainNameLabel = 11;
+	//string fqdn = 12;
+    //string reverseFqdn = 13;
 }
 
 service PublicIPAddressAgent {
 	rpc Invoke(PublicIPAddressRequest) returns (PublicIPAddressResponse) {}
-}
 
+    // Prechecks whether the system is able to create specified public IP address (but does not actually create them).
+	rpc Precheck(PublicIPAddressPrecheckRequest) returns (PublicIPAddressPrecheckResponse) {}
+}
