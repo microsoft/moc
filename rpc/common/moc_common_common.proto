@@ -335,6 +335,7 @@ enum ImageSource {
         SFS_SOURCE   = 1;
         HTTP_SOURCE  = 2;
         CLONE_SOURCE = 3;
+		CGI_SOURCE = 4;
 }
 
 enum HyperVGeneration {
