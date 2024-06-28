@@ -20,20 +20,6 @@ message PublicIPAddressResponse {
 	string Error = 3;
 }
 
-    IPAddress *string `json:"ipAddress,omitempty"` 
-
-    PublicIPAllocationMethod IPAllocationMethod `json:"publicIPAllocationMethod,omitempty"` 
-
-    PublicIPAddressVersion IPVersion `json:"publicIPAddressVersion,omitempty"` 
-
-    IPConfiguration *IPConfiguration `json:"ipConfiguration,omitempty"` 
-
-    DNSSettings *PublicIPAddressDNSSettings `json:"dnsSettings,omitempty"` 
-
-    IdleTimeoutInMinutes *int32 `json:"idleTimeoutInMinutes,omitempty"` 
-
-    DNSSettings *PublicIPAddressDNSSettings `json:"dnsSettings,omitempty"` 
-
 message PublicIPAddress {
 	string name = 1;
 	string id = 2;
@@ -52,4 +38,3 @@ message PublicIPAddress {
 service PublicIPAddressAgent {
 	rpc Invoke(PublicIPAddressRequest) returns (PublicIPAddressResponse) {}
 }
-

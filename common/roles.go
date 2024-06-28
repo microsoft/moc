@@ -35,6 +35,8 @@ const (
 	NIContributorRoleName = "NetworkInterfaceContributor"
 	// Network Security Group Contributor Role - has permissions to run any operation on network security groups
 	NSGContributorRoleName = "NetworkSecurityGroupContributor"
+	// PublicIPAddress Contributor Role - has permissions to run any operation on public IP address
+	PublicIPAddressRoleName = "PublicIPAddressContributor"
 	// VM Contributor Role - has permissions to run any operation on VMs
 	VMContributorRoleName = "VMContributor"
 	// VM Updater Role - has permissions to update VMs
@@ -95,6 +97,8 @@ const (
 	NIReaderRoleName = "NetworkInterfaceReader"
 	// Network Security Group Reader Role - has permissions to run read operations on network security groups
 	NSGReaderRoleName = "NetworkSecurityGroupReader"
+	// PublicIPAddress Reader Role - has permissions to run read operation on public IP address
+	PIPReaderRoleName = "PublicIPAddressReader"
 	// VM Reader Role - has permissions to run read operations on VMs
 	VMReaderRoleName = "VMReader"
 	// VirtualMachineImage Reader Role - has permissions to run read operations on VirtualMachineImages
