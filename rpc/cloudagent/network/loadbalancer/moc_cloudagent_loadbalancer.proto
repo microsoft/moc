@@ -60,7 +60,6 @@ message Probe {
 	uint32 numberOfProbes = 3;
 	Protocol protocol = 4;
 	uint32 port = 5; 
-	repeated LoadBalancingRule loadbalancingrules = 6; //read-only
 }
 
 message FrontEndIpConfiguration {
@@ -69,10 +68,6 @@ message FrontEndIpConfiguration {
 	IPAllocationMethod allocationMethod = 3; // required
 	SubnetReference subnetRef = 4; // required if using privateIPAddress.
 	PublicIPAddressReference publicIPAddress = 5; // required if not using privateIP and a subnet. resourceRef to publicIPAddress
-	
-	repeated LoadbalancerInboundNatRule inboundNatRules = 6; //read-only
-	repeated LoadbalancerOutboundNatRule outboundNatRules = 7; //read-only
-	repeated LoadBalancingRule loadbalancingrules = 8; //read-only
 }
 
 message LoadBalancer {
