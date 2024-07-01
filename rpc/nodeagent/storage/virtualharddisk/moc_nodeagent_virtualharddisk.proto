@@ -52,6 +52,11 @@ message AzureGalleryImageProperties {
 	string version = 2;
 }
 
+message AzureCGIProperties {
+	string ResourceId = 1 [(sensitive) = true];
+	string version = 2;
+}
+
 message VirtualHardDisk {
 	string name = 1;
 	string id = 2;
