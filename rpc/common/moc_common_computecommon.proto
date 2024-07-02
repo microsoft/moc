@@ -182,7 +182,6 @@ enum ConfidentialVMHardwareType {
 }
 
 // describes the the capabilities of this node in terms of what type of VM can be created
-// In the future when CVM comes, another bool will be added to check hardware capability.
 message VirtualMachineCapabilities {
 	bool IsolatedVmCapable =  1;
 	ConfidentialVMHardwareType ConfidentialVMHardwareCapability = 2;
@@ -236,19 +235,6 @@ enum SecurityType {
         NOTCONFIGURED = 0;
         TRUSTEDLAUNCH = 1;
         CONFIDENTIALVM = 2;
-}
-
-enum SecurityEncryptionTypes {
-    SecurityEncryptionNone = 0;
-    NonPersistedTPM = 1;
-}
-
-message VMDiskSecurityProfile {
-    SecurityEncryptionTypes securityEncryptionType = 1;
-}
-
-message VirtualMachineManagedDiskParameters {
-    VMDiskSecurityProfile securityProfile = 1;
 }
 
 message ProxyConfiguration {
