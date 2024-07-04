@@ -36,11 +36,6 @@ message InboundNatRule {
 	string name = 1;
 }
 
-enum NetworkType {
-	VIRTUAL_NETWORK = 0;
-	LOGICAL_NETWORK = 1;
-}
-
 message IpConfiguration {
 	reserved 11; // deprecated string version of networkSecurityGroup
 	string ipaddress = 1 [(sensitive) = true];
@@ -54,6 +49,7 @@ message IpConfiguration {
 	Tags tags = 9;
 	NetworkType networkType = 10;
 	NetworkSecurityGroupReference networkSecurityGroupRef = 12;
+	SubnetReference subnetRef = 13;
 }
 
 message NetworkInterface {

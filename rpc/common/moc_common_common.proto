@@ -351,3 +351,7 @@ enum CloudInitDataSource {
 	NoCloud = 0;
 	Azure = 1;
 }
+
+message EntityVersion {
+	uint32 major = 1;
+}

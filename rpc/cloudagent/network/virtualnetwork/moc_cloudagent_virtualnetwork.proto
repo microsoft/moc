@@ -57,6 +57,8 @@ message VirtualNetwork {
 	string locationName = 9;
 	string macPoolName = 10 [(sensitive) = true];
 	Tags tags = 12;
+	NetworkReference logicalNetworkReference = 13;
+	EntityVersion version = 14;
 }
 
 message Subnet {

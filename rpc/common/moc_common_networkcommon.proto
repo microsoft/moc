@@ -33,6 +33,11 @@ enum IPPoolType {
 	VIPPool = 1;
 }
 
+enum NetworkType {
+	VIRTUAL_NETWORK = 0;
+	LOGICAL_NETWORK = 1;
+}
+
 message IPPoolInfo {
 	string used = 1;
 	string available = 2;
@@ -60,4 +65,14 @@ message ResourceReference {
 
 message NetworkSecurityGroupReference {
 	ResourceReference resourceRef = 1;
+}
+
+message NetworkReference {
+	ResourceReference resourceRef = 1;
+	NetworkType networkType = 2;
+}
+
+message SubnetReference {
+	NetworkReference parentNetwork = 1;
+	ResourceReference resourceRef = 2;
 }
