@@ -45,6 +45,8 @@ message VirtualHardDisk {
 	DiskFileFormat diskFileFormat = 21;
 	CloudInitDataSource cloudInitDataSource = 22;
 	Tags tags = 23;
+	string sourcePath = 24;
+	ImageSource sourceType = 25;
 }
 
 message VirtualHardDiskPrecheckRequest {
