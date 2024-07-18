@@ -1336,6 +1336,12 @@ func (m *Entity) GetIsPlaceholder() bool {
 	return false
 }
 
+func (m *Entity) SetIsPlaceholder(isPlaceHolder bool)  {
+	if m != nil {
+		m.IsPlaceholder = isPlaceHolder
+	}
+}
+
 type Tag struct {
 	Key                  string   `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	Value                string   `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
