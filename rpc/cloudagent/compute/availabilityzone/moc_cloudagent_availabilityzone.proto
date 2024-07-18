@@ -19,11 +19,19 @@ message AvailabilityZoneResponse {
 	string  Error = 3;
 }
 
+message VirtualMachineReference {
+	string groupName = 1;
+	string name = 2;
+	string realizedName = 3;
+}
+
 message AvailabilityZone {
     string name = 1;
     string id = 2;
     string locationName = 3;
 	repeated string nodes = 4;
+	Status status = 5;
+	repeated VirtualMachineReference virtualMachines = 5;
 }
 
 service AvailabilityZoneAgent {
