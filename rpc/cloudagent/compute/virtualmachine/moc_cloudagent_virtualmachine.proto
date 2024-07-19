@@ -110,7 +110,8 @@ message AvailabilitySetReference {
 }
 
 message AvailabilityZoneReference {
-	string name = 1;
+	string groupName = 1;
+	string name = 2;
 }
 
 message VirtualMachine {
