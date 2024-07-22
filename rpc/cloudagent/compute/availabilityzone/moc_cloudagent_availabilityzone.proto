@@ -29,9 +29,10 @@ message AvailabilityZone {
     string name = 1;
     string id = 2;
     string locationName = 3;
-	repeated string nodes = 4;
-	Status status = 5;
-	repeated VirtualMachineRef virtualMachines = 6;
+	string groupName = 4;
+	repeated string nodes = 5;
+	Status status = 6;
+	repeated VirtualMachineRef virtualMachines = 7;
 }
 
 service AvailabilityZoneAgent {
