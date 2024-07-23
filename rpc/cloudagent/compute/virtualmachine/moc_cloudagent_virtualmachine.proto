@@ -118,6 +118,16 @@ message AvailabilityZoneConfiguration {
 	bool strictAffinityToZones = 2;
 }
 
+enum PlacementStatusType {
+	ALIGNED = 0;
+	NOT_ALIGNED = 1;
+}
+
+message PlacementStatus  {
+	PlacementStatusType Status = 1;
+	string Message = 2;
+}
+
 message VirtualMachine {
 	string name = 1;
 	string id = 2;
@@ -139,6 +149,7 @@ message VirtualMachine {
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 18;
 	AvailabilitySetReference availabilitySet = 19;
 	AvailabilityZoneConfiguration availabilityZone = 20;
+	PlacementStatus placementStatus = 21;
 }
 
 message VirtualMachineOperationRequest {
