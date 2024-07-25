@@ -109,12 +109,12 @@ message AvailabilitySetReference {
 	string name = 2;
 }
 
-message AvailabilityZone {
+message AvailabilityZoneReference {
 	string name = 1;
 }
 
 message AvailabilityZoneConfiguration {
-	repeated AvailabilityZone availabilityZones = 1;
+	repeated AvailabilityZoneReference availabilityZones = 1;
 	bool strictAffinityToZones = 2;
 }
 

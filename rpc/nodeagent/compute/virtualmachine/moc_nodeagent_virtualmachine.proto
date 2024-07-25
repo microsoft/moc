@@ -107,13 +107,13 @@ message SecurityConfiguration {
 	SecurityType securityType = 3;
 }
 
-message AvailabilityZone {
+message AvailabilityZoneReference {
 	string name = 1;
 	repeated string nodes = 2;
 }
 
 message AvailabilityZoneConfiguration {
-	repeated AvailabilityZone availabilityZones = 1;
+	repeated AvailabilityZoneReference availabilityZones = 1;
 	bool strictAffinityToZones = 2;
 }
 
