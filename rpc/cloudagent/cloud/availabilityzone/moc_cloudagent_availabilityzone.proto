@@ -2,8 +2,8 @@
 // Licensed under the Apache v2.0 license.
 
 syntax = "proto3";
-option go_package = "github.com/microsoft/moc/rpc/cloudagent/compute";
-package moc.cloudagent.compute;
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/cloud";
+package moc.cloudagent.availabilityzone;
 
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
