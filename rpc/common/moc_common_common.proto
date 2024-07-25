@@ -328,6 +328,7 @@ enum ProviderAccessOperation {
 
 	AvailabilityZone_Create		    = 3700;
 	AvailabilityZone_Delete		    = 3701;
+	AvailabilityZone_Update		    = 3702;
 }
 
 extend google.protobuf.FieldOptions {
