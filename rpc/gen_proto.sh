@@ -164,7 +164,6 @@ protoc -I $Agent/$Module/galleryimage -I ./common $Agent/$Module/galleryimage/mo
 protoc -I $Agent/$Module/baremetalhost -I ./common -I $Agent/$Module/virtualmachine $Agent/$Module/baremetalhost/moc_cloudagent_baremetalhost.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/baremetalmachine -I ./common -I $Agent/$Module/virtualmachine $Agent/$Module/baremetalmachine/moc_cloudagent_baremetalmachine.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/availabilityset -I ./common $Agent/$Module/availabilityset/moc_cloudagent_availabilityset.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/availabilityzone -I ./common $Agent/$Module/availabilityzone/moc_cloudagent_availabilityzone.proto  --go_out=plugins=grpc:../bld/gen/
 
 Module="storage"
 echo "Generating $Agent/$Module protoc"
@@ -182,6 +181,7 @@ protoc -I $Agent/$Module/subscription -I ./common $Agent/$Module/subscription/mo
 protoc -I $Agent/$Module/controlplane -I ./common $Agent/$Module/controlplane/moc_cloudagent_controlplane.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/etcdcluster/etcdserver -I ./common $Agent/$Module/etcdcluster/etcdserver/moc_cloudagent_etcdserver.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/etcdcluster -I ./common -I $Agent/$Module/etcdcluster/etcdserver $Agent/$Module/etcdcluster/moc_cloudagent_etcdcluster.proto  --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/availabilityzone -I ./common $Agent/$Module/availabilityzone/moc_cloudagent_availabilityzone.proto  --go_out=plugins=grpc:../bld/gen/
 
 Module="security"
 echo "Generating $Agent/$Module protoc"
