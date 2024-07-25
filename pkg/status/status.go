@@ -20,6 +20,7 @@ func InitStatus() *common.Status {
 		Version:            GenerateVersion(),
 		DownloadStatus:     &common.DownloadStatus{},
 		ValidationStatus:   &common.ValidationStatus{},
+		PlacementStatus:    &common.PlacementStatus{},
 	}
 }
 
@@ -96,6 +97,16 @@ func GetValidationStatus(s *common.Status) []*common.ValidationState {
 	return s.GetValidationStatus().GetValidationState()
 }
 
+func SetPlacementStatus(s *common.Status, placementState *common.PlacementStatus) {
+	s.PlacementStatus = new(common.PlacementStatus)
+	s.PlacementStatus.Status = placementState.GetStatus()
+	s.PlacementStatus.Message = placementState.GetMessage()
+}
+
+func GetPlacementStatus(s *common.Status) common.PlacementStatusType {
+	return s.GetPlacementStatus().GetStatus()
+}
+
 // GetStatuses - converts status to map
 func GetStatuses(status *common.Status) map[string]*string {
 	statuses := map[string]*string{}
@@ -109,6 +120,8 @@ func GetStatuses(status *common.Status) map[string]*string {
 	statuses["Version"] = &version
 	dstate := status.GetDownloadStatus().String()
 	statuses["DownloadStatus"] = &dstate
+	placementStatus := status.GetPlacementStatus().String()
+	statuses["PlacementStatus"] = &placementStatus
 	return statuses
 }
 
@@ -134,6 +147,11 @@ func GetFromStatuses(statuses map[string]*string) (status *common.Status) {
 		ps := new(common.DownloadStatus)
 		proto.UnmarshalText(*val, ps)
 		status.DownloadStatus = ps
+	}
+	if val, ok := statuses["PlacementStatus"]; ok {
+		ps := new(common.PlacementStatus)
+		proto.UnmarshalText(*val, ps)
+		status.PlacementStatus = ps
 	}
 
 	return
