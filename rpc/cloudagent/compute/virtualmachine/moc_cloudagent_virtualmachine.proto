@@ -109,11 +109,6 @@ message AvailabilitySetReference {
 	string name = 2;
 }
 
-message AvailabilityZoneReference {
-	string groupName = 1;
-	string name = 2;
-}
-
 message VirtualMachine {
 	string name = 1;
 	string id = 2;
@@ -134,7 +129,6 @@ message VirtualMachine {
 	GuestAgentConfiguration guestAgent = 17;
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 18;
 	AvailabilitySetReference availabilitySet = 19;
-	AvailabilityZoneReference availabilityZone = 20;
 }
 
 message VirtualMachineOperationRequest {
