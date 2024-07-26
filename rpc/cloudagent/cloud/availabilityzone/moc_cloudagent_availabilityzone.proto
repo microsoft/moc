@@ -1,0 +1,34 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/cloud";
+package moc.cloudagent.availabilityzone;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+message AvailabilityZoneRequest {
+	repeated AvailabilityZone AvailabilityZones = 1;
+	Operation OperationType = 2;
+}
+
+message AvailabilityZoneResponse {
+	repeated AvailabilityZone AvailabilityZones = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message AvailabilityZone {
+    string name = 1;
+    string id = 2;
+    string locationName = 3;
+	repeated string nodes = 5;
+	Status status = 6;
+}
+
+service AvailabilityZoneAgent {
+	rpc Invoke(AvailabilityZoneRequest) returns (AvailabilityZoneResponse) {}
+}
+
+
