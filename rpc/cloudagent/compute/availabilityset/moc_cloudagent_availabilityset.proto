@@ -25,6 +25,18 @@ message VirtualMachineReference {
 	string realizedName = 3;
 }
 
+message AvailabilitySetPrecheckRequest {
+	repeated AvailabilitySet AvailabilitySets = 1;
+}
+
+message AvailabilitySetPrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
+	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
+	string Error = 2;
+}
+
 // avset structure is a flattened version of the model in the Azure sdk for go at
 // https://github.com/Azure/azure-sdk-for-go/blob/main/sdk/resourcemanager/compute/armcompute/models.go
 message AvailabilitySet {
@@ -40,6 +52,9 @@ message AvailabilitySet {
 
 service AvailabilitySetAgent {
 	rpc Invoke(AvailabilitySetRequest) returns (AvailabilitySetResponse) {}
+
+	// Prechecks whether the system is able to create specified availability set (but does not actually create them).
+	rpc Precheck(AvailabilitySetPrecheckRequest) returns (AvailabilitySetPrecheckResponse) {}
 }
 
 
