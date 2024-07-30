@@ -93,22 +93,46 @@ func SetValidationStatus(s *common.Status, validationState []*common.ValidationS
 }
 
 func GetValidationStatus(s *common.Status) []*common.ValidationState {
-	return s.GetValidationStatus().GetValidationState()
+	vstate := s.GetValidationStatus()
+	if vstate != nil {
+		return vstate.GetValidationState()
+	}
+	return nil
 }
 
 // GetStatuses - converts status to map
 func GetStatuses(status *common.Status) map[string]*string {
 	statuses := map[string]*string{}
-	pstate := status.GetProvisioningStatus().String()
-	statuses["ProvisionState"] = &pstate
-	hstate := status.GetHealth().String()
-	statuses["HealthState"] = &hstate
-	estate := status.GetLastError().String()
-	statuses["Error"] = &estate
-	version := status.GetVersion().Number
-	statuses["Version"] = &version
-	dstate := status.GetDownloadStatus().String()
-	statuses["DownloadStatus"] = &dstate
+
+	pstate := status.GetProvisioningStatus()
+	if pstate != nil {
+		pstateStr := pstate.String()
+		statuses["ProvisionState"] = &pstateStr
+	}
+
+	hstate := status.GetHealth()
+	if hstate != nil {
+		hstateStr := hstate.String()
+		statuses["HealthState"] = &hstateStr
+	}
+
+	estate := status.GetLastError()
+	if estate != nil {
+		estateStr := estate.String()
+		statuses["Error"] = &estateStr
+	}
+
+	version := status.GetVersion()
+	if version != nil {
+		statuses["Version"] = &version.Number
+	}
+
+	dstate := status.GetDownloadStatus()
+	if dstate != nil {
+		dstateStr := dstate.String()
+		statuses["DownloadStatus"] = &dstateStr
+	}
+
 	return statuses
 }
 
