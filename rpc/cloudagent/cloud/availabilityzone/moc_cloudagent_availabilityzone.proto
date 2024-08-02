@@ -20,9 +20,9 @@ message AvailabilityZoneResponse {
 }
 
 message AvailabilityZone {
-    string name = 1;
-    string id = 2;
-    string locationName = 3;
+	string name = 1;
+	string id = 2;
+	string locationName = 3;
 	repeated string nodes = 5;
 	Status status = 6;
 }
