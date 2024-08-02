@@ -103,6 +103,17 @@ message Version {
 	string number = 1;
 }
 
+enum PlacementStatusType {
+	UNKNOWN_PLACEMENT = 0;
+	ALIGNED = 1;
+	NOT_ALIGNED = 2;
+}
+
+message PlacementStatus  {
+	PlacementStatusType Status = 1;
+	string Message = 2;
+}
+
 message Status {
 	Health health = 1;
 	ProvisionStatus provisioningStatus = 2;
@@ -110,6 +121,7 @@ message Status {
 	Version version = 4;
 	DownloadStatus downloadStatus = 5;
 	ValidationStatus validationStatus = 6;
+	PlacementStatus	placementStatus = 7;
 }
 
 message Entity {
@@ -187,6 +199,7 @@ enum ProviderType {
 	LogicalNetwork         = 38;
 	AvailabilitySet		   = 39;
 	NetworkSecurityGroup   = 40;
+	AvailabilityZone	   = 41;
 }
 
 // Operations specific to a provider
@@ -324,6 +337,10 @@ enum ProviderAccessOperation {
 
 	NetworkSecurityGroup_Create 	= 3600;
 	NetworkSecurityGroup_Update 	= 3601;
+
+	AvailabilityZone_Create		    = 3700;
+	AvailabilityZone_Delete		    = 3701;
+	AvailabilityZone_Update		    = 3702;
 }
 
 extend google.protobuf.FieldOptions {
