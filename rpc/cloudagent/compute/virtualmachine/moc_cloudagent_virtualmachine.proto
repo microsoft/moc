@@ -33,6 +33,8 @@ message SSHPublicKey {
 message Disk {
 	// reference to the virtual hard disk managed by storage
 	string diskname = 1;
+	// security encryption type for OsDisk. Possible values include: "NonPersistedTPM"
+	string securityEncryptionType = 2;
 }
 
 message StorageConfiguration {
