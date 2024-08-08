@@ -19,18 +19,6 @@ message AvailabilityZoneResponse {
 	string  Error = 3;
 }
 
-message AvailabilityZonePrecheckRequest {
-	repeated AvailabilityZone AvailabilityZones = 1;
-}
-
-message AvailabilityZonePrecheckResponse {
-	// The precheck result: true if the precheck criteria is passed; otherwise, false
-	google.protobuf.BoolValue Result = 1;
-
-	// The error message if the precheck is not passed; otherwise, empty string
-	string Error = 2;
-}
-
 message AvailabilityZone {
 	string name = 1;
 	string id = 2;
@@ -41,9 +29,6 @@ message AvailabilityZone {
 
 service AvailabilityZoneAgent {
 	rpc Invoke(AvailabilityZoneRequest) returns (AvailabilityZoneResponse) {}
-
-	// Prechecks whether the system is able to create specified availability zone (but does not actually create them).
-	rpc Precheck(AvailabilityZonePrecheckRequest) returns (AvailabilityZonePrecheckResponse) {}
 }
 
 
