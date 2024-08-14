@@ -331,10 +331,11 @@ extend google.protobuf.FieldOptions {
 }
 
 enum ImageSource {
-        LOCAL_SOURCE = 0;
-        SFS_SOURCE   = 1;
-        HTTP_SOURCE  = 2;
-        CLONE_SOURCE = 3;
+        LOCAL_SOURCE    = 0;
+        SFS_SOURCE      = 1;
+        HTTP_SOURCE     = 2;
+        CLONE_SOURCE    = 3;
+        VMOSDISK_SOURCE = 4;
 }
 
 enum HyperVGeneration {
