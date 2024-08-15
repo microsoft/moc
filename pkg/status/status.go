@@ -20,6 +20,7 @@ func InitStatus() *common.Status {
 		Version:            GenerateVersion(),
 		DownloadStatus:     &common.DownloadStatus{},
 		ValidationStatus:   &common.ValidationStatus{},
+		UploadStatus:       &common.UploadStatus{},
 	}
 }
 
@@ -87,6 +88,16 @@ func SetDownloadStatus(s *common.Status, dProgressPercentage, dDownloadSizeInByt
 	}
 }
 
+// SetUploadStatus
+func SetUploadStatus(s *common.Status, dProgressPercentage, dUploadSizeInBytes, dFileSizeInBytes int64, err ...error) {
+	s.UploadStatus.ProgressPercentage = dProgressPercentage
+	s.UploadStatus.UploadSizeInBytes = dUploadSizeInBytes
+	s.UploadStatus.FileSizeInBytes = dFileSizeInBytes
+	if len(err) > 0 {
+		SetError(s, err[0])
+	}
+}
+
 func SetValidationStatus(s *common.Status, validationState []*common.ValidationState) {
 	s.ValidationStatus = new(common.ValidationStatus)
 	s.ValidationStatus.ValidationState = validationState
@@ -109,6 +120,8 @@ func GetStatuses(status *common.Status) map[string]*string {
 	statuses["Version"] = &version
 	dstate := status.GetDownloadStatus().String()
 	statuses["DownloadStatus"] = &dstate
+	ustate := status.GetUploadStatus().String()
+	statuses["UploadStatus"] = &ustate
 	return statuses
 }
 
@@ -134,6 +147,11 @@ func GetFromStatuses(statuses map[string]*string) (status *common.Status) {
 		ps := new(common.DownloadStatus)
 		proto.UnmarshalText(*val, ps)
 		status.DownloadStatus = ps
+	}
+	if val, ok := statuses["UploadStatus"]; ok {
+		ps := new(common.UploadStatus)
+		proto.UnmarshalText(*val, ps)
+		status.UploadStatus = ps
 	}
 
 	return
