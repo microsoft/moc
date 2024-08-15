@@ -9,6 +9,8 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 import "moc_common_notification.proto";
 import "google/protobuf/empty.proto";
+import "moc_common_storageinfo.proto";
+
 
 enum VirtualHardDiskType {
 	OS_VIRTUALHARDDISK = 0;
@@ -78,10 +80,23 @@ message VirtualHardDisk {
 	CloudInitDataSource cloudInitDataSource = 22;
 	DiskFileFormat diskFileFormat = 23;
 	string SourceVM = 24;
+	string TargetUrl = 25 [(sensitive) = true];
+}
+
+message VirtualHardDiskOperationRequest {
+	repeated VirtualHardDisk VirtualHardDisks = 1;
+	VirtualHardDiskOperation OperationType = 2;
+}
+
+message VirtualHardDiskOperationResponse {
+	repeated VirtualHardDisk VirtualHardDisks = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
 }
 
 service VirtualHardDiskAgent {
 	rpc Invoke(VirtualHardDiskRequest) returns (VirtualHardDiskResponse) {}
+	rpc Operate(VirtualHardDiskOperationRequest) returns (VirtualHardDiskOperationResponse) {}
 	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 }
 

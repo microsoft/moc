@@ -9,13 +9,23 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 
 
-
 message VirtualHardDiskRequest {
 	repeated VirtualHardDisk VirtualHardDisks = 1;
 	Operation OperationType = 2;
 }
 
 message VirtualHardDiskResponse {
+	repeated VirtualHardDisk VirtualHardDisks = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message VirtualHardDiskOperationRequest {
+	repeated VirtualHardDisk VirtualHardDisks = 1;
+	ProviderAccessOperation OperationType = 2;
+}
+
+message VirtualHardDiskOperationResponse {
 	repeated VirtualHardDisk VirtualHardDisks = 1;
 	google.protobuf.BoolValue Result = 2;
 	string  Error = 3;
@@ -47,6 +57,7 @@ message VirtualHardDisk {
 	Tags tags = 23;
 	string sourcePath = 24;
 	ImageSource sourceType = 25;
+	string targetUrl = 26 [(sensitive) = true];
 }
 
 message VirtualHardDiskPrecheckRequest {
