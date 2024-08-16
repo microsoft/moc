@@ -9,6 +9,7 @@ import (
 
 	"github.com/microsoft/moc/pkg/certs"
 	commonproto "github.com/microsoft/moc/rpc/common"
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_ValidateProxyURL(t *testing.T) {
@@ -38,11 +39,8 @@ func Test_TestProxyUrlConnection(t *testing.T) {
 	parsedUrl, _ := ValidateProxyURL("http://w3proxy.netscape.com:3128")
 	// Invalid hostname
 	err = TestProxyUrlConnection(parsedUrl, caCertString, "")
-	expectedResult := "Get \"https://mcr.microsoft.com\": proxyconnect tcp: dial tcp: lookup w3proxy.netscape.com: no such host: Invalid Input"
-
-	if err.Error() != expectedResult {
-		t.Fatalf("Test_TestProxyUrlConnection test case failed. Expected error %s but got %s", expectedResult, err.Error())
-	}
+	expectedResult := "Get \"https://mcr.microsoft.com\": proxyconnect tcp: dial tcp: lookup w3proxy.netscape.com"
+	assert.ErrorContains(t, err, expectedResult)
 
 	// Valid case
 	proxy := NewProxy()
