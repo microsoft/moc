@@ -1,6 +1,6 @@
 module github.com/microsoft/moc
 
-go 1.16
+go 1.22.5
 
 require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
@@ -15,8 +15,13 @@ require (
 )
 
 require (
-	golang.org/x/net v0.28.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240820151423-278611b39280 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	golang.org/x/net v0.26.0 // indirect
+	golang.org/x/sys v0.21.0 // indirect
+	golang.org/x/text v0.16.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240624140628-dc46fd24d27d // indirect
+	google.golang.org/protobuf v1.34.2 // indirect
 )
 
 replace (
