@@ -197,10 +197,11 @@ func (m *SSHPublicKey) GetKeydata() string {
 
 type Disk struct {
 	// reference to the virtual hard disk managed by storage
-	Diskname             string   `protobuf:"bytes,1,opt,name=diskname,proto3" json:"diskname,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Diskname             string                                      `protobuf:"bytes,1,opt,name=diskname,proto3" json:"diskname,omitempty"`
+	ManagedDisk          *common.VirtualMachineManagedDiskParameters `protobuf:"bytes,2,opt,name=managedDisk,proto3" json:"managedDisk,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                                    `json:"-"`
+	XXX_unrecognized     []byte                                      `json:"-"`
+	XXX_sizecache        int32                                       `json:"-"`
 }
 
 func (m *Disk) Reset()         { *m = Disk{} }
@@ -233,6 +234,13 @@ func (m *Disk) GetDiskname() string {
 		return m.Diskname
 	}
 	return ""
+}
+
+func (m *Disk) GetManagedDisk() *common.VirtualMachineManagedDiskParameters {
+	if m != nil {
+		return m.ManagedDisk
+	}
+	return nil
 }
 
 type StorageConfiguration struct {

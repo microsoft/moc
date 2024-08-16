@@ -589,6 +589,31 @@ func (SecurityType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_7d1a061f6c82445b, []int{12}
 }
 
+type SecurityEncryptionTypes int32
+
+const (
+	SecurityEncryptionTypes_SecurityEncryptionNone SecurityEncryptionTypes = 0
+	SecurityEncryptionTypes_NonPersistedTPM        SecurityEncryptionTypes = 1
+)
+
+var SecurityEncryptionTypes_name = map[int32]string{
+	0: "SecurityEncryptionNone",
+	1: "NonPersistedTPM",
+}
+
+var SecurityEncryptionTypes_value = map[string]int32{
+	"SecurityEncryptionNone": 0,
+	"NonPersistedTPM":        1,
+}
+
+func (x SecurityEncryptionTypes) String() string {
+	return proto.EnumName(SecurityEncryptionTypes_name, int32(x))
+}
+
+func (SecurityEncryptionTypes) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_7d1a061f6c82445b, []int{13}
+}
+
 type InstanceViewStatus_StatusLevelType int32
 
 const (
@@ -1235,6 +1260,84 @@ func (m *GuestAgentConfiguration) GetEnabled() bool {
 	return false
 }
 
+type VMDiskSecurityProfile struct {
+	SecurityEncryptionType SecurityEncryptionTypes `protobuf:"varint,1,opt,name=securityEncryptionType,proto3,enum=moc.SecurityEncryptionTypes" json:"securityEncryptionType,omitempty"`
+	XXX_NoUnkeyedLiteral   struct{}                `json:"-"`
+	XXX_unrecognized       []byte                  `json:"-"`
+	XXX_sizecache          int32                   `json:"-"`
+}
+
+func (m *VMDiskSecurityProfile) Reset()         { *m = VMDiskSecurityProfile{} }
+func (m *VMDiskSecurityProfile) String() string { return proto.CompactTextString(m) }
+func (*VMDiskSecurityProfile) ProtoMessage()    {}
+func (*VMDiskSecurityProfile) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d1a061f6c82445b, []int{12}
+}
+
+func (m *VMDiskSecurityProfile) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_VMDiskSecurityProfile.Unmarshal(m, b)
+}
+func (m *VMDiskSecurityProfile) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_VMDiskSecurityProfile.Marshal(b, m, deterministic)
+}
+func (m *VMDiskSecurityProfile) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VMDiskSecurityProfile.Merge(m, src)
+}
+func (m *VMDiskSecurityProfile) XXX_Size() int {
+	return xxx_messageInfo_VMDiskSecurityProfile.Size(m)
+}
+func (m *VMDiskSecurityProfile) XXX_DiscardUnknown() {
+	xxx_messageInfo_VMDiskSecurityProfile.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VMDiskSecurityProfile proto.InternalMessageInfo
+
+func (m *VMDiskSecurityProfile) GetSecurityEncryptionType() SecurityEncryptionTypes {
+	if m != nil {
+		return m.SecurityEncryptionType
+	}
+	return SecurityEncryptionTypes_SecurityEncryptionNone
+}
+
+type VirtualMachineManagedDiskParameters struct {
+	SecurityProfile      *VMDiskSecurityProfile `protobuf:"bytes,1,opt,name=securityProfile,proto3" json:"securityProfile,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
+	XXX_unrecognized     []byte                 `json:"-"`
+	XXX_sizecache        int32                  `json:"-"`
+}
+
+func (m *VirtualMachineManagedDiskParameters) Reset()         { *m = VirtualMachineManagedDiskParameters{} }
+func (m *VirtualMachineManagedDiskParameters) String() string { return proto.CompactTextString(m) }
+func (*VirtualMachineManagedDiskParameters) ProtoMessage()    {}
+func (*VirtualMachineManagedDiskParameters) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7d1a061f6c82445b, []int{13}
+}
+
+func (m *VirtualMachineManagedDiskParameters) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_VirtualMachineManagedDiskParameters.Unmarshal(m, b)
+}
+func (m *VirtualMachineManagedDiskParameters) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_VirtualMachineManagedDiskParameters.Marshal(b, m, deterministic)
+}
+func (m *VirtualMachineManagedDiskParameters) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VirtualMachineManagedDiskParameters.Merge(m, src)
+}
+func (m *VirtualMachineManagedDiskParameters) XXX_Size() int {
+	return xxx_messageInfo_VirtualMachineManagedDiskParameters.Size(m)
+}
+func (m *VirtualMachineManagedDiskParameters) XXX_DiscardUnknown() {
+	xxx_messageInfo_VirtualMachineManagedDiskParameters.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VirtualMachineManagedDiskParameters proto.InternalMessageInfo
+
+func (m *VirtualMachineManagedDiskParameters) GetSecurityProfile() *VMDiskSecurityProfile {
+	if m != nil {
+		return m.SecurityProfile
+	}
+	return nil
+}
+
 type ProxyConfiguration struct {
 	HttpProxy            string   `protobuf:"bytes,1,opt,name=httpProxy,proto3" json:"httpProxy,omitempty"`
 	HttpsProxy           string   `protobuf:"bytes,2,opt,name=httpsProxy,proto3" json:"httpsProxy,omitempty"`
@@ -1249,7 +1352,7 @@ func (m *ProxyConfiguration) Reset()         { *m = ProxyConfiguration{} }
 func (m *ProxyConfiguration) String() string { return proto.CompactTextString(m) }
 func (*ProxyConfiguration) ProtoMessage()    {}
 func (*ProxyConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7d1a061f6c82445b, []int{12}
+	return fileDescriptor_7d1a061f6c82445b, []int{14}
 }
 
 func (m *ProxyConfiguration) XXX_Unmarshal(b []byte) error {
@@ -1330,6 +1433,7 @@ func init() {
 	proto.RegisterEnum("moc.ConfidentialVMHardwareType", ConfidentialVMHardwareType_name, ConfidentialVMHardwareType_value)
 	proto.RegisterEnum("moc.Architecture", Architecture_name, Architecture_value)
 	proto.RegisterEnum("moc.SecurityType", SecurityType_name, SecurityType_value)
+	proto.RegisterEnum("moc.SecurityEncryptionTypes", SecurityEncryptionTypes_name, SecurityEncryptionTypes_value)
 	proto.RegisterEnum("moc.InstanceViewStatus_StatusLevelType", InstanceViewStatus_StatusLevelType_name, InstanceViewStatus_StatusLevelType_value)
 	proto.RegisterType((*WinRMListener)(nil), "moc.WinRMListener")
 	proto.RegisterType((*WinRMConfiguration)(nil), "moc.WinRMConfiguration")
@@ -1343,6 +1447,8 @@ func init() {
 	proto.RegisterType((*InstanceViewStatus)(nil), "moc.InstanceViewStatus")
 	proto.RegisterType((*VirtualMachineAgentInstanceView)(nil), "moc.VirtualMachineAgentInstanceView")
 	proto.RegisterType((*GuestAgentConfiguration)(nil), "moc.GuestAgentConfiguration")
+	proto.RegisterType((*VMDiskSecurityProfile)(nil), "moc.VMDiskSecurityProfile")
+	proto.RegisterType((*VirtualMachineManagedDiskParameters)(nil), "moc.VirtualMachineManagedDiskParameters")
 	proto.RegisterType((*ProxyConfiguration)(nil), "moc.ProxyConfiguration")
 	proto.RegisterExtension(E_Sensitivecompute)
 	proto.RegisterExtension(E_Sensitivejson)
