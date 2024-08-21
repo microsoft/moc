@@ -237,6 +237,19 @@ enum SecurityType {
         CONFIDENTIALVM = 2;
 }
 
+enum SecurityEncryptionTypes {
+    SecurityEncryptionNone = 0;
+    NonPersistedTPM = 1;
+}
+
+message VMDiskSecurityProfile {
+    SecurityEncryptionTypes securityEncryptionType = 1;
+}
+
+message VirtualMachineManagedDiskParameters {
+    VMDiskSecurityProfile securityProfile = 1;
+}
+
 message ProxyConfiguration {
 	string httpProxy = 1 [(sensitivecompute) = true];
 	string httpsProxy = 2 [(sensitivecompute) = true];
