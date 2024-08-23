@@ -187,6 +187,7 @@ enum ProviderType {
 	LogicalNetwork         = 38;
 	AvailabilitySet		   = 39;
 	NetworkSecurityGroup   = 40;
+	Zone	               = 41;
 }
 
 // Operations specific to a provider
@@ -324,6 +325,10 @@ enum ProviderAccessOperation {
 
 	NetworkSecurityGroup_Create 	= 3600;
 	NetworkSecurityGroup_Update 	= 3601;
+
+	Zone_Create         		    = 3700;
+	Zone_Delete		                = 3701;
+	Zone_Update	            	    = 3702;
 }
 
 extend google.protobuf.FieldOptions {

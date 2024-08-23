@@ -1,0 +1,49 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/cloud";
+package moc.cloudagent.zone;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+message ZoneRequest {
+	repeated Zone Zones = 1;
+	Operation OperationType = 2;
+}
+
+message ZoneResponse {
+	repeated Zone Zones = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message ZonePrecheckRequest {
+	repeated Zone Zones = 1;
+}
+
+message ZonePrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
+	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
+	string Error = 2;
+}
+
+message Zone {
+	string name = 1;
+	string id = 2;
+	string locationName = 3;
+	repeated string nodes = 5;
+	Status status = 6;
+}
+
+service ZoneAgent {
+	rpc Invoke(ZoneRequest) returns (ZoneResponse) {}
+
+	// Prechecks whether the system is able to create specified zone (but does not actually create them).
+	rpc Precheck(ZonePrecheckRequest) returns (ZonePrecheckResponse) {}
+}
+
+
