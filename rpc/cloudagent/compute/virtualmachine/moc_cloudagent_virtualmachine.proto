@@ -109,16 +109,14 @@ message AvailabilitySetReference {
 	string name = 2;
 }
 
-message AvailabilityZoneReference {
+message ZoneReference {
 	string name = 1;
 }
 
-message AvailabilityZoneConfiguration {
-	repeated AvailabilityZoneReference availabilityZones = 1;
-	bool strictAffinityToZones = 2;
+message ZoneConfiguration {
+	repeated ZoneReference zones = 1;
+	bool strictPlacement = 2;
 }
-
-
 
 message VirtualMachine {
 	string name = 1;
@@ -140,7 +138,7 @@ message VirtualMachine {
 	GuestAgentConfiguration guestAgent = 17;
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 18;
 	AvailabilitySetReference availabilitySet = 19;
-	AvailabilityZoneConfiguration availabilityZone = 20;
+	ZoneConfiguration zone = 20;
 }
 
 message VirtualMachineOperationRequest {
