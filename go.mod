@@ -1,8 +1,6 @@
 module github.com/microsoft/moc
 
-go 1.21
-
-toolchain go1.22.2
+go 1.16
 
 require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
