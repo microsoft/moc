@@ -328,7 +328,7 @@ func (m *VirtualHardDisk) GetDiskFileFormat() common.DiskFileFormat {
 	if m != nil {
 		return m.DiskFileFormat
 	}
-	return common.DiskFileFormat_DiskFileFormatVHDX
+	return common.DiskFileFormat_DiskFileFormatUNKNOWN
 }
 
 func (m *VirtualHardDisk) GetCloudInitDataSource() common.CloudInitDataSource {
