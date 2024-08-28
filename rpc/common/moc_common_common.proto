@@ -349,9 +349,9 @@ enum HyperVGeneration {
 } 
 
 enum DiskFileFormat {
-	DiskFileFormatUNKNOWN = 0;
-	DiskFileFormatVHDX =  1;
-	DiskFileFormatVHD = 2;
+	DiskFileFormatVHDX =  0;
+	DiskFileFormatVHD = 1;
+	DiskFileFormatUNKNOWN = 2;
 } 
 
 enum CloudInitDataSource {
