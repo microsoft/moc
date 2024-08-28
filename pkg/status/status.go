@@ -34,7 +34,9 @@ func SetError(s *common.Status, err error) {
 
 // SetHealth
 func SetHealth(s *common.Status, hState common.HealthState, err ...error) {
-	s.Health.PreviousState = s.Health.CurrentState
+	if s.Health.CurrentState != hState {
+		s.Health.PreviousState = s.Health.CurrentState
+	}
 	s.Health.CurrentState = hState
 	if len(err) > 0 {
 		SetError(s, err[0])
