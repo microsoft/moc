@@ -57,9 +57,6 @@ enum HealthState {
 	// The entity went missing from the agent
 	NOTFOUND = 6;
 	NOTREADY = 7;
-	OFFLINE = 8;
-	ONLINE = 9;
-	PARTIALLYONLINE = 10;
 }
 
 message Error {
