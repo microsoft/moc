@@ -102,9 +102,9 @@ func GetValidationStatus(s *common.Status) []*common.ValidationState {
 func GetStatuses(status *common.Status) map[string]*string {
 	statuses := map[string]*string{}
 
-	pstate := parseProvisioning(status.GetProvisioningStatus())
+	pstate := status.GetProvisioningStatus().String()
 	statuses["ProvisionState"] = &pstate
-	hstate := parseHealth(status.GetHealth())
+	hstate := status.GetHealth().String()
 	statuses["HealthState"] = &hstate
 	estate := status.GetLastError().String()
 	statuses["Error"] = &estate
