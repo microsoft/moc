@@ -116,8 +116,6 @@ func GetStatuses(status *common.Status) map[string]*string {
 	dstate := status.GetDownloadStatus().String()
 	statuses["DownloadStatus"] = &dstate
 
-	fmt.Printf("Statuses: %+v\n", statuses)
-
 	return statuses
 }
 

@@ -1039,8 +1039,8 @@ func (m *DownloadStatus) GetFileSizeInBytes() int64 {
 }
 
 type Health struct {
-	CurrentState         HealthState `protobuf:"varint,1,opt,name=currentState,proto3,enum=moc.HealthState" json:"currentState"`
-	PreviousState        HealthState `protobuf:"varint,2,opt,name=previousState,proto3,enum=moc.HealthState" json:"previousState"`
+	CurrentState         HealthState `protobuf:"varint,1,opt,name=currentState,proto3,enum=moc.HealthState" json:"currentState,omitempty"`
+	PreviousState        HealthState `protobuf:"varint,2,opt,name=previousState,proto3,enum=moc.HealthState" json:"previousState,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
 	XXX_unrecognized     []byte      `json:"-"`
 	XXX_sizecache        int32       `json:"-"`

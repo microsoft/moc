@@ -4,14 +4,12 @@
 package config
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"reflect"
 
 	"github.com/jmespath/go-jmespath"
 	"github.com/microsoft/moc/pkg/marshal"
-	"gopkg.in/yaml.v2"
 )
 
 // Load the virtual machine configuration from the specified path
@@ -165,22 +163,6 @@ func MarshalOutput(data interface{}, query string, outputType string) ([]byte, e
 	} else {
 		result = queryTarget
 	}
-
-	// Print JSON
-	jsonData, err := json.MarshalIndent(result, "", "  ")
-	if err != nil {
-		return nil, err
-	}
-	fmt.Println("JSON:")
-	fmt.Println(string(jsonData))
-
-	// Print YAML
-	yamlData, err := yaml.Marshal(result)
-	if err != nil {
-		return nil, err
-	}
-	fmt.Println("YAML:")
-	fmt.Println(string(yamlData))
 
 	var marshaledByte []byte
 	if outputType == "json" {
