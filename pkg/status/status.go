@@ -34,7 +34,9 @@ func SetError(s *common.Status, err error) {
 
 // SetHealth
 func SetHealth(s *common.Status, hState common.HealthState, err ...error) {
-	s.Health.PreviousState = s.Health.CurrentState
+	if s.Health.CurrentState != hState {
+		s.Health.PreviousState = s.Health.CurrentState
+	}
 	s.Health.CurrentState = hState
 	if len(err) > 0 {
 		SetError(s, err[0])
@@ -99,16 +101,23 @@ func GetValidationStatus(s *common.Status) []*common.ValidationState {
 // GetStatuses - converts status to map
 func GetStatuses(status *common.Status) map[string]*string {
 	statuses := map[string]*string{}
-	pstate := status.GetProvisioningStatus().String()
+
+	// Provision and Health State require custom parsing as they are enums.
+	// Otherwise enum 0 (UNKNOWN / NOT_KNOWN) will be an empty string.
+	pstate := parseProvisioning(status.GetProvisioningStatus())
 	statuses["ProvisionState"] = &pstate
-	hstate := status.GetHealth().String()
+	hstate := parseHealth(status.GetHealth())
 	statuses["HealthState"] = &hstate
+
 	estate := status.GetLastError().String()
 	statuses["Error"] = &estate
 	version := status.GetVersion().Number
 	statuses["Version"] = &version
 	dstate := status.GetDownloadStatus().String()
 	statuses["DownloadStatus"] = &dstate
+
+	fmt.Printf("Statuses: %+v\n", statuses)
+
 	return statuses
 }
 
@@ -137,4 +146,40 @@ func GetFromStatuses(statuses map[string]*string) (status *common.Status) {
 	}
 
 	return
+}
+
+// HealthState requires custom parsing as it is a proto enum. Otherwise enum 0 (NOT_KNOWN) will be an empty string.
+func parseHealth(hstate *common.Health) string {
+	if hstate == nil {
+		return ""
+	}
+
+	prevHealth, ok := common.HealthState_name[int32(hstate.GetPreviousState())]
+	if !ok {
+		prevHealth = ""
+	}
+	currHealth, ok := common.HealthState_name[int32(hstate.GetCurrentState())]
+	if !ok {
+		currHealth = ""
+	}
+
+	return fmt.Sprintf("currentState:%s previousState:%s", currHealth, prevHealth)
+}
+
+// ProvisionState requires custom parsing as it is a proto enum. Otherwise enum 0 (UNKNOWN) will be an empty string.
+func parseProvisioning(pstate *common.ProvisionStatus) string {
+	if pstate == nil {
+		return ""
+	}
+
+	prevProv, ok := common.ProvisionState_name[int32(pstate.GetPreviousState())]
+	if !ok {
+		prevProv = ""
+	}
+	currProv, ok := common.ProvisionState_name[int32(pstate.GetCurrentState())]
+	if !ok {
+		currProv = ""
+	}
+
+	return fmt.Sprintf("currentState:%s previousState:%s", currProv, prevProv)
 }
