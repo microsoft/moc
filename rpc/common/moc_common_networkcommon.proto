@@ -73,6 +73,6 @@ message NetworkReference {
 }
 
 message SubnetReference {
-	NetworkReference parentNetwork = 1;
+	NetworkReference network = 1;
 	ResourceReference resourceRef = 2;
 }

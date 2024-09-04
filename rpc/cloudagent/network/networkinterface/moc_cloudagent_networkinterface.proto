@@ -49,7 +49,7 @@ message IpConfiguration {
 	Tags tags = 9;
 	NetworkType networkType = 10;
 	NetworkSecurityGroupReference networkSecurityGroupRef = 12;
-	SubnetReference subnetRef = 13;
+	SubnetReference subnet = 13;
 }
 
 message NetworkInterface {
