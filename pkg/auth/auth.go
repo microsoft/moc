@@ -236,7 +236,7 @@ func (ba *BearerAuthorizer) WithTransportAuthorization() credentials.TransportCr
 func NewEmptyBearerAuthorizer() *BearerAuthorizer {
 	return &BearerAuthorizer{
 		tokenProvider:        NewEmptyTokenCredentialProvider(),
-		transportCredentials: NewEmptyBearerAuthorizer().transportCredentials,
+		transportCredentials: NewEmptyTransportCredential().GetTransportCredentials(),
 	}
 }
 
