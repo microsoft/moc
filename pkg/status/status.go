@@ -34,9 +34,7 @@ func SetError(s *common.Status, err error) {
 
 // SetHealth
 func SetHealth(s *common.Status, hState common.HealthState, err ...error) {
-	if s.Health.CurrentState != hState {
-		s.Health.PreviousState = s.Health.CurrentState
-	}
+	s.Health.PreviousState = s.Health.CurrentState
 	s.Health.CurrentState = hState
 	if len(err) > 0 {
 		SetError(s, err[0])
@@ -149,16 +147,16 @@ func GetFromStatuses(statuses map[string]*string) (status *common.Status) {
 // HealthState requires custom parsing as it is a proto enum. Otherwise enum 0 (NOT_KNOWN) will be an empty string.
 func parseHealth(hstate *common.Health) string {
 	if hstate == nil {
-		return ""
+		return fmt.Sprintf("currentState:%s", common.HealthState_name[0])
 	}
 
 	prevHealth, ok := common.HealthState_name[int32(hstate.GetPreviousState())]
 	if !ok {
-		prevHealth = ""
+		prevHealth = common.HealthState_name[0]
 	}
 	currHealth, ok := common.HealthState_name[int32(hstate.GetCurrentState())]
 	if !ok {
-		currHealth = ""
+		currHealth = common.HealthState_name[0]
 	}
 
 	return fmt.Sprintf("currentState:%s previousState:%s", currHealth, prevHealth)
@@ -167,16 +165,16 @@ func parseHealth(hstate *common.Health) string {
 // ProvisionState requires custom parsing as it is a proto enum. Otherwise enum 0 (UNKNOWN) will be an empty string.
 func parseProvisioning(pstate *common.ProvisionStatus) string {
 	if pstate == nil {
-		return ""
+		return fmt.Sprintf("currentState:%s", common.ProvisionState_name[0])
 	}
 
 	prevProv, ok := common.ProvisionState_name[int32(pstate.GetPreviousState())]
 	if !ok {
-		prevProv = ""
+		prevProv = common.ProvisionState_name[0]
 	}
 	currProv, ok := common.ProvisionState_name[int32(pstate.GetCurrentState())]
 	if !ok {
-		currProv = ""
+		currProv = common.ProvisionState_name[0]
 	}
 
 	return fmt.Sprintf("currentState:%s previousState:%s", currProv, prevProv)

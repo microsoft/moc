@@ -62,3 +62,31 @@ func TestProvisionStatusConversion(t *testing.T) {
 		t.Errorf("CurrentState mismatch: got %v, want %v", convertedStatus.ProvisioningStatus.CurrentState, originalStatus.ProvisioningStatus.CurrentState)
 	}
 }
+
+func TestHealthAndProvisionStateNilConversion(t *testing.T) {
+	// Create a sample status with nil health state
+	originalStatus := &common.Status{
+		Health:             nil,
+		ProvisioningStatus: nil,
+		LastError:          &common.Error{},
+		Version:            &common.Version{},
+	}
+
+	// Convert the status to a map using GetStatuses
+	statusMap := GetStatuses(originalStatus)
+
+	// Convert the map back to a status using GetFromStatuses
+	convertedStatus := GetFromStatuses(statusMap)
+
+	// Check that the health state in the converted status is NOT_KNOWN
+	expectedHealthState := common.HealthState_NOTKNOWN
+	if convertedStatus.Health == nil || convertedStatus.Health.CurrentState != expectedHealthState {
+		t.Errorf("HealthState mismatch: got %v, want %v", convertedStatus.Health.GetCurrentState(), expectedHealthState)
+	}
+
+	// Check that the provision state in the converted status is UNKNOWN
+	expectedProvisionState := common.ProvisionState_UNKNOWN
+	if convertedStatus.ProvisioningStatus == nil || convertedStatus.ProvisioningStatus.CurrentState != expectedProvisionState {
+		t.Errorf("ProvisionState mismatch: got %v, want %v", convertedStatus.ProvisioningStatus.GetCurrentState(), expectedProvisionState)
+	}
+}
