@@ -39,8 +39,11 @@ func Test_TestProxyUrlConnection(t *testing.T) {
 	parsedUrl, _ := ValidateProxyURL("http://w3proxy.netscape.com:3128")
 	// Invalid hostname
 	err = TestProxyUrlConnection(parsedUrl, caCertString, "")
-	expectedResult := "Get \"https://mcr.microsoft.com\": proxyconnect tcp: dial tcp: lookup w3proxy.netscape.com"
-	assert.ErrorContains(t, err, expectedResult)
+
+	expectedResult1 := "Get \"https://mcr.microsoft.com\": proxyconnect tcp: dial tcp: lookup w3proxy.netscape.com"
+	expectedResult2 := "no such host: Invalid Input"
+	assert.ErrorContains(t, err, expectedResult1)
+	assert.ErrorContains(t, err, expectedResult2)
 
 	// Valid case
 	proxy := NewProxy()
