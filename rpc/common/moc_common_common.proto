@@ -99,6 +99,12 @@ message ValidationStatus {
 	repeated ValidationState validationState = 1;
 }
 
+message UploadStatus {
+	int64 progressPercentage = 1;
+	int64 uploadSizeInBytes = 2;
+	int64 fileSizeInBytes = 3;
+}
+
 message Version {
 	string number = 1;
 }
@@ -110,6 +116,7 @@ message Status {
 	Version version = 4;
 	DownloadStatus downloadStatus = 5;
 	ValidationStatus validationStatus = 6;
+	UploadStatus uploadStatus = 7;
 }
 
 message Entity {
@@ -310,6 +317,7 @@ enum ProviderAccessOperation {
 
 	VirtualHardDisk_Create          = 3100;
 	VirtualHardDisk_Update          = 3101;
+	VirtualHardDisk_Upload 			= 3102;
 
 	VirtualMachineImage_Create      = 3200;
 	VirtualMachineImage_Update      = 3201;
