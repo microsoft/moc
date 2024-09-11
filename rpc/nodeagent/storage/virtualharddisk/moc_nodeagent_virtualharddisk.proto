@@ -85,6 +85,6 @@ message DiskNotificationRequest {
 
 service VirtualHardDiskAgent {
 	rpc Invoke(VirtualHardDiskRequest) returns (VirtualHardDiskResponse) {}
-	rpc CheckNotificationVHD(DiskNotificationRequest) returns (NotificationResponse) {}
+	rpc CheckNotification(DiskNotificationRequest) returns (NotificationResponse) {}
 }
 
