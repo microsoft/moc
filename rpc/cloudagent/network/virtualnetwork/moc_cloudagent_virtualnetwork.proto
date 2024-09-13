@@ -59,6 +59,7 @@ message VirtualNetwork {
 	string macPoolName = 10 [(sensitive) = true];
 	Tags tags = 12;
 	NetworkReference logicalNetwork = 13;
+	repeated string cidr = 14;
 }
 
 message Subnet {
@@ -71,6 +72,7 @@ message Subnet {
 	uint32 vlan = 6;
 	repeated IPPool ippools = 7;
 	NetworkSecurityGroupReference networksecuritygroupref = 9;
+	Tags tags = 10;
 }
 
 message Ipam {
