@@ -112,6 +112,7 @@ type NetworkType int32
 const (
 	NetworkType_VIRTUAL_NETWORK NetworkType = 0
 	NetworkType_LOGICAL_NETWORK NetworkType = 1
+	NetworkType_UNDEFINED       NetworkType = -1
 )
 
 var NetworkType_name = map[int32]string{
