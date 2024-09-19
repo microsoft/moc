@@ -58,7 +58,7 @@ const (
 
 // errorMessages - map of error codes to their string representation. This needs to be updated whenever new codes are added.
 var errorMessages = map[MocCode]string{
-	OK:                          "",
+	OK:                          "", // No error so no message
 	NotFound:                    "Not Found",
 	Degraded:                    "Degraded",
 	InvalidConfiguration:        "Invalid Configuration",
