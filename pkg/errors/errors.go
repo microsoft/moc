@@ -8,58 +8,157 @@ import (
 	"strings"
 
 	perrors "github.com/pkg/errors"
+	"go.uber.org/multierr"
 	"google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+
+	moccodes "github.com/microsoft/moc/pkg/errors/codes"
+	"github.com/microsoft/moc/rpc/common"
 )
 
+// MocError is a trivial implementation of error that wraps the moc rpc Error struct.
+type MocError struct {
+	// None of MocError's fields should be modifiable after instantiation
+	// since errors are supposed to be immutable.
+	err *common.Error
+}
+
+func (e *MocError) Error() string {
+	return e.err.Message
+}
+
+// GetMocCode returns the underlying MocCode of the MocError.
+func (e *MocError) GetMocCode() moccodes.MocCode {
+	return moccodes.Convert(e.err.Code)
+}
+
+// NewMocError creates a new MocError based on the given MocCode.
+func NewMocError(code moccodes.MocCode) *MocError {
+	return &MocError{
+		err: &common.Error{
+			Code:    int32(code),
+			Message: code.String(),
+		},
+	}
+}
+
+// NewMocErrorWithError creates a new MocError based on the given moc.rpc.common.Error.
+// Generally, this should only be used for conversion between agents.
+func NewMocErrorWithError(err *common.Error) *MocError {
+	if err == nil || err.Code == int32(moccodes.OK) {
+		// Don't need to return an error if the Error struct is nil or all fields are zero
+		return nil
+	}
+
+	return &MocError{
+		err: err,
+	}
+}
+
 var (
-	NotFound                    error = errors.New("Not Found")
-	Degraded                    error = errors.New("Degraded")
-	InvalidConfiguration        error = errors.New("Invalid Configuration")
-	InvalidInput                error = errors.New("Invalid Input")
-	InvalidType                 error = errors.New("Invalid Type")
-	NotSupported                error = errors.New("Not Supported")
-	AlreadyExists               error = errors.New("Already Exists")
-	InUse                       error = errors.New("In Use")
-	Duplicates                  error = errors.New("Duplicates")
-	InvalidFilter               error = errors.New("Invalid Filter")
-	Failed                      error = errors.New("Failed")
-	InvalidGroup                error = errors.New("InvalidGroup")
-	InvalidVersion              error = errors.New("InvalidVersion")
-	OldVersion                  error = errors.New("OldVersion")
-	OutOfCapacity               error = errors.New("OutOfCapacity")
-	OutOfNodeCapacity           error = errors.New("OutOfNodeCapacity")
-	OutOfMemory                 error = errors.New("OutOfMemory")
-	UpdateFailed                error = errors.New("Update Failed")
-	NotInitialized              error = errors.New("Not Initialized")
-	NotImplemented              error = errors.New("Not Implemented")
-	OutOfRange                  error = errors.New("Out of range")
-	AlreadySet                  error = errors.New("Already Set")
-	NotSet                      error = errors.New("Not Set")
-	InconsistentState           error = errors.New("Inconsistent state")
-	PendingState                error = errors.New("Pending state")
-	WrongHost                   error = errors.New("Wrong host")
-	PoolFull                    error = errors.New("The pool is full")
-	NoActionTaken               error = errors.New("No Action Taken")
-	Expired                     error = errors.New("Expired")
-	Revoked                     error = errors.New("Revoked")
-	Timeout                     error = errors.New("Timedout")
-	RunCommandFailed            error = errors.New("Run Command Failed")
-	InvalidToken                error = errors.New("InvalidToken")
-	Unknown                     error = errors.New("Unknown Reason")
-	DeleteFailed                error = errors.New("Delete Failed")
-	DeletePending               error = errors.New("Delete Pending")
-	FileNotFound                error = errors.New("The system cannot find the file specified")
-	PathNotFound                error = errors.New("The system cannot find the path specified")
-	NotEnoughSpace              error = errors.New("There is not enough space on the disk")
-	AccessDenied                error = errors.New("Access is denied")
-	BlobNotFound                error = errors.New("BlobNotFound")
-	GenericFailure              error = errors.New("Generic failure")
-	NoAuthenticationInformation error = errors.New("NoAuthenticationInformation")
-	MeasurementUnitError        error = errors.New("byte quantity must be a positive integer with a unit of measurement like")
-	QuotaViolation              error = errors.New("Quota violation")
-	IPOutOfRange                error = errors.New("IP is out of range")
+	NotFound                    error = NewMocError(moccodes.NotFound)
+	Degraded                    error = NewMocError(moccodes.Degraded)
+	InvalidConfiguration        error = NewMocError(moccodes.InvalidConfiguration)
+	InvalidInput                error = NewMocError(moccodes.InvalidInput)
+	InvalidType                 error = NewMocError(moccodes.InvalidType)
+	NotSupported                error = NewMocError(moccodes.NotSupported)
+	AlreadyExists               error = NewMocError(moccodes.AlreadyExists)
+	InUse                       error = NewMocError(moccodes.InUse)
+	Duplicates                  error = NewMocError(moccodes.Duplicates)
+	InvalidFilter               error = NewMocError(moccodes.InvalidFilter)
+	Failed                      error = NewMocError(moccodes.Failed)
+	InvalidGroup                error = NewMocError(moccodes.InvalidGroup)
+	InvalidVersion              error = NewMocError(moccodes.InvalidVersion)
+	OldVersion                  error = NewMocError(moccodes.OldVersion)
+	OutOfCapacity               error = NewMocError(moccodes.OutOfCapacity)
+	OutOfNodeCapacity           error = NewMocError(moccodes.OutOfNodeCapacity)
+	OutOfMemory                 error = NewMocError(moccodes.OutOfMemory)
+	UpdateFailed                error = NewMocError(moccodes.UpdateFailed)
+	NotInitialized              error = NewMocError(moccodes.NotInitialized)
+	NotImplemented              error = NewMocError(moccodes.NotImplemented)
+	OutOfRange                  error = NewMocError(moccodes.OutOfRange)
+	AlreadySet                  error = NewMocError(moccodes.AlreadySet)
+	NotSet                      error = NewMocError(moccodes.NotSet)
+	InconsistentState           error = NewMocError(moccodes.InconsistentState)
+	PendingState                error = NewMocError(moccodes.PendingState)
+	WrongHost                   error = NewMocError(moccodes.WrongHost)
+	PoolFull                    error = NewMocError(moccodes.PoolFull)
+	NoActionTaken               error = NewMocError(moccodes.NoActionTaken)
+	Expired                     error = NewMocError(moccodes.Expired)
+	Revoked                     error = NewMocError(moccodes.Revoked)
+	Timeout                     error = NewMocError(moccodes.Timeout)
+	RunCommandFailed            error = NewMocError(moccodes.RunCommandFailed)
+	InvalidToken                error = NewMocError(moccodes.InvalidToken)
+	Unknown                     error = NewMocError(moccodes.Unknown)
+	DeleteFailed                error = NewMocError(moccodes.DeleteFailed)
+	DeletePending               error = NewMocError(moccodes.DeletePending)
+	FileNotFound                error = NewMocError(moccodes.FileNotFound)
+	PathNotFound                error = NewMocError(moccodes.PathNotFound)
+	NotEnoughSpace              error = NewMocError(moccodes.NotEnoughSpace)
+	AccessDenied                error = NewMocError(moccodes.AccessDenied)
+	BlobNotFound                error = NewMocError(moccodes.BlobNotFound)
+	GenericFailure              error = NewMocError(moccodes.GenericFailure)
+	NoAuthenticationInformation error = NewMocError(moccodes.NoAuthenticationInformation)
+	MeasurementUnitError        error = NewMocError(moccodes.MeasurementUnitError)
+	QuotaViolation              error = NewMocError(moccodes.QuotaViolation)
+	IPOutOfRange                error = NewMocError(moccodes.IPOutOfRange)
+	MultipleErrors              error = NewMocError(moccodes.MultipleErrors)
 )
+
+// GetMocErrorCode attempts to extract the MocCode from the given error. If the error is a multierr,
+// it will return the MocCode if all errors in the multierr match the same MocCode. If there are
+// multiple non-matching MocCodes, then it returns MocCode.MultipleErrors and false.
+//
+// GetMocErrorCode follows the following rules when parsing individual errors:
+//
+//   - If the error is nil, it returns MocCode.OK and true.
+//   - If the error is of type MocError, it returns the MocCode and true.
+//   - If the error has a Cause that is not nil and is of type MocError, it returns the MocCode of the Cause and true.
+//   - If both the error and its Cause are not of type MocError, it returns MocCode.Unknown and false.
+func GetMocErrorCode(err error) (moccodes.MocCode, bool) {
+	errors := multierr.Errors(err)
+	if len(errors) == 0 {
+		return moccodes.OK, true
+	}
+
+	firstMocCode, ok := getSingleMocErrorCode(errors[0])
+	if !ok && len(errors) == 1 {
+		return moccodes.Unknown, false
+	}
+
+	for _, e := range errors[1:] {
+		mocCode, ok := getSingleMocErrorCode(e)
+		if !ok || mocCode != firstMocCode {
+			return moccodes.MultipleErrors, false
+		}
+	}
+
+	return firstMocCode, true
+}
+
+func getSingleMocErrorCode(err error) (moccodes.MocCode, bool) {
+	if err == nil {
+		return moccodes.OK, true
+	}
+
+	// Check if the error itself is a MocError
+	if mocErr, ok := err.(*MocError); ok {
+		return mocErr.GetMocCode(), true
+	}
+
+	// Get the cause of the error
+	cerr := perrors.Cause(err)
+	if cerr == nil || cerr == err {
+		return moccodes.Unknown, false
+	}
+
+	// Check if the cause of the error is a MocError
+	if mocErr, ok := cerr.(*MocError); ok {
+		return mocErr.GetMocCode(), true
+	}
+
+	return moccodes.Unknown, false
+}
 
 func GetErrorCode(err error) string {
 	if IsNotFound(err) || IsFileNotFound(err) || IsPathNotFound(err) || IsBlobNotFound(err) {
@@ -144,6 +243,8 @@ func GetErrorCode(err error) string {
 		return "MeasurementUnitError"
 	} else if IsIPOutOfRange(err) {
 		return "IPOutOfRange"
+	} else if IsMultipleErrors(err) {
+		return "MultipleErrors"
 	}
 
 	// We dont know the type of error.
@@ -364,15 +465,37 @@ func IsIPOutOfRange(err error) bool {
 	return checkError(err, IPOutOfRange)
 }
 
+func IsMultipleErrors(err error) bool {
+	return checkError(err, MultipleErrors)
+}
+
+// checkError checks if the wrappedError has the same MocCode as the err error. If wrappedError is
+// a multierror, it will check whether each error in the multierror has the same MocCode as err.
+// checkError will start with generic comparisons before attempting to cast the wrappedError to a MocError.
 func checkError(wrappedError, err error) bool {
+	if wrappedError == nil {
+		return false
+	}
+
+	for _, e := range multierr.Errors(wrappedError) {
+		if !checkSingleError(e, err) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func checkSingleError(wrappedError, err error) bool {
 	if wrappedError == nil {
 		return false
 	}
 	if wrappedError == err {
 		return true
 	}
-	cerr := perrors.Cause(wrappedError)
-	if cerr != nil && cerr == err {
+	moccode, ok := GetMocErrorCode(wrappedError)
+	errCode, ok2 := GetMocErrorCode(err)
+	if ok && ok2 && moccode == errCode {
 		return true
 	}
 

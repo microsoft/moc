@@ -8,6 +8,8 @@ import (
 	"time"
 
 	proto "github.com/golang/protobuf/proto"
+	"github.com/microsoft/moc/pkg/errors"
+	"github.com/microsoft/moc/pkg/errors/codes"
 	common "github.com/microsoft/moc/rpc/common"
 )
 
@@ -27,9 +29,16 @@ func InitStatus() *common.Status {
 // SetError
 func SetError(s *common.Status, err error) {
 	if err != nil {
-		s.LastError.Message = fmt.Sprintf("%+v", err)
+		// Remove the stack trace from the error message by calling Error() instead of fmt.Sprintf("%+v", err).
+		s.LastError.Message = err.Error()
+
+		// Get the error code, if it's not a moc error, it will return codes.Unknown
+		code, _ := errors.GetMocErrorCode(err)
+		s.LastError.Code = int32(code)
 	} else {
-		s.LastError.Message = "" // Clear the error
+		// Clear the error
+		s.LastError.Message = ""
+		s.LastError.Code = int32(codes.OK)
 	}
 }
 
@@ -43,8 +52,29 @@ func SetHealth(s *common.Status, hState common.HealthState, err ...error) {
 }
 
 func IsHealthStateMissing(s *common.Status) bool {
+	if s == nil {
+		return false
+	}
+
+	if s.GetHealth() == nil {
+		return false
+	}
+
 	hstatus := s.GetHealth().GetCurrentState()
 	return (hstatus == common.HealthState_MISSING)
+}
+
+func IsHealthStateCritical(s *common.Status) bool {
+	if s == nil {
+		return false
+	}
+
+	if s.GetHealth() == nil {
+		return false
+	}
+
+	hstatus := s.GetHealth().GetCurrentState()
+	return (hstatus == common.HealthState_CRITICAL)
 }
 
 func IsDeleted(s *common.Status) bool {
