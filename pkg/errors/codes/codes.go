@@ -6,54 +6,58 @@ package codes
 type MocCode uint32
 
 const (
-	OK                          MocCode = 0
-	NotFound                    MocCode = 1
-	Degraded                    MocCode = 2
-	InvalidConfiguration        MocCode = 3
-	InvalidInput                MocCode = 4
-	InvalidType                 MocCode = 5
-	NotSupported                MocCode = 6
-	AlreadyExists               MocCode = 7
-	InUse                       MocCode = 8
-	Duplicates                  MocCode = 9
-	InvalidFilter               MocCode = 10
-	Failed                      MocCode = 11
-	InvalidGroup                MocCode = 12
-	InvalidVersion              MocCode = 13
-	OldVersion                  MocCode = 14
-	OutOfCapacity               MocCode = 15
-	OutOfNodeCapacity           MocCode = 16
-	OutOfMemory                 MocCode = 17
-	UpdateFailed                MocCode = 18
-	NotInitialized              MocCode = 19
-	NotImplemented              MocCode = 20
-	OutOfRange                  MocCode = 21
-	AlreadySet                  MocCode = 22
-	NotSet                      MocCode = 23
-	InconsistentState           MocCode = 24
-	PendingState                MocCode = 25
-	WrongHost                   MocCode = 26
-	PoolFull                    MocCode = 27
-	NoActionTaken               MocCode = 28
-	Expired                     MocCode = 29
-	Revoked                     MocCode = 30
-	Timeout                     MocCode = 31
-	RunCommandFailed            MocCode = 32
-	InvalidToken                MocCode = 33
-	Unknown                     MocCode = 34
-	DeleteFailed                MocCode = 35
-	DeletePending               MocCode = 36
-	FileNotFound                MocCode = 37
-	PathNotFound                MocCode = 38
-	NotEnoughSpace              MocCode = 39
-	AccessDenied                MocCode = 40
-	BlobNotFound                MocCode = 41
-	GenericFailure              MocCode = 42
-	NoAuthenticationInformation MocCode = 43
-	MeasurementUnitError        MocCode = 44
-	QuotaViolation              MocCode = 45
-	IPOutOfRange                MocCode = 46
-	MultipleErrors              MocCode = 47
+	OK MocCode = iota
+	NotFound
+	Degraded
+	InvalidConfiguration
+	InvalidInput
+	InvalidType
+	NotSupported
+	AlreadyExists
+	InUse
+	Duplicates
+	InvalidFilter
+	Failed
+	InvalidGroup
+	InvalidVersion
+	OldVersion
+	OutOfCapacity
+	OutOfNodeCapacity
+	OutOfMemory
+	UpdateFailed
+	NotInitialized
+	NotImplemented
+	OutOfRange
+	AlreadySet
+	NotSet
+	InconsistentState
+	PendingState
+	WrongHost
+	PoolFull
+	NoActionTaken
+	Expired
+	Revoked
+	Timeout
+	RunCommandFailed
+	InvalidToken
+	Unknown
+	DeleteFailed
+	DeletePending
+	FileNotFound
+	PathNotFound
+	NotEnoughSpace
+	AccessDenied
+	BlobNotFound
+	GenericFailure
+	NoAuthenticationInformation
+	MeasurementUnitError
+	QuotaViolation
+	IPOutOfRange
+	MultipleErrors
+
+	// This is not a valid code, it is used to get the maximum code value.
+	// Any new codes should be defined above this.
+	_maxCode
 )
 
 // errorMessages - map of error codes to their string representation. This needs to be updated whenever new codes are added.
@@ -108,11 +112,14 @@ var errorMessages = map[MocCode]string{
 	MultipleErrors:              "Multiple Errors",
 }
 
-// isValid - check if the MocCode is valid. This needs to be updated whenever new codes are added.
+// IsValid - check if the code is a valid MocCode.
 func (c MocCode) IsValid() bool {
-	return c <= MultipleErrors
+	_, inMap := errorMessages[c]
+	lessThanMax := c < _maxCode
+	return inMap && lessThanMax
 }
 
+// String returns Unknown if the code is not a valid MocCode, otherwise it returns the string representation of the code.
 func (c MocCode) String() string {
 	if msg, exists := errorMessages[c]; exists {
 		return msg
