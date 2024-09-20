@@ -33,7 +33,7 @@ func (e *MocError) GetMocCode() moccodes.MocCode {
 }
 
 // NewMocError creates a new MocError based on the given MocCode.
-func NewMocError(code moccodes.MocCode) *MocError {
+func NewMocError(code moccodes.MocCode) error {
 	return &MocError{
 		err: &common.Error{
 			Code:    int32(code),
@@ -43,11 +43,23 @@ func NewMocError(code moccodes.MocCode) *MocError {
 }
 
 // NewMocErrorWithError creates a new MocError based on the given moc.rpc.common.Error.
-// Generally, this should only be used for conversion between agents.
-func NewMocErrorWithError(err *common.Error) *MocError {
-	if err == nil || err.Code == int32(moccodes.OK) {
-		// Don't need to return an error if the Error struct is nil or all fields are zero
+// Will return nil if the input error is nil or if the input error has an OK code and an empty message.
+// If the input error has an OK code but a non-empty message, it will return an Unknown error code.
+// Otherwise it will return an error with the same code and message as the input error.
+func NewMocErrorWithError(err *common.Error) error {
+	if err == nil {
 		return nil
+	}
+
+	if err.Code == int32(moccodes.OK) && err.Message == "" {
+		// Don't need to return an error if all relevant fields are empty.
+		return nil
+	}
+
+	if err.Code == int32(moccodes.OK) {
+		// If the code is OK, but the message is not, then we should return an Unknown error code.
+		// This is to maintain backwards compatibility with older versions of the agent (that autofill an empty code).
+		err.Code = int32(moccodes.Unknown)
 	}
 
 	return &MocError{

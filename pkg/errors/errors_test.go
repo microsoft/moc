@@ -8,7 +8,80 @@ import (
 	"google.golang.org/grpc/status"
 
 	moccodes "github.com/microsoft/moc/pkg/errors/codes"
+	"github.com/microsoft/moc/rpc/common"
 )
+
+func TestNewMocErrorWithError(t *testing.T) {
+	tests := []struct {
+		name         string
+		input        *common.Error
+		expectedNil  bool
+		expectedCode moccodes.MocCode
+		expectedErr  string
+	}{
+		{
+			name:        "Nil error",
+			input:       nil,
+			expectedNil: true,
+		},
+		{
+			name: "OK code with empty message",
+			input: &common.Error{
+				Code:    int32(moccodes.OK),
+				Message: "",
+			},
+			expectedNil: true,
+		},
+		{
+			// Tests backwards compatibility (e.g., old nodeagent communicating to new cloudagent)
+			name: "OK code with message",
+			input: &common.Error{
+				Code:    int32(moccodes.OK),
+				Message: "Some error msg with no code",
+			},
+			expectedNil:  false,
+			expectedCode: moccodes.Unknown,
+			expectedErr:  "Some error msg with no code",
+		},
+		{
+			// Tests backwards compatibility (e.g., new nodeagent communicating to old cloudagent)
+			name: "Code outside of valid range with message",
+			input: &common.Error{
+				Code:    2147483647,
+				Message: "Some error msg with invalid code",
+			},
+			expectedCode: moccodes.Unknown,
+			expectedErr:  "Some error msg with invalid code",
+		},
+		{
+			name: "Non-OK code",
+			input: &common.Error{
+				Code:    int32(moccodes.NotFound),
+				Message: moccodes.NotFound.String(),
+			},
+			expectedNil:  false,
+			expectedCode: moccodes.NotFound,
+			expectedErr:  moccodes.NotFound.String(),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := NewMocErrorWithError(tt.input)
+			if (result == nil) != tt.expectedNil {
+				t.Errorf("NewMocErrorWithError() did not return expected nil value, got: %v", result)
+			} else if result != nil {
+				resultCode, _ := GetMocErrorCode(result)
+				if resultCode != tt.expectedCode {
+					t.Errorf("NewMocErrorWithError() code = %v, want %v", resultCode, tt.expectedCode)
+				}
+				if result.Error() != tt.expectedErr {
+					t.Errorf("NewMocErrorWithError() error = %v, want %v", result.Error(), tt.expectedErr)
+				}
+			}
+		})
+	}
+}
 
 func TestGetMocErrorCode(t *testing.T) {
 	tests := []struct {
