@@ -33,6 +33,7 @@ message Certificate {
 	CertificateType type = 7;
 	Entity entity = 8;
 	Tags tags = 9;
+	string thumbprint = 10;
 }
 
 message CSRRequest {

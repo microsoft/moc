@@ -199,7 +199,7 @@ enum ProviderType {
 	LogicalNetwork         = 38;
 	AvailabilitySet		   = 39;
 	NetworkSecurityGroup   = 40;
-	AvailabilityZone	   = 41;
+	Zone	               = 41;
 }
 
 // Operations specific to a provider
@@ -338,9 +338,9 @@ enum ProviderAccessOperation {
 	NetworkSecurityGroup_Create 	= 3600;
 	NetworkSecurityGroup_Update 	= 3601;
 
-	AvailabilityZone_Create		    = 3700;
-	AvailabilityZone_Delete		    = 3701;
-	AvailabilityZone_Update		    = 3702;
+	Zone_Create         		    = 3700;
+	Zone_Delete		                = 3701;
+	Zone_Update	            	    = 3702;
 }
 
 extend google.protobuf.FieldOptions {
@@ -348,10 +348,10 @@ extend google.protobuf.FieldOptions {
 }
 
 enum ImageSource {
-        LOCAL_SOURCE = 0;
-        SFS_SOURCE   = 1;
-        HTTP_SOURCE  = 2;
-        CLONE_SOURCE = 3;
+	LOCAL_SOURCE = 0;
+	SFS_SOURCE   = 1;
+	HTTP_SOURCE  = 2;
+	CLONE_SOURCE = 3;
 }
 
 enum HyperVGeneration {
@@ -362,6 +362,7 @@ enum HyperVGeneration {
 enum DiskFileFormat {
 	DiskFileFormatVHDX =  0;
 	DiskFileFormatVHD = 1;
+	DiskFileFormatUNKNOWN = 2;
 } 
 
 enum CloudInitDataSource {

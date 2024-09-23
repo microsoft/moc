@@ -33,6 +33,7 @@ message SSHPublicKey {
 message Disk {
 	// reference to the virtual hard disk managed by storage
 	string diskname = 1;
+	VirtualMachineManagedDiskParameters managedDisk = 2;
 }
 
 message StorageConfiguration {

@@ -71,8 +71,8 @@ const (
 	SecretContributorRoleName = "SecretContributor"
 	// AvailabilitySet Contributor Role - has permissions to run any operations on AvailabilitySets
 	AvailabilitySetContributorRoleName = "AvailabilitySetContributor"
-	// AvailabilityZone Contributor Role - has permissions to run any operations on AvailabilityZones
-	AvailabilityZoneContributorRoleName = "AvailabilityZoneContributor"
+	// Zone Contributor Role - has permissions to run any operations on Zones
+	ZoneContributorRoleName = "ZoneContributor"
 	// Location Reader role - has permissions to run read operations on locations
 	LocationReaderRoleName = "LocationReader"
 	// Group Reader Role - has permissions to run read operations on the group resource
@@ -135,6 +135,6 @@ const (
 	AvailabilitySetReaderRoleName = "AvailabilitySetReader"
 	// Certificate Signer Role - has permissions to run sign and renew operations on Certificates
 	CertSignerRoleName = "CertificateSigner"
-	// AvailabilityZone Reader Role - has permissions to run read operations on AvailabilityZones
-	AvailabilityZoneReaderRoleName = "AvailabilityZoneReader"
+	// Zone Reader Role - has permissions to run read operations on Zones
+	ZoneReaderRoleName = "ZoneReader"
 )
