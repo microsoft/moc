@@ -379,4 +379,3 @@ enum CloudInitDataSource {
 	NoCloud = 0;
 	Azure = 1;
 }
-
