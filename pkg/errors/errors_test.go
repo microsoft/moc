@@ -138,6 +138,26 @@ func TestGetMocErrorCode(t *testing.T) {
 			expectedCode:  moccodes.NotFound,
 			expectedValid: true,
 		},
+		{
+			name: "Multierr with wrapped error and matching MocCodes",
+			err: multierr.Combine(
+				Wrap(NewMocError(moccodes.NotFound), "additional context"),
+				Wrap(NewMocError(moccodes.NotFound), "additional context 2"),
+				Wrap(NewMocError(moccodes.NotFound), "additional context 3"),
+			),
+			expectedCode:  moccodes.NotFound,
+			expectedValid: true,
+		},
+		{
+			name: "Multierr with wrapped error and different MocCodes",
+			err: multierr.Combine(
+				Wrap(NewMocError(moccodes.NotFound), "additional context"),
+				Wrap(NewMocError(moccodes.InvalidInput), "additional context 2"),
+				Wrap(NewMocError(moccodes.NotFound), "additional context 3"),
+			),
+			expectedCode:  moccodes.MultipleErrors,
+			expectedValid: false,
+		},
 	}
 
 	for _, tt := range tests {
@@ -227,7 +247,7 @@ func TestCheckError(t *testing.T) {
 			name:          "Multierr with not all errors having same MocCodes",
 			wrappedError:  multierr.Combine(NotFound, Degraded, NewMocError(moccodes.InvalidInput)),
 			err:           NotFound,
-			expectedEqual: false,
+			expectedEqual: true,
 		},
 		{
 			name: "Multierr with all errors having same MocCodes using Wrapf",
@@ -247,7 +267,7 @@ func TestCheckError(t *testing.T) {
 				Wrapf(NewMocError(moccodes.NotFound), "additional context 3"),
 			),
 			err:           NotFound,
-			expectedEqual: false,
+			expectedEqual: true,
 		},
 		{
 			name: "Multierr with nested multierr all have same MocCodes",
@@ -268,7 +288,38 @@ func TestCheckError(t *testing.T) {
 				InvalidInput,
 			),
 			err:           NotFound,
-			expectedEqual: false,
+			expectedEqual: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			equal := checkError(tt.wrappedError, tt.err)
+			if equal != tt.expectedEqual {
+				t.Errorf("checkError() = %v, want %v", equal, tt.expectedEqual)
+			}
+		})
+	}
+}
+
+func TestCheckErrorBackwardsCompatible(t *testing.T) {
+	tests := []struct {
+		name          string
+		wrappedError  error
+		err           error
+		expectedEqual bool
+	}{
+		{
+			name:          "GRPC Unknown code error uses string matching",
+			wrappedError:  status.Error(codes.Unknown, "this is an example description: "+NotFound.Error()),
+			err:           NotFound,
+			expectedEqual: true,
+		},
+		{
+			name:          "Error without explicit GRPC Unknown code uses string matching",
+			wrappedError:  New("this is an example description: " + NotFound.Error()),
+			err:           NotFound,
+			expectedEqual: true,
 		},
 	}
 
