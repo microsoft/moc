@@ -323,6 +323,13 @@ func GetGRPCError(err error) error {
 	return err
 }
 
+// IsMocErrorCode wraps a call to GetMocErrorCode. It returns true only
+// if the error has the same MocCode as the given code (no string matching).
+func IsMocErrorCode(err error, code moccodes.MocCode) bool {
+	mocCode, _ := GetMocErrorCode(err)
+	return mocCode == code
+}
+
 func IsOutOfMemory(err error) bool {
 	return checkError(err, OutOfMemory)
 }
@@ -481,24 +488,10 @@ func IsMultipleErrors(err error) bool {
 	return checkError(err, MultipleErrors)
 }
 
-// checkError checks if the wrappedError has the same MocCode as the err error. If wrappedError is
-// a multierror, it will check whether each error in the multierror has the same MocCode as err.
-// checkError will start with generic comparisons before attempting to cast the wrappedError to a MocError.
+// checkError checks if the wrappedError has the same MocCode as the err error according to GetMocErrorCode.
+// If the error is not matched by GetMocErrorCode and the error does not have a GRPC code (or is a GRPC Unknown code),
+// it will attempt to match the error strings through string matching (even for multierrors).
 func checkError(wrappedError, err error) bool {
-	if wrappedError == nil {
-		return false
-	}
-
-	for _, e := range multierr.Errors(wrappedError) {
-		if !checkSingleError(e, err) {
-			return false
-		}
-	}
-
-	return true
-}
-
-func checkSingleError(wrappedError, err error) bool {
 	if wrappedError == nil {
 		return false
 	}
@@ -511,6 +504,9 @@ func checkSingleError(wrappedError, err error) bool {
 		return true
 	}
 
+	// Ideally, we wouldn't rely on any string matching to identify errors,
+	// but we need backwards compatibility. Note this triggers on all errors
+	// that don't have GRPC codes.
 	if !IsGRPCUnknown(err) {
 		return false
 	}
