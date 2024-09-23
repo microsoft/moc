@@ -142,6 +142,16 @@ message Tags {
 	repeated Tag tags = 1;
 }
 
+message ZoneReference {
+	string name = 1;
+	repeated string nodes = 2;
+}
+
+message ZoneConfiguration {
+	repeated ZoneReference zones = 1;
+	bool strictAffinityToZones = 2;
+}
+
 enum ClientType {
 	CONTROLPLANE = 0;
 	EXTERNALCLIENT = 1;
@@ -369,3 +379,4 @@ enum CloudInitDataSource {
 	NoCloud = 0;
 	Azure = 1;
 }
+

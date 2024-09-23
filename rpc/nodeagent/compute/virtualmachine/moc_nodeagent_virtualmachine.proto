@@ -108,16 +108,6 @@ message SecurityConfiguration {
 	SecurityType securityType = 3;
 }
 
-message AvailabilityZoneReference {
-	string name = 1;
-	repeated string nodes = 2;
-}
-
-message AvailabilityZoneConfiguration {
-	repeated AvailabilityZoneReference availabilityZones = 1;
-	bool strictAffinityToZones = 2;
-}
-
 message VirtualMachine {
 	string name = 1;
 	string id = 2;
@@ -135,7 +125,7 @@ message VirtualMachine {
 	Tags tags = 14;
 	GuestAgentConfiguration guestAgent = 15;
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 16;
-	AvailabilityZoneConfiguration availabilityZone = 17;
+	ZoneConfiguration zones = 17;
 }
 
 message VirtualMachineOperationRequest {
