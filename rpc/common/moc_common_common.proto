@@ -61,7 +61,7 @@ enum HealthState {
 
 message Error {
 	string Message = 1;
-	int32 Code = 2;
+	uint32 Code = 2;
 	string Parameters = 3;
 }
 

@@ -27,7 +27,7 @@ func TestNewMocErrorWithError(t *testing.T) {
 		{
 			name: "OK code with empty message",
 			input: &common.Error{
-				Code:    int32(moccodes.OK),
+				Code:    moccodes.OK.ToUint32(),
 				Message: "",
 			},
 			expectedNil: true,
@@ -36,7 +36,7 @@ func TestNewMocErrorWithError(t *testing.T) {
 			// Tests backwards compatibility (e.g., old nodeagent communicating to new cloudagent)
 			name: "OK code with message",
 			input: &common.Error{
-				Code:    int32(moccodes.OK),
+				Code:    moccodes.OK.ToUint32(),
 				Message: "Some error msg with no code",
 			},
 			expectedNil:  false,
@@ -56,12 +56,12 @@ func TestNewMocErrorWithError(t *testing.T) {
 		{
 			name: "Non-OK code",
 			input: &common.Error{
-				Code:    int32(moccodes.NotFound),
-				Message: moccodes.NotFound.String(),
+				Code:    moccodes.NotFound.ToUint32(),
+				Message: moccodes.NotFound.ErrorMessage(),
 			},
 			expectedNil:  false,
 			expectedCode: moccodes.NotFound,
-			expectedErr:  moccodes.NotFound.String(),
+			expectedErr:  moccodes.NotFound.ErrorMessage(),
 		},
 	}
 

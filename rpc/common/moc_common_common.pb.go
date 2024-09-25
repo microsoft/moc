@@ -917,7 +917,7 @@ func (CloudInitDataSource) EnumDescriptor() ([]byte, []int) {
 
 type Error struct {
 	Message              string   `protobuf:"bytes,1,opt,name=Message,proto3" json:"Message,omitempty"`
-	Code                 int32    `protobuf:"varint,2,opt,name=Code,proto3" json:"Code,omitempty"`
+	Code                 uint32   `protobuf:"varint,2,opt,name=Code,proto3" json:"Code,omitempty"`
 	Parameters           string   `protobuf:"bytes,3,opt,name=Parameters,proto3" json:"Parameters,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -956,7 +956,7 @@ func (m *Error) GetMessage() string {
 	return ""
 }
 
-func (m *Error) GetCode() int32 {
+func (m *Error) GetCode() uint32 {
 	if m != nil {
 		return m.Code
 	}

@@ -36,8 +36,8 @@ func (e *MocError) GetMocCode() moccodes.MocCode {
 func NewMocError(code moccodes.MocCode) error {
 	return &MocError{
 		err: &common.Error{
-			Code:    int32(code),
-			Message: code.String(),
+			Code:    code.ToUint32(),
+			Message: code.ErrorMessage(),
 		},
 	}
 }
@@ -51,15 +51,15 @@ func NewMocErrorWithError(err *common.Error) error {
 		return nil
 	}
 
-	if err.Code == int32(moccodes.OK) && err.Message == "" {
+	if err.Code == moccodes.OK.ToUint32() && err.Message == "" {
 		// Don't need to return an error if all relevant fields are empty.
 		return nil
 	}
 
-	if err.Code == int32(moccodes.OK) {
+	if err.Code == moccodes.OK.ToUint32() {
 		// If the code is OK, but the message is not, then we should return an Unknown error code.
 		// This is to maintain backwards compatibility with older versions of the agent (that autofill an empty code).
-		err.Code = int32(moccodes.Unknown)
+		err.Code = moccodes.Unknown.ToUint32()
 	}
 
 	return &MocError{

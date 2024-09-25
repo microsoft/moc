@@ -2,6 +2,10 @@
 // Licensed under the Apache v2.0 license.
 package codes
 
+import (
+	"strings"
+)
+
 // MocCode - error codes used by MOC
 type MocCode uint32
 
@@ -60,7 +64,8 @@ const (
 	_maxCode
 )
 
-// errorMessages - map of error codes to their string representation. This needs to be updated whenever new codes are added.
+// errorMessages - map of error codes to their string representation. This is maintained solely for backwards compatibility.
+// This, along with the func and map in codes_string.go, need to be updated whenever new codes are added.
 var errorMessages = map[MocCode]string{
 	OK:                          "", // No error so no message
 	NotFound:                    "Not Found",
@@ -74,12 +79,12 @@ var errorMessages = map[MocCode]string{
 	Duplicates:                  "Duplicates",
 	InvalidFilter:               "Invalid Filter",
 	Failed:                      "Failed",
-	InvalidGroup:                "Invalid Group",
-	InvalidVersion:              "Invalid Version",
-	OldVersion:                  "Old Version",
-	OutOfCapacity:               "Out Of Capacity",
-	OutOfNodeCapacity:           "Out Of Node Capacity",
-	OutOfMemory:                 "Out Of Memory",
+	InvalidGroup:                "InvalidGroup",
+	InvalidVersion:              "InvalidVersion",
+	OldVersion:                  "OldVersion",
+	OutOfCapacity:               "OutOfCapacity",
+	OutOfNodeCapacity:           "OutOfNodeCapacity",
+	OutOfMemory:                 "OutOfMemory",
 	UpdateFailed:                "Update Failed",
 	NotInitialized:              "Not Initialized",
 	NotImplemented:              "Not Implemented",
@@ -95,7 +100,7 @@ var errorMessages = map[MocCode]string{
 	Revoked:                     "Revoked",
 	Timeout:                     "Timed out",
 	RunCommandFailed:            "Run Command Failed",
-	InvalidToken:                "Invalid Token",
+	InvalidToken:                "InvalidToken",
 	Unknown:                     "Unknown Reason",
 	DeleteFailed:                "Delete Failed",
 	DeletePending:               "Delete Pending",
@@ -103,9 +108,9 @@ var errorMessages = map[MocCode]string{
 	PathNotFound:                "The system cannot find the path specified",
 	NotEnoughSpace:              "There is not enough space on the disk",
 	AccessDenied:                "Access is denied",
-	BlobNotFound:                "Blob Not Found",
+	BlobNotFound:                "BlobNotFound",
 	GenericFailure:              "Generic Failure",
-	NoAuthenticationInformation: "No Authentication Information",
+	NoAuthenticationInformation: "NoAuthenticationInformation",
 	MeasurementUnitError:        "Byte quantity must be a positive integer with a unit of measurement like",
 	QuotaViolation:              "Quota Violation",
 	IPOutOfRange:                "IP is out of range",
@@ -114,13 +119,26 @@ var errorMessages = map[MocCode]string{
 
 // IsValid - check if the code is a valid MocCode.
 func (c MocCode) IsValid() bool {
+	if c >= _maxCode {
+		return false
+	}
+
 	_, inMap := errorMessages[c]
-	lessThanMax := c < _maxCode
-	return inMap && lessThanMax
+	if !inMap {
+		return false
+	}
+
+	s := c.String()
+	if strings.Contains(s, "MocCode(") {
+		return false
+	}
+
+	_, inMap = stringToMocCode[c.String()]
+	return inMap
 }
 
 // String returns Unknown if the code is not a valid MocCode, otherwise it returns the string representation of the code.
-func (c MocCode) String() string {
+func (c MocCode) ErrorMessage() string {
 	if msg, exists := errorMessages[c]; exists {
 		return msg
 	}
@@ -128,9 +146,13 @@ func (c MocCode) String() string {
 	return errorMessages[Unknown]
 }
 
-// Convert an int32 to a MocCode. If the int32 is not a valid MocCode, return Unknown.
-func Convert(code int32) MocCode {
-	c := MocCode(uint32(code))
+func (c MocCode) ToUint32() uint32 {
+	return uint32(c)
+}
+
+// Convert an uint32 to a MocCode. If the uint32 is not a valid MocCode, return Unknown.
+func Convert(code uint32) MocCode {
+	c := MocCode(code)
 	if !c.IsValid() {
 		return Unknown
 	}
