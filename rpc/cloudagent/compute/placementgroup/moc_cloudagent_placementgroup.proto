@@ -1,0 +1,50 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the Apache v2.0 license.
+
+syntax = "proto3";
+option go_package = "github.com/microsoft/moc/rpc/cloudagent/compute";
+package moc.cloudagent.compute;
+
+import "google/protobuf/wrappers.proto";
+import "moc_common_common.proto";
+
+message PlacementGroupRequest {
+	repeated PlacementGroup PlacementGroups = 1;
+	Operation OperationType = 2;
+}
+
+message PlacementGroupResponse {
+	repeated PlacementGroup PlacementGroups = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+message PlacementGroupPrecheckRequest {
+	repeated PlacementGroup PlacementGroups = 1;
+}
+
+message PlacementGroupPrecheckResponse {
+	// The precheck result: true if the precheck criteria is passed; otherwise, false
+	google.protobuf.BoolValue Result = 1;
+
+	// The error message if the precheck is not passed; otherwise, empty string
+	string Error = 2;
+}
+
+message PlacementGroup {
+    string name = 1;
+    string id = 2;
+    string groupName = 3;
+    string type = 4;
+    string scope = 5;
+    repeated string zones = 6;
+    bool strictZonePlacement = 7;
+    Status status = 8;
+}
+
+service PlacementGroupAgent {
+	rpc Invoke(PlacementGroupRequest) returns (PlacementGroupResponse) {}
+
+	// Prechecks whether the system is able to create specified Placement Group (but does not actually create them).
+	rpc Precheck(PlacementGroupPrecheckRequest) returns (PlacementGroupPrecheckResponse) {}
+}
