@@ -27,35 +27,35 @@ func TestSetError(t *testing.T) {
 		inputError              error
 		expectedLastErrorString string
 		expectedMsg             string
-		expectedCode            int32
+		expectedCode            uint32
 	}{
 		{
 			name:                    "Nil error should clear the error",
 			inputError:              nil,
 			expectedLastErrorString: "",
 			expectedMsg:             "",
-			expectedCode:            int32(codes.OK),
+			expectedCode:            codes.OK.ToUint32(),
 		},
 		{
 			name:                    "Non-MocError results in codes.Unknown",
 			inputError:              errors.New("simple error"),
 			expectedLastErrorString: "Message:\"simple error\" Code:34 ",
 			expectedMsg:             "simple error",
-			expectedCode:            int32(codes.Unknown),
+			expectedCode:            codes.Unknown.ToUint32(),
 		},
 		{
 			name:                    "MocError results in the correct code and message",
 			inputError:              errors.NotFound,
 			expectedLastErrorString: "Message:\"Not Found\" Code:1 ",
-			expectedMsg:             codes.NotFound.String(),
-			expectedCode:            int32(codes.NotFound),
+			expectedMsg:             codes.NotFound.ErrorMessage(),
+			expectedCode:            codes.NotFound.ToUint32(),
 		},
 		{
 			name:                    "Wrapped MocError results in the correct code and merged message",
 			inputError:              errors.Wrapf(errors.NotFound, "more info here"),
 			expectedLastErrorString: "Message:\"more info here: Not Found\" Code:1 ",
-			expectedMsg:             "more info here: " + codes.NotFound.String(),
-			expectedCode:            int32(codes.NotFound),
+			expectedMsg:             "more info here: " + codes.NotFound.ErrorMessage(),
+			expectedCode:            codes.NotFound.ToUint32(),
 		},
 	}
 
@@ -95,8 +95,8 @@ func TestSetErrorWithStackTraceExcludesStackTrace(t *testing.T) {
 
 	SetError(status, simulatedError)
 
-	assert.Equal(t, errorDesc+": "+codes.InvalidInput.String(), status.LastError.Message)
-	assert.Equal(t, int32(codes.InvalidInput), status.LastError.Code)
+	assert.Equal(t, errorDesc+": "+codes.InvalidInput.ErrorMessage(), status.LastError.Message)
+	assert.Equal(t, codes.InvalidInput.ToUint32(), status.LastError.Code)
 
 	// Check that the stack trace is not included in the LastError.Message
 	stackTrace := fmt.Sprintf("%+v", simulatedError)
