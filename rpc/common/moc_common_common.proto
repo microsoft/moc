@@ -144,7 +144,6 @@ message Tags {
 
 message ZoneReference {
 	string name = 1;
-	repeated string nodes = 2;
 }
 
 message ZoneConfiguration {

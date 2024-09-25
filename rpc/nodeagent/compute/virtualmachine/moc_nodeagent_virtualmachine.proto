@@ -108,6 +108,16 @@ message SecurityConfiguration {
 	SecurityType securityType = 3;
 }
 
+message ZoneReference {
+	string name = 1;
+	repeated string nodes = 2;
+}
+
+message ZoneConfiguration {
+	repeated ZoneReference zones = 1;
+	bool strictPlacement = 2;
+}
+
 message VirtualMachine {
 	string name = 1;
 	string id = 2;
