@@ -125,7 +125,7 @@ message VirtualMachine {
 	Tags tags = 14;
 	GuestAgentConfiguration guestAgent = 15;
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 16;
-	ZoneConfiguration zones = 17;
+	ZoneConfiguration zoneConfiguration = 17;
 }
 
 message VirtualMachineOperationRequest {

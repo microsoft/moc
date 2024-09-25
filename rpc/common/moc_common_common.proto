@@ -149,7 +149,7 @@ message ZoneReference {
 
 message ZoneConfiguration {
 	repeated ZoneReference zones = 1;
-	bool strictAffinityToZones = 2;
+	bool strictPlacement = 2;
 }
 
 enum ClientType {
