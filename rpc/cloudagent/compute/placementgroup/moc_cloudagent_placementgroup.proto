@@ -8,6 +8,17 @@ package moc.cloudagent.compute;
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 
+enum PlacementGroupType {
+	Affinity = 0;
+	AntiAffinity = 1 ;
+	StrictAntiAffinity = 2;
+}
+
+enum PlacementGroupScope {
+	Server = 0;
+	Zone = 1 ;
+}
+
 message PlacementGroupRequest {
 	repeated PlacementGroup PlacementGroups = 1;
 	Operation OperationType = 2;
@@ -35,8 +46,8 @@ message PlacementGroup {
     string name = 1;
     string id = 2;
     string groupName = 3;
-    string type = 4;
-    string scope = 5;
+    PlacementGroupType type = 4;
+    PlacementGroupScope scope = 5;
     repeated string zones = 6;
     bool strictZonePlacement = 7;
     Status status = 8;
