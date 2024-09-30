@@ -133,8 +133,7 @@ func (c MocCode) IsValid() bool {
 		return false
 	}
 
-	_, inMap = stringToMocCode[c.String()]
-	return inMap
+	return true
 }
 
 // String returns Unknown if the code is not a valid MocCode, otherwise it returns the string representation of the code.

@@ -3,7 +3,6 @@
 package codes
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -109,64 +108,4 @@ func (c MocCode) String() string {
 	default:
 		return "MocCode(" + strconv.FormatInt(int64(c), 10) + ")"
 	}
-}
-
-// map to store string representations and their corresponding constants
-var stringToMocCode = map[string]MocCode{
-	"OK":                          OK,
-	"NotFound":                    NotFound,
-	"Degraded":                    Degraded,
-	"InvalidConfiguration":        InvalidConfiguration,
-	"InvalidInput":                InvalidInput,
-	"InvalidType":                 InvalidType,
-	"NotSupported":                NotSupported,
-	"AlreadyExists":               AlreadyExists,
-	"InUse":                       InUse,
-	"Duplicates":                  Duplicates,
-	"InvalidFilter":               InvalidFilter,
-	"Failed":                      Failed,
-	"InvalidGroup":                InvalidGroup,
-	"InvalidVersion":              InvalidVersion,
-	"OldVersion":                  OldVersion,
-	"OutOfCapacity":               OutOfCapacity,
-	"OutOfNodeCapacity":           OutOfNodeCapacity,
-	"OutOfMemory":                 OutOfMemory,
-	"UpdateFailed":                UpdateFailed,
-	"NotInitialized":              NotInitialized,
-	"NotImplemented":              NotImplemented,
-	"OutOfRange":                  OutOfRange,
-	"AlreadySet":                  AlreadySet,
-	"NotSet":                      NotSet,
-	"InconsistentState":           InconsistentState,
-	"PendingState":                PendingState,
-	"WrongHost":                   WrongHost,
-	"PoolFull":                    PoolFull,
-	"NoActionTaken":               NoActionTaken,
-	"Expired":                     Expired,
-	"Revoked":                     Revoked,
-	"Timeout":                     Timeout,
-	"RunCommandFailed":            RunCommandFailed,
-	"InvalidToken":                InvalidToken,
-	"Unknown":                     Unknown,
-	"DeleteFailed":                DeleteFailed,
-	"DeletePending":               DeletePending,
-	"FileNotFound":                FileNotFound,
-	"PathNotFound":                PathNotFound,
-	"NotEnoughSpace":              NotEnoughSpace,
-	"AccessDenied":                AccessDenied,
-	"BlobNotFound":                BlobNotFound,
-	"GenericFailure":              GenericFailure,
-	"NoAuthenticationInformation": NoAuthenticationInformation,
-	"MeasurementUnitError":        MeasurementUnitError,
-	"QuotaViolation":              QuotaViolation,
-	"IPOutOfRange":                IPOutOfRange,
-	"MultipleErrors":              MultipleErrors,
-}
-
-// MocCodeFromString translates a string back to the corresponding MocCode constant
-func MocCodeFromString(s string) (MocCode, error) {
-	if code, exists := stringToMocCode[s]; exists {
-		return code, nil
-	}
-	return 0, fmt.Errorf("unknown MocCode string: %s", s)
 }
