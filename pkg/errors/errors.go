@@ -174,89 +174,89 @@ func getSingleMocErrorCode(err error) (moccodes.MocCode, bool) {
 
 func GetErrorCode(err error) string {
 	if IsNotFound(err) || IsFileNotFound(err) || IsPathNotFound(err) || IsBlobNotFound(err) {
-		return "NotFound"
+		return moccodes.NotFound.String()
 	} else if IsDegraded(err) {
-		return "Degraded"
+		return moccodes.Degraded.String()
 	} else if IsInvalidConfiguration(err) {
-		return "InvalidConfiguration"
+		return moccodes.InvalidConfiguration.String()
 	} else if IsInvalidInput(err) {
-		return "InvalidInput"
+		return moccodes.InvalidInput.String()
 	} else if IsNotSupported(err) {
-		return "NotSupported"
+		return moccodes.NotSupported.String()
 	} else if IsAlreadyExists(err) {
-		return "AlreadyExists"
+		return moccodes.AlreadyExists.String()
 	} else if IsInUse(err) {
-		return "InUse"
+		return moccodes.InUse.String()
 	} else if IsDuplicates(err) {
-		return "Duplicates"
+		return moccodes.Duplicates.String()
 	} else if IsInvalidFilter(err) {
-		return "InvalidFilter"
+		return moccodes.InvalidFilter.String()
 	} else if IsFailed(err) {
-		return "Failed"
+		return moccodes.Failed.String()
 	} else if IsInvalidGroup(err) {
-		return "InvalidGroup"
+		return moccodes.InvalidGroup.String()
 	} else if IsInvalidType(err) {
-		return "InvalidType"
+		return moccodes.InvalidType.String()
 	} else if IsInvalidVersion(err) {
-		return "InvalidVersion"
+		return moccodes.InvalidVersion.String()
 	} else if IsOldVersion(err) {
-		return "OldVersion"
+		return moccodes.OldVersion.String()
 	} else if IsOutOfCapacity(err) || IsNotEnoughSpace(err) {
-		return "OutOfCapacity"
+		return moccodes.OutOfCapacity.String()
 	} else if IsOutOfNodeCapacity(err) {
-		return "OutOfNodeCapacity"
+		return moccodes.OutOfNodeCapacity.String()
 	} else if IsOutOfMemory(err) {
-		return "OutOfMemory"
+		return moccodes.OutOfMemory.String()
 	} else if IsUpdateFailed(err) {
-		return "UpdateFailed"
+		return moccodes.UpdateFailed.String()
 	} else if IsNotInitialized(err) {
-		return "NotInitialized"
+		return moccodes.NotInitialized.String()
 	} else if IsNotImplemented(err) {
-		return "NotImplemented"
+		return moccodes.NotImplemented.String()
 	} else if IsOutOfRange(err) {
-		return "OutOfRange"
+		return moccodes.OutOfRange.String()
 	} else if IsAlreadySet(err) {
-		return "AlreadySet"
+		return moccodes.AlreadySet.String()
 	} else if IsNotSet(err) {
-		return "NotSet"
+		return moccodes.NotSet.String()
 	} else if IsInconsistentState(err) {
-		return "InconsistentState"
+		return moccodes.InconsistentState.String()
 	} else if IsPendingState(err) {
-		return "PendingState"
+		return moccodes.PendingState.String()
 	} else if IsWrongHost(err) {
-		return "WrongHost"
+		return moccodes.WrongHost.String()
 	} else if IsPoolFull(err) {
-		return "PoolFull"
+		return moccodes.PoolFull.String()
 	} else if IsNoActionTaken(err) {
-		return "NoActionTaken"
+		return moccodes.NoActionTaken.String()
 	} else if IsExpired(err) {
-		return "Expired"
+		return moccodes.Expired.String()
 	} else if IsRevoked(err) {
-		return "Revoked"
+		return moccodes.Revoked.String()
 	} else if IsTimeout(err) {
-		return "Timeout"
+		return moccodes.Timeout.String()
 	} else if IsInvalidToken(err) {
-		return "InvalidToken"
+		return moccodes.InvalidToken.String()
 	} else if IsUnknown(err) || IsGenericFailure(err) {
-		return "Unknown"
+		return moccodes.Unknown.String()
 	} else if IsDeleteFailed(err) {
-		return "Delete Failed"
+		return moccodes.DeleteFailed.String()
 	} else if IsDeletePending(err) {
-		return "Delete Pending"
+		return moccodes.DeletePending.String()
 	} else if IsRunCommandFailed(err) {
-		return "RunCommandFailed"
+		return moccodes.RunCommandFailed.String()
 	} else if IsAccessDenied(err) {
-		return "AccessDenied"
+		return moccodes.AccessDenied.String()
 	} else if IsNoAuthenticationInformation(err) {
-		return "NoAuthenticationInformation"
+		return moccodes.NoAuthenticationInformation.String()
 	} else if IsQuotaViolation(err) {
-		return "QuotaViolation"
+		return moccodes.QuotaViolation.String()
 	} else if IsMeasurementUnitError(err) {
-		return "MeasurementUnitError"
+		return moccodes.MeasurementUnitError.String()
 	} else if IsIPOutOfRange(err) {
-		return "IPOutOfRange"
+		return moccodes.IPOutOfRange.String()
 	} else if IsMultipleErrors(err) {
-		return "MultipleErrors"
+		return moccodes.MultipleErrors.String()
 	}
 
 	// We dont know the type of error.
