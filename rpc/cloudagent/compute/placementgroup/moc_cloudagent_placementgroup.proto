@@ -40,6 +40,7 @@ message PlacementGroup {
     repeated string zones = 6;
     bool strictZonePlacement = 7;
     Status status = 8;
+    repeated VirtualMachineReference virtualMachines = 9;
 }
 
 service PlacementGroupAgent {
