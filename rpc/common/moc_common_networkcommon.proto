@@ -36,6 +36,7 @@ enum IPPoolType {
 enum NetworkType {
 	VIRTUAL_NETWORK = 0;
 	LOGICAL_NETWORK = 1;
+	UNDEFINED = 2;
 }
 
 message IPPoolInfo {
