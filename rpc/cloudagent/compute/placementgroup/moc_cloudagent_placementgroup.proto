@@ -51,12 +51,13 @@ message VirtualMachineRef {
 message PlacementGroup {
     string name = 1;
     string id = 2;
-    string groupName = 3;
-    PlacementGroupType type = 4;
-    PlacementGroupScope scope = 5;
-    ZoneConfiguration zones = 6;
-    Status status = 7;
-    repeated VirtualMachineRef virtualMachines = 8;
+    string locationName = 3;
+    string groupName = 4;
+    PlacementGroupType type = 5;
+    PlacementGroupScope scope = 6;
+    ZoneConfiguration zones = 7;
+    Status status = 8;
+    repeated VirtualMachineRef virtualMachines = 9;
 }
 
 service PlacementGroupAgent {
