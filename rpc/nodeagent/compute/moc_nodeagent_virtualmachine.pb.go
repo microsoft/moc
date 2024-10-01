@@ -887,6 +887,9 @@ func (m *SecurityConfiguration) GetSecurityType() common.SecurityType {
 	return common.SecurityType_NOTCONFIGURED
 }
 
+// Zone entity exists in cloud agent only and platform layer configuration needs node names.
+// So this zone information includes node names associated with zone.
+// This additional info is not present in ZoneReference defined in common file, which is used by cloud agent.
 type ZoneReference struct {
 	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Nodes                []string `protobuf:"bytes,2,rep,name=nodes,proto3" json:"nodes,omitempty"`

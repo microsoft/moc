@@ -108,6 +108,9 @@ message SecurityConfiguration {
 	SecurityType securityType = 3;
 }
 
+// Zone entity exists in cloud agent only and platform layer configuration needs node names.
+// So this zone information includes node names associated with zone.
+// This additional info is not present in ZoneReference defined in common file, which is used by cloud agent.
 message ZoneReference {
 	string name = 1;
 	repeated string nodes = 2;

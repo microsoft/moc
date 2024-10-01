@@ -1547,6 +1547,7 @@ func (m *ZoneReference) GetName() string {
 	return ""
 }
 
+// Used by VM proto and Placement Group proto, so it is placed in common
 type ZoneConfiguration struct {
 	Zones                []*ZoneReference `protobuf:"bytes,1,rep,name=zones,proto3" json:"zones,omitempty"`
 	StrictPlacement      bool             `protobuf:"varint,2,opt,name=strictPlacement,proto3" json:"strictPlacement,omitempty"`
