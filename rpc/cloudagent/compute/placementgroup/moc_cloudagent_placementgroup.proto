@@ -42,7 +42,7 @@ message PlacementGroupPrecheckResponse {
 	string Error = 2;
 }
 
-message VirtualMachineReference {
+message VirtualMachineRef {
 	string groupName = 1;
 	string name = 2;
 	string realizedName = 3;
@@ -56,7 +56,7 @@ message PlacementGroup {
     PlacementGroupScope scope = 5;
     ZoneConfiguration zones = 6;
     Status status = 7;
-    repeated VirtualMachineReference virtualMachines = 8;
+    repeated VirtualMachineRef virtualMachines = 8;
 }
 
 service PlacementGroupAgent {
