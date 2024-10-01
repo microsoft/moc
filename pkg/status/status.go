@@ -125,7 +125,10 @@ func GetStatuses(status *common.Status) map[string]*string {
 	dstate := status.GetDownloadStatus().String()
 	statuses["DownloadStatus"] = &dstate
 	placementStatus := status.GetPlacementStatus().String()
-	statuses["PlacementStatus"] = &placementStatus
+	if placementStatus != "" {
+		statuses["PlacementStatus"] = &placementStatus
+	}
+
 	return statuses
 }
 
