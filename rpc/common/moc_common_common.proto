@@ -130,6 +130,16 @@ message Tags {
 	repeated Tag tags = 1;
 }
 
+message ZoneReference {
+	string name = 1;
+}
+
+// Used by VM proto and Placement Group proto, so it is placed in common
+message ZoneConfiguration {
+	repeated ZoneReference zones = 1;
+	bool strictPlacement = 2;
+}
+
 enum ClientType {
 	CONTROLPLANE = 0;
 	EXTERNALCLIENT = 1;

@@ -2,8 +2,8 @@
 // Licensed under the Apache v2.0 license.
 
 syntax = "proto3";
-option go_package = "github.com/microsoft/moc/rpc/cloudagent/compute";
-package moc.cloudagent.compute;
+option go_package = "github.com/microsoft/moc/rpc/nodeagent/compute";
+package moc.nodeagent.compute;
 
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
@@ -30,22 +30,8 @@ message PlacementGroupResponse {
 	string  Error = 3;
 }
 
-message PlacementGroupPrecheckRequest {
-	repeated PlacementGroup PlacementGroups = 1;
-}
-
-message PlacementGroupPrecheckResponse {
-	// The precheck result: true if the precheck criteria is passed; otherwise, false
-	google.protobuf.BoolValue Result = 1;
-
-	// The error message if the precheck is not passed; otherwise, empty string
-	string Error = 2;
-}
-
 message VirtualMachineReference {
-	string groupName = 1;
-	string name = 2;
-	string realizedName = 3;
+	string name = 1;
 }
 
 message PlacementGroup {
@@ -61,7 +47,4 @@ message PlacementGroup {
 
 service PlacementGroupAgent {
 	rpc Invoke(PlacementGroupRequest) returns (PlacementGroupResponse) {}
-
-	// Prechecks whether the system is able to create specified Placement Group (but does not actually create them).
-	rpc Precheck(PlacementGroupPrecheckRequest) returns (PlacementGroupPrecheckResponse) {}
 }
