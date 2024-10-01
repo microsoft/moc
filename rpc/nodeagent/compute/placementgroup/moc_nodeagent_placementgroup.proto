@@ -41,8 +41,9 @@ message PlacementGroup {
     PlacementGroupType type = 4;
     PlacementGroupScope scope = 5;
     ZoneConfiguration zones = 6;
-    Status status = 7;
-    repeated VirtualMachineRef virtualMachines = 8;
+    Entity entity = 7;
+    Status status = 8;
+    repeated VirtualMachineRef virtualMachines = 9;
 }
 
 service PlacementGroupAgent {
