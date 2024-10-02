@@ -12,6 +12,7 @@ import "moc_common_networkcommon.proto";
 message LoadBalancerRequest {
 	repeated LoadBalancer LoadBalancers = 1;
 	Operation OperationType = 2;
+	ApiVersion version = 3;
 }
 
 message LoadBalancerResponse {
@@ -50,7 +51,7 @@ message LoadBalancingRule {
 	uint32 frontendPort = 1;
 	uint32 backendPort = 2;
 	Protocol protocol = 3;
-	ProbeReference probeRef = 4; // Update based on chat with Nithin
+	ProbeReference probeRef = 4;
 	string name = 5;
 }
 
@@ -67,7 +68,7 @@ message FrontEndIpConfiguration {
 	string privateIPAddress = 2; // required if using subnet
 	IPAllocationMethod allocationMethod = 3; // required
 	SubnetReference subnetRef = 4; // required if using privateIPAddress.
-	PublicIPAddressReference publicIPAddress = 5; // required if not using privateIP and a subnet. resourceRef to publicIPAddress
+	string publicIPAddressRef = 5; // required if not using privateIP and a subnet. resourceRef to publicIPAddress
 }
 
 message LoadBalancer {
@@ -86,9 +87,9 @@ message LoadBalancer {
 	repeated LoadbalancerInboundNatRule inboundNatRules = 13;
 	repeated LoadbalancerOutboundNatRule outboundNatRules = 14;
 	repeated FrontEndIpConfiguration frontendIpConfigurations = 15;
-	repeated Probe probes = 16; // Need more discussion around probes
+	repeated Probe probes = 16;
 	string useSDN = 17; // To indicate SDN optionality
-	string apiVersion = 18; 
+	ApiVersion version = 18;
 }
 
 service LoadBalancerAgent {
