@@ -68,7 +68,7 @@ message FrontEndIpConfiguration {
 	string privateIPAddress = 2; // required if using subnet
 	IPAllocationMethod allocationMethod = 3; // required
 	SubnetReference subnetRef = 4; // required if using privateIPAddress.
-	string publicIPAddressRef = 5; // required if not using privateIP and a subnet. resourceRef to publicIPAddress
+	PublicIPAddressReference publicIPAddress = 5; // required if not using privateIP and a subnet. resourceRef to publicIPAddress
 }
 
 message LoadBalancer {
