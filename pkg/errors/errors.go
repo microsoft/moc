@@ -114,62 +114,56 @@ var (
 	MeasurementUnitError        error = NewMocError(moccodes.MeasurementUnitError)
 	QuotaViolation              error = NewMocError(moccodes.QuotaViolation)
 	IPOutOfRange                error = NewMocError(moccodes.IPOutOfRange)
-	MultipleErrors              error = NewMocError(moccodes.MultipleErrors)
 )
 
 // GetMocErrorCode attempts to extract the MocCode from the given error. If the error is a multierr,
-// it will return the MocCode if all errors in the multierr match the same MocCode. If there are
-// multiple non-matching MocCodes, then it returns MocCode.MultipleErrors and false.
+// it will return the MocCode if all errors in the multierr match the same MocCode. Otherwise, it returns
+// MocCode.Unknown.
 //
 // GetMocErrorCode follows the following rules when parsing individual errors:
 //
-//   - If the error is nil, it returns MocCode.OK and true.
-//   - If the error is of type MocError, it returns the MocCode and true.
-//   - If the error has a Cause that is not nil and is of type MocError, it returns the MocCode of the Cause and true.
-//   - If both the error and its Cause are not of type MocError, it returns MocCode.Unknown and false.
-func GetMocErrorCode(err error) (moccodes.MocCode, bool) {
+//   - If the error is nil, it returns MocCode.OK.
+//   - If the error is of type MocError, it returns the MocCode.
+//   - If the error has a Cause that is not nil and is of type MocError, it returns the MocCode of the Cause.
+//   - If both the error and its Cause are not of type MocError, it returns MocCode.Unknown.
+func GetMocErrorCode(err error) moccodes.MocCode {
 	errors := multierr.Errors(err)
 	if len(errors) == 0 {
-		return moccodes.OK, true
+		return moccodes.OK
 	}
 
-	firstMocCode, ok := getSingleMocErrorCode(errors[0])
-	if !ok && len(errors) == 1 {
-		return moccodes.Unknown, false
-	}
-
+	firstMocCode := getSingleMocErrorCode(errors[0])
 	for _, e := range errors[1:] {
-		mocCode, ok := getSingleMocErrorCode(e)
-		if !ok || mocCode != firstMocCode {
-			return moccodes.MultipleErrors, false
+		if mocCode := getSingleMocErrorCode(e); mocCode != firstMocCode {
+			return moccodes.Unknown
 		}
 	}
 
-	return firstMocCode, true
+	return firstMocCode
 }
 
-func getSingleMocErrorCode(err error) (moccodes.MocCode, bool) {
+func getSingleMocErrorCode(err error) moccodes.MocCode {
 	if err == nil {
-		return moccodes.OK, true
+		return moccodes.OK
 	}
 
 	// Check if the error itself is a MocError
 	if mocErr, ok := err.(*MocError); ok {
-		return mocErr.GetMocCode(), true
+		return mocErr.GetMocCode()
 	}
 
 	// Get the cause of the error
 	cerr := perrors.Cause(err)
 	if cerr == nil || cerr == err {
-		return moccodes.Unknown, false
+		return moccodes.Unknown
 	}
 
 	// Check if the cause of the error is a MocError
 	if mocErr, ok := cerr.(*MocError); ok {
-		return mocErr.GetMocCode(), true
+		return mocErr.GetMocCode()
 	}
 
-	return moccodes.Unknown, false
+	return moccodes.Unknown
 }
 
 func GetErrorCode(err error) string {
@@ -255,8 +249,6 @@ func GetErrorCode(err error) string {
 		return moccodes.MeasurementUnitError.String()
 	} else if IsIPOutOfRange(err) {
 		return moccodes.IPOutOfRange.String()
-	} else if IsMultipleErrors(err) {
-		return moccodes.MultipleErrors.String()
 	}
 
 	// We dont know the type of error.
@@ -326,8 +318,7 @@ func GetGRPCError(err error) error {
 // IsMocErrorCode wraps a call to GetMocErrorCode. It returns true only
 // if the error has the same MocCode as the given code (no string matching).
 func IsMocErrorCode(err error, code moccodes.MocCode) bool {
-	mocCode, _ := GetMocErrorCode(err)
-	return mocCode == code
+	return GetMocErrorCode(err) == code
 }
 
 func IsOutOfMemory(err error) bool {
@@ -484,10 +475,6 @@ func IsIPOutOfRange(err error) bool {
 	return checkError(err, IPOutOfRange)
 }
 
-func IsMultipleErrors(err error) bool {
-	return checkError(err, MultipleErrors)
-}
-
 // checkError checks if the wrappedError has the same MocCode as the err error according to GetMocErrorCode.
 // If the error is not matched by GetMocErrorCode and the error does not have a GRPC code (or is a GRPC Unknown code),
 // it will attempt to match the error strings through string matching (even for multierrors).
@@ -498,9 +485,7 @@ func checkError(wrappedError, err error) bool {
 	if wrappedError == err {
 		return true
 	}
-	moccode, ok := GetMocErrorCode(wrappedError)
-	errCode, ok2 := GetMocErrorCode(err)
-	if ok && ok2 && moccode == errCode {
+	if GetMocErrorCode(wrappedError) == GetMocErrorCode(err) {
 		return true
 	}
 

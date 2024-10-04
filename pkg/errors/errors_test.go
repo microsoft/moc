@@ -71,7 +71,7 @@ func TestNewMocErrorWithError(t *testing.T) {
 			if (result == nil) != tt.expectedNil {
 				t.Errorf("NewMocErrorWithError() did not return expected nil value, got: %v", result)
 			} else if result != nil {
-				resultCode, _ := GetMocErrorCode(result)
+				resultCode := GetMocErrorCode(result)
 				if resultCode != tt.expectedCode {
 					t.Errorf("NewMocErrorWithError() code = %v, want %v", resultCode, tt.expectedCode)
 				}
@@ -85,58 +85,49 @@ func TestNewMocErrorWithError(t *testing.T) {
 
 func TestGetMocErrorCode(t *testing.T) {
 	tests := []struct {
-		name          string
-		err           error
-		expectedCode  moccodes.MocCode
-		expectedValid bool
+		name         string
+		err          error
+		expectedCode moccodes.MocCode
 	}{
 		{
-			name:          "Nil error",
-			err:           nil,
-			expectedCode:  moccodes.OK,
-			expectedValid: true,
+			name:         "Nil error",
+			err:          nil,
+			expectedCode: moccodes.OK,
 		},
 		{
-			name:          "Single MocError",
-			err:           NewMocError(moccodes.NotFound),
-			expectedCode:  moccodes.NotFound,
-			expectedValid: true,
+			name:         "Single MocError",
+			err:          NewMocError(moccodes.NotFound),
+			expectedCode: moccodes.NotFound,
 		},
 		{
-			name:          "Error with MocError cause",
-			err:           Wrap(NewMocError(moccodes.InvalidInput), "wrapped error"),
-			expectedCode:  moccodes.InvalidInput,
-			expectedValid: true,
+			name:         "Error with MocError cause",
+			err:          Wrap(NewMocError(moccodes.InvalidInput), "wrapped error"),
+			expectedCode: moccodes.InvalidInput,
 		},
 		{
-			name:          "Error with non-MocError cause",
-			err:           Wrap(New("standard error"), "wrapped error"),
-			expectedCode:  moccodes.Unknown,
-			expectedValid: false,
+			name:         "Error with non-MocError cause",
+			err:          Wrap(New("standard error"), "wrapped error"),
+			expectedCode: moccodes.Unknown,
 		},
 		{
-			name:          "Multierr with matching MocCodes",
-			err:           multierr.Combine(NotFound, NewMocError(moccodes.NotFound)),
-			expectedCode:  moccodes.NotFound,
-			expectedValid: true,
+			name:         "Multierr with matching MocCodes",
+			err:          multierr.Combine(NotFound, NewMocError(moccodes.NotFound)),
+			expectedCode: moccodes.NotFound,
 		},
 		{
-			name:          "Multierr with different MocCodes",
-			err:           multierr.Combine(NewMocError(moccodes.NotFound), NewMocError(moccodes.InvalidInput)),
-			expectedCode:  moccodes.MultipleErrors,
-			expectedValid: false,
+			name:         "Multierr with different MocCodes",
+			err:          multierr.Combine(NewMocError(moccodes.NotFound), NewMocError(moccodes.InvalidInput)),
+			expectedCode: moccodes.Unknown,
 		},
 		{
-			name:          "Multierr with non-MocError",
-			err:           multierr.Combine(New("standard error"), NewMocError(moccodes.NotFound)),
-			expectedCode:  moccodes.MultipleErrors,
-			expectedValid: false,
+			name:         "Multierr with non-MocError",
+			err:          multierr.Combine(New("standard error"), NewMocError(moccodes.NotFound)),
+			expectedCode: moccodes.Unknown,
 		},
 		{
-			name:          "Multierr with nil error and matching MocCodes",
-			err:           multierr.Combine(nil, NewMocError(moccodes.NotFound), NotFound),
-			expectedCode:  moccodes.NotFound,
-			expectedValid: true,
+			name:         "Multierr with nil error and matching MocCodes",
+			err:          multierr.Combine(nil, NewMocError(moccodes.NotFound), NotFound),
+			expectedCode: moccodes.NotFound,
 		},
 		{
 			name: "Multierr with wrapped error and matching MocCodes",
@@ -145,8 +136,7 @@ func TestGetMocErrorCode(t *testing.T) {
 				Wrap(NewMocError(moccodes.NotFound), "additional context 2"),
 				Wrap(NewMocError(moccodes.NotFound), "additional context 3"),
 			),
-			expectedCode:  moccodes.NotFound,
-			expectedValid: true,
+			expectedCode: moccodes.NotFound,
 		},
 		{
 			name: "Multierr with wrapped error and different MocCodes",
@@ -155,16 +145,15 @@ func TestGetMocErrorCode(t *testing.T) {
 				Wrap(NewMocError(moccodes.InvalidInput), "additional context 2"),
 				Wrap(NewMocError(moccodes.NotFound), "additional context 3"),
 			),
-			expectedCode:  moccodes.MultipleErrors,
-			expectedValid: false,
+			expectedCode: moccodes.Unknown,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			code, valid := GetMocErrorCode(tt.err)
-			if code != tt.expectedCode || valid != tt.expectedValid {
-				t.Errorf("GetMocErrorCode() = (%v, %v), want (%v, %v)", code, valid, tt.expectedCode, tt.expectedValid)
+			code := GetMocErrorCode(tt.err)
+			if code != tt.expectedCode {
+				t.Errorf("GetMocErrorCode() = (%v), want (%v)", code, tt.expectedCode)
 			}
 		})
 	}
@@ -217,12 +206,6 @@ func TestCheckError(t *testing.T) {
 			name:          "Wrapped error with different MocCode",
 			wrappedError:  Wrapf(NewMocError(moccodes.InvalidInput), "additional context"),
 			err:           NotFound,
-			expectedEqual: false,
-		},
-		{
-			name:          "GRPC Unknown error doesn't match MocCode",
-			wrappedError:  status.Error(codes.Unknown, "unknown error"),
-			err:           Unknown,
 			expectedEqual: false,
 		},
 		{

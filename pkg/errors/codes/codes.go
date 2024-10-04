@@ -2,10 +2,6 @@
 // Licensed under the Apache v2.0 license.
 package codes
 
-import (
-	"strings"
-)
-
 // MocCode - error codes used by MOC
 type MocCode uint32
 
@@ -57,7 +53,6 @@ const (
 	MeasurementUnitError
 	QuotaViolation
 	IPOutOfRange
-	MultipleErrors
 
 	// This is not a valid code, it is used to get the maximum code value.
 	// Any new codes should be defined above this.
@@ -114,7 +109,6 @@ var errorMessages = map[MocCode]string{
 	MeasurementUnitError:        "Byte quantity must be a positive integer with a unit of measurement like",
 	QuotaViolation:              "Quota Violation",
 	IPOutOfRange:                "IP is out of range",
-	MultipleErrors:              "Multiple Errors",
 }
 
 // IsValid - check if the code is a valid MocCode.
@@ -125,11 +119,6 @@ func (c MocCode) IsValid() bool {
 
 	_, inMap := errorMessages[c]
 	if !inMap {
-		return false
-	}
-
-	s := c.String()
-	if strings.Contains(s, "MocCode(") {
 		return false
 	}
 

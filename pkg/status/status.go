@@ -33,8 +33,7 @@ func SetError(s *common.Status, err error) {
 		s.LastError.Message = err.Error()
 
 		// Get the error code, if it's not a moc error, it will return codes.Unknown
-		code, _ := errors.GetMocErrorCode(err)
-		s.LastError.Code = code.ToUint32()
+		s.LastError.Code = errors.GetMocErrorCode(err).ToUint32()
 	} else {
 		// Clear the error
 		s.LastError.Message = ""
