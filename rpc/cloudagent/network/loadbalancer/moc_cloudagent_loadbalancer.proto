@@ -12,6 +12,7 @@ import "moc_common_networkcommon.proto";
 message LoadBalancerRequest {
 	repeated LoadBalancer LoadBalancers = 1;
 	Operation OperationType = 2;
+	ApiVersion version = 3;
 }
 
 message LoadBalancerResponse {
@@ -59,6 +60,8 @@ message LoadBalancer {
 	Tags tags = 11;
 	uint32 replicationCount = 12;
 	repeated LoadbalancerInboundNatRule inboundNatRules = 13;
+	string useSDN = 14; // To indicate SDN optionality
+	ApiVersion version = 15;
 }
 
 service LoadBalancerAgent {
