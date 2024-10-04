@@ -1,6 +1,13 @@
 trigger:
 - main
 
+schedules:
+- cron: "0 0 * * *"
+  displayName: Moc - main branch - daily build
+  branches:
+    include:
+      - main
+
 jobs:
 - template: .pipelines/build.yaml
 - template: .pipelines/static.yaml
