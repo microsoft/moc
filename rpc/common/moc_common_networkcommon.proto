@@ -61,15 +61,3 @@ message ResourceReference {
 message NetworkSecurityGroupReference {
 	ResourceReference resourceRef = 1;
 }
-
-message PublicIPAddressReference {
-	ResourceReference resourceRef = 1;
-}
-
-message ProbeReference {
-	ResourceReference resourceRef = 1;
-}
-
-message SubnetReference {
-	ResourceReference resourceRef = 1;
-}
