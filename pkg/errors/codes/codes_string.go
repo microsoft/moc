@@ -103,8 +103,6 @@ func (c MocCode) String() string {
 		return "QuotaViolation"
 	case IPOutOfRange:
 		return "IPOutOfRange"
-	case MultipleErrors:
-		return "MultipleErrors"
 	default:
 		return "MocCode(" + strconv.FormatInt(int64(c), 10) + ")"
 	}
