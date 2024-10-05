@@ -10,7 +10,7 @@ import (
 func (c MocCode) String() string {
 	switch c {
 	case OK:
-		return "OK"
+		return ""
 	case NotFound:
 		return "NotFound"
 	case Degraded:
@@ -104,6 +104,6 @@ func (c MocCode) String() string {
 	case IPOutOfRange:
 		return "IPOutOfRange"
 	default:
-		return "MocCode(" + strconv.FormatInt(int64(c), 10) + ")"
+		return "MocCode(" + strconv.FormatUint(uint64(c), 10) + ")"
 	}
 }

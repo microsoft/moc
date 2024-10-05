@@ -57,17 +57,17 @@ func TestNewMocErrorWithError(t *testing.T) {
 			name: "Non-OK code",
 			input: &common.Error{
 				Code:    moccodes.NotFound.ToUint32(),
-				Message: moccodes.NotFound.ErrorMessage(),
+				Message: legacyErrorMessages[moccodes.NotFound],
 			},
 			expectedNil:  false,
 			expectedCode: moccodes.NotFound,
-			expectedErr:  moccodes.NotFound.ErrorMessage(),
+			expectedErr:  legacyErrorMessages[moccodes.NotFound],
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := NewMocErrorWithError(tt.input)
+			result := ProtoToMocError(tt.input)
 			if (result == nil) != tt.expectedNil {
 				t.Errorf("NewMocErrorWithError() did not return expected nil value, got: %v", result)
 			} else if result != nil {
