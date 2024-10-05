@@ -47,14 +47,14 @@ func TestSetError(t *testing.T) {
 			name:                    "MocError results in the correct code and message",
 			inputError:              errors.NotFound,
 			expectedLastErrorString: "Message:\"Not Found\" Code:1 ",
-			expectedMsg:             codes.NotFound.ErrorMessage(),
+			expectedMsg:             errors.NotFound.Error(),
 			expectedCode:            codes.NotFound.ToUint32(),
 		},
 		{
 			name:                    "Wrapped MocError results in the correct code and merged message",
 			inputError:              errors.Wrapf(errors.NotFound, "more info here"),
 			expectedLastErrorString: "Message:\"more info here: Not Found\" Code:1 ",
-			expectedMsg:             "more info here: " + codes.NotFound.ErrorMessage(),
+			expectedMsg:             "more info here: " + errors.NotFound.Error(),
 			expectedCode:            codes.NotFound.ToUint32(),
 		},
 	}
@@ -95,7 +95,7 @@ func TestSetErrorWithStackTraceExcludesStackTrace(t *testing.T) {
 
 	SetError(status, simulatedError)
 
-	assert.Equal(t, errorDesc+": "+codes.InvalidInput.ErrorMessage(), status.LastError.Message)
+	assert.Equal(t, errorDesc+": "+errors.InvalidInput.Error(), status.LastError.Message)
 	assert.Equal(t, codes.InvalidInput.ToUint32(), status.LastError.Code)
 
 	// Check that the stack trace is not included in the LastError.Message

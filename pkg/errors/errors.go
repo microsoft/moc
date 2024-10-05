@@ -16,54 +16,72 @@ import (
 	"github.com/microsoft/moc/rpc/common"
 )
 
-// MocError is a trivial implementation of error that wraps the moc rpc Error struct.
+// MocError is an implementation of error that wraps a MocCode and an error message.
 type MocError struct {
-	// None of MocError's fields should be modifiable after instantiation
-	// since errors are supposed to be immutable.
-	err *common.Error
+	code moccodes.MocCode
+	err  string
 }
 
 func (e *MocError) Error() string {
-	return e.err.Message
+	return e.err
 }
 
 // GetMocCode returns the underlying MocCode of the MocError.
 func (e *MocError) GetMocCode() moccodes.MocCode {
-	return moccodes.Convert(e.err.Code)
+	return e.code
 }
 
-// NewMocError creates a new MocError based on the given MocCode.
+// NewMocError creates a new MocError based on the given MocCode and message.
+// If code is OK, it will return nil.
 func NewMocError(code moccodes.MocCode) error {
-	return &MocError{
-		err: &common.Error{
-			Code:    code.ToUint32(),
-			Message: code.ErrorMessage(),
-		},
-	}
-}
-
-// NewMocErrorWithError creates a new MocError based on the given moc.rpc.common.Error.
-// Will return nil if the input error is nil or if the input error has an OK code and an empty message.
-// If the input error has an OK code but a non-empty message, it will return an Unknown error code.
-// Otherwise it will return an error with the same code and message as the input error.
-func NewMocErrorWithError(err *common.Error) error {
-	if err == nil {
+	if code == moccodes.OK {
 		return nil
 	}
 
-	if err.Code == moccodes.OK.ToUint32() && err.Message == "" {
+	// We need to use the legacy map to maintain backwards compatibility with older versions of moc/pkg/errors.
+	msg, isLegacy := legacyErrorMessages[code]
+	if !isLegacy {
+		msg = code.String()
+	}
+
+	return &MocError{
+		code: code,
+		err:  msg,
+	}
+}
+
+// ErrorToProto converts an error to a protobuf common.Error by extracting the MocCode and message.
+func ErrorToProto(err error) *common.Error {
+	if err == nil {
+		return &common.Error{}
+	}
+
+	return &common.Error{
+		Code:    GetMocErrorCode(err).ToUint32(),
+		Message: err.Error(), // Use Error() to avoid including stack trace
+	}
+}
+
+// ProtoToMocError converts a protobuf common.Error to a MocError.
+func ProtoToMocError(protoErr *common.Error) error {
+	if protoErr == nil {
+		return nil
+	}
+
+	if protoErr.Code == moccodes.OK.ToUint32() && protoErr.Message == "" {
 		// Don't need to return an error if all relevant fields are empty.
 		return nil
 	}
 
-	if err.Code == moccodes.OK.ToUint32() {
+	if protoErr.Code == moccodes.OK.ToUint32() {
 		// If the code is OK, but the message is not, then we should return an Unknown error code.
 		// This is to maintain backwards compatibility with older versions of the agent (that autofill an empty code).
-		err.Code = moccodes.Unknown.ToUint32()
+		protoErr.Code = moccodes.Unknown.ToUint32()
 	}
 
 	return &MocError{
-		err: err,
+		code: moccodes.Convert(protoErr.GetCode()),
+		err:  protoErr.Message,
 	}
 }
 
@@ -115,6 +133,43 @@ var (
 	QuotaViolation              error = NewMocError(moccodes.QuotaViolation)
 	IPOutOfRange                error = NewMocError(moccodes.IPOutOfRange)
 )
+
+// legacyErrorMessages - map of error codes to their string representation. This is solely for backwards compatibility
+// for checkError() since it uses strings.contains() to match errors.
+var legacyErrorMessages = map[moccodes.MocCode]string{
+	moccodes.NotFound:             "Not Found",
+	moccodes.InvalidConfiguration: "Invalid Configuration",
+	moccodes.InvalidInput:         "Invalid Input",
+	moccodes.InvalidType:          "Invalid Type",
+	moccodes.NotSupported:         "Not Supported",
+	moccodes.AlreadyExists:        "Already Exists",
+	moccodes.InUse:                "In Use",
+	moccodes.InvalidFilter:        "Invalid Filter",
+	moccodes.UpdateFailed:         "Update Failed",
+	moccodes.NotInitialized:       "Not Initialized",
+	moccodes.NotImplemented:       "Not Implemented",
+	moccodes.OutOfRange:           "Out of Range",
+	moccodes.AlreadySet:           "Already Set",
+	moccodes.NotSet:               "Not Set",
+	moccodes.InconsistentState:    "Inconsistent State",
+	moccodes.PendingState:         "Pending State",
+	moccodes.WrongHost:            "Wrong Host",
+	moccodes.PoolFull:             "The pool is full",
+	moccodes.NoActionTaken:        "No Action Taken",
+	moccodes.Timeout:              "Timed out",
+	moccodes.RunCommandFailed:     "Run Command Failed",
+	moccodes.Unknown:              "Unknown Reason",
+	moccodes.DeleteFailed:         "Delete Failed",
+	moccodes.DeletePending:        "Delete Pending",
+	moccodes.FileNotFound:         "The system cannot find the file specified",
+	moccodes.PathNotFound:         "The system cannot find the path specified",
+	moccodes.NotEnoughSpace:       "There is not enough space on the disk",
+	moccodes.AccessDenied:         "Access is denied",
+	moccodes.GenericFailure:       "Generic Failure",
+	moccodes.MeasurementUnitError: "Byte quantity must be a positive integer with a unit of measurement like",
+	moccodes.QuotaViolation:       "Quota Violation",
+	moccodes.IPOutOfRange:         "IP is out of range",
+}
 
 // GetMocErrorCode attempts to extract the MocCode from the given error. If the error is a multierr,
 // it will return the MocCode if all errors in the multierr match the same MocCode. Otherwise, it returns
@@ -302,16 +357,50 @@ func IsGRPCAborted(err error) bool {
 	return checkGRPCErrorCode(err, codes.Aborted)
 }
 
+// GetGRPCError is used when returning errors from MOC GRPC services.
+// It adds the MocCode to the error status details.
 func GetGRPCError(err error) error {
 	if err == nil {
 		return err
 	}
-	if IsNotFound(err) {
-		return status.Errorf(codes.NotFound, err.Error())
+
+	var st *status.Status
+	switch {
+	case IsNotFound(err):
+		st = status.New(codes.NotFound, err.Error())
+	case IsAlreadyExists(err):
+		st = status.New(codes.AlreadyExists, err.Error())
+	default:
+		// If we didn't match against any GRPC codes, then add the MocCode
+		// to the error status details.
+		st = status.New(codes.Unknown, err.Error())
 	}
-	if IsAlreadyExists(err) {
-		return status.Errorf(codes.AlreadyExists, err.Error())
+
+	st, _ = st.WithDetails(ErrorToProto(err))
+	return st.Err()
+}
+
+// ParseGRPCError is when parsing errors from MOC GRPC services.
+// Will extract the error as a MocError if GRPC code is Unknown.
+func ParseGRPCError(err error) error {
+	if err == nil {
+		return nil
 	}
+
+	if !IsGRPCUnknown(err) {
+		return err
+	}
+
+	st := status.Convert(err)
+	for _, d := range st.Details() {
+		switch detail := d.(type) {
+		case *common.Error:
+			return ProtoToMocError(detail)
+		default:
+			continue
+		}
+	}
+
 	return err
 }
 

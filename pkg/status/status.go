@@ -9,7 +9,6 @@ import (
 
 	proto "github.com/golang/protobuf/proto"
 	"github.com/microsoft/moc/pkg/errors"
-	"github.com/microsoft/moc/pkg/errors/codes"
 	common "github.com/microsoft/moc/rpc/common"
 )
 
@@ -28,17 +27,7 @@ func InitStatus() *common.Status {
 
 // SetError
 func SetError(s *common.Status, err error) {
-	if err != nil {
-		// Remove the stack trace from the error message by calling Error() instead of fmt.Sprintf("%+v", err).
-		s.LastError.Message = err.Error()
-
-		// Get the error code, if it's not a moc error, it will return codes.Unknown
-		s.LastError.Code = errors.GetMocErrorCode(err).ToUint32()
-	} else {
-		// Clear the error
-		s.LastError.Message = ""
-		s.LastError.Code = codes.OK.ToUint32()
-	}
+	s.LastError = errors.ErrorToProto(err)
 }
 
 // SetHealth
