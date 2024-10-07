@@ -1,9 +1,13 @@
 package status
 
 import (
+	"fmt"
 	"testing"
 
+	"github.com/microsoft/moc/pkg/errors"
+	"github.com/microsoft/moc/pkg/errors/codes"
 	"github.com/microsoft/moc/rpc/common"
+	"github.com/stretchr/testify/assert"
 )
 
 func newEmptyStatus() *common.Status {
@@ -12,7 +16,99 @@ func newEmptyStatus() *common.Status {
 		ProvisioningStatus: &common.ProvisionStatus{},
 		LastError:          &common.Error{},
 		Version:            &common.Version{},
+		DownloadStatus:     &common.DownloadStatus{},
+		ValidationStatus:   &common.ValidationStatus{},
 	}
+}
+
+func TestSetError(t *testing.T) {
+	tests := []struct {
+		name                    string
+		inputError              error
+		expectedLastErrorString string
+		expectedMsg             string
+		expectedCode            uint32
+	}{
+		{
+			name:                    "Nil error should clear the error",
+			inputError:              nil,
+			expectedLastErrorString: "",
+			expectedMsg:             "",
+			expectedCode:            codes.OK.ToUint32(),
+		},
+		{
+			name:                    "Non-MocError results in codes.Unknown",
+			inputError:              errors.New("simple error"),
+			expectedLastErrorString: "Message:\"simple error\" Code:34 ",
+			expectedMsg:             "simple error",
+			expectedCode:            codes.Unknown.ToUint32(),
+		},
+		{
+			name:                    "MocError results in the correct code and message",
+			inputError:              errors.NotFound,
+			expectedLastErrorString: "Message:\"Not Found\" Code:1 ",
+			expectedMsg:             errors.NotFound.Error(),
+			expectedCode:            codes.NotFound.ToUint32(),
+		},
+		{
+			name:                    "Wrapped MocError results in the correct code and merged message",
+			inputError:              errors.Wrapf(errors.NotFound, "more info here"),
+			expectedLastErrorString: "Message:\"more info here: Not Found\" Code:1 ",
+			expectedMsg:             "more info here: " + errors.NotFound.Error(),
+			expectedCode:            codes.NotFound.ToUint32(),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			status := &common.Status{
+				LastError: &common.Error{},
+			}
+
+			SetError(status, tt.inputError)
+
+			assert.Equal(t, tt.expectedLastErrorString, status.LastError.String())
+			assert.Equal(t, tt.expectedMsg, status.LastError.Message)
+			assert.Equal(t, tt.expectedCode, status.LastError.Code)
+		})
+	}
+}
+
+// simulateStackTraceError simulates an error with a stack trace
+func simulateStackTraceError(err error, desc string) error {
+	err = returnFakeError(err, desc)
+	return err
+}
+
+func returnFakeError(err error, desc string) error {
+	return errors.Wrapf(err, desc)
+}
+
+func TestSetErrorWithStackTraceExcludesStackTrace(t *testing.T) {
+	status := &common.Status{
+		LastError: &common.Error{},
+	}
+
+	// Simulate an error with a stack trace
+	errorDesc := "helpful in-depth description"
+	simulatedError := simulateStackTraceError(errors.InvalidInput, errorDesc)
+
+	SetError(status, simulatedError)
+
+	assert.Equal(t, errorDesc+": "+errors.InvalidInput.Error(), status.LastError.Message)
+	assert.Equal(t, codes.InvalidInput.ToUint32(), status.LastError.Code)
+
+	// Check that the stack trace is not included in the LastError.Message
+	stackTrace := fmt.Sprintf("%+v", simulatedError)
+
+	// Make sure the stack trace is present by checking for function names
+	assert.Contains(t, stackTrace, "returnFakeError")
+	assert.Contains(t, stackTrace, "simulateStackTraceError")
+
+	// Make sure the stack trace is not present in LastError msg by checking for function names
+	assert.NotContains(t, status.LastError.Message, stackTrace)
+	assert.NotContains(t, status.LastError.Message, "returnFakeError")
+	assert.NotContains(t, status.LastError.Message, "simulateStackTraceError")
 }
 
 func TestHealthStatusConversion(t *testing.T) {

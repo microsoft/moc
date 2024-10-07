@@ -79,8 +79,11 @@ message VirtualHardDisk {
 	DiskFileFormat diskFileFormat = 23;
 }
 
-service VirtualHardDiskAgent {
-	rpc Invoke(VirtualHardDiskRequest) returns (VirtualHardDiskResponse) {}
-	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
+message DiskNotificationRequest {
+	string resourceType = 1;
 }
 
+service VirtualHardDiskAgent {
+	rpc Invoke(VirtualHardDiskRequest) returns (VirtualHardDiskResponse) {}
+	rpc CheckNotification(DiskNotificationRequest) returns (NotificationResponse) {}
+}
