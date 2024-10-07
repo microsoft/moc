@@ -315,3 +315,139 @@ func TestCheckErrorBackwardsCompatible(t *testing.T) {
 		})
 	}
 }
+
+func TestGetGRPCError(t *testing.T) {
+	tests := []struct {
+		name     string
+		err      error
+		expected codes.Code
+	}{
+		{
+			name:     "NotFound error converted to grpc NotFound and has details",
+			err:      NotFound,
+			expected: codes.NotFound,
+		},
+		{
+			name:     "Unknown error converted to grpc Unknown and has details",
+			err:      PathNotFound,
+			expected: codes.Unknown,
+		},
+		{
+			name:     "Nil error returns nil",
+			err:      nil,
+			expected: codes.OK,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			grpcErr := GetGRPCError(tt.err)
+			if tt.err == nil {
+				if grpcErr != nil {
+					t.Errorf("expected nil, got %v", grpcErr)
+				}
+				return // Skip further checks
+			}
+
+			st, ok := status.FromError(grpcErr)
+			if !ok {
+				t.Fatalf("expected gRPC error, got %v", grpcErr)
+			}
+			if st.Code() != tt.expected {
+				t.Errorf("expected code %v, got %v", tt.expected, st.Code())
+			}
+			if st.Message() != tt.err.Error() {
+				t.Errorf("expected message %v, got %v", tt.err.Error(), st.Message())
+			}
+
+			var detail *common.Error
+			for _, d := range st.Details() {
+				if errDetail, ok := d.(*common.Error); ok {
+					detail = errDetail
+					break
+				}
+			}
+
+			if detail == nil {
+				t.Fatalf("expected a protobuf error, got nil")
+			}
+
+			if detail.Message != tt.err.Error() {
+				t.Errorf("expected detail message %v, got %v", tt.err.Error(), detail.Message)
+			}
+		})
+	}
+}
+
+func TestParseGRPCError(t *testing.T) {
+	tests := []struct {
+		name        string
+		err         error
+		expected    error
+		isGRPCError bool
+	}{
+		{
+			name:        "Parse Unknown gRPC error extracts MocCode",
+			err:         GetGRPCError(PathNotFound),
+			expected:    PathNotFound,
+			isGRPCError: false,
+		},
+		{
+			name:        "Parse known gRPC error retains original error",
+			err:         GetGRPCError(NotFound),
+			expected:    status.Error(codes.NotFound, NotFound.Error()),
+			isGRPCError: true,
+		},
+		{
+			name:        "Parse known untranslated gRPC error retains original error",
+			err:         status.Error(codes.NotFound, "not found error"),
+			expected:    status.Error(codes.NotFound, "not found error"),
+			isGRPCError: true,
+		},
+		{
+			name:     "Parse nil error returns nil",
+			err:      nil,
+			expected: nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			parsedErr := ParseGRPCError(tt.err)
+			if tt.expected == nil {
+				if parsedErr != nil {
+					t.Errorf("expected nil, got %v", parsedErr)
+				}
+				return // Skip further checks
+			}
+
+			if tt.isGRPCError {
+				// Should be a known gRPC error
+				st, ok := status.FromError(parsedErr)
+				expStatus := status.Convert(tt.expected)
+
+				if !ok {
+					t.Errorf("expected a gRPC error, got %v", parsedErr)
+				}
+
+				if expStatus.Code() != st.Code() {
+					t.Errorf("expected code '%s', got '%s'", expStatus.Code(), st.Code())
+				}
+
+				if expStatus.Message() != st.Message() {
+					t.Errorf("expected code '%s', got '%s'", expStatus.Message(), st.Message())
+				}
+			} else {
+				// Should be a MocError
+				parsedErr, ok := parsedErr.(*MocError)
+				if !ok {
+					t.Errorf("expected MocError, got %v", parsedErr)
+				}
+
+				if GetMocErrorCode(parsedErr) != GetMocErrorCode(tt.expected) {
+					t.Errorf("expected code %v, got %v", GetMocErrorCode(parsedErr), GetMocErrorCode(tt.expected))
+				}
+			}
+		})
+	}
+}
