@@ -104,6 +104,17 @@ message Version {
 	string number = 1;
 }
 
+enum PlacementStatusType {
+	UNKNOWN_PLACEMENT = 0;
+	ALIGNED = 1;
+	NOT_ALIGNED = 2;
+}
+
+message PlacementStatus  {
+	PlacementStatusType Status = 1;
+	string Message = 2;
+}
+
 message Status {
 	Health health = 1;
 	ProvisionStatus provisioningStatus = 2;
@@ -111,6 +122,7 @@ message Status {
 	Version version = 4;
 	DownloadStatus downloadStatus = 5;
 	ValidationStatus validationStatus = 6;
+	PlacementStatus	placementStatus = 7;
 }
 
 message Entity {
@@ -129,6 +141,16 @@ message Tag {
 
 message Tags {
 	repeated Tag tags = 1;
+}
+
+message ZoneReference {
+	string name = 1;
+}
+
+// Used by VM proto and Placement Group proto, so it is placed in common
+message ZoneConfiguration {
+	repeated ZoneReference zones = 1;
+	bool strictPlacement = 2;
 }
 
 enum ClientType {
