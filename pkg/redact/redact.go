@@ -48,6 +48,70 @@ func Redact(msg interface{}, val reflect.Value) {
 	}
 }
 
+// RedactedError - redacts the error message with search of fields marked as sensitive given a proto message struct
+func RedactedError(err *error, msg interface{}) {
+	rMsg := proto.Clone((msg).(proto.Message))
+	properties := proto.GetProperties(reflect.TypeOf(rMsg).Elem())
+	_, md := descriptor.ForMessage((msg).(descriptor.Message))
+
+	// TODO: clean up this code for unnecessary conditions, or refactor it to share code with redactMessage
+	for _, field := range md.GetField() {
+		var fieldVal reflect.Value
+		if field.Options != nil || field.GetType() == descriptorpb.FieldDescriptorProto_TYPE_MESSAGE {
+			for _, p := range properties.Prop {
+				if int32(p.Tag) == field.GetNumber() {
+					fieldVal = val.FieldByName(p.Name)
+					break
+				}
+			}
+			if !fieldVal.IsValid() {
+				for _, oot := range properties.OneofTypes {
+					if int32(oot.Prop.Tag) == field.GetNumber() {
+						fieldVal = val.Field(oot.Field).Elem().FieldByName(oot.Prop.Name)
+						break
+					}
+				}
+			}
+			if !fieldVal.IsValid() {
+				return
+			}
+		}
+		if field.Options != nil {
+			ex, err := proto.GetExtension(field.Options, common.E_Sensitivejson)
+			if err != proto.ErrMissingExtension && err == nil && *ex.(*bool) {
+				if fieldVal.Kind() == reflect.String {
+					// we've found the sensitive field, find it in the error message and redact it
+					errMsg := err.Error()
+					if strings.Contains(errMsg, fieldVal.String()) {
+						errMsg = strings.ReplaceAll(errMsg, fieldVal.String(), RedactedString)
+						*err = NewError(errMsg)
+					}
+				} else {
+					t := fieldVal.Type()
+					fieldVal.Set(reflect.Zero(t))
+				}
+				continue
+			}
+
+			ex, err = proto.GetExtension(field.Options, common.E_Sensitive)
+			if err == proto.ErrMissingExtension {
+				continue
+			}
+
+			if err == nil && *ex.(*bool) {
+				if fieldVal.Kind() == reflect.String {
+					fieldVal.SetString(RedactedString)
+				} else {
+					t := fieldVal.Type()
+					fieldVal.Set(reflect.Zero(t))
+				}
+				continue
+			}
+		}
+	}
+
+}
+
 func redactMessage(msg interface{}, val reflect.Value) {
 	properties := proto.GetProperties(reflect.TypeOf(msg).Elem())
 	_, md := descriptor.ForMessage((msg).(descriptor.Message))
