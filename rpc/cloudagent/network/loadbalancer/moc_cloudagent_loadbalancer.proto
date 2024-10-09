@@ -60,8 +60,7 @@ message LoadBalancer {
 	Tags tags = 11;
 	uint32 replicationCount = 12;
 	repeated LoadbalancerInboundNatRule inboundNatRules = 13;
-	string useSDN = 14; // To indicate SDN optionality
-	ApiVersion version = 15;
+	ApiVersion version = 14;
 }
 
 service LoadBalancerAgent {
