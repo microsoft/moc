@@ -3,6 +3,7 @@
 
 syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/cloudagent/admin";
+option csharp_namespace = "Rpc.Moc.CloudAgent.Admin";
 package moc.cloudagent.admin;
 
 service LogAgent {

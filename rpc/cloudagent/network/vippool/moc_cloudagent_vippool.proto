@@ -3,6 +3,7 @@
 
 syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/cloudagent/network";
+option csharp_namespace = "Rpc.Moc.CloudAgent.Network";
 package moc.cloudagent.network;
 
 import "google/protobuf/wrappers.proto";

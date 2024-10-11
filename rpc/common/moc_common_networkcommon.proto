@@ -3,6 +3,7 @@
 
 syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/common";
+option csharp_namespace = "Rpc.Moc.Common";
 package moc;
 
 import "moc_common_common.proto";

@@ -3,6 +3,7 @@
 
 syntax = "proto3";
 option go_package = "github.com/microsoft/moc/rpc/common/admin";
+option csharp_namespace = "Rpc.Moc.Common.Admin";
 package moc.common.admin;
 
 import "google/protobuf/wrappers.proto";
