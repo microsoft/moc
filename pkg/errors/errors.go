@@ -134,7 +134,7 @@ var (
 	IPOutOfRange                error = NewMocError(moccodes.IPOutOfRange)
 )
 
-// legacyErrorMessages - map of error codes to their string representation. This is solely for backwards compatibility
+// legacyErrorMessages - map of error codes to their legacy string representation. This is solely for backwards compatibility
 // for checkError() since it uses strings.contains() to match errors.
 var legacyErrorMessages = map[moccodes.MocCode]string{
 	moccodes.NotFound:             "Not Found",
