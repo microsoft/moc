@@ -131,7 +131,7 @@ message VirtualMachine {
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 18;
 	AvailabilitySetReference availabilitySet = 19;
 	ZoneConfiguration zoneConfiguration = 20;
-	FailoverPriority priority = 21;
+	FailoverPriority failoverPriority = 21;
 }
 
 message VirtualMachineOperationRequest {
