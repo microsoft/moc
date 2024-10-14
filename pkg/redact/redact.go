@@ -227,7 +227,6 @@ func redactErrorJsonSensitiveField(val reflect.Value, errMessage *error) {
 	for key := range jsonData {
 		// This can be extended to an array of sensitive keys if needed
 		if key == "private-key" {
-			jsonData[key] = RedactedString
 			if strVal, ok := jsonData[key].(string); ok && errMessage != nil && strVal != "" {
 				redactSensitiveField(strVal, errMessage)
 			}
