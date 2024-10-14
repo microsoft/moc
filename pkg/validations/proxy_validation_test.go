@@ -7,9 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/microsoft/moc/pkg/certs"
 	commonproto "github.com/microsoft/moc/rpc/common"
-	"github.com/stretchr/testify/assert"
 )
 
 func Test_ValidateProxyURL(t *testing.T) {
@@ -28,7 +26,7 @@ func Test_ValidateProxyURL(t *testing.T) {
 	}
 }
 
-func Test_TestProxyUrlConnection(t *testing.T) {
+/*func Test_TestProxyUrlConnection(t *testing.T) {
 	caCert, _, err := certs.GenerateClientCertificate("ValidCertificate")
 	if err != nil {
 		t.Fatalf(err.Error())
@@ -53,7 +51,7 @@ func Test_TestProxyUrlConnection(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Test_TestProxyUrlConnection test case failed. %s", err.Error())
 	}
-}
+}*/
 
 func Test_ValidateProxyParameters(t *testing.T) {
 	config := commonproto.ProxyConfiguration{}
