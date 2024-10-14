@@ -59,6 +59,13 @@ enum HealthState {
 	NOTREADY = 7;
 }
 
+enum FailoverPriority { 
+    DEFAULT = 0;
+    LOW = 1;  
+    MEDIUM = 2;  
+    HIGH = 3;
+} 
+
 message Error {
 	string Message = 1;
 	int32 Code = 2;
