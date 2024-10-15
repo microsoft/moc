@@ -83,4 +83,3 @@ service VirtualHardDiskAgent {
 	rpc Invoke(VirtualHardDiskRequest) returns (VirtualHardDiskResponse) {}
 	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 }
-
