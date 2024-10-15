@@ -55,6 +55,10 @@ func RedactSensitiveError(msg interface{}, val reflect.Value, err *error) {
 	// TODO: This needs to be optimized!
 	// Should cache messages that contain no sensitive data to ignore, and should cache the map of tag number to field name
 
+	if err == nil {
+		return
+	}
+
 	if !val.IsValid() {
 		return
 	}
@@ -77,7 +81,9 @@ func RedactSensitiveError(msg interface{}, val reflect.Value, err *error) {
 // It takes a message of any type and a pointer to an error, and processes the message
 // to remove any sensitive data from error message.
 func RedactedError(msg interface{}, err *error) {
-	RedactSensitiveError(msg, reflect.ValueOf(msg), err)
+	if err != nil {
+		RedactSensitiveError(msg, reflect.ValueOf(msg), err)
+	}
 }
 
 func redactMessage(msg interface{}, val reflect.Value) {
