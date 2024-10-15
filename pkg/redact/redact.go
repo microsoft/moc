@@ -49,7 +49,8 @@ func Redact(msg interface{}, val reflect.Value) {
 	}
 }
 
-// Redact - removes data from fields marked as sensitive given a proto message struct
+// RedactSensitiveError traverses the given value and processes fields marked as sensitive, redacting their data from error message.
+// Note: The function modifies the error message in place if sensitive data is found.
 func RedactSensitiveError(msg interface{}, val reflect.Value, err *error) {
 	// TODO: This needs to be optimized!
 	// Should cache messages that contain no sensitive data to ignore, and should cache the map of tag number to field name
@@ -72,11 +73,11 @@ func RedactSensitiveError(msg interface{}, val reflect.Value, err *error) {
 	}
 }
 
-// RedactedMessage - returns a copy of a proto message struct with data from fields marked as sensitive redacted
-func RedactedError(msg interface{}, err *error) interface{} {
-	rMsg := proto.Clone((msg).(proto.Message))
-	RedactSensitiveError(rMsg, reflect.ValueOf(rMsg), err)
-	return rMsg
+// RedactedError redacts sensitive information from the provided error message.
+// It takes a message of any type and a pointer to an error, and processes the message
+// to remove any sensitive data from error message.
+func RedactedError(msg interface{}, err *error) {
+	RedactSensitiveError(msg, reflect.ValueOf(msg), err)
 }
 
 func redactMessage(msg interface{}, val reflect.Value) {
@@ -180,6 +181,10 @@ func redactErrorMessage(msg interface{}, val reflect.Value, errMessage *error) {
 	}
 }
 
+// getFieldVal retrieves the value of a specific field from a given struct based on the field's descriptor.
+// It searches through the properties of the struct and matches the field's tag number to return the corresponding value.
+// Returns:
+// - A reflect.Value representing the value of the specified field. If the field is not found, it returns an empty reflect.Value.
 func getFieldVal(properties *proto.StructProperties, field *descriptorpb.FieldDescriptorProto, val reflect.Value) reflect.Value {
 	for _, p := range properties.Prop {
 		if int32(p.Tag) == field.GetNumber() {
@@ -210,6 +215,15 @@ func redactField(options *descriptorpb.FieldOptions, fieldVal reflect.Value, err
 	return true
 }
 
+// redactSensitiveField redacts occurrences of a sensitive field value from an error message.
+// If the error message contains the sensitive field value, it replaces all instances of the field value
+// with a predefined redacted string and updates the error message.
+//
+// Parameters:
+//   - fieldVal: The sensitive field value to be redacted from the error message.
+//   - errMessage: A pointer to the error message that may contain the sensitive field value.
+//
+// Note: The function modifies the error message in place.
 func redactSensitiveField(fieldVal string, errMessage *error) {
 	errMsg := (*errMessage).Error()
 	if strings.Contains(errMsg, fieldVal) {
@@ -218,6 +232,15 @@ func redactSensitiveField(fieldVal string, errMessage *error) {
 	}
 }
 
+// redactErrorJsonSensitiveField redacts sensitive fields in a JSON string contained within a reflect.Value.
+// It specifically looks for the "private-key" field and redacts its value if found.
+// The function takes two parameters:
+// - val: a reflect.Value containing the JSON string to be processed.
+// - errMessage: a pointer to an error that will be updated if a sensitive field is redacted.
+//
+// The function first converts the JSON string to a map, then iterates over the keys to find the "private-key" field.
+// If the "private-key" field is found and contains a non-empty string, the redactSensitiveField function is called
+// to redact the value and update the errMessage.
 func redactErrorJsonSensitiveField(val reflect.Value, errMessage *error) {
 	var jsonData map[string]interface{}
 	validJsonString := strings.ReplaceAll(val.String(), `\`, `"`)
