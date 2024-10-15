@@ -77,10 +77,10 @@ func RedactSensitiveError(msg interface{}, val reflect.Value, err *error) {
 	}
 }
 
-// RedactedError redacts sensitive information from the provided error message.
+// RedactError redacts sensitive information from the provided error message.
 // It takes a message of any type and a pointer to an error, and processes the message
 // to remove any sensitive data from error message.
-func RedactedError(msg interface{}, err *error) {
+func RedactError(msg interface{}, err *error) {
 	if err != nil {
 		RedactSensitiveError(msg, reflect.ValueOf(msg), err)
 	}

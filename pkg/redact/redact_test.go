@@ -113,7 +113,7 @@ func TestRedactedError(t *testing.T) {
 
 	// Call the RedactedError function
 	err := fmt.Errorf("authentication failed for user %s with password %s", id.Name, id.Password)
-	RedactedError(&a, &err)
+	RedactError(&a, &err)
 
 	assert.Equal(t, err.Error(), "authentication failed for user testIdentity with password ** Redacted **")
 }
