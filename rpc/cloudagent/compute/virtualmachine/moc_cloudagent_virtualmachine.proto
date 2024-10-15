@@ -130,6 +130,7 @@ message VirtualMachine {
 	GuestAgentConfiguration guestAgent = 17;
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 18;
 	AvailabilitySetReference availabilitySet = 19;
+	ZoneConfiguration zoneConfiguration = 20;
 }
 
 message VirtualMachineOperationRequest {

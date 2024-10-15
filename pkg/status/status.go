@@ -8,6 +8,7 @@ import (
 	"time"
 
 	proto "github.com/golang/protobuf/proto"
+	"github.com/microsoft/moc/pkg/errors"
 	common "github.com/microsoft/moc/rpc/common"
 )
 
@@ -20,16 +21,13 @@ func InitStatus() *common.Status {
 		Version:            GenerateVersion(),
 		DownloadStatus:     &common.DownloadStatus{},
 		ValidationStatus:   &common.ValidationStatus{},
+		PlacementStatus:    &common.PlacementStatus{},
 	}
 }
 
 // SetError
 func SetError(s *common.Status, err error) {
-	if err != nil {
-		s.LastError.Message = fmt.Sprintf("%+v", err)
-	} else {
-		s.LastError.Message = "" // Clear the error
-	}
+	s.LastError = errors.ErrorToProto(err)
 }
 
 // SetHealth
@@ -42,8 +40,29 @@ func SetHealth(s *common.Status, hState common.HealthState, err ...error) {
 }
 
 func IsHealthStateMissing(s *common.Status) bool {
+	if s == nil {
+		return false
+	}
+
+	if s.GetHealth() == nil {
+		return false
+	}
+
 	hstatus := s.GetHealth().GetCurrentState()
 	return (hstatus == common.HealthState_MISSING)
+}
+
+func IsHealthStateCritical(s *common.Status) bool {
+	if s == nil {
+		return false
+	}
+
+	if s.GetHealth() == nil {
+		return false
+	}
+
+	hstatus := s.GetHealth().GetCurrentState()
+	return (hstatus == common.HealthState_CRITICAL)
 }
 
 func IsDeleted(s *common.Status) bool {
@@ -96,6 +115,16 @@ func GetValidationStatus(s *common.Status) []*common.ValidationState {
 	return s.GetValidationStatus().GetValidationState()
 }
 
+func SetPlacementStatus(s *common.Status, placementState *common.PlacementStatus) {
+	s.PlacementStatus = new(common.PlacementStatus)
+	s.PlacementStatus.Status = placementState.GetStatus()
+	s.PlacementStatus.Message = placementState.GetMessage()
+}
+
+func GetPlacementStatus(s *common.Status) common.PlacementStatusType {
+	return s.GetPlacementStatus().GetStatus()
+}
+
 // GetStatuses - converts status to map
 func GetStatuses(status *common.Status) map[string]*string {
 	statuses := map[string]*string{}
@@ -113,6 +142,10 @@ func GetStatuses(status *common.Status) map[string]*string {
 	statuses["Version"] = &version
 	dstate := status.GetDownloadStatus().String()
 	statuses["DownloadStatus"] = &dstate
+	placementStatus := status.GetPlacementStatus().String()
+	if placementStatus != "" {
+		statuses["PlacementStatus"] = &placementStatus
+	}
 
 	return statuses
 }
@@ -139,6 +172,11 @@ func GetFromStatuses(statuses map[string]*string) (status *common.Status) {
 		ps := new(common.DownloadStatus)
 		proto.UnmarshalText(*val, ps)
 		status.DownloadStatus = ps
+	}
+	if val, ok := statuses["PlacementStatus"]; ok {
+		ps := new(common.PlacementStatus)
+		proto.UnmarshalText(*val, ps)
+		status.PlacementStatus = ps
 	}
 
 	return
