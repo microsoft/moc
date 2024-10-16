@@ -12,6 +12,12 @@ enum UserType {
 	USER = 1;
 }
 
+enum VMSourceType {
+	DefaultVMSource = 0;
+	ArcVM = 1;
+	AksVM = 2;
+}
+
 enum ProcessorType {
 	None = 0;
 	Intel = 1;
