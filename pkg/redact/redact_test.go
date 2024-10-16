@@ -117,6 +117,50 @@ func TestRedactedError(t *testing.T) {
 
 	assert.Equal(t, err.Error(), "authentication failed for user testIdentity with password ** Redacted **")
 }
+
+func TestNegativeRedactedError(t *testing.T) {
+	// Mock security.Identity
+	id := security.Identity{
+		Name:          "testIdentity",
+		Id:            "123",
+		ResourceGroup: "testGroup",
+		Password:      "testPassword",
+		Token:         "testToken",
+		LocationName:  "testLocation",
+		Certificates: map[string]string{
+			"testKey1": "testVal1",
+			"testKey2": "testVal2",
+		},
+		TokenExpiry: 30,
+		ClientType:  common.ClientType_ADMIN,
+		Tags: &common.Tags{
+			Tags: []*common.Tag{
+				{
+					Key:   "testKey1",
+					Value: "testValue1",
+				},
+				{
+					Key:   "testKey2",
+					Value: "testValue2",
+				},
+			},
+		},
+	}
+
+	a := security.AuthenticationRequest{
+		Identity: &id,
+	}
+
+	// Call the RedactedError function
+	err := fmt.Errorf("authentication failed for user %s with password %s", id.Name, id.Password)
+	err1 := &err
+	*err1 = nil
+
+	RedactError(&a, err1)
+
+	assert.Equal(t, *err1, nil)
+}
+
 func TestRedactErrorJsonSensitiveField(t *testing.T) {
 	tests := []struct {
 		name          string
