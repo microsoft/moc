@@ -81,7 +81,7 @@ func RedactSensitiveError(msg interface{}, val reflect.Value, err *error) {
 // It takes a message of any type and a pointer to an error, and processes the message
 // to remove any sensitive data from error message.
 func RedactError(msg interface{}, err *error) {
-	if err != nil {
+	if err != nil && *err != nil {
 		RedactSensitiveError(msg, reflect.ValueOf(msg), err)
 	}
 }
@@ -211,7 +211,7 @@ func redactField(options *descriptorpb.FieldOptions, fieldVal reflect.Value, err
 		return false
 	}
 
-	if fieldVal.Kind() == reflect.String && errMessage != nil && fieldVal.String() != "" {
+	if fieldVal.Kind() == reflect.String && errMessage != nil && *errMessage != nil && fieldVal.String() != "" {
 		if extensionType == common.E_Sensitive {
 			redactSensitiveField(fieldVal.String(), errMessage)
 		} else if extensionType == common.E_Sensitivejson {
@@ -256,7 +256,7 @@ func redactErrorJsonSensitiveField(val reflect.Value, errMessage *error) {
 	for key := range jsonData {
 		// This can be extended to an array of sensitive keys if needed
 		if key == "private-key" {
-			if strVal, ok := jsonData[key].(string); ok && errMessage != nil && strVal != "" {
+			if strVal, ok := jsonData[key].(string); ok && errMessage != nil && *errMessage != nil && strVal != "" {
 				redactSensitiveField(strVal, errMessage)
 			}
 		}
