@@ -59,7 +59,7 @@ enum HealthState {
 	NOTREADY = 7;
 }
 
-enum FailoverPriority { 
+enum Priority { 
     DEFAULT = 0;
     LOW = 1;  
     MEDIUM = 2;  
