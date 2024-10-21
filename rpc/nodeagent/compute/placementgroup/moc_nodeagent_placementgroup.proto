@@ -7,6 +7,7 @@ package moc.nodeagent.compute;
 
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
+import "moc_nodeagent_availabilityset.proto";
 
 enum PlacementGroupType {
 	Affinity = 0;
@@ -30,10 +31,6 @@ message PlacementGroupResponse {
 	string  Error = 3;
 }
 
-message VirtualMachineRef {
-	string name = 1;
-}
-
 message PlacementGroup {
     string name = 1;
     string id = 2;
@@ -43,7 +40,7 @@ message PlacementGroup {
     ZoneConfiguration zones = 6;
     Entity entity = 7;
     Status status = 8;
-    repeated VirtualMachineRef virtualMachines = 9;
+    repeated VirtualMachineReference virtualMachines = 9;
 }
 
 service PlacementGroupAgent {
