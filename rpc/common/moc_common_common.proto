@@ -211,6 +211,7 @@ enum ProviderType {
 	AvailabilitySet		   = 39;
 	NetworkSecurityGroup   = 40;
 	Zone	               = 41;
+	PlacementGroup         = 42;
 }
 
 // Operations specific to a provider
@@ -352,6 +353,9 @@ enum ProviderAccessOperation {
 	Zone_Create         		    = 3700;
 	Zone_Delete		                = 3701;
 	Zone_Update	            	    = 3702;
+
+	PlacementGroup_Create		    = 3800;
+	PlacementGroup_Delete		    = 3801;
 }
 
 extend google.protobuf.FieldOptions {
