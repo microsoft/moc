@@ -56,11 +56,12 @@ enum HealthState {
 	DEGRADED = 5;
 	// The entity went missing from the agent
 	NOTFOUND = 6;
+	NOTREADY = 7;
 }
 
 message Error {
 	string Message = 1;
-	int32 Code = 2;
+	uint32 Code = 2;
 	string Parameters = 3;
 }
 
@@ -103,6 +104,17 @@ message Version {
 	string number = 1;
 }
 
+enum PlacementStatusType {
+	UNKNOWN_PLACEMENT = 0;
+	ALIGNED = 1;
+	NOT_ALIGNED = 2;
+}
+
+message PlacementStatus  {
+	PlacementStatusType Status = 1;
+	string Message = 2;
+}
+
 message Status {
 	Health health = 1;
 	ProvisionStatus provisioningStatus = 2;
@@ -110,6 +122,7 @@ message Status {
 	Version version = 4;
 	DownloadStatus downloadStatus = 5;
 	ValidationStatus validationStatus = 6;
+	PlacementStatus	placementStatus = 7;
 }
 
 message Entity {
