@@ -7,10 +7,11 @@ package moc.cloudagent.compute;
 
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
+import "moc_cloudagent_availabilityset.proto";
 
 enum PlacementGroupType {
 	Affinity = 0;
-	AntiAffinity = 1 ;
+	AntiAffinity = 1;
 	StrictAntiAffinity = 2;
 }
 
@@ -42,12 +43,6 @@ message PlacementGroupPrecheckResponse {
 	string Error = 2;
 }
 
-message VirtualMachineRef {
-	string groupName = 1;
-	string name = 2;
-	string realizedName = 3;
-}
-
 message PlacementGroup {
     string name = 1;
     string id = 2;
@@ -57,7 +52,7 @@ message PlacementGroup {
     PlacementGroupScope scope = 6;
     ZoneConfiguration zones = 7;
     Status status = 8;
-    repeated VirtualMachineRef virtualMachines = 9;
+    repeated VirtualMachineReference virtualMachines = 9;
 }
 
 service PlacementGroupAgent {
