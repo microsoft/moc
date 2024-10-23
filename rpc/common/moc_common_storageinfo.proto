@@ -11,6 +11,7 @@ import "moc_common_common.proto";
 message StorageContainerInfo {
 	Capacity capacity  = 1;
 	Latency latency	= 2;
+	string preferredOwner = 3;
 	Status status = 7;
 }
 
