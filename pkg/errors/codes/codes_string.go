@@ -103,6 +103,12 @@ func (c MocCode) String() string {
 		return "QuotaViolation"
 	case IPOutOfRange:
 		return "IPOutOfRange"
+	case VolumeNotFound:
+		return "VolumeNotFound"
+	case VolumeCorrupted:
+		return "VolumeCorrupted"
+	case VolumeFlaky:
+		return "VolumeFlaky"
 	default:
 		return "MocCode(" + strconv.FormatUint(uint64(c), 10) + ")"
 	}
