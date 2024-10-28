@@ -73,6 +73,8 @@ const (
 	AvailabilitySetContributorRoleName = "AvailabilitySetContributor"
 	// Zone Contributor Role - has permissions to run any operations on Zones
 	ZoneContributorRoleName = "ZoneContributor"
+	// PlacementGroup Contributor Role - has permissions to run any operations on PlacementGroups
+	PlacementGroupContributorRoleName = "PlacementGroupContributor"
 	// Location Reader role - has permissions to run read operations on locations
 	LocationReaderRoleName = "LocationReader"
 	// Group Reader Role - has permissions to run read operations on the group resource
@@ -137,4 +139,6 @@ const (
 	CertSignerRoleName = "CertificateSigner"
 	// Zone Reader Role - has permissions to run read operations on Zones
 	ZoneReaderRoleName = "ZoneReader"
+	// PlacementGroup Reader Role - has permissions to run read operations on PlacementGroups
+	PlacementGroupReaderRoleName = "PlacementGroupReader"
 )

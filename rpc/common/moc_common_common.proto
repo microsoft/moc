@@ -61,7 +61,7 @@ enum HealthState {
 
 message Error {
 	string Message = 1;
-	int32 Code = 2;
+	uint32 Code = 2;
 	string Parameters = 3;
 }
 
@@ -211,6 +211,7 @@ enum ProviderType {
 	AvailabilitySet		   = 39;
 	NetworkSecurityGroup   = 40;
 	Zone	               = 41;
+	PlacementGroup         = 42;
 }
 
 // Operations specific to a provider
@@ -255,6 +256,7 @@ enum ProviderAccessOperation {
 	VirtualMachine_Repair_Guest_Agent		= 607;
 	VirtualMachine_Pause 				= 608;
 	VirtualMachine_Save 				= 609;
+	VirtualMachine_Remove_Iso_Disk			= 610;
 
 	Cluster_Create					= 700; 
 	Cluster_Update 					= 701; 
@@ -352,6 +354,9 @@ enum ProviderAccessOperation {
 	Zone_Create         		    = 3700;
 	Zone_Delete		                = 3701;
 	Zone_Update	            	    = 3702;
+
+	PlacementGroup_Create		    = 3800;
+	PlacementGroup_Delete		    = 3801;
 }
 
 extend google.protobuf.FieldOptions {
