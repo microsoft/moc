@@ -105,10 +105,10 @@ func (c MocCode) String() string {
 		return "IPOutOfRange"
 	case VolumeNotFound:
 		return "VolumeNotFound"
-	case VolumeCorrupted:
-		return "VolumeCorrupted"
-	case VolumeFlaky:
-		return "VolumeFlaky"
+	case VolumeDegraded:
+		return "VolumeDegraded"
+	case VolumeAccessInconsistent:
+		return "VolumeAccessInconsistent"
 	default:
 		return "MocCode(" + strconv.FormatUint(uint64(c), 10) + ")"
 	}

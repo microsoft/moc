@@ -56,8 +56,8 @@ const (
 	QuotaViolation
 	IPOutOfRange
 	VolumeNotFound
-	VolumeCorrupted
-	VolumeFlaky
+	VolumeDegraded
+	VolumeAccessInconsistent
 
 	// This is not a valid code, it is used to get the maximum code value.
 	// Any new codes should be defined above this.
