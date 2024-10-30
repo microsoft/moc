@@ -186,6 +186,7 @@ const (
 	HealthState_DEGRADED HealthState = 5
 	// The entity went missing from the agent
 	HealthState_NOTFOUND HealthState = 6
+	HealthState_NOTREADY HealthState = 7
 )
 
 var HealthState_name = map[int32]string{
@@ -196,6 +197,7 @@ var HealthState_name = map[int32]string{
 	4: "MISSING",
 	5: "DEGRADED",
 	6: "NOTFOUND",
+	7: "NOTREADY",
 }
 
 var HealthState_value = map[string]int32{
@@ -206,6 +208,7 @@ var HealthState_value = map[string]int32{
 	"MISSING":  4,
 	"DEGRADED": 5,
 	"NOTFOUND": 6,
+	"NOTREADY": 7,
 }
 
 func (x HealthState) String() string {
@@ -253,6 +256,34 @@ func (ValidationStateCode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_681f78e46755eb93, []int{4}
 }
 
+type PlacementStatusType int32
+
+const (
+	PlacementStatusType_UNKNOWN_PLACEMENT PlacementStatusType = 0
+	PlacementStatusType_ALIGNED           PlacementStatusType = 1
+	PlacementStatusType_NOT_ALIGNED       PlacementStatusType = 2
+)
+
+var PlacementStatusType_name = map[int32]string{
+	0: "UNKNOWN_PLACEMENT",
+	1: "ALIGNED",
+	2: "NOT_ALIGNED",
+}
+
+var PlacementStatusType_value = map[string]int32{
+	"UNKNOWN_PLACEMENT": 0,
+	"ALIGNED":           1,
+	"NOT_ALIGNED":       2,
+}
+
+func (x PlacementStatusType) String() string {
+	return proto.EnumName(PlacementStatusType_name, int32(x))
+}
+
+func (PlacementStatusType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_681f78e46755eb93, []int{5}
+}
+
 type ClientType int32
 
 const (
@@ -290,7 +321,7 @@ func (x ClientType) String() string {
 }
 
 func (ClientType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_681f78e46755eb93, []int{5}
+	return fileDescriptor_681f78e46755eb93, []int{6}
 }
 
 type AuthenticationType int32
@@ -315,7 +346,7 @@ func (x AuthenticationType) String() string {
 }
 
 func (AuthenticationType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_681f78e46755eb93, []int{6}
+	return fileDescriptor_681f78e46755eb93, []int{7}
 }
 
 type ProviderType int32
@@ -363,6 +394,7 @@ const (
 	ProviderType_AvailabilitySet        ProviderType = 39
 	ProviderType_NetworkSecurityGroup   ProviderType = 40
 	ProviderType_Zone                   ProviderType = 41
+	ProviderType_PlacementGroup         ProviderType = 42
 )
 
 var ProviderType_name = map[int32]string{
@@ -408,6 +440,7 @@ var ProviderType_name = map[int32]string{
 	39: "AvailabilitySet",
 	40: "NetworkSecurityGroup",
 	41: "Zone",
+	42: "PlacementGroup",
 }
 
 var ProviderType_value = map[string]int32{
@@ -453,6 +486,7 @@ var ProviderType_value = map[string]int32{
 	"AvailabilitySet":        39,
 	"NetworkSecurityGroup":   40,
 	"Zone":                   41,
+	"PlacementGroup":         42,
 }
 
 func (x ProviderType) String() string {
@@ -460,7 +494,7 @@ func (x ProviderType) String() string {
 }
 
 func (ProviderType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_681f78e46755eb93, []int{7}
+	return fileDescriptor_681f78e46755eb93, []int{8}
 }
 
 // Operations specific to a provider
@@ -501,6 +535,7 @@ const (
 	ProviderAccessOperation_VirtualMachine_Repair_Guest_Agent ProviderAccessOperation = 607
 	ProviderAccessOperation_VirtualMachine_Pause              ProviderAccessOperation = 608
 	ProviderAccessOperation_VirtualMachine_Save               ProviderAccessOperation = 609
+	ProviderAccessOperation_VirtualMachine_Remove_Iso_Disk    ProviderAccessOperation = 610
 	ProviderAccessOperation_Cluster_Create                    ProviderAccessOperation = 700
 	ProviderAccessOperation_Cluster_Update                    ProviderAccessOperation = 701
 	ProviderAccessOperation_Cluster_LoadCluster               ProviderAccessOperation = 702
@@ -567,6 +602,8 @@ const (
 	ProviderAccessOperation_Zone_Create                       ProviderAccessOperation = 3700
 	ProviderAccessOperation_Zone_Delete                       ProviderAccessOperation = 3701
 	ProviderAccessOperation_Zone_Update                       ProviderAccessOperation = 3702
+	ProviderAccessOperation_PlacementGroup_Create             ProviderAccessOperation = 3800
+	ProviderAccessOperation_PlacementGroup_Delete             ProviderAccessOperation = 3801
 )
 
 var ProviderAccessOperation_name = map[int32]string{
@@ -603,6 +640,7 @@ var ProviderAccessOperation_name = map[int32]string{
 	607:  "VirtualMachine_Repair_Guest_Agent",
 	608:  "VirtualMachine_Pause",
 	609:  "VirtualMachine_Save",
+	610:  "VirtualMachine_Remove_Iso_Disk",
 	700:  "Cluster_Create",
 	701:  "Cluster_Update",
 	702:  "Cluster_LoadCluster",
@@ -669,6 +707,8 @@ var ProviderAccessOperation_name = map[int32]string{
 	3700: "Zone_Create",
 	3701: "Zone_Delete",
 	3702: "Zone_Update",
+	3800: "PlacementGroup_Create",
+	3801: "PlacementGroup_Delete",
 }
 
 var ProviderAccessOperation_value = map[string]int32{
@@ -705,6 +745,7 @@ var ProviderAccessOperation_value = map[string]int32{
 	"VirtualMachine_Repair_Guest_Agent": 607,
 	"VirtualMachine_Pause":              608,
 	"VirtualMachine_Save":               609,
+	"VirtualMachine_Remove_Iso_Disk":    610,
 	"Cluster_Create":                    700,
 	"Cluster_Update":                    701,
 	"Cluster_LoadCluster":               702,
@@ -771,6 +812,8 @@ var ProviderAccessOperation_value = map[string]int32{
 	"Zone_Create":                       3700,
 	"Zone_Delete":                       3701,
 	"Zone_Update":                       3702,
+	"PlacementGroup_Create":             3800,
+	"PlacementGroup_Delete":             3801,
 }
 
 func (x ProviderAccessOperation) String() string {
@@ -778,7 +821,7 @@ func (x ProviderAccessOperation) String() string {
 }
 
 func (ProviderAccessOperation) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_681f78e46755eb93, []int{8}
+	return fileDescriptor_681f78e46755eb93, []int{9}
 }
 
 type ImageSource int32
@@ -809,7 +852,7 @@ func (x ImageSource) String() string {
 }
 
 func (ImageSource) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_681f78e46755eb93, []int{9}
+	return fileDescriptor_681f78e46755eb93, []int{10}
 }
 
 type HyperVGeneration int32
@@ -834,7 +877,7 @@ func (x HyperVGeneration) String() string {
 }
 
 func (HyperVGeneration) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_681f78e46755eb93, []int{10}
+	return fileDescriptor_681f78e46755eb93, []int{11}
 }
 
 type DiskFileFormat int32
@@ -865,7 +908,7 @@ func (x DiskFileFormat) String() string {
 }
 
 func (DiskFileFormat) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_681f78e46755eb93, []int{11}
+	return fileDescriptor_681f78e46755eb93, []int{12}
 }
 
 type CloudInitDataSource int32
@@ -890,12 +933,12 @@ func (x CloudInitDataSource) String() string {
 }
 
 func (CloudInitDataSource) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_681f78e46755eb93, []int{12}
+	return fileDescriptor_681f78e46755eb93, []int{13}
 }
 
 type Error struct {
 	Message              string   `protobuf:"bytes,1,opt,name=Message,proto3" json:"Message,omitempty"`
-	Code                 int32    `protobuf:"varint,2,opt,name=Code,proto3" json:"Code,omitempty"`
+	Code                 uint32   `protobuf:"varint,2,opt,name=Code,proto3" json:"Code,omitempty"`
 	Parameters           string   `protobuf:"bytes,3,opt,name=Parameters,proto3" json:"Parameters,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -934,7 +977,7 @@ func (m *Error) GetMessage() string {
 	return ""
 }
 
-func (m *Error) GetCode() int32 {
+func (m *Error) GetCode() uint32 {
 	if m != nil {
 		return m.Code
 	}
@@ -1230,6 +1273,53 @@ func (m *Version) GetNumber() string {
 	return ""
 }
 
+type PlacementStatus struct {
+	Status               PlacementStatusType `protobuf:"varint,1,opt,name=Status,proto3,enum=moc.PlacementStatusType" json:"Status,omitempty"`
+	Message              string              `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
+}
+
+func (m *PlacementStatus) Reset()         { *m = PlacementStatus{} }
+func (m *PlacementStatus) String() string { return proto.CompactTextString(m) }
+func (*PlacementStatus) ProtoMessage()    {}
+func (*PlacementStatus) Descriptor() ([]byte, []int) {
+	return fileDescriptor_681f78e46755eb93, []int{7}
+}
+
+func (m *PlacementStatus) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PlacementStatus.Unmarshal(m, b)
+}
+func (m *PlacementStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PlacementStatus.Marshal(b, m, deterministic)
+}
+func (m *PlacementStatus) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PlacementStatus.Merge(m, src)
+}
+func (m *PlacementStatus) XXX_Size() int {
+	return xxx_messageInfo_PlacementStatus.Size(m)
+}
+func (m *PlacementStatus) XXX_DiscardUnknown() {
+	xxx_messageInfo_PlacementStatus.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PlacementStatus proto.InternalMessageInfo
+
+func (m *PlacementStatus) GetStatus() PlacementStatusType {
+	if m != nil {
+		return m.Status
+	}
+	return PlacementStatusType_UNKNOWN_PLACEMENT
+}
+
+func (m *PlacementStatus) GetMessage() string {
+	if m != nil {
+		return m.Message
+	}
+	return ""
+}
+
 type Status struct {
 	Health               *Health           `protobuf:"bytes,1,opt,name=health,proto3" json:"health,omitempty"`
 	ProvisioningStatus   *ProvisionStatus  `protobuf:"bytes,2,opt,name=provisioningStatus,proto3" json:"provisioningStatus,omitempty"`
@@ -1237,6 +1327,7 @@ type Status struct {
 	Version              *Version          `protobuf:"bytes,4,opt,name=version,proto3" json:"version,omitempty"`
 	DownloadStatus       *DownloadStatus   `protobuf:"bytes,5,opt,name=downloadStatus,proto3" json:"downloadStatus,omitempty"`
 	ValidationStatus     *ValidationStatus `protobuf:"bytes,6,opt,name=validationStatus,proto3" json:"validationStatus,omitempty"`
+	PlacementStatus      *PlacementStatus  `protobuf:"bytes,7,opt,name=placementStatus,proto3" json:"placementStatus,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`
@@ -1246,7 +1337,7 @@ func (m *Status) Reset()         { *m = Status{} }
 func (m *Status) String() string { return proto.CompactTextString(m) }
 func (*Status) ProtoMessage()    {}
 func (*Status) Descriptor() ([]byte, []int) {
-	return fileDescriptor_681f78e46755eb93, []int{7}
+	return fileDescriptor_681f78e46755eb93, []int{8}
 }
 
 func (m *Status) XXX_Unmarshal(b []byte) error {
@@ -1309,6 +1400,13 @@ func (m *Status) GetValidationStatus() *ValidationStatus {
 	return nil
 }
 
+func (m *Status) GetPlacementStatus() *PlacementStatus {
+	if m != nil {
+		return m.PlacementStatus
+	}
+	return nil
+}
+
 type Entity struct {
 	IsPlaceholder        bool     `protobuf:"varint,1,opt,name=IsPlaceholder,proto3" json:"IsPlaceholder,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -1320,7 +1418,7 @@ func (m *Entity) Reset()         { *m = Entity{} }
 func (m *Entity) String() string { return proto.CompactTextString(m) }
 func (*Entity) ProtoMessage()    {}
 func (*Entity) Descriptor() ([]byte, []int) {
-	return fileDescriptor_681f78e46755eb93, []int{8}
+	return fileDescriptor_681f78e46755eb93, []int{9}
 }
 
 func (m *Entity) XXX_Unmarshal(b []byte) error {
@@ -1360,7 +1458,7 @@ func (m *Tag) Reset()         { *m = Tag{} }
 func (m *Tag) String() string { return proto.CompactTextString(m) }
 func (*Tag) ProtoMessage()    {}
 func (*Tag) Descriptor() ([]byte, []int) {
-	return fileDescriptor_681f78e46755eb93, []int{9}
+	return fileDescriptor_681f78e46755eb93, []int{10}
 }
 
 func (m *Tag) XXX_Unmarshal(b []byte) error {
@@ -1406,7 +1504,7 @@ func (m *Tags) Reset()         { *m = Tags{} }
 func (m *Tags) String() string { return proto.CompactTextString(m) }
 func (*Tags) ProtoMessage()    {}
 func (*Tags) Descriptor() ([]byte, []int) {
-	return fileDescriptor_681f78e46755eb93, []int{10}
+	return fileDescriptor_681f78e46755eb93, []int{11}
 }
 
 func (m *Tags) XXX_Unmarshal(b []byte) error {
@@ -1434,6 +1532,93 @@ func (m *Tags) GetTags() []*Tag {
 	return nil
 }
 
+type ZoneReference struct {
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ZoneReference) Reset()         { *m = ZoneReference{} }
+func (m *ZoneReference) String() string { return proto.CompactTextString(m) }
+func (*ZoneReference) ProtoMessage()    {}
+func (*ZoneReference) Descriptor() ([]byte, []int) {
+	return fileDescriptor_681f78e46755eb93, []int{12}
+}
+
+func (m *ZoneReference) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ZoneReference.Unmarshal(m, b)
+}
+func (m *ZoneReference) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ZoneReference.Marshal(b, m, deterministic)
+}
+func (m *ZoneReference) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ZoneReference.Merge(m, src)
+}
+func (m *ZoneReference) XXX_Size() int {
+	return xxx_messageInfo_ZoneReference.Size(m)
+}
+func (m *ZoneReference) XXX_DiscardUnknown() {
+	xxx_messageInfo_ZoneReference.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ZoneReference proto.InternalMessageInfo
+
+func (m *ZoneReference) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// Used by VM proto and Placement Group proto, so it is placed in common
+type ZoneConfiguration struct {
+	Zones                []*ZoneReference `protobuf:"bytes,1,rep,name=zones,proto3" json:"zones,omitempty"`
+	StrictPlacement      bool             `protobuf:"varint,2,opt,name=strictPlacement,proto3" json:"strictPlacement,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
+}
+
+func (m *ZoneConfiguration) Reset()         { *m = ZoneConfiguration{} }
+func (m *ZoneConfiguration) String() string { return proto.CompactTextString(m) }
+func (*ZoneConfiguration) ProtoMessage()    {}
+func (*ZoneConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_681f78e46755eb93, []int{13}
+}
+
+func (m *ZoneConfiguration) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ZoneConfiguration.Unmarshal(m, b)
+}
+func (m *ZoneConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ZoneConfiguration.Marshal(b, m, deterministic)
+}
+func (m *ZoneConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ZoneConfiguration.Merge(m, src)
+}
+func (m *ZoneConfiguration) XXX_Size() int {
+	return xxx_messageInfo_ZoneConfiguration.Size(m)
+}
+func (m *ZoneConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_ZoneConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ZoneConfiguration proto.InternalMessageInfo
+
+func (m *ZoneConfiguration) GetZones() []*ZoneReference {
+	if m != nil {
+		return m.Zones
+	}
+	return nil
+}
+
+func (m *ZoneConfiguration) GetStrictPlacement() bool {
+	if m != nil {
+		return m.StrictPlacement
+	}
+	return false
+}
+
 var E_Sensitive = &proto.ExtensionDesc{
 	ExtendedType:  (*descriptor.FieldOptions)(nil),
 	ExtensionType: (*bool)(nil),
@@ -1449,6 +1634,7 @@ func init() {
 	proto.RegisterEnum("moc.HighAvailabilityState", HighAvailabilityState_name, HighAvailabilityState_value)
 	proto.RegisterEnum("moc.HealthState", HealthState_name, HealthState_value)
 	proto.RegisterEnum("moc.ValidationStateCode", ValidationStateCode_name, ValidationStateCode_value)
+	proto.RegisterEnum("moc.PlacementStatusType", PlacementStatusType_name, PlacementStatusType_value)
 	proto.RegisterEnum("moc.ClientType", ClientType_name, ClientType_value)
 	proto.RegisterEnum("moc.AuthenticationType", AuthenticationType_name, AuthenticationType_value)
 	proto.RegisterEnum("moc.ProviderType", ProviderType_name, ProviderType_value)
@@ -1464,10 +1650,13 @@ func init() {
 	proto.RegisterType((*ValidationState)(nil), "moc.ValidationState")
 	proto.RegisterType((*ValidationStatus)(nil), "moc.ValidationStatus")
 	proto.RegisterType((*Version)(nil), "moc.Version")
+	proto.RegisterType((*PlacementStatus)(nil), "moc.PlacementStatus")
 	proto.RegisterType((*Status)(nil), "moc.Status")
 	proto.RegisterType((*Entity)(nil), "moc.Entity")
 	proto.RegisterType((*Tag)(nil), "moc.Tag")
 	proto.RegisterType((*Tags)(nil), "moc.Tags")
+	proto.RegisterType((*ZoneReference)(nil), "moc.ZoneReference")
+	proto.RegisterType((*ZoneConfiguration)(nil), "moc.ZoneConfiguration")
 	proto.RegisterExtension(E_Sensitive)
 }
 

@@ -434,6 +434,7 @@ const (
 	VirtualMachineOperation_REPAIR_GUEST_AGENT VirtualMachineOperation = 3
 	VirtualMachineOperation_PAUSE              VirtualMachineOperation = 4
 	VirtualMachineOperation_SAVE               VirtualMachineOperation = 5
+	VirtualMachineOperation_REMOVE_ISO_DISK    VirtualMachineOperation = 6
 )
 
 var VirtualMachineOperation_name = map[int32]string{
@@ -443,6 +444,7 @@ var VirtualMachineOperation_name = map[int32]string{
 	3: "REPAIR_GUEST_AGENT",
 	4: "PAUSE",
 	5: "SAVE",
+	6: "REMOVE_ISO_DISK",
 }
 
 var VirtualMachineOperation_value = map[string]int32{
@@ -452,6 +454,7 @@ var VirtualMachineOperation_value = map[string]int32{
 	"REPAIR_GUEST_AGENT": 3,
 	"PAUSE":              4,
 	"SAVE":               5,
+	"REMOVE_ISO_DISK":    6,
 }
 
 func (x VirtualMachineOperation) String() string {

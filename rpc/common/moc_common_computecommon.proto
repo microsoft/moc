@@ -149,6 +149,7 @@ enum VirtualMachineOperation {
 	REPAIR_GUEST_AGENT = 3;
 	PAUSE = 4;
 	SAVE = 5;
+	REMOVE_ISO_DISK = 6;
 }
 
 enum VirtualMachineRunCommandExecutionState {
