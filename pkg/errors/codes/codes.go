@@ -55,6 +55,9 @@ const (
 	MeasurementUnitError
 	QuotaViolation
 	IPOutOfRange
+	VolumeNotFound
+	VolumeDegraded
+	VolumeAccessInconsistent
 
 	// This is not a valid code, it is used to get the maximum code value.
 	// Any new codes should be defined above this.
