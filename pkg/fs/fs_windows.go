@@ -18,8 +18,8 @@ func Chmod(path string, mode os.FileMode) error {
 func ChmodRecursiveAdmin(path string) error {
 	// Step 0: check for command injections because we using exec command to run icacls
 	var err error
-	if strings.Contains(path, "&") || strings.Contains(path, "|") || strings.Contains(path, ";") {
-		err = errors.Wrapf(errors.InvalidInput, "Path [%s] contains invalid operators like '&', '|', ';'", path)
+	if strings.Contains(path, "&") || strings.Contains(path, "|") || strings.Contains(path, ";") || strings.Contains(path, "^") || strings.Contains(path, ">") {
+		err = errors.Wrapf(errors.InvalidInput, "Path [%s] contains invalid operators like '&', '|', ';', '^', '>'", path)
 		return err
 	}
 
