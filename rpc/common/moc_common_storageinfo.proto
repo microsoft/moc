@@ -11,8 +11,8 @@ import "moc_common_common.proto";
 message StorageContainerInfo {
 	Capacity capacity  = 1;
 	Latency latency	= 2;
-	string nodeName = 3;
-	string zoneName = 4;
+	string node = 3;
+	string zone = 4;
 	Status status = 7;
 }
 
