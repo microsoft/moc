@@ -110,6 +110,11 @@ message AvailabilitySetReference {
 	string name = 2;
 }
 
+message PlacementGroupReference {
+	string groupName = 1;
+	string name = 2;
+}
+
 message VirtualMachine {
 	string name = 1;
 	string id = 2;
@@ -131,7 +136,8 @@ message VirtualMachine {
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 18;
 	AvailabilitySetReference availabilitySet = 19;
 	ZoneConfiguration zoneConfiguration = 20;
-	Priority priority = 21;
+	PlacementGroupReference placementGroup = 21;
+	Priority priority = 22;
 }
 
 message VirtualMachineOperationRequest {
