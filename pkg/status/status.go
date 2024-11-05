@@ -22,6 +22,7 @@ func InitStatus() *common.Status {
 		DownloadStatus:     &common.DownloadStatus{},
 		ValidationStatus:   &common.ValidationStatus{},
 		PlacementStatus:    &common.PlacementStatus{},
+		UploadStatus:       &common.UploadStatus{},
 	}
 }
 
@@ -125,6 +126,16 @@ func GetPlacementStatus(s *common.Status) common.PlacementStatusType {
 	return s.GetPlacementStatus().GetStatus()
 }
 
+// SetUploadStatus
+func SetUploadStatus(s *common.Status, dProgressPercentage, dUploadSizeInBytes, dFileSizeInBytes int64, err ...error) {
+	s.UploadStatus.ProgressPercentage = dProgressPercentage
+	s.UploadStatus.UploadSizeInBytes = dUploadSizeInBytes
+	s.UploadStatus.FileSizeInBytes = dFileSizeInBytes
+	if len(err) > 0 {
+		SetError(s, err[0])
+	}
+}
+
 // GetStatuses - converts status to map
 func GetStatuses(status *common.Status) map[string]*string {
 	statuses := map[string]*string{}
@@ -146,6 +157,8 @@ func GetStatuses(status *common.Status) map[string]*string {
 	if placementStatus != "" {
 		statuses["PlacementStatus"] = &placementStatus
 	}
+	ustate := status.GetUploadStatus().String()
+	statuses["UploadStatus"] = &ustate
 
 	return statuses
 }
@@ -177,6 +190,11 @@ func GetFromStatuses(statuses map[string]*string) (status *common.Status) {
 		ps := new(common.PlacementStatus)
 		proto.UnmarshalText(*val, ps)
 		status.PlacementStatus = ps
+	}
+	if val, ok := statuses["UploadStatus"]; ok {
+		ps := new(common.UploadStatus)
+		proto.UnmarshalText(*val, ps)
+		status.UploadStatus = ps
 	}
 
 	return
