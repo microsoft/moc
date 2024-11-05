@@ -89,11 +89,13 @@ message VirtualHardDisk {
 	HyperVGeneration hyperVGeneration = 21; 
 	CloudInitDataSource cloudInitDataSource = 22;
 	DiskFileFormat diskFileFormat = 23;
-	string TargetUrl = 24 [(sensitive) = true];
+}
+
+message DiskNotificationRequest {
+	string resourceType = 1;
 }
 
 service VirtualHardDiskAgent {
 	rpc Invoke(VirtualHardDiskRequest) returns (VirtualHardDiskResponse) {}
-	rpc Operate(VirtualHardDiskOperationRequest) returns (VirtualHardDiskOperationResponse) {}
-	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
+	rpc CheckNotification(DiskNotificationRequest) returns (NotificationResponse) {}
 }
