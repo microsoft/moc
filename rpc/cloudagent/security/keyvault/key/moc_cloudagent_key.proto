@@ -28,12 +28,15 @@ message KeyOperationRequest {
 	KeyOperation OBSOLETE_OperationType = 4 [deprecated=true];
 	SignVerifyParams  SignVerifyParams = 5;
 	ProviderAccessOperation OperationType = 6;
+	string KeyId = 7;
 }
 
 message KeyOperationResponse {
 	string Data = 1 [(sensitive) = true];
 	google.protobuf.BoolValue Result = 2;
 	string  Error = 3;
+	string KeyId = 4;
+	int64 createdAt = 5;
 }
 
 message PrivateKeyWrappingInfo {
@@ -65,6 +68,8 @@ message Key {
 	// Private Key Value and wrapping information
 	bytes privateKey = 14 [(sensitive) = true];
 	PrivateKeyWrappingInfo privateKeyWrappingInfo = 15;
+	uint32 keyVersion = 16; //The key version currently being used for encryptions
+	int64 createdAt = 17; // A time offset signifying when the key was created relative to the current time. Always <=0
 }
 
 service KeyAgent {
