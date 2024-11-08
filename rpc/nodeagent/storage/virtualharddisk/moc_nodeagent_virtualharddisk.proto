@@ -89,6 +89,7 @@ message VirtualHardDisk {
 	HyperVGeneration hyperVGeneration = 21; 
 	CloudInitDataSource cloudInitDataSource = 22;
 	DiskFileFormat diskFileFormat = 23;
+	string TargetUrl = 24 [(sensitive) = true];
 }
 
 message DiskNotificationRequest {
@@ -98,4 +99,5 @@ message DiskNotificationRequest {
 service VirtualHardDiskAgent {
 	rpc Invoke(VirtualHardDiskRequest) returns (VirtualHardDiskResponse) {}
 	rpc CheckNotification(DiskNotificationRequest) returns (NotificationResponse) {}
+	rpc Operate(VirtualHardDiskOperationRequest) returns (VirtualHardDiskOperationResponse) {}
 }
