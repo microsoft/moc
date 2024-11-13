@@ -56,11 +56,19 @@ enum HealthState {
 	DEGRADED = 5;
 	// The entity went missing from the agent
 	NOTFOUND = 6;
+	NOTREADY = 7;
 }
+
+enum Priority { 
+    DEFAULT = 0;
+    LOW = 1;  
+    MEDIUM = 2;  
+    HIGH = 3;
+} 
 
 message Error {
 	string Message = 1;
-	int32 Code = 2;
+	uint32 Code = 2;
 	string Parameters = 3;
 }
 
@@ -103,6 +111,17 @@ message Version {
 	string number = 1;
 }
 
+enum PlacementStatusType {
+	UNKNOWN_PLACEMENT = 0;
+	ALIGNED = 1;
+	NOT_ALIGNED = 2;
+}
+
+message PlacementStatus  {
+	PlacementStatusType Status = 1;
+	string Message = 2;
+}
+
 message Status {
 	Health health = 1;
 	ProvisionStatus provisioningStatus = 2;
@@ -110,6 +129,7 @@ message Status {
 	Version version = 4;
 	DownloadStatus downloadStatus = 5;
 	ValidationStatus validationStatus = 6;
+	PlacementStatus	placementStatus = 7;
 }
 
 message Entity {
@@ -128,6 +148,16 @@ message Tag {
 
 message Tags {
 	repeated Tag tags = 1;
+}
+
+message ZoneReference {
+	string name = 1;
+}
+
+// Used by VM proto and Placement Group proto, so it is placed in common
+message ZoneConfiguration {
+	repeated ZoneReference zones = 1;
+	bool strictPlacement = 2;
 }
 
 enum ClientType {
@@ -188,6 +218,7 @@ enum ProviderType {
 	AvailabilitySet		   = 39;
 	NetworkSecurityGroup   = 40;
 	Zone	               = 41;
+	PlacementGroup         = 42;
 }
 
 // Operations specific to a provider
@@ -232,6 +263,7 @@ enum ProviderAccessOperation {
 	VirtualMachine_Repair_Guest_Agent		= 607;
 	VirtualMachine_Pause 				= 608;
 	VirtualMachine_Save 				= 609;
+	VirtualMachine_Remove_Iso_Disk			= 610;
 
 	Cluster_Create					= 700; 
 	Cluster_Update 					= 701; 
@@ -329,6 +361,9 @@ enum ProviderAccessOperation {
 	Zone_Create         		    = 3700;
 	Zone_Delete		                = 3701;
 	Zone_Update	            	    = 3702;
+
+	PlacementGroup_Create		    = 3800;
+	PlacementGroup_Delete		    = 3801;
 }
 
 extend google.protobuf.FieldOptions {
