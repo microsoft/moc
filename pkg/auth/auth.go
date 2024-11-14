@@ -284,6 +284,11 @@ func NewAuthorizerForAuth(tokenString string, certificate string, server string)
 	if err != nil {
 		return NewEmptyBearerAuthorizer(), err
 	}
+
+	//print tokenString
+	fmt.Println("Endpoint: ", tokenString)
+	fmt.Println("certificate: ", certificate)
+
 	return NewBearerAuthorizer(NewTokenCredentialProvider(tokenString), credentials.GetTransportCredentials()), nil
 }
 
