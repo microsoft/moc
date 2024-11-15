@@ -209,7 +209,7 @@ func getSingleMocErrorCode(err error) moccodes.MocCode {
 
 	// Get the cause of the error
 	cerr := perrors.Cause(err)
-	if cerr == nil || cerr == err {
+	if cerr == nil {
 		return moccodes.Unknown
 	}
 
