@@ -137,6 +137,7 @@ message VirtualMachine {
 	AvailabilitySetReference availabilitySet = 19;
 	ZoneConfiguration zoneConfiguration = 20;
 	PlacementGroupReference placementGroup = 21;
+	Priority priority = 22;
 }
 
 message VirtualMachineOperationRequest {

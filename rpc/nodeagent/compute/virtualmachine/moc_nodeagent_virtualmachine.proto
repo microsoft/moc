@@ -139,6 +139,7 @@ message VirtualMachine {
 	GuestAgentConfiguration guestAgent = 15;
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 16;
 	ZoneConfiguration zoneConfiguration = 17;
+	Priority priority = 18;
 }
 
 message VirtualMachineOperationRequest {
