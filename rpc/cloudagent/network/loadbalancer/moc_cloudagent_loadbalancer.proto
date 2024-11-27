@@ -42,9 +42,17 @@ message LoadbalancerInboundNatRule {
 
 message LoadbalancerOutboundNatRule {
 	string name = 1;
-	uint32 frontendPort = 2;
-	uint32 backendPort = 3;
+	repeated FrontendIPConfigurationReference frontendIpConfigurationsRef= 2;
+	BackendAddressPoolReference backendAddressPoolRef= 3;
 	Protocol protocol = 4;
+	bool enableTcpReset = 5;
+	Tags tags = 6;
+}
+
+enum LoadDistribution {
+	Default = 0;
+	SourceIp = 1;
+	SourceIPProtocol = 2;
 }
 
 message LoadBalancingRule {
@@ -52,7 +60,14 @@ message LoadBalancingRule {
 	uint32 backendPort = 2;
 	Protocol protocol = 3;
 	ProbeReference probeRef = 4;
-	string name = 5;
+	FrontendIPConfigurationReference frontendIpConfigurationRef= 5;
+	BackendAddressPoolReference backendAddressPoolRef= 6;
+	string name = 7;
+	uint32 idleTimeoutInMinutes = 8;
+	bool enableFloatingIP = 9;
+	bool enableTcpReset = 10;
+	LoadDistribution loadDistribution = 11;
+	Tags tags = 12;
 }
 
 message Probe {
@@ -60,15 +75,15 @@ message Probe {
 	uint32 intervalInSeconds = 2;
 	uint32 numberOfProbes = 3;
 	Protocol protocol = 4;
-	uint32 port = 5; 
+	uint32 port = 5;
+	Tags tags = 6;
 }
 
 message FrontEndIpConfiguration {
 	string name = 1;
-	string privateIPAddress = 2; // required if using subnet
-	IPAllocationMethod allocationMethod = 3; // required
-	SubnetReference subnetRef = 4; // required if using privateIPAddress.
-	PublicIPAddressReference publicIPAddress = 5; // required if not using privateIP and a subnet. resourceRef to publicIPAddress
+	IPAllocationMethod allocationMethod = 2; // required
+	PublicIPAddressReference publicIPAddress = 3; // required if not using privateIP and a subnet. resourceRef to publicIPAddress
+	Tags tags = 4;
 }
 
 message LoadBalancer {
@@ -88,8 +103,7 @@ message LoadBalancer {
 	repeated LoadbalancerOutboundNatRule outboundNatRules = 14;
 	repeated FrontEndIpConfiguration frontendIpConfigurations = 15;
 	repeated Probe probes = 16;
-	string useSDN = 17; // To indicate SDN optionality
-	ApiVersion version = 18;
+	ApiVersion version = 17;
 }
 
 service LoadBalancerAgent {
