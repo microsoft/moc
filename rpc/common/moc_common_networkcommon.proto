@@ -73,3 +73,11 @@ message ProbeReference {
 message SubnetReference {
 	ResourceReference resourceRef = 1;
 }
+
+message FrontendIPConfigurationReference {
+	ResourceReference resourceRef = 1;
+}
+
+message BackendAddressPoolReference {
+	ResourceReference resourceRef = 1;
+}
