@@ -70,11 +70,17 @@ message LoadBalancingRule {
 	Tags tags = 12;
 }
 
+enum ProbeProtocol {
+	Http = 0;
+	Https = 1;
+	Tcp = 2;
+}
+
 message Probe {
 	string name = 1;
 	uint32 intervalInSeconds = 2;
 	uint32 numberOfProbes = 3;
-	Protocol protocol = 4;
+	ProbeProtocol protocol = 4;
 	uint32 port = 5;
 	Tags tags = 6;
 }
