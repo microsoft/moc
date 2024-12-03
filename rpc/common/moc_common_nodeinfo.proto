@@ -33,6 +33,10 @@ message PhysicalMemory {
 	uint64 sizeBytes = 1;
 }
 
+message HyperVMemory {
+	uint64 sizeBytes = 1;
+}
+
 message HostGPU {
 	string id = 1;
 	string name = 2;
@@ -64,6 +68,7 @@ message Resources {
 	reserved 6;
 	Processor processor = 1;
 	PhysicalMemory memory = 2;
+	HyperVMemory hypervMemory = 8;
 	VirtualMachineCapabilities vmCapabilities = 5;
 	repeated HostGPU hostGPUs = 7;
 }
