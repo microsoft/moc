@@ -60,10 +60,12 @@ message Key {
 	JsonWebKeyCurveName curve = 10;
 	repeated KeyOperation keyOps = 11;
 	Tags tags = 12;
-	int64 keyRotationFrequencyInSeconds = 13;
+	Entity entity = 13;
+
+	int64 keyRotationFrequencyInSeconds = 14;
 	// Private Key Value and wrapping information
-	bytes privateKey = 14 [(sensitive) = true];
-	PrivateKeyWrappingInfo privateKeyWrappingInfo = 15;
+	bytes privateKey = 15 [(sensitive) = true];
+	PrivateKeyWrappingInfo privateKeyWrappingInfo = 16;
 }
 
 service KeyAgent {
