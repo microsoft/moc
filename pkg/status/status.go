@@ -8,6 +8,7 @@ import (
 	"time"
 
 	proto "github.com/golang/protobuf/proto"
+	"github.com/microsoft/moc/pkg/errors"
 	common "github.com/microsoft/moc/rpc/common"
 )
 
@@ -20,16 +21,13 @@ func InitStatus() *common.Status {
 		Version:            GenerateVersion(),
 		DownloadStatus:     &common.DownloadStatus{},
 		ValidationStatus:   &common.ValidationStatus{},
+		PlacementStatus:    &common.PlacementStatus{},
 	}
 }
 
 // SetError
 func SetError(s *common.Status, err error) {
-	if err != nil {
-		s.LastError.Message = fmt.Sprintf("%+v", err)
-	} else {
-		s.LastError.Message = "" // Clear the error
-	}
+	s.LastError = errors.ErrorToProto(err)
 }
 
 // SetHealth
@@ -42,8 +40,29 @@ func SetHealth(s *common.Status, hState common.HealthState, err ...error) {
 }
 
 func IsHealthStateMissing(s *common.Status) bool {
+	if s == nil {
+		return false
+	}
+
+	if s.GetHealth() == nil {
+		return false
+	}
+
 	hstatus := s.GetHealth().GetCurrentState()
 	return (hstatus == common.HealthState_MISSING)
+}
+
+func IsHealthStateCritical(s *common.Status) bool {
+	if s == nil {
+		return false
+	}
+
+	if s.GetHealth() == nil {
+		return false
+	}
+
+	hstatus := s.GetHealth().GetCurrentState()
+	return (hstatus == common.HealthState_CRITICAL)
 }
 
 func IsDeleted(s *common.Status) bool {
@@ -96,19 +115,38 @@ func GetValidationStatus(s *common.Status) []*common.ValidationState {
 	return s.GetValidationStatus().GetValidationState()
 }
 
+func SetPlacementStatus(s *common.Status, placementState *common.PlacementStatus) {
+	s.PlacementStatus = new(common.PlacementStatus)
+	s.PlacementStatus.Status = placementState.GetStatus()
+	s.PlacementStatus.Message = placementState.GetMessage()
+}
+
+func GetPlacementStatus(s *common.Status) common.PlacementStatusType {
+	return s.GetPlacementStatus().GetStatus()
+}
+
 // GetStatuses - converts status to map
 func GetStatuses(status *common.Status) map[string]*string {
 	statuses := map[string]*string{}
-	pstate := status.GetProvisioningStatus().String()
+
+	// Provision and Health State require custom parsing as they are enums.
+	// Otherwise enum 0 (UNKNOWN / NOT_KNOWN) will be an empty string.
+	pstate := parseProvisioning(status.GetProvisioningStatus())
 	statuses["ProvisionState"] = &pstate
-	hstate := status.GetHealth().String()
+	hstate := parseHealth(status.GetHealth())
 	statuses["HealthState"] = &hstate
+
 	estate := status.GetLastError().String()
 	statuses["Error"] = &estate
 	version := status.GetVersion().Number
 	statuses["Version"] = &version
 	dstate := status.GetDownloadStatus().String()
 	statuses["DownloadStatus"] = &dstate
+	placementStatus := status.GetPlacementStatus().String()
+	if placementStatus != "" {
+		statuses["PlacementStatus"] = &placementStatus
+	}
+
 	return statuses
 }
 
@@ -135,6 +173,47 @@ func GetFromStatuses(statuses map[string]*string) (status *common.Status) {
 		proto.UnmarshalText(*val, ps)
 		status.DownloadStatus = ps
 	}
+	if val, ok := statuses["PlacementStatus"]; ok {
+		ps := new(common.PlacementStatus)
+		proto.UnmarshalText(*val, ps)
+		status.PlacementStatus = ps
+	}
 
 	return
+}
+
+// HealthState requires custom parsing as it is a proto enum. Otherwise enum 0 (NOT_KNOWN) will be an empty string.
+func parseHealth(hstate *common.Health) string {
+	if hstate == nil {
+		return fmt.Sprintf("currentState:%s", common.HealthState_NOTKNOWN)
+	}
+
+	prevHealth, ok := common.HealthState_name[int32(hstate.GetPreviousState())]
+	if !ok {
+		prevHealth = common.HealthState_NOTKNOWN.String()
+	}
+	currHealth, ok := common.HealthState_name[int32(hstate.GetCurrentState())]
+	if !ok {
+		currHealth = common.HealthState_NOTKNOWN.String()
+	}
+
+	return fmt.Sprintf("currentState:%s previousState:%s", currHealth, prevHealth)
+}
+
+// ProvisionState requires custom parsing as it is a proto enum. Otherwise enum 0 (UNKNOWN) will be an empty string.
+func parseProvisioning(pstate *common.ProvisionStatus) string {
+	if pstate == nil {
+		return fmt.Sprintf("currentState:%s", common.ProvisionState_UNKNOWN)
+	}
+
+	prevProv, ok := common.ProvisionState_name[int32(pstate.GetPreviousState())]
+	if !ok {
+		prevProv = common.ProvisionState_UNKNOWN.String()
+	}
+	currProv, ok := common.ProvisionState_name[int32(pstate.GetCurrentState())]
+	if !ok {
+		currProv = common.ProvisionState_UNKNOWN.String()
+	}
+
+	return fmt.Sprintf("currentState:%s previousState:%s", currProv, prevProv)
 }
