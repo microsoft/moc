@@ -63,9 +63,10 @@ message Key {
 	Entity entity = 13;
 
 	int64 keyRotationFrequencyInSeconds = 14;
+	int64 keyVersion = 15;
 	// Private Key Value and wrapping information
-	bytes privateKey = 15 [(sensitive) = true];
-	PrivateKeyWrappingInfo privateKeyWrappingInfo = 16;
+	bytes privateKey = 16 [(sensitive) = true];
+	PrivateKeyWrappingInfo privateKeyWrappingInfo = 17;
 }
 
 service KeyAgent {
