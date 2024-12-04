@@ -61,6 +61,13 @@ enum HealthState {
 	NOTREADY = 7;
 }
 
+enum Priority { 
+    DEFAULT = 0;
+    LOW = 1;  
+    MEDIUM = 2;  
+    HIGH = 3;
+} 
+
 message Error {
 	string Message = 1;
 	uint32 Code = 2;
@@ -387,4 +394,9 @@ enum DiskFileFormat {
 enum CloudInitDataSource {
 	NoCloud = 0;
 	Azure = 1;
+}
+
+message ApiVersion {
+	uint32 major = 1;
+	uint32 minor = 2;
 }
