@@ -112,7 +112,11 @@ func SetValidationStatus(s *common.Status, validationState []*common.ValidationS
 }
 
 func GetValidationStatus(s *common.Status) []*common.ValidationState {
-	return s.GetValidationStatus().GetValidationState()
+	validationStatus := s.GetValidationStatus()
+	if validationStatus != nil {
+		return validationStatus.GetValidationState()
+	}
+	return nil
 }
 
 func SetPlacementStatus(s *common.Status, placementState *common.PlacementStatus) {
@@ -136,15 +140,27 @@ func GetStatuses(status *common.Status) map[string]*string {
 	hstate := parseHealth(status.GetHealth())
 	statuses["HealthState"] = &hstate
 
-	estate := status.GetLastError().String()
-	statuses["Error"] = &estate
-	version := status.GetVersion().Number
-	statuses["Version"] = &version
-	dstate := status.GetDownloadStatus().String()
-	statuses["DownloadStatus"] = &dstate
-	placementStatus := status.GetPlacementStatus().String()
-	if placementStatus != "" {
-		statuses["PlacementStatus"] = &placementStatus
+	errorStatus := status.GetLastError()
+	if errorStatus != nil {
+		errorStatusStr := errorStatus.String()
+		statuses["Error"] = &errorStatusStr
+	}
+
+	version := status.GetVersion()
+	if version != nil {
+		statuses["Version"] = &version.Number
+	}
+
+	downloadStatus := status.GetDownloadStatus()
+	if downloadStatus != nil {
+		downloadStatusStr := downloadStatus.String()
+		statuses["DownloadStatus"] = &downloadStatusStr
+	}
+
+	placementStatus := status.GetPlacementStatus()
+	if placementStatus != nil {
+		placementStatusStr := placementStatus.String()
+		statuses["PlacementStatus"] = &placementStatusStr
 	}
 
 	return statuses
