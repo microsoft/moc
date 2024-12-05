@@ -11,6 +11,15 @@ import (
 	"github.com/microsoft/moc/rpc/common"
 )
 
+type NotComparableError struct {
+	msg  string
+	data []byte // Slices make structs not comparable
+}
+
+func (e NotComparableError) Error() string {
+	return e.msg
+}
+
 func TestNewMocErrorWithError(t *testing.T) {
 	tests := []struct {
 		name         string
@@ -157,6 +166,43 @@ func TestGetMocErrorCode(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestGetSingleMocErrorCodeAvoidsPanicOnUncomparable(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			t.Errorf("unexpected panic occurred: %v", r)
+		}
+	}()
+
+	// Create a NotComparableError
+	detailedErr := NotComparableError{
+		msg: "detailed error",
+	}
+
+	// Call getSingleMocErrorCode with the NotComparableError
+	code := getSingleMocErrorCode(detailedErr)
+
+	// Check the result
+	if code != moccodes.Unknown {
+		t.Errorf("expected %v, got %v", moccodes.Unknown, code)
+	}
+}
+
+func TestCheckErrorAvoidsPanicOnUncomparable(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			t.Errorf("unexpected panic occurred: %v", r)
+		}
+	}()
+
+	// Create a NotComparableError
+	detailedErr := NotComparableError{
+		msg: "detailed error",
+	}
+
+	// Make sure checkError doesn't panic
+	checkError(detailedErr, NotFound)
 }
 
 func TestCheckError(t *testing.T) {

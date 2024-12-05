@@ -14,7 +14,7 @@ export GO111MODULE=on
 #
 PKG := 
 
-all: format test unittest
+all: format test
 
 .PHONY: tidy
 tidy:
