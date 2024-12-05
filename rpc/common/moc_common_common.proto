@@ -38,6 +38,7 @@ enum ProvisionState {
 	IMPORTING = 17;
 	IMPORTED = 18;
 	IMPORT_FAILED = 19;
+	UPLOADING = 20;
 }
 
 enum HighAvailabilityState {
@@ -119,6 +120,7 @@ message UploadStatus {
 	int64 progressPercentage = 1;
 	int64 uploadSizeInBytes = 2;
 	int64 fileSizeInBytes = 3;
+	Error lastUploadError = 4;
 }
 
 message Status {

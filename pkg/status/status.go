@@ -126,13 +126,23 @@ func GetPlacementStatus(s *common.Status) common.PlacementStatusType {
 	return s.GetPlacementStatus().GetStatus()
 }
 
+// Set UploadError
+func SetUploadError(s *common.Status, err ...error) {
+	s.UploadStatus.LastUploadError = errors.ErrorToProto(err[0])
+}
+
 // SetUploadStatus
 func SetUploadStatus(s *common.Status, dProgressPercentage, dUploadSizeInBytes, dFileSizeInBytes int64, err ...error) {
+	if s.UploadStatus == nil {
+		s.UploadStatus = &common.UploadStatus{}
+	}
 	s.UploadStatus.ProgressPercentage = dProgressPercentage
 	s.UploadStatus.UploadSizeInBytes = dUploadSizeInBytes
 	s.UploadStatus.FileSizeInBytes = dFileSizeInBytes
 	if len(err) > 0 {
-		SetError(s, err[0])
+		SetUploadError(s, err[0])
+	} else {
+		s.UploadStatus.LastUploadError = nil
 	}
 }
 
