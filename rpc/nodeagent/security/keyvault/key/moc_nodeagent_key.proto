@@ -33,6 +33,7 @@ message KeyOperationResponse {
 	string Data = 1 [(sensitive) = true];
 	google.protobuf.BoolValue Result = 2;
 	string  Error = 3;
+	Key key = 4;
 }
 
 message PrivateKeyWrappingInfo {
