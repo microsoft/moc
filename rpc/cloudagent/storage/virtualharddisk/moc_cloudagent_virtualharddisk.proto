@@ -21,6 +21,17 @@ message VirtualHardDiskResponse {
 	string  Error = 3;
 }
 
+message VirtualHardDiskOperationRequest {
+	repeated VirtualHardDisk VirtualHardDisks = 1;
+	ProviderAccessOperation OperationType = 2;
+}
+
+message VirtualHardDiskOperationResponse {
+	repeated VirtualHardDisk VirtualHardDisks = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
 message VirtualHardDisk {
 	string name = 1;
 	string id = 2;
@@ -47,6 +58,7 @@ message VirtualHardDisk {
 	Tags tags = 23;
 	string sourcePath = 24;
 	ImageSource sourceType = 25;
+	string targetUrl = 26 [(sensitive) = true];
 }
 
 message VirtualHardDiskPrecheckRequest {
@@ -66,4 +78,5 @@ service VirtualHardDiskAgent {
 
 	// Prechecks whether the system is able to create specified virtual hard disks (but does not actually create them).
 	rpc Precheck(VirtualHardDiskPrecheckRequest) returns (VirtualHardDiskPrecheckResponse) {}
+	rpc Operate(VirtualHardDiskOperationRequest) returns (VirtualHardDiskOperationResponse) {}
 }
