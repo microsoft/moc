@@ -68,6 +68,26 @@ message NetworkSecurityGroupReference {
 	ResourceReference resourceRef = 1;
 }
 
+message PublicIPAddressReference {
+	ResourceReference resourceRef = 1;
+}
+
+message ProbeReference {
+	ResourceReference resourceRef = 1;
+}
+
+message ProbeRequestPathReference {
+	ResourceReference resourceRef = 1;
+}
+
+message FrontendIPConfigurationReference {
+	ResourceReference resourceRef = 1;
+}
+
+message BackendAddressPoolReference {
+	ResourceReference resourceRef = 1;
+}
+
 message NetworkReference {
 	ResourceReference resourceRef = 1;
 	NetworkType networkType = 2;
