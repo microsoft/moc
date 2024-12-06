@@ -60,7 +60,7 @@ message LoadBalancingRule {
 	uint32 backendPort = 2;
 	Protocol protocol = 3;
 	ProbeReference probeRef = 4;
-	FrontendIPConfigurationReference frontendIpConfigurationRef= 5;
+	repeated FrontendIPConfigurationReference frontendIpConfigurationsRef= 5;
 	BackendAddressPoolReference backendAddressPoolRef= 6;
 	string name = 7;
 	uint32 idleTimeoutInMinutes = 8;
@@ -82,7 +82,8 @@ message Probe {
 	uint32 numberOfProbes = 3;
 	ProbeProtocol protocol = 4;
 	uint32 port = 5;
-	Tags tags = 6;
+	ProbeRequestPathReference requestPath = 6;
+	Tags tags = 7;
 }
 
 message FrontEndIpConfiguration {
@@ -90,6 +91,11 @@ message FrontEndIpConfiguration {
 	IPAllocationMethod allocationMethod = 2; // required
 	PublicIPAddressReference publicIPAddress = 3; // required if not using privateIP and a subnet. resourceRef to publicIPAddress
 	Tags tags = 4;
+}
+
+message BackendAddressPool {
+	string name = 1;
+	Tags tags = 2;
 }
 
 message LoadBalancer {
@@ -109,7 +115,8 @@ message LoadBalancer {
 	repeated LoadbalancerOutboundNatRule outboundNatRules = 14;
 	repeated FrontEndIpConfiguration frontendIpConfigurations = 15;
 	repeated Probe probes = 16;
-	ApiVersion version = 17;
+	repeated BackendAddressPool backendAddressPools = 17;
+	ApiVersion version = 18;
 }
 
 service LoadBalancerAgent {
