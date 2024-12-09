@@ -116,7 +116,6 @@ message LoadBalancer {
 	repeated FrontEndIpConfiguration frontendIpConfigurations = 15;
 	repeated Probe probes = 16;
 	repeated BackendAddressPool backendAddressPools = 17;
-	ApiVersion version = 18;
 }
 
 service LoadBalancerAgent {
