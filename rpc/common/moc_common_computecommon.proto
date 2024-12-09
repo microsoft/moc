@@ -25,7 +25,6 @@ enum ProcessorType {
 enum OperatingSystemBootstrapEngine {
 	CLOUD_INIT = 0; // For both cloud-init and cloudbase-init
 	WINDOWS_ANSWER_FILES = 1;
-	HYDRATED = 2;
 }
 
 enum OperatingSystemType {
