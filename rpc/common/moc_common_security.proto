@@ -7,8 +7,6 @@ option go_package = "github.com/microsoft/moc/rpc/common";
 package moc;
 
 import "moc_common_common.proto";
-import "google/protobuf/wrappers.proto";
-import "google/protobuf/timestamp.proto";
 
 enum Algorithm {
 	A_UNKNOWN = 0;
@@ -88,70 +86,4 @@ message Scope {
 	string resourceGroup = 2;
 	ProviderType providerType = 3;
 	string resource = 4;
-}
-
-message KeyCommon {
-	string name = 1;
-	string id = 2;
-	string locationName = 3;
-	// Public Key Value
-	bytes publicKey = 4 [(sensitive) = true];
-	JsonWebKeyType type = 5;
-	string vaultName = 6;
-	string groupName = 7;
-	Status status = 8;
-	KeySize size = 9;
-	JsonWebKeyCurveName curve = 10;
-	repeated KeyOperation keyOps = 11;
-	Tags tags = 12;
-	int64 keyRotationFrequencyInSeconds = 13;
-	// Private Key Value and wrapping information
-	bytes privateKey = 14 [(sensitive) = true];
-	PrivateKeyWrappingInfo privateKeyWrappingInfo = 15;
-	Entity entity = 16;
-	uint32 keyVersion = 17;
-	google.protobuf.Timestamp creationTime = 18;
-}
-
-message KeyRequest {
-	repeated KeyCommon Keys = 1;
-	Operation OperationType = 2;
-}
-
-message KeyResponse {
-	repeated KeyCommon Keys = 1;
-	google.protobuf.BoolValue Result = 2;
-	string  Error = 3;
-}
-
-message KeyOperationRequest {
-	KeyCommon key = 1;
-	string Data = 2 [(sensitive) = true];
-	Algorithm algorithm = 3;
-	KeyOperation OBSOLETE_OperationType = 4 [deprecated=true];
-	SignVerifyParams  SignVerifyParams = 5;
-	ProviderAccessOperation OperationType = 6;
-}
-
-message KeyOperationResponse {
-	string Data = 1 [(sensitive) = true];
-	google.protobuf.BoolValue Result = 2;
-	string  Error = 3;
-	KeyCommon key = 4;
-}
-
-message PrivateKeyWrappingInfo {
-	string WrappingKeyName = 1;
-	bytes WrappingKeyPublic = 2 [(sensitive) = true];
-	KeyWrappingAlgorithm WrappingAlgorithm = 3;
-}
-
-message SignVerifyParams {
-	JSONWebKeySignatureAlgorithm  algorithm  = 1;
-	string signature = 2  [(sensitive) = true];
-}
-
-service KeyAgent {
-	rpc Invoke(KeyRequest) returns (KeyResponse) {}
-	rpc Operate(KeyOperationRequest) returns (KeyOperationResponse) {}
 }
