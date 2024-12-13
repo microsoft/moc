@@ -26,9 +26,8 @@ message KeyOperationRequest {
 	Key key = 1;
 	string Data = 2 [(sensitive) = true];
 	Algorithm algorithm = 3;
-	KeyOperation OBSOLETE_OperationType = 4 [deprecated=true];
-	SignVerifyParams  SignVerifyParams = 5;
-	ProviderAccessOperation OperationType = 6;
+	SignVerifyParams  SignVerifyParams = 4;
+	ProviderAccessOperation OperationType = 5;
 }
 
 message KeyOperationResponse {
@@ -36,17 +35,6 @@ message KeyOperationResponse {
 	google.protobuf.BoolValue Result = 2;
 	string  Error = 3;
 	Key key = 4;
-}
-
-message PrivateKeyWrappingInfo {
-	string WrappingKeyName = 1;
-	bytes WrappingKeyPublic = 2 [(sensitive) = true];
-	KeyWrappingAlgorithm WrappingAlgorithm = 3;
-}
-
-message SignVerifyParams {
-	JSONWebKeySignatureAlgorithm  algorithm  = 1;
-	string signature = 2  [(sensitive) = true];
 }
 
 message Key {
