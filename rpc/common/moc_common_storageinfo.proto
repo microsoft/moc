@@ -24,3 +24,7 @@ message Capacity {
 message Latency {
 	uint64 iops = 1;
 }
+
+enum VirtualHardDiskOperation {
+	UPLOAD = 0;
+}
