@@ -167,8 +167,11 @@ func GetStatuses(status *common.Status) map[string]*string {
 	if placementStatus != "" {
 		statuses["PlacementStatus"] = &placementStatus
 	}
-	ustate := status.GetUploadStatus().String()
-	statuses["UploadStatus"] = &ustate
+	uploadStatus := status.GetUploadStatus()
+	if uploadStatus != nil {
+		uploadStatusStr := uploadStatus.String()
+		statuses["UploadStatus"] = &uploadStatusStr
+	}
 
 	return statuses
 }
