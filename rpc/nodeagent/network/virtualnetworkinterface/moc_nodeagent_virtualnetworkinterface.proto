@@ -27,6 +27,16 @@ enum NetworkType {
 	LOGICAL_NETWORK = 1;
 }
 
+enum PolicyType {
+    UNKNOWN = 0;
+    SDN_ALL = 1;
+}
+
+message AdvancedNetworkPolicy {
+	PolicyType type = 1;
+	bool enabled = 2;
+}
+
 message IpConfiguration {
 	string ipaddress = 1 [(sensitive) = true];
 	string prefixlength = 2;
@@ -53,6 +63,7 @@ message VirtualNetworkInterface {
 	Entity entity = 9;
 	uint32 iovWeight = 10;
 	Tags tags = 11;
+	repeated AdvancedNetworkPolicy policies = 12;
 }
 
 service VirtualNetworkInterfaceAgent {
