@@ -50,6 +50,7 @@ message IpConfiguration {
 	NetworkType networkType = 10;
 	NetworkSecurityGroupReference networkSecurityGroupRef = 12;
 	SubnetReference subnet = 13;
+	PublicIPAddressReference publicIPAddressRef = 14; 
 }
 
 message NetworkInterface {

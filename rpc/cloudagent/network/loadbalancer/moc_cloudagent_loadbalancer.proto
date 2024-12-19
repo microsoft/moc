@@ -67,4 +67,3 @@ service LoadBalancerAgent {
 	// Prechecks whether the system is able to create specified load balancers (but does not actually create them).
 	rpc Precheck(LoadBalancerPrecheckRequest) returns (LoadBalancerPrecheckResponse) {}
 }
-
