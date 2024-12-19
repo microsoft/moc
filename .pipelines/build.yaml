@@ -107,4 +107,3 @@ jobs:
       make golangci-lint
     displayName: 'Run GolangCI-Lint'
     workingDirectory: '$(System.DefaultWorkingDirectory)'
-    continueOnError: true
