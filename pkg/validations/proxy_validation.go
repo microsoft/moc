@@ -18,7 +18,7 @@ func ValidateProxyURL(proxyURL string) (*url.URL, error) {
 	parsedURL, err := url.ParseRequestURI(proxyURL)
 
 	if err != nil {
-		return nil, errors.Wrapf(errors.InvalidInput, err.Error())
+		return nil, errors.Wrapf(errors.InvalidInput, "%s", err.Error())
 	}
 
 	// Check if url scheme is http or https
@@ -54,7 +54,7 @@ func TestProxyUrlConnection(parsedURL *url.URL, certContent string, getRequestUr
 	// Test the HTTP GET request
 	response, err := client.Get(getRequestUrl)
 	if err != nil {
-		return errors.Wrapf(errors.InvalidInput, err.Error())
+		return errors.Wrapf(errors.InvalidInput, "%s", err.Error())
 	} else {
 		defer response.Body.Close()
 		fmt.Println("Connected successfully to the proxy server")
