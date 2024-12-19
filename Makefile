@@ -52,3 +52,7 @@ mocks:
 	go get github.com/golang/mock@v1.6.0
 	go generate ./...
 
+golangci-lint:
+	$(GOCMD) install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	$(GOPATH_BIN)/golangci-lint run --config .golangci.yml
+
