@@ -23,6 +23,7 @@ message VirtualMachineReference {
 	string groupName = 1;
 	string name = 2;
 	string realizedName = 3;
+	PlacementStatus	placementStatus = 4;
 }
 
 message AvailabilitySetPrecheckRequest {
