@@ -176,6 +176,9 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 			return nil, errors.Wrapf(errors.InvalidInput, "Old certificate verification failed : %v", err)
 		}
 		oldCert, err = DecodeCertPEM(oldCertPem)
+		if err != nil {
+			return
+		}
 	}
 	err = csr.CheckSignature()
 	if err != nil {
@@ -302,7 +305,9 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 			if ext.Id.Equal(oidOriginalCertificate) {
 				origCertDER = ext.Value
 			} else if ext.Id.Equal(oidRenewCount) {
-				asn1.Unmarshal(ext.Value, &renewCount)
+				if _, err := asn1.Unmarshal(ext.Value, &renewCount); err != nil {
+					return nil, errors.Wrapf(err, "Failed to unmarshall renew count")
+				}
 			}
 		}
 
