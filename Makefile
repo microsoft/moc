@@ -5,6 +5,7 @@ GOBUILD=$(GOCMD) build -v #-mod=vendor
 GOTEST=$(GOCMD) test -v 
 GOHOSTOS=$(strip $(shell $(GOCMD) env get GOHOSTOS))
 MOCKGEN=$(shell command -v mockgen 2> /dev/null)
+GOPATH_BIN := $(shell go env GOPATH)/bin
 
 # Private repo workaround
 export GOPRIVATE = github.com/microsoft
