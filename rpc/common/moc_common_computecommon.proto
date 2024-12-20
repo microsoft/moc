@@ -180,6 +180,7 @@ message VirtualMachineRunCommandInstanceView {
 enum ConfidentialVMHardwareType {
 	HardwareTypeNone = 0;
 	HardwareTypeSEVSNP = 1;
+	HardwareTypeTDX = 2;
 }
 
 // describes the the capabilities of this node in terms of what type of VM can be created
