@@ -97,3 +97,7 @@ message SubnetReference {
 	NetworkReference network = 1;
 	ResourceReference resourceRef = 2;
 }
+
+message NetworkInterfaceReference {
+	ResourceReference resourceRef = 1;
+}
