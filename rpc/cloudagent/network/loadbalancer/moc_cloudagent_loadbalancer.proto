@@ -95,7 +95,8 @@ message FrontEndIpConfiguration {
 
 message BackendAddressPool {
 	string name = 1;
-	Tags tags = 2;
+	NetworkInterfaceReference networkInterfaceRef = 2;
+	Tags tags = 3;
 }
 
 message LoadBalancer {
