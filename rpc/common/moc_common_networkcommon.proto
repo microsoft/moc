@@ -113,3 +113,7 @@ message FrontendIPConfigurationReference {
 message BackendAddressPoolReference {
 	ResourceReference resourceRef = 1;
 }
+
+message NetworkInterfaceReference {
+	ResourceReference resourceRef = 1;
+}

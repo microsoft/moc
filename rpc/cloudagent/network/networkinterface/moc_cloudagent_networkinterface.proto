@@ -51,6 +51,7 @@ message IpConfiguration {
 	NetworkSecurityGroupReference networkSecurityGroupRef = 12;
 	SubnetReference subnet = 13;
 	PublicIPAddressReference publicIPAddressRef = 14; 
+	repeated BackendAddressPoolReference loadBalancerAddressPoolsRef = 15;
 }
 
 message NetworkInterface {
