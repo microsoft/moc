@@ -230,6 +230,7 @@ enum ProviderType {
 	NetworkSecurityGroup   = 40;
 	Zone	               = 41;
 	PlacementGroup         = 42;
+	PublicIPAddress        = 43;
 }
 
 // Operations specific to a provider
@@ -263,6 +264,7 @@ enum ProviderAccessOperation {
 	Key_UnwrapKey					= 505; 
 	Key_Sign 						= 506; 
 	Key_Verify 						= 507; 
+	Key_Rotate                      = 508;
 
 	VirtualMachine_Create 				= 600; 
 	VirtualMachine_Update 				= 601; 
@@ -376,6 +378,9 @@ enum ProviderAccessOperation {
 
 	PlacementGroup_Create		    = 3800;
 	PlacementGroup_Delete		    = 3801;
+
+	PublicIPAddress_Create 			= 3900;
+	PublicIPAddress_Update 			= 3901;
 }
 
 extend google.protobuf.FieldOptions {

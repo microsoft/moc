@@ -154,7 +154,9 @@ func MarshalOutput(data interface{}, query string, outputType string) ([]byte, e
 	if err != nil {
 		return nil, err
 	}
-	marshal.FromJSONBytes(jsonByte, &queryTarget)
+	if err := marshal.FromJSONBytes(jsonByte, &queryTarget); err != nil {
+		return nil, err
+	}
 	if query != "" {
 		result, err = jmespath.Search(query, queryTarget)
 		if err != nil {
