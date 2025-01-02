@@ -222,7 +222,7 @@ func GetFromStatuses(statuses map[string]*string) (status *common.Status) {
 	}
 	if val, ok := statuses["UploadStatus"]; ok {
 		ps := new(common.UploadStatus)
-		proto.UnmarshalText(*val, ps)
+		proto.UnmarshalText(*val, ps) //nolint:golint,errcheck
 		status.UploadStatus = ps
 	}
 
