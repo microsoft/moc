@@ -1432,6 +1432,7 @@ func (m *UploadStatus) GetLastUploadError() *Error {
 	return nil
 }
 
+// TODO: Reevaluate the status implementation to avoid displaying irrelevant properties for resources, such as UploadStatus for VirtualMachines.
 type Status struct {
 	Health               *Health           `protobuf:"bytes,1,opt,name=health,proto3" json:"health,omitempty"`
 	ProvisioningStatus   *ProvisionStatus  `protobuf:"bytes,2,opt,name=provisioningStatus,proto3" json:"provisioningStatus,omitempty"`

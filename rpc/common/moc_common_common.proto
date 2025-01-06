@@ -132,6 +132,7 @@ message UploadStatus {
 	Error lastUploadError = 4;
 }
 
+// TODO: Reevaluate the status implementation to avoid displaying irrelevant properties for resources, such as UploadStatus for VirtualMachines.
 message Status {
 	Health health = 1;
 	ProvisionStatus provisioningStatus = 2;

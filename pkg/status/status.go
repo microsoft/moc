@@ -131,8 +131,8 @@ func GetPlacementStatus(s *common.Status) common.PlacementStatusType {
 }
 
 // Set UploadError
-func SetUploadError(s *common.Status, err ...error) {
-	s.UploadStatus.LastUploadError = errors.ErrorToProto(err[0])
+func SetUploadError(s *common.Status, err error) {
+	s.UploadStatus.LastUploadError = errors.ErrorToProto(err)
 }
 
 // SetUploadStatus
