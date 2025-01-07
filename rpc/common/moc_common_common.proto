@@ -40,6 +40,7 @@ enum ProvisionState {
 	IMPORTING = 17;
 	IMPORTED = 18;
 	IMPORT_FAILED = 19;
+	UPLOADING = 20;
 }
 
 enum HighAvailabilityState {
@@ -124,6 +125,14 @@ message PlacementStatus  {
 	string Message = 2;
 }
 
+message UploadStatus {
+	int64 progressPercentage = 1;
+	int64 uploadSizeInBytes = 2;
+	int64 fileSizeInBytes = 3;
+	Error lastUploadError = 4;
+}
+
+// TODO: Reevaluate the status implementation to avoid displaying irrelevant properties for resources, such as UploadStatus for VirtualMachines.
 message Status {
 	Health health = 1;
 	ProvisionStatus provisioningStatus = 2;
@@ -132,6 +141,7 @@ message Status {
 	DownloadStatus downloadStatus = 5;
 	ValidationStatus validationStatus = 6;
 	PlacementStatus	placementStatus = 7;
+	UploadStatus uploadStatus = 8;
 }
 
 message Entity {
@@ -346,6 +356,7 @@ enum ProviderAccessOperation {
 
 	VirtualHardDisk_Create          = 3100;
 	VirtualHardDisk_Update          = 3101;
+	VirtualHardDisk_Upload          = 3102;
 
 	VirtualMachineImage_Create      = 3200;
 	VirtualMachineImage_Update      = 3201;
