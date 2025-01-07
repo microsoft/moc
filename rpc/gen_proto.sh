@@ -57,6 +57,7 @@ Module="security"
 echo "Generating $Agent/$Module protoc"
 protoc -I $Agent/$Module/identity -I ./common $Agent/$Module/identity/moc_nodeagent_identity.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/keyvault/secret -I ./common $Agent/$Module/keyvault/secret/moc_nodeagent_secret.proto  --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/keyvault/key -I ./common $Agent/$Module/keyvault/key/moc_nodeagent_key.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/keyvault -I ./common -I $Agent/$Module/keyvault/secret $Agent/$Module/keyvault/moc_nodeagent_keyvault.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/authentication -I ./common -I $Agent/$Module/identity $Agent/$Module/authentication/moc_nodeagent_authentication.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/certificate -I ./common -I $Agent/$Module/certificate $Agent/$Module/certificate/moc_nodeagent_certificate.proto --go_out=plugins=grpc:../bld/gen/
@@ -154,6 +155,7 @@ protoc -I $Agent/$Module/networkinterface -I ./common $Agent/$Module/networkinte
 protoc -I $Agent/$Module/vippool -I ./common $Agent/$Module/vippool/moc_cloudagent_vippool.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/macpool -I ./common $Agent/$Module/macpool/moc_cloudagent_macpool.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/networksecuritygroup -I ./common $Agent/$Module/networksecuritygroup/moc_cloudagent_networksecuritygroup.proto --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/publicipaddress -I ./common $Agent/$Module/publicipaddress/moc_cloudagent_publicipaddress.proto --go_out=plugins=grpc:../bld/gen/
 
 # Generate compute agent protoc
 Module="compute"

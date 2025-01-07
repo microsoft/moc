@@ -39,6 +39,11 @@ enum NetworkType {
 	UNDEFINED = 2;
 }
 
+enum IPVersion {
+	IPv4 = 0;
+	IPv6 = 1;
+}
+
 message IPPoolInfo {
 	string used = 1;
 	string available = 2;
@@ -65,10 +70,6 @@ message ResourceReference {
 }
 
 message NetworkSecurityGroupReference {
-	ResourceReference resourceRef = 1;
-}
-
-message PublicIPAddressReference {
 	ResourceReference resourceRef = 1;
 }
 
@@ -99,5 +100,9 @@ message SubnetReference {
 }
 
 message NetworkInterfaceReference {
+	ResourceReference resourceRef = 1;
+}
+
+message PublicIPAddressReference {
 	ResourceReference resourceRef = 1;
 }
