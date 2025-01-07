@@ -356,7 +356,7 @@ enum ProviderAccessOperation {
 
 	VirtualHardDisk_Create          = 3100;
 	VirtualHardDisk_Update          = 3101;
-	VirtualHardDisk_Upload 			= 3102;
+	VirtualHardDisk_Upload          = 3102;
 
 	VirtualMachineImage_Create      = 3200;
 	VirtualMachineImage_Update      = 3201;
