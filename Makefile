@@ -5,7 +5,6 @@ GOBUILD=$(GOCMD) build -v #-mod=vendor
 GOTEST=$(GOCMD) test -v 
 GOHOSTOS=$(strip $(shell $(GOCMD) env get GOHOSTOS))
 MOCKGEN=$(shell command -v mockgen 2> /dev/null)
-GOPATH_BIN := $(shell go env GOPATH)/bin
 
 # Private repo workaround
 export GOPRIVATE = github.com/microsoft
@@ -51,8 +50,4 @@ mocks:
 	go mod download github.com/golang/mock
 	go get github.com/golang/mock@v1.6.0
 	go generate ./...
-
-golangci-lint:
-	$(GOCMD) install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-	$(GOPATH_BIN)/golangci-lint run --config .golangci.yml
 
