@@ -197,27 +197,27 @@ func GetFromStatuses(statuses map[string]*string) (status *common.Status) {
 	status = &common.Status{}
 	if val, ok := statuses["ProvisionState"]; ok {
 		ps := new(common.ProvisionStatus)
-		proto.UnmarshalText(*val, ps) //nolint:golint,errcheck
+		proto.UnmarshalText(*val, ps)
 		status.ProvisioningStatus = ps
 	}
 	if val, ok := statuses["HealthState"]; ok {
 		ps := new(common.Health)
-		proto.UnmarshalText(*val, ps) //nolint:golint,errcheck
+		proto.UnmarshalText(*val, ps)
 		status.Health = ps
 	}
 	if val, ok := statuses["Error"]; ok {
 		ps := new(common.Error)
-		proto.UnmarshalText(*val, ps) //nolint:golint,errcheck
+		proto.UnmarshalText(*val, ps)
 		status.LastError = ps
 	}
 	if val, ok := statuses["DownloadStatus"]; ok {
 		ps := new(common.DownloadStatus)
-		proto.UnmarshalText(*val, ps) //nolint:golint,errcheck
+		proto.UnmarshalText(*val, ps)
 		status.DownloadStatus = ps
 	}
 	if val, ok := statuses["PlacementStatus"]; ok {
 		ps := new(common.PlacementStatus)
-		proto.UnmarshalText(*val, ps) //nolint:golint,errcheck
+		proto.UnmarshalText(*val, ps)
 		status.PlacementStatus = ps
 	}
 	if val, ok := statuses["UploadStatus"]; ok {
