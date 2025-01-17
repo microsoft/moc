@@ -88,15 +88,13 @@ message Probe {
 
 message FrontEndIpConfiguration {
 	string name = 1;
-	IPAllocationMethod allocationMethod = 2; // required
-	PublicIPAddressReference publicIPAddress = 3; // required if not using privateIP and a subnet. resourceRef to publicIPAddress
-	Tags tags = 4;
+	PublicIPAddressReference publicIPAddress = 2; // required if not using privateIP and a subnet. resourceRef to publicIPAddress
+	Tags tags = 3;
 }
 
 message BackendAddressPool {
 	string name = 1;
-	NetworkInterfaceReference networkInterfaceRef = 2;
-	Tags tags = 3;
+	Tags tags = 2;
 }
 
 message LoadBalancer {
