@@ -81,14 +81,13 @@ func GetWssdConfigLocation() string {
 		// Create the default config path and set the
 		// env variable
 		defaultPath = filepath.Join(wd, DefaultWSSDFolder)
-		os.Setenv(AccessFileDirPath, defaultPath) //nolint:golint,errcheck
+		os.Setenv(AccessFileDirPath, defaultPath)
 	}
 
 	if execName, err := getExecutableName(); err == nil {
 		defaultPath = filepath.Join(defaultPath, execName)
 	}
-	// needs to be fixed later since a large number of repos use this
-	os.MkdirAll(defaultPath, os.ModePerm) //nolint:golint,errcheck
+	os.MkdirAll(defaultPath, os.ModePerm)
 	accessFilePath := filepath.Join(defaultPath, AccessFileDefaultName)
 	return accessFilePath
 }
@@ -109,9 +108,9 @@ func GetMocConfigLocationName(subfolder, filename string) string {
 		// Create the default config path and set the
 		// env variable
 		defaultPath := filepath.Join(wd, DefaultWSSDFolder, subfolder)
-		os.MkdirAll(defaultPath, os.ModePerm) //nolint:golint,errcheck
+		os.MkdirAll(defaultPath, os.ModePerm)
 		wssdConfigPath = filepath.Join(defaultPath, file)
-		os.Setenv(WssdConfigPath, wssdConfigPath) //nolint:golint,errcheck
+		os.Setenv(WssdConfigPath, wssdConfigPath)
 	}
 	return wssdConfigPath
 }
@@ -127,9 +126,9 @@ func getClientTokenLocation() string {
 		// Create the default token path and set the
 		// env variable
 		defaultPath := filepath.Join(wd, DefaultWSSDFolder)
-		os.MkdirAll(defaultPath, os.ModePerm) //nolint:golint,errcheck
+		os.MkdirAll(defaultPath, os.ModePerm)
 		clientTokenPath = filepath.Join(defaultPath, ClientTokenName)
-		os.Setenv(ClientTokenPath, clientTokenPath) //nolint:golint,errcheck
+		os.Setenv(ClientTokenPath, clientTokenPath)
 	}
 	return clientTokenPath
 }

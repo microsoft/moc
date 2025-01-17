@@ -22,6 +22,7 @@ func InitStatus() *common.Status {
 		DownloadStatus:     &common.DownloadStatus{},
 		ValidationStatus:   &common.ValidationStatus{},
 		PlacementStatus:    &common.PlacementStatus{},
+		UploadStatus:       &common.UploadStatus{},
 	}
 }
 
@@ -129,6 +130,26 @@ func GetPlacementStatus(s *common.Status) common.PlacementStatusType {
 	return s.GetPlacementStatus().GetStatus()
 }
 
+// Set UploadError
+func SetUploadError(s *common.Status, err error) {
+	s.UploadStatus.LastUploadError = errors.ErrorToProto(err)
+}
+
+// SetUploadStatus
+func SetUploadStatus(s *common.Status, dProgressPercentage, dUploadSizeInBytes, dFileSizeInBytes int64, err ...error) {
+	if s.UploadStatus == nil {
+		s.UploadStatus = &common.UploadStatus{}
+	}
+	s.UploadStatus.ProgressPercentage = dProgressPercentage
+	s.UploadStatus.UploadSizeInBytes = dUploadSizeInBytes
+	s.UploadStatus.FileSizeInBytes = dFileSizeInBytes
+	if len(err) > 0 {
+		SetUploadError(s, err[0])
+	} else {
+		s.UploadStatus.LastUploadError = nil
+	}
+}
+
 // GetStatuses - converts status to map
 func GetStatuses(status *common.Status) map[string]*string {
 	statuses := map[string]*string{}
@@ -162,6 +183,11 @@ func GetStatuses(status *common.Status) map[string]*string {
 		placementStatusStr := placementStatus.String()
 		statuses["PlacementStatus"] = &placementStatusStr
 	}
+	uploadStatus := status.GetUploadStatus()
+	if uploadStatus != nil {
+		uploadStatusStr := uploadStatus.String()
+		statuses["UploadStatus"] = &uploadStatusStr
+	}
 
 	return statuses
 }
@@ -171,28 +197,33 @@ func GetFromStatuses(statuses map[string]*string) (status *common.Status) {
 	status = &common.Status{}
 	if val, ok := statuses["ProvisionState"]; ok {
 		ps := new(common.ProvisionStatus)
-		proto.UnmarshalText(*val, ps) //nolint:golint,errcheck
+		proto.UnmarshalText(*val, ps)
 		status.ProvisioningStatus = ps
 	}
 	if val, ok := statuses["HealthState"]; ok {
 		ps := new(common.Health)
-		proto.UnmarshalText(*val, ps) //nolint:golint,errcheck
+		proto.UnmarshalText(*val, ps)
 		status.Health = ps
 	}
 	if val, ok := statuses["Error"]; ok {
 		ps := new(common.Error)
-		proto.UnmarshalText(*val, ps) //nolint:golint,errcheck
+		proto.UnmarshalText(*val, ps)
 		status.LastError = ps
 	}
 	if val, ok := statuses["DownloadStatus"]; ok {
 		ps := new(common.DownloadStatus)
-		proto.UnmarshalText(*val, ps) //nolint:golint,errcheck
+		proto.UnmarshalText(*val, ps)
 		status.DownloadStatus = ps
 	}
 	if val, ok := statuses["PlacementStatus"]; ok {
 		ps := new(common.PlacementStatus)
-		proto.UnmarshalText(*val, ps) //nolint:golint,errcheck
+		proto.UnmarshalText(*val, ps)
 		status.PlacementStatus = ps
+	}
+	if val, ok := statuses["UploadStatus"]; ok {
+		ps := new(common.UploadStatus)
+		proto.UnmarshalText(*val, ps) //nolint:golint,errcheck
+		status.UploadStatus = ps
 	}
 
 	return

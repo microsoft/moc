@@ -1,6 +1,6 @@
 module github.com/microsoft/moc
 
-go 1.22.4
+go 1.22
 
 require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
@@ -29,7 +29,7 @@ replace (
 	github.com/golang/mock => github.com/golang/mock v1.6.0
 	github.com/stretchr/testify => github.com/stretchr/testify v1.8.3
 	go.opentelemetry.io/proto/otlp => go.opentelemetry.io/proto/otlp v0.19.0
-	golang.org/x/crypto => golang.org/x/crypto v0.17.0
+	golang.org/x/crypto => golang.org/x/crypto v0.32.0
 	golang.org/x/image => golang.org/x/image v0.10.0
 	golang.org/x/sys => golang.org/x/sys v0.0.0-20220823224334-20c2bfdbfe24
 	google.golang.org/grpc => google.golang.org/grpc v1.59.0
