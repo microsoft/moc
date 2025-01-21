@@ -99,10 +99,6 @@ message SubnetReference {
 	ResourceReference resourceRef = 2;
 }
 
-message NetworkInterfaceReference {
-	ResourceReference resourceRef = 1;
-}
-
 message PublicIPAddressReference {
 	ResourceReference resourceRef = 1;
 }
