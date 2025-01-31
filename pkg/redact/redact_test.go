@@ -3,6 +3,7 @@
 package redact
 
 import (
+	"errors"
 	"fmt"
 	"net/url"
 	"reflect"
@@ -10,7 +11,6 @@ import (
 	"testing"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/microsoft/moc/pkg/errors"
 	"github.com/microsoft/moc/rpc/cloudagent/security"
 	"github.com/microsoft/moc/rpc/common"
 	"github.com/stretchr/testify/assert"
@@ -197,11 +197,52 @@ func TestRedactErrorJsonSensitiveField(t *testing.T) {
 	}
 }
 
-func TestRedactHttpURL(t *testing.T) {
-	uri := "https://sas.azure.net/test?sp=sljsdf&st=2025-01-31T10:33:25Z&sv=2022-10-02&spr=3lskdjfoi23y9owh9u23fgn"
-	err := url.Error{"Head", uri, errors.New("Unable to reach host")}
+func TestRedactErrorURL(t *testing.T) {
+	type args struct {
+		err error
+		uri string
+	}
+	tests := []struct {
+		name      string
+		args      args
+		uri       string
+		wantError bool
+	}{
+		{name: "valid URI", args: struct {
+			err error
+			uri string
+		}{err: &url.Error{
+			Op:  "Head",
+			URL: "https://sas.azure.net/test?sp=sljsdf&st=2025-01-31T10:33:25Z&sv=2022-10-02&spr=3lskdjfoi23y9owh9u23fgn",
+			Err: errors.New("unable to reach host"),
+		},
+			uri: "https://sas.azure.net/test?sp=sljsdf&st=2025-01-31T10:33:25Z&sv=2022-10-02&spr=3lskdjfoi23y9owh9u23fgn"}, wantError: false},
 
-	RedactErrorURL(&err)
-
-	assert.False(t, strings.Contains(err.Error(), uri))
+		{name: "uri with token", args: struct {
+			err error
+			uri string
+		}{err: &url.Error{
+			Op:  "Head",
+			URL: "https://sas.azure.net/test?se=2025-01-31T18%3A33%3A25Z&sig=7k%3D&sp=r&spr=https&sr=b&st=2025-01-31T10%3A33%3A25Z&sv=2022-11-02",
+			Err: errors.New("unable to reach host"),
+		},
+			uri: "https://sas.azure.net/test?se=2025-01-31T18%3A33%3A25Z&sig=7k%3D&sp=r&spr=https&sr=b&st=2025-01-31T10%3A33%3A25Z&sv=2022-11-02"}, wantError: false},
+		{name: "empty uri", args: struct {
+			err error
+			uri string
+		}{err: &url.Error{
+			Op:  "Head",
+			URL: "",
+			Err: errors.New("unable to reach host"),
+		},
+			uri: ""}, wantError: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			RedactErrorURL(tt.args.err)
+			if tt.wantError != strings.Contains(tt.args.err.Error(), tt.args.uri) {
+				t.Errorf("RedactErrorURL() got = %v, want %v", tt.args.err, tt.wantError)
+			}
+		})
+	}
 }
