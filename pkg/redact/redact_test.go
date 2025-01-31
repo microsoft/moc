@@ -4,10 +4,13 @@ package redact
 
 import (
 	"fmt"
+	"net/url"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/golang/protobuf/proto"
+	"github.com/microsoft/moc/pkg/errors"
 	"github.com/microsoft/moc/rpc/cloudagent/security"
 	"github.com/microsoft/moc/rpc/common"
 	"github.com/stretchr/testify/assert"
@@ -192,4 +195,13 @@ func TestRedactErrorJsonSensitiveField(t *testing.T) {
 			assert.Equal(t, fmt.Errorf(tt.expectedError), err)
 		})
 	}
+}
+
+func TestRedactHttpURL(t *testing.T) {
+	uri := "https://sas.azure.net/test?sp=sljsdf&st=2025-01-31T10:33:25Z&sv=2022-10-02&spr=3lskdjfoi23y9owh9u23fgn"
+	err := url.Error{"Head", uri, errors.New("Unable to reach host")}
+
+	RedactErrorURL(&err)
+
+	assert.False(t, strings.Contains(err.Error(), uri))
 }
