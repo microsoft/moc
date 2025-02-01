@@ -10,6 +10,8 @@ import "moc_common_common.proto";
 import "moc_common_notification.proto";
 import "google/protobuf/empty.proto";
 import "moc_common_storageinfo.proto";
+import "moc_common_computecommon.proto";
+import "google/protobuf/descriptor.proto";
 
 enum VirtualHardDiskType {
 	OS_VIRTUALHARDDISK = 0;
@@ -67,7 +69,7 @@ message AzureGalleryImageProperties {
 message VirtualHardDisk {
 	string name = 1;
 	string id = 2;
-	string source = 3 [(sensitive) = true];
+	string source = 3 [(sensitivejson) = true];
 	string path = 4 [(sensitive) = true];
 	// Storage container name to hold this vhd
 	string containerName = 5;
