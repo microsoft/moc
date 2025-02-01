@@ -5,7 +5,9 @@ package redact
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"net/url"
 	"reflect"
 	"strings"
 
@@ -150,12 +152,15 @@ func redactJsonSensitiveField(val reflect.Value) {
 	if err := json.Unmarshal([]byte(validJsonString), &jsonData); err != nil {
 		return
 	}
-	for key := range jsonData {
-		// This can be extended to an array of sensitive keys if needed
-		if key == "private-key" {
-			jsonData[key] = RedactedString
+
+	sensitiveKeys := [...]string{"private-key", "sasURI"}
+
+	for _, sensitiveKey := range sensitiveKeys {
+		if _, ok := jsonData[sensitiveKey]; ok {
+			jsonData[sensitiveKey] = RedactedString
 		}
 	}
+
 	redactedJson, err := json.Marshal(jsonData)
 	if err == nil {
 		val.SetString(string(redactedJson))
@@ -253,12 +258,19 @@ func redactErrorJsonSensitiveField(val reflect.Value, errMessage *error) {
 	if err := json.Unmarshal([]byte(validJsonString), &jsonData); err != nil {
 		return
 	}
-	for key := range jsonData {
-		// This can be extended to an array of sensitive keys if needed
-		if key == "private-key" {
-			if strVal, ok := jsonData[key].(string); ok && errMessage != nil && *errMessage != nil && strVal != "" {
-				redactSensitiveField(strVal, errMessage)
-			}
+	sensitiveKeys := [...]string{"private-key", "sasURI"}
+
+	for _, sensitiveKey := range sensitiveKeys {
+		if strVal, ok := jsonData[sensitiveKey].(string); ok && errMessage != nil && *errMessage != nil && strVal != "" {
+			redactSensitiveField(strVal, errMessage)
 		}
+	}
+}
+
+// Redacts URL from net/http errors
+func RedactErrorURL(err error) {
+	var ue *url.Error
+	if errors.As(err, &ue) {
+		ue.URL = RedactedString
 	}
 }
