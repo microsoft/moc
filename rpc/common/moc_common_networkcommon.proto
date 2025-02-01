@@ -110,6 +110,11 @@ message FrontendIPConfigurationReference {
 	ResourceReference resourceRef = 1;
 }
 
+message LoadBalancerReference {
+	ResourceReference resourceRef = 1;
+}
+
 message BackendAddressPoolReference {
 	ResourceReference resourceRef = 1;
+	LoadBalancerReference loadBalancerRef = 2;
 }
