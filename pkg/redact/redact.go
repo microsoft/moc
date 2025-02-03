@@ -148,8 +148,7 @@ func redactMessage(msg interface{}, val reflect.Value) {
 
 func redactJsonSensitiveField(val reflect.Value) {
 	var jsonData map[string]interface{}
-	validJsonString := strings.ReplaceAll(val.String(), `\`, `"`)
-	if err := json.Unmarshal([]byte(validJsonString), &jsonData); err != nil {
+	if err := json.Unmarshal([]byte(val.String()), &jsonData); err != nil {
 		return
 	}
 
@@ -254,8 +253,7 @@ func redactSensitiveField(fieldVal string, errMessage *error) {
 // to redact the value and update the errMessage.
 func redactErrorJsonSensitiveField(val reflect.Value, errMessage *error) {
 	var jsonData map[string]interface{}
-	validJsonString := strings.ReplaceAll(val.String(), `\`, `"`)
-	if err := json.Unmarshal([]byte(validJsonString), &jsonData); err != nil {
+	if err := json.Unmarshal([]byte(val.String()), &jsonData); err != nil {
 		return
 	}
 	sensitiveKeys := [...]string{"private-key", "sasURI"}
