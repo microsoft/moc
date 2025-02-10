@@ -183,6 +183,12 @@ func TestRedactErrorJsonSensitiveField(t *testing.T) {
 			inputError:    "error with no sensitive data",
 			expectedError: "error with no sensitive data",
 		},
+		{
+			name:          "Redact sasURI in JSON",
+			inputJson:     `{"private-key": "sensitiveKey2", "sasURI": "https://usgovcloudapi.net/"}`,
+			inputError:    "error with sensitiveKey2, sasURI: https://usgovcloudapi.net/",
+			expectedError: "error with ** Redacted **, sasURI: ** Redacted **",
+		},
 	}
 
 	for _, tt := range tests {
