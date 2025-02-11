@@ -9,16 +9,6 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 import "moc_common_networkcommon.proto";
 
-enum PolicyType {
-    UNKNOWN = 0;
-    SDN_ALL = 1;
-}
-
-message AdvancedNetworkPolicy {
-	PolicyType type = 1;
-	bool enabled = 2;
-}
-
 message NetworkInterfaceRequest {
 	repeated NetworkInterface NetworkInterfaces = 1;
 	Operation OperationType = 2;
@@ -81,7 +71,7 @@ message NetworkInterface {
 	string virtualMachineName = 11;
 	uint32 iovWeight = 12;
 	Tags tags = 13;
-	repeated AdvancedNetworkPolicy policies = 14;
+	repeated AdvancedNetworkPolicy advancedPolicies = 14;
 }
 
 service NetworkInterfaceAgent {

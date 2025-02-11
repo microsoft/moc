@@ -85,3 +85,14 @@ message SubnetReference {
 message PublicIPAddressReference {
 	ResourceReference resourceRef = 1;
 }
+
+enum NetworkPolicyType {
+	INVALID = 0;
+	// Denotes SDN Policies. Disabling SDN policy disables all SDN features.
+	SDN = 1;
+}
+
+message AdvancedNetworkPolicy {
+	NetworkPolicyType type = 1;
+	bool enabled = 2;
+}
