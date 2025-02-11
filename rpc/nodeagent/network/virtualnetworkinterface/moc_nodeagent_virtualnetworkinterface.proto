@@ -35,6 +35,8 @@ message IpConfiguration {
 	string gateway = 5 [(sensitive) = true];
 	IPAllocationMethod allocation = 6;
 	NetworkType networkType = 7;
+	string switchName = 8;
+	uint32 subnetVlan = 9;
 }
 
 message VirtualNetworkInterface {
