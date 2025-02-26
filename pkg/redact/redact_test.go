@@ -3,8 +3,11 @@
 package redact
 
 import (
+	"errors"
 	"fmt"
+	"net/url"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/golang/protobuf/proto"
@@ -180,6 +183,12 @@ func TestRedactErrorJsonSensitiveField(t *testing.T) {
 			inputError:    "error with no sensitive data",
 			expectedError: "error with no sensitive data",
 		},
+		{
+			name:          "Redact sasURI in JSON",
+			inputJson:     `{"private-key": "sensitiveKey2", "sasURI": "https://usgovcloudapi.net/"}`,
+			inputError:    "error with sensitiveKey2, sasURI: https://usgovcloudapi.net/",
+			expectedError: "error with ** Redacted **, sasURI: ** Redacted **",
+		},
 	}
 
 	for _, tt := range tests {
@@ -190,6 +199,56 @@ func TestRedactErrorJsonSensitiveField(t *testing.T) {
 			redactErrorJsonSensitiveField(val, &err)
 
 			assert.Equal(t, fmt.Errorf(tt.expectedError), err)
+		})
+	}
+}
+
+func TestRedactErrorURL(t *testing.T) {
+	type args struct {
+		err error
+		uri string
+	}
+	tests := []struct {
+		name      string
+		args      args
+		uri       string
+		wantError bool
+	}{
+		{name: "valid URI", args: struct {
+			err error
+			uri string
+		}{err: &url.Error{
+			Op:  "Head",
+			URL: "https://sas.azure.net/test?sp=sljsdf&st=2025-01-31T10:33:25Z&sv=2022-10-02&spr=3lskdjfoi23y9owh9u23fgn",
+			Err: errors.New("unable to reach host"),
+		},
+			uri: "https://sas.azure.net/test?sp=sljsdf&st=2025-01-31T10:33:25Z&sv=2022-10-02&spr=3lskdjfoi23y9owh9u23fgn"}, wantError: false},
+
+		{name: "uri with token", args: struct {
+			err error
+			uri string
+		}{err: &url.Error{
+			Op:  "Head",
+			URL: "https://sas.azure.net/test?se=2025-01-31T18%3A33%3A25Z&sig=7k%3D&sp=r&spr=https&sr=b&st=2025-01-31T10%3A33%3A25Z&sv=2022-11-02",
+			Err: errors.New("unable to reach host"),
+		},
+			uri: "https://sas.azure.net/test?se=2025-01-31T18%3A33%3A25Z&sig=7k%3D&sp=r&spr=https&sr=b&st=2025-01-31T10%3A33%3A25Z&sv=2022-11-02"}, wantError: false},
+		{name: "empty uri", args: struct {
+			err error
+			uri string
+		}{err: &url.Error{
+			Op:  "Head",
+			URL: "",
+			Err: errors.New("unable to reach host"),
+		},
+			uri: ""}, wantError: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			RedactErrorURL(tt.args.err)
+			if tt.wantError != strings.Contains(tt.args.err.Error(), tt.args.uri) {
+				t.Errorf("RedactErrorURL() got = %v, want %v", tt.args.err, tt.wantError)
+			}
 		})
 	}
 }
