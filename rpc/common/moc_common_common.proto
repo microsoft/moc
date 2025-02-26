@@ -17,6 +17,7 @@ enum Operation {
 	VALIDATE = 6;
 	HYDRATE = 7;
 	DISCOVER = 8;
+	SNAPSHOT = 9;
 }
 
 enum ProvisionState {
