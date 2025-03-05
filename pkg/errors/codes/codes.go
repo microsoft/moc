@@ -8,8 +8,8 @@ import "strings"
 type MocCode uint32
 
 const (
-	OK MocCode = iota
-	NotFound
+	OK       MocCode = iota
+	NotFound MocCode = 5
 	Degraded
 	InvalidConfiguration
 	InvalidInput

@@ -497,3 +497,94 @@ func TestParseGRPCError(t *testing.T) {
 		})
 	}
 }
+
+func TestAreAllErrorsNotFound(t *testing.T) {
+	tests := []struct {
+		name          string
+		err           error
+		expectedEqual bool
+	}{
+		{
+			name:          "NotFound error single",
+			err:           NotFound,
+			expectedEqual: true,
+		},
+		{
+			name:          "InUse error single",
+			err:           InUse,
+			expectedEqual: false,
+		},
+		{
+			name:          "nil error single",
+			err:           nil,
+			expectedEqual: false,
+		},
+		{
+			name:          "Multierr with single matching error",
+			err:           multierr.Combine(NotFound),
+			expectedEqual: true,
+		},
+		{
+			name:          "Multierr with all errors having same MocCodes",
+			err:           multierr.Combine(NotFound, NotFound, NewMocError(moccodes.NotFound)),
+			err:           NotFound,
+			expectedEqual: true,
+		},
+		{
+			name:          "Multierr with not all errors having same MocCodes",
+			wrappedError:  multierr.Combine(NotFound, Degraded, NewMocError(moccodes.InvalidInput)),
+			err:           NotFound,
+			expectedEqual: true,
+		},
+		{
+			name: "Multierr with all errors having same MocCodes using Wrapf",
+			wrappedError: multierr.Combine(
+				Wrapf(NotFound, "additional context"),
+				Wrapf(NotFound, "additional context 2"),
+				Wrapf(NewMocError(moccodes.NotFound), "additional context 3"),
+			),
+			err:           NotFound,
+			expectedEqual: true,
+		},
+		{
+			name: "Multierr with not all errors having same MocCodes using Wrapf",
+			wrappedError: multierr.Combine(
+				Wrapf(NotFound, "additional context"),
+				Wrapf(InvalidInput, "additional context 2"),
+				Wrapf(NewMocError(moccodes.NotFound), "additional context 3"),
+			),
+			err:           NotFound,
+			expectedEqual: true,
+		},
+		{
+			name: "Multierr with nested multierr all have same MocCodes",
+			wrappedError: multierr.Combine(
+				multierr.Combine(
+					NewMocError(moccodes.NotFound),
+					Wrapf(NotFound, "additional context"),
+				),
+				NewMocError(moccodes.NotFound),
+			),
+			err:           NotFound,
+			expectedEqual: true,
+		},
+		{
+			name: "Multierr with nested multierr don't all have same MocCodes",
+			wrappedError: multierr.Combine(
+				multierr.Combine(NotFound, NotFound),
+				InvalidInput,
+			),
+			err:           NotFound,
+			expectedEqual: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			equal := AreAllErrorsNotFound(tt.err)
+			if equal != tt.expectedEqual {
+				t.Errorf("AreAllErrorsNotFound() = %v, want %v", equal, tt.expectedEqual)
+			}
+		})
+	}
+}

@@ -596,6 +596,25 @@ func checkError(wrappedError, err error) bool {
 	return false
 }
 
+func AreAllErrorsNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	// Get all errors if it's a multi-error
+	errs := multierr.Errors(err)
+	if len(errs) == 0 {
+		errs = append(errs, err)
+	}
+	for _, e := range errs {
+		if IsNotFound(e) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func New(errString string) error {
 	return errors.New(errString)
 }
