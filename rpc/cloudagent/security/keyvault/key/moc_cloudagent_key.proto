@@ -67,7 +67,7 @@ message Key {
 	// Private Key Value and wrapping information
 	bytes privateKey = 14 [(sensitive) = true];
 	PrivateKeyWrappingInfo privateKeyWrappingInfo = 15;
-	uint32 keyVersion = 16;
+	string keyVersion = 16;
 	google.protobuf.Duration keyAge = 17;
 }
 
