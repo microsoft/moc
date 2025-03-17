@@ -140,6 +140,8 @@ message VirtualMachine {
 	VirtualMachineAgentInstanceView guestAgentInstanceView = 16;
 	ZoneConfiguration zoneConfiguration = 17;
 	Priority priority = 18;
+	string hyperVVmId = 19;
+	string hostNodeName = 20;
 }
 
 message VirtualMachineOperationRequest {
