@@ -9,6 +9,7 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 import "moc_common_security.proto";
 
+option cc_generic_services = true;
 
 message KeyRequest {
 	repeated Key Keys = 1;

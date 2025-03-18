@@ -8,6 +8,8 @@ package moc;
 
 import "moc_common_common.proto";
 
+option cc_generic_services = true;
+
 enum Algorithm {
 	A_UNKNOWN = 0;
 	RSA15 = 1;

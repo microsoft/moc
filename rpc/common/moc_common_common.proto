@@ -7,6 +7,8 @@ option go_package = "github.com/microsoft/moc/rpc/common";
 package moc;
 import "google/protobuf/descriptor.proto";
 
+option cc_generic_services = true;
+
 enum Operation {
 	GET = 0;
 	POST = 1;

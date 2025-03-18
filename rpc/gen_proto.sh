@@ -11,6 +11,7 @@ set -e
 Module="common"
 echo "Generating $Module protoc"
 protoc -I common common/moc_common_common.proto --go_out=plugins=grpc:../bld/gen/
+protoc -I common common/moc_common_common.proto --cpp_out=.
 protoc -I common common/moc_common_computecommon.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I common common/moc_common_nodeinfo.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I common common/moc_common_networkcommon.proto --go_out=plugins=grpc:../bld/gen/
@@ -22,6 +23,7 @@ protoc -I common common/admin/validation/moc_common_validation.proto --go_out=pl
 protoc -I common common/admin/version/moc_common_version.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I common common/moc_common_notification.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I common common/moc_common_security.proto --go_out=plugins=grpc:../bld/gen/
+protoc -I common common/moc_common_security.proto --cpp_out=.
 protoc -I common common/moc_common_storageinfo.proto --go_out=plugins=grpc:../bld/gen/
 
 #### 
@@ -56,7 +58,8 @@ Module="security"
 echo "Generating $Agent/$Module protoc"
 protoc -I $Agent/$Module/identity -I ./common $Agent/$Module/identity/moc_nodeagent_identity.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/keyvault/secret -I ./common $Agent/$Module/keyvault/secret/moc_nodeagent_secret.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/keyvault -I ./common -I $Agent/$Module/keyvault/secret $Agent/$Module/keyvault/moc_nodeagent_keyvault.proto  --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/keyvault -I ./common -I $Agent/$Module/keyvault/secret $Agent/$Module/keyvault/moc_nodeagent_keyvault.proto  --go_out=plugins=grpc:../bld/gen/ 
+#protoc -I $Agent/$Module/keyvault -I ./common -I $Agent/$Module/keyvault/secret $Agent/$Module/keyvault/moc_nodeagent_keyvault.proto  --cpp_out=.
 protoc -I $Agent/$Module/authentication -I ./common -I $Agent/$Module/identity $Agent/$Module/authentication/moc_nodeagent_authentication.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/certificate -I ./common -I $Agent/$Module/certificate $Agent/$Module/certificate/moc_nodeagent_certificate.proto --go_out=plugins=grpc:../bld/gen/
 
@@ -152,7 +155,6 @@ protoc -I $Agent/$Module/loadbalancer -I ./common $Agent/$Module/loadbalancer/mo
 protoc -I $Agent/$Module/networkinterface -I ./common $Agent/$Module/networkinterface/moc_cloudagent_networkinterface.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/vippool -I ./common $Agent/$Module/vippool/moc_cloudagent_vippool.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/macpool -I ./common $Agent/$Module/macpool/moc_cloudagent_macpool.proto --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/networksecuritygroup -I ./common $Agent/$Module/networksecuritygroup/moc_cloudagent_networksecuritygroup.proto --go_out=plugins=grpc:../bld/gen/
 
 # Generate compute agent protoc
 Module="compute"
@@ -189,6 +191,10 @@ protoc -I $Agent/$Module/identity -I ./common -I $Agent/$Module/certificate $Age
 protoc -I $Agent/$Module/roleassignment -I ./common $Agent/$Module/roleassignment/moc_cloudagent_roleassignment.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/keyvault/secret -I ./common $Agent/$Module/keyvault/secret/moc_cloudagent_secret.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/keyvault/key -I ./common $Agent/$Module/keyvault/key/moc_cloudagent_key.proto  --go_out=plugins=grpc:../bld/gen/
+protoc -I $Agent/$Module/keyvault/key -I ./common $Agent/$Module/keyvault/key/moc_cloudagent_key.proto --cpp_out=.
+#protoc -I=. --grpc_out=. --plugin=protoc-gen-grpc="<vcpkg_install_path>\packages\grpc_x64-windows\tools\grpc\grpc_cpp_plugin.exe" .
+#protoc -I $Agent/$Module/keyvault/key -I ./common $Agent/$Module/keyvault/key/moc_cloudagent_key.proto  --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin`
+#$ protoc -I ../../protos --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` ../../protos/route_guide.proto
 protoc -I $Agent/$Module/keyvault -I ./common -I $Agent/$Module/keyvault/secret $Agent/$Module/keyvault/moc_cloudagent_keyvault.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/authentication -I ./common -I $Agent/$Module/identity -I $Agent/$Module/certificate $Agent/$Module/authentication/moc_cloudagent_authentication.proto --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/certificate -I ./common $Agent/$Module/certificate/moc_cloudagent_certificate.proto --go_out=plugins=grpc:../bld/gen/

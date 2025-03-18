@@ -50,4 +50,3 @@ mocks:
 	go mod download github.com/golang/mock
 	go get github.com/golang/mock@v1.6.0
 	go generate ./...
-
