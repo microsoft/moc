@@ -58,7 +58,7 @@ const (
 	VolumeNotFound
 	VolumeDegraded
 	VolumeAccessInconsistent
-
+	PreCheckFailed
 	// This is not a valid code, it is used to get the maximum code value.
 	// Any new codes should be defined above this.
 	_maxCode
