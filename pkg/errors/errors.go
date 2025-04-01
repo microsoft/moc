@@ -132,6 +132,7 @@ var (
 	MeasurementUnitError        error = NewMocError(moccodes.MeasurementUnitError)
 	QuotaViolation              error = NewMocError(moccodes.QuotaViolation)
 	IPOutOfRange                error = NewMocError(moccodes.IPOutOfRange)
+	PreCheckFailed              error = NewMocError(moccodes.PreCheckFailed)
 )
 
 // legacyErrorMessages - map of error codes to their legacy string representation. This is solely for backwards compatibility
