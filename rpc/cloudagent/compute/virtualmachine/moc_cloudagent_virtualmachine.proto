@@ -138,6 +138,8 @@ message VirtualMachine {
 	ZoneConfiguration zoneConfiguration = 20;
 	PlacementGroupReference placementGroup = 21;
 	Priority priority = 22;
+	string hyperVVmId = 23;
+	string hostNodeName = 24;
 }
 
 message VirtualMachineOperationRequest {
