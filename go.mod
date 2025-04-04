@@ -3,6 +3,7 @@ module github.com/microsoft/moc
 go 1.23.0
 
 require (
+	github.com/go-logr/logr v1.4.2
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang/mock v1.6.0
 	github.com/golang/protobuf v1.5.4
