@@ -179,6 +179,19 @@ message VirtualMachinePrecheckResponse {
 	string Error = 2;
 }
 
+message VirtualMachineHyperVVmId {
+	string hyperVVmId = 1;
+}
+
+message VirtualMachineHostNodeName {
+	string hostNodeName = 1;
+}
+
+message VirtualMachineHostNodeIpAddress {
+	string hostNodeIpAddress = 1;
+}
+
+
 service VirtualMachineAgent {
 	rpc Invoke(VirtualMachineRequest) returns (VirtualMachineResponse) {}
 
