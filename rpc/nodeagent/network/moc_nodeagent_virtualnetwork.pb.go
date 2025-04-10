@@ -584,6 +584,11 @@ func NewVirtualNetworkAgentClient(cc *grpc.ClientConn) VirtualNetworkAgentClient
 	return &virtualNetworkAgentClient{cc}
 }
 
+func GetClientConnection(client VirtualNetworkAgentClient) *grpc.ClientConn {
+	clientStruct, _ := client.(*virtualNetworkAgentClient)
+	return clientStruct.cc
+}
+
 func (c *virtualNetworkAgentClient) Invoke(ctx context.Context, in *VirtualNetworkRequest, opts ...grpc.CallOption) (*VirtualNetworkResponse, error) {
 	out := new(VirtualNetworkResponse)
 	err := c.cc.Invoke(ctx, "/moc.nodeagent.network.VirtualNetworkAgent/Invoke", in, out, opts...)
