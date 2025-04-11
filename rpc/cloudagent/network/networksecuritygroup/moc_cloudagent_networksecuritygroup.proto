@@ -55,6 +55,7 @@ message NetworkSecurityGroupRule {
 	uint32 priority = 10;
 	bool logging = 11;
 	bool isDefaultRule = 12;
+	Tags tags = 13;
 }
 
 message NetworkSecurityGroup {
