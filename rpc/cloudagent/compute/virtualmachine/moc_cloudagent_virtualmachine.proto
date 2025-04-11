@@ -198,4 +198,6 @@ service VirtualMachineAgent {
 
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
+	rpc GetHyperVVmId(VirtualMachine) returns (VirtualMachineHyperVVmId) {}
+	rpc GetHostNodeName(VirtualMachine) returns (VirtualMachineHostNodeName) {}
 }
