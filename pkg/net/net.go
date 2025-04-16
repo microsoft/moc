@@ -23,7 +23,7 @@ func GetIPAddress() (string, error) {
 }
 
 func GetIpAddresses() ([]string, error) {
-	var ipv4Addresses []string
+	var ipAddresses []string
 
 	interfaces, err := net.Interfaces()
 	if err != nil {
@@ -46,14 +46,13 @@ func GetIpAddresses() ([]string, error) {
 				ip = v.IP
 			}
 
-			// Check if the IP address is IPv4
-			if ip != nil && ip.To4() != nil {
-				ipv4Addresses = append(ipv4Addresses, ip.String())
+			if ip != nil {
+				ipAddresses = append(ipAddresses, ip.String())
 			}
 		}
 	}
 
-	return ipv4Addresses, nil
+	return ipAddresses, nil
 }
 
 func StringToNetIPAddress(ipString string) net.IP {
