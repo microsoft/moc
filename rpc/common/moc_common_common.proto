@@ -18,6 +18,7 @@ enum Operation {
 	HYDRATE = 7;
 	DISCOVER = 8;
 	SNAPSHOT = 9;
+	DELETESNAPSHOT = 10;
 }
 
 enum ProvisionState {
