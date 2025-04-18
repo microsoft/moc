@@ -63,3 +63,47 @@ jobs:
 
   - publish: $(System.DefaultWorkingDirectory)/manifest
     artifact: manifest
+
+
+- job: Lint
+  displayName: 'Lint'
+
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  variables:
+  - group: moc-build
+  - name: GO111MODULE
+    value: 'on'
+
+  steps:
+  - task: GoTool@0
+    inputs:
+      version: '1.22.5'
+
+  - task: InstallSSHKey@0
+    inputs:
+      knownHostsEntry: |
+        $(KNOWN_HOST_GITHUB)
+        $(KNOWN_HOST_GITHUB_ECDSA)
+        $(KNOWN_HOST_GITHUB_Ed25519)
+      sshPublicKey: '$(SSH_PUBLIC_KEY)'
+      sshKeySecureFile: 'azure-pipelines-ssh-key-new'
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'kva-azuredevops-gcm'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        # Obtain Azure DevOps access token
+        aadToken=$(az account get-access-token --query accessToken --resource 499b84ac-1321-427f-aa17-267ca6975798 -o tsv)
+        # Set git configuration for authentication
+        git config --global http.extraheader "AUTHORIZATION: bearer $aadToken"
+        git config --global url."ssh://git@github.com/".insteadOf "https://github.com/"
+    displayName: 'Set git config'
+
+  - script: |
+      make golangci-lint
+    displayName: 'Run GolangCI-Lint'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'

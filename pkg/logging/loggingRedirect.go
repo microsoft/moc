@@ -20,7 +20,7 @@ var (
 
 func createLogFile(logFileAbsolutePath string, logFileName string) (*os.File, error) {
 	// Create log path
-	os.MkdirAll(logFileAbsolutePath, os.ModeDir)
+	os.MkdirAll(logFileAbsolutePath, os.ModeDir) //nolint:golint,errcheck
 
 	err := path.CheckPath(logFileAbsolutePath)
 	if err != nil {
@@ -40,7 +40,7 @@ func createLogFile(logFileAbsolutePath string, logFileName string) (*os.File, er
 	// If there are contents in the file already, move the file and replace it.
 	if st.Size() > 0 {
 		logFile.Close()
-		os.Rename(path, path+".old")
+		os.Rename(path, path+".old") //nolint:golint,errcheck
 		logFile, err = os.Create(path)
 		if err != nil {
 			return nil, err

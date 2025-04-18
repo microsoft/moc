@@ -9,8 +9,6 @@ import (
 )
 
 func RedirectStdErr(file *os.File) {
-	err := syscall.Dup3(int(file.Fd()), int(os.Stderr.Fd()), 0)
-	if err != nil {
-	}
+	syscall.Dup3(int(file.Fd()), int(os.Stderr.Fd()), 0) //nolint:golint,errcheck
 	return
 }
