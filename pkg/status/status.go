@@ -212,12 +212,12 @@ func GetFromStatuses(statuses map[string]*string) (status *common.Status) {
 	}
 	if val, ok := statuses["DownloadStatus"]; ok {
 		ps := new(common.DownloadStatus)
-		proto.UnmarshalText(*val, ps)
+		proto.UnmarshalText(*val, ps) //nolint:golint,errcheck
 		status.DownloadStatus = ps
 	}
 	if val, ok := statuses["PlacementStatus"]; ok {
 		ps := new(common.PlacementStatus)
-		proto.UnmarshalText(*val, ps)
+		proto.UnmarshalText(*val, ps) //nolint:golint,errcheck
 		status.PlacementStatus = ps
 	}
 	if val, ok := statuses["UploadStatus"]; ok {

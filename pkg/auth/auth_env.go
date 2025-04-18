@@ -126,7 +126,7 @@ func getClientTokenLocation() string {
 		// Create the default token path and set the
 		// env variable
 		defaultPath := filepath.Join(wd, DefaultWSSDFolder)
-		os.MkdirAll(defaultPath, os.ModePerm)
+		os.MkdirAll(defaultPath, os.ModePerm) //nolint:golint,errcheck
 		clientTokenPath = filepath.Join(defaultPath, ClientTokenName)
 		os.Setenv(ClientTokenPath, clientTokenPath)
 	}

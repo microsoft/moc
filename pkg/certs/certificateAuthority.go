@@ -175,7 +175,7 @@ func (ca *CertificateAuthority) SignRequest(csrPem []byte, oldCertPem []byte, co
 		if err = ca.VerifyClientCertificate([][]byte{oldCertPem}); err != nil {
 			return nil, errors.Wrapf(errors.InvalidInput, "Old certificate verification failed : %v", err)
 		}
-		oldCert, err = DecodeCertPEM(oldCertPem) //nolint:golint,ineffassign
+		oldCert, err = DecodeCertPEM(oldCertPem) //nolint:golint,ineffassign,staticcheck
 	}
 	err = csr.CheckSignature()
 	if err != nil {
