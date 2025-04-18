@@ -66,7 +66,7 @@ func GenerateClientCsr(loginconfig LoginConfig) (string, WssdConfig, error) {
 	if err != nil {
 		return "", WssdConfig{}, err
 	}
-	accessFile, err := readAccessFile(GetWssdConfigLocation())
+	accessFile, err := readAccessFile(GetWssdConfigLocation()) //nolint:golint,ineffassign
 	cloudAgentIpAddress, err := wssdnet.GetIPAddress()
 	if err != nil {
 		return "", WssdConfig{}, err
