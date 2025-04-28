@@ -18,7 +18,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v4"
 	gomock "github.com/golang/mock/gomock"
 	mock "github.com/microsoft/moc/pkg/auth/mock"
 	"github.com/microsoft/moc/pkg/certs"
