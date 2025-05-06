@@ -133,6 +133,7 @@ var (
 	QuotaViolation              error = NewMocError(moccodes.QuotaViolation)
 	IPOutOfRange                error = NewMocError(moccodes.IPOutOfRange)
 	PreCheckFailed              error = NewMocError(moccodes.PreCheckFailed)
+	ProviderNotReady            error = NewMocError(moccodes.ProviderNotReady)
 )
 
 // legacyErrorMessages - map of error codes to their legacy string representation. This is solely for backwards compatibility
