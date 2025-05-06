@@ -26,6 +26,8 @@ message AgentInfoResponse{
 	google.protobuf.BoolValue Result = 2;
 	string  Error = 3;
 	string deploymentId = 4;
+	string version = 5;
+	string mocVersion = 6;
 }
 
 service HealthAgent {
