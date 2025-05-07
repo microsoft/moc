@@ -566,6 +566,10 @@ func IsIPOutOfRange(err error) bool {
 	return checkError(err, IPOutOfRange)
 }
 
+func IsProviderNotReady(err error) bool {
+	return checkError(err, ProviderNotReady)
+}
+
 // checkError checks if the wrappedError has the same MocCode as the err error according to GetMocErrorCode.
 // If the error is not matched by GetMocErrorCode and the error does not have a GRPC code (or is a GRPC Unknown code),
 // it will attempt to match the error strings through string matching (even for multierrors).
