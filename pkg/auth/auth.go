@@ -206,6 +206,7 @@ func NewTransportCredentialFromAccessFile(serverName string, accessFile WssdConf
 func (transportCredentials *TransportCredentialsProvider) GetTransportCredentials() credentials.TransportCredentials {
 	creds := &tls.Config{
 		ServerName: transportCredentials.serverName,
+		NextProtos: []string{"h2"},
 	}
 	if len(transportCredentials.certificate) > 0 {
 		creds.Certificates = transportCredentials.certificate

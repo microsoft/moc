@@ -14,9 +14,11 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
+	"unsafe"
 
 	"github.com/golang-jwt/jwt/v4"
 	gomock "github.com/golang/mock/gomock"
@@ -306,6 +308,17 @@ func Test_AuthServer(t *testing.T) {
 	tokenAuth := NewTokenCredentialProvider(token)
 	providerAuth, err := NewTransportCredentialFromAuthFromPem(server, certPem)
 	assert.NoErrorf(t, err, "Failed to create tls credentials", err)
+
+	tlsCreds := providerAuth.GetTransportCredentials()
+
+	val := reflect.ValueOf(tlsCreds).Elem()
+	configField := val.FieldByName("config")
+	assert.True(t, configField.IsValid(), "Could not find 'config' field in tls credentials")
+
+	tlsCfgPtr := (*tls.Config)(unsafe.Pointer(configField.UnsafePointer()))
+	assert.NotNil(t, tlsCfgPtr, "tls.Config must not be nil")
+	assert.Contains(t, tlsCfgPtr.NextProtos, "h2", "NextProtos must contain 'h2' for gRPC ALPN")
+
 	response, err := makeAuthCall(t, address, tokenAuth, providerAuth.GetTransportCredentials())
 	assert.NoErrorf(t, err, "Failed to make auth call", err)
 	assert.Equal(t, response.Name, "Holla From the Server!AuthServer")
