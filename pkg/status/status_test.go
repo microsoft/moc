@@ -81,7 +81,7 @@ func simulateStackTraceError(err error, desc string) error {
 }
 
 func returnFakeError(err error, desc string) error {
-	return errors.Wrapf(err, desc)
+	return errors.Wrapf(err, "%s", desc)
 }
 
 func TestSetErrorWithStackTraceExcludesStackTrace(t *testing.T) {
