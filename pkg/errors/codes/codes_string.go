@@ -111,6 +111,8 @@ func (c MocCode) String() string {
 		return "VolumeAccessInconsistent"
 	case PreCheckFailed:
 		return "PreCheckFailed"
+	case ProviderNotReady:
+		return "ProviderNotReady"
 	default:
 		return "MocCode(" + strconv.FormatUint(uint64(c), 10) + ")"
 	}
