@@ -225,6 +225,13 @@ func getTlsCreds(t *testing.T, tlsCert tls.Certificate, certPem []byte) credenti
 	})
 }
 
+// For poptoken, the client does not validate the server's identity during the TLS handshake as communication goes
+// through a secure channel via Azure Relay. Hence the server just need to pass in any TLS cert.
+func getDisableTlsCreds(t *testing.T, tlsCert tls.Certificate, certPem []byte) credentials.TransportCredentials {
+
+	return credentials.NewServerTLSFromCert(&tlsCert)
+}
+
 func getGrpcServer(t *testing.T, creds credentials.TransportCredentials) *grpc.Server {
 	var opts []grpc.ServerOption
 	opts = append(opts, grpc.Creds(creds))
@@ -824,4 +831,60 @@ func Test_Authorizer_WithRPCAuthorization(t *testing.T) {
 	m := mock.NewMockAuthorizer(ctrl)
 	m.EXPECT().WithRPCAuthorization()
 	m.WithRPCAuthorization()
+}
+
+// For poptoken auth, the workflow is much simpler compared to mTLS; the client is set to blindly trust
+// the server's TLS certificate as it is already on a secure communication channel.
+func Test_PopTokenAuthorizer(t *testing.T) {
+	server := "localhost"
+	port := "9005"
+	address := server + ":" + port
+	tlsCert, certPem, _ := getClientCert(t)
+	creds := getDisableTlsCreds(t, tlsCert, certPem)
+	grpcServer := getGrpcServer(t, creds)
+	go startHelloServer(grpcServer, address)
+	defer grpcServer.Stop()
+
+	time.Sleep((time.Second * 3))
+	provider, err := NewPopTokenAuthorizer()
+	assert.NoErrorf(t, err, "Failed to create NewPopTokenAuthorizer", err)
+	response, err := makeTlsCall(t, address, provider.WithTransportAuthorization())
+	assert.NoErrorf(t, err, "Failed to make tls call", err)
+	assert.Equal(t, response.Name, "Hello From the Server!TLSServer")
+}
+
+func Test_StripPortFromServerName(t *testing.T) {
+	tests := []struct {
+		name               string
+		serverName         string
+		expectedServerName string
+	}{
+		{
+			name:               "server with no port",
+			serverName:         "myhost",
+			expectedServerName: "myhost",
+		},
+		{
+			name:               "server with port",
+			serverName:         "myhost:1234",
+			expectedServerName: "myhost",
+		},
+		{
+			name:               "server with port and whitespace",
+			serverName:         " myhost : 1234 ",
+			expectedServerName: "myhost",
+		},
+		{
+			name:               "empty string",
+			serverName:         "",
+			expectedServerName: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actualServerName := stripPortFromServerName(tt.serverName)
+			assert.Equal(t, tt.expectedServerName, actualServerName)
+		})
+	}
 }
