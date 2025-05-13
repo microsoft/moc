@@ -17,6 +17,7 @@ import (
 	"github.com/microsoft/moc/pkg/marshal"
 	"github.com/microsoft/moc/rpc/common"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/security/advancedtls"
 )
 
 const (
@@ -34,6 +35,7 @@ type WssdConfig struct {
 type Authorizer interface {
 	WithTransportAuthorization() credentials.TransportCredentials
 	WithRPCAuthorization() credentials.PerRPCCredentials
+	GetAuthorizerType() AuthorizerType
 }
 
 type ManagedIdentityConfig struct {
@@ -41,6 +43,13 @@ type ManagedIdentityConfig struct {
 	WssdConfigPath  string
 	ServerName      string
 }
+
+type AuthorizerType string
+
+const (
+	CertificateAuth AuthorizerType = "CertificateAuth"
+	PopTokenAuth    AuthorizerType = "PopTokenAuth"
+)
 
 type ClientType string
 
@@ -219,6 +228,61 @@ func (transportCredentials *TransportCredentialsProvider) GetTransportCredential
 	return credentials.NewTLS(creds)
 }
 
+// Poptoken
+type CmpPopTokenAuthorizer struct {
+	transportProvider credentials.TransportCredentials
+	rpcProvider       credentials.PerRPCCredentials
+}
+
+func NewPopTokenAuthorizer() (*CmpPopTokenAuthorizer, error) {
+	tp, err := DisableTransportAuthorization()
+	if err != nil {
+		return nil, err
+	}
+
+	rp, err := NewFakeTokenProvier()
+	if err != nil {
+		return nil, err
+	}
+
+	return &CmpPopTokenAuthorizer{
+		transportProvider: tp,
+		rpcProvider:       rp,
+	}, nil
+}
+
+func (c *CmpPopTokenAuthorizer) WithTransportAuthorization() credentials.TransportCredentials {
+	return c.transportProvider
+}
+
+func (c *CmpPopTokenAuthorizer) WithRPCAuthorization() credentials.PerRPCCredentials {
+	return c.rpcProvider
+}
+
+func (c *CmpPopTokenAuthorizer) GetAuthorizerType() AuthorizerType {
+	return PopTokenAuth
+}
+
+// for CMP, Azure Relay is considered a secure connection and thus we are not required to setup a secure communication on top of it.
+// However, gRPC does not allow the transport auth to be disabled for token validation, hence the workaround is to add a custom Transport
+// validaton step that ignores it.
+func DisableTransportAuthorization() (credentials.TransportCredentials, error) {
+	advancedTlsOptions := advancedtls.Options{
+		VerificationType: advancedtls.SkipVerification,
+		// See https://github.com/golang/go/blob/master/src/crypto/tls/handshake_client.go#L1096
+		AdditionalPeerVerification: func(params *advancedtls.HandshakeVerificationInfo) (*advancedtls.PostHandshakeVerificationResults, error) {
+			results := advancedtls.PostHandshakeVerificationResults{}
+			//
+			return &results, nil
+		},
+	}
+	creds, err := advancedtls.NewClientCreds(&advancedTlsOptions)
+	if err != nil {
+		return nil, err
+	}
+	return creds, nil
+}
+
 // BearerAuthorizer implements the bearer authorization
 type BearerAuthorizer struct {
 	tokenProvider        JwtTokenProvider
@@ -231,6 +295,10 @@ func (ba *BearerAuthorizer) WithRPCAuthorization() credentials.PerRPCCredentials
 
 func (ba *BearerAuthorizer) WithTransportAuthorization() credentials.TransportCredentials {
 	return ba.transportCredentials
+}
+
+func (c *BearerAuthorizer) GetAuthorizerType() AuthorizerType {
+	return CertificateAuth
 }
 
 func NewEmptyBearerAuthorizer() *BearerAuthorizer {

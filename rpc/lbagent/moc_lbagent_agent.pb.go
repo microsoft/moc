@@ -656,7 +656,7 @@ type LoadBalancerAgentClient interface {
 	Create(ctx context.Context, in *LoadBalancerRequest, opts ...grpc.CallOption) (*LoadBalancerResponse, error)
 	Delete(ctx context.Context, in *LoadBalancerRequest, opts ...grpc.CallOption) (*LoadBalancerResponse, error)
 	Get(ctx context.Context, in *LoadBalancerRequest, opts ...grpc.CallOption) (*LoadBalancerResponse, error)
-	// GetConfig is for debugging/testing
+	//GetConfig is for debugging/testing
 	GetConfig(ctx context.Context, in *LoadBalancerConfigRequest, opts ...grpc.CallOption) (*LoadBalancerConfigResponse, error)
 	CheckNotification(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*common.NotificationResponse, error)
 	AddPeer(ctx context.Context, in *LoadBalancerPeerRequest, opts ...grpc.CallOption) (*LoadBalancerPeerResponse, error)
@@ -749,7 +749,7 @@ type LoadBalancerAgentServer interface {
 	Create(context.Context, *LoadBalancerRequest) (*LoadBalancerResponse, error)
 	Delete(context.Context, *LoadBalancerRequest) (*LoadBalancerResponse, error)
 	Get(context.Context, *LoadBalancerRequest) (*LoadBalancerResponse, error)
-	// GetConfig is for debugging/testing
+	//GetConfig is for debugging/testing
 	GetConfig(context.Context, *LoadBalancerConfigRequest) (*LoadBalancerConfigResponse, error)
 	CheckNotification(context.Context, *empty.Empty) (*common.NotificationResponse, error)
 	AddPeer(context.Context, *LoadBalancerPeerRequest) (*LoadBalancerPeerResponse, error)

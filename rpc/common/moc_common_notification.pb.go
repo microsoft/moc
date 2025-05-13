@@ -32,7 +32,7 @@ type Notification struct {
 	ParentEntityName string `protobuf:"bytes,4,opt,name=parentEntityName,proto3" json:"parentEntityName,omitempty"`
 	// Optional flag to specify if the notification is async
 	Async bool `protobuf:"varint,5,opt,name=async,proto3" json:"async,omitempty"`
-	// Unique identifier for the notification
+	//Unique identifier for the notification
 	Id                   string   `protobuf:"bytes,6,opt,name=id,proto3" json:"id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
