@@ -12,11 +12,13 @@ import (
 	"fmt"
 	"io/fs"
 	"io/ioutil"
+	"strings"
 
 	"github.com/microsoft/moc/pkg/config"
 	"github.com/microsoft/moc/pkg/marshal"
 	"github.com/microsoft/moc/rpc/common"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/security/advancedtls"
 )
 
 const (
@@ -34,6 +36,7 @@ type WssdConfig struct {
 type Authorizer interface {
 	WithTransportAuthorization() credentials.TransportCredentials
 	WithRPCAuthorization() credentials.PerRPCCredentials
+	GetNodeAgentAuthorizerType() NodeAgentAuthorizerType
 }
 
 type ManagedIdentityConfig struct {
@@ -41,6 +44,13 @@ type ManagedIdentityConfig struct {
 	WssdConfigPath  string
 	ServerName      string
 }
+
+type NodeAgentAuthorizerType string
+
+const (
+	NodeAgentAuthCertificate NodeAgentAuthorizerType = "NodeAgentAuthCertificate"
+	NodeAgentAuthPopToken    NodeAgentAuthorizerType = "NodeAgentAuthPopToken"
+)
 
 type ClientType string
 
@@ -74,6 +84,11 @@ const (
 	// CASigned ...
 	CASigned LoginType = "CA-Signed"
 )
+
+func stripPortFromServerName(serverName string) string {
+	toks := strings.Split(serverName, ":")
+	return strings.TrimSpace(toks[0])
+}
 
 func LoginTypeToAuthType(authType string) common.AuthenticationType {
 	switch authType {
@@ -204,8 +219,12 @@ func NewTransportCredentialFromAccessFile(serverName string, accessFile WssdConf
 }
 
 func (transportCredentials *TransportCredentialsProvider) GetTransportCredentials() credentials.TransportCredentials {
+
+	// For TLS handshake, the serverName set must match one of the items in the DNSNames/SNI of the server's certificate.
+	// The server's certificate DNSNames does NOT contain a port, hence if the serverName here has a port the client will
+	// reject the server's certificate
 	creds := &tls.Config{
-		ServerName: transportCredentials.serverName,
+		ServerName: stripPortFromServerName(transportCredentials.serverName),
 	}
 	if len(transportCredentials.certificate) > 0 {
 		creds.Certificates = transportCredentials.certificate
@@ -217,6 +236,60 @@ func (transportCredentials *TransportCredentialsProvider) GetTransportCredential
 		creds.VerifyPeerCertificate = transportCredentials.verifyPeerCertificate
 	}
 	return credentials.NewTLS(creds)
+}
+
+// Poptoken
+type CmpPopTokenAuthorizer struct {
+	transportProvider credentials.TransportCredentials
+	rpcProvider       credentials.PerRPCCredentials
+}
+
+func NewPopTokenAuthorizer() (*CmpPopTokenAuthorizer, error) {
+	tp, err := DisableTransportAuthorization()
+	if err != nil {
+		return nil, err
+	}
+
+	rp, err := NewFakeTokenProvier()
+	if err != nil {
+		return nil, err
+	}
+
+	return &CmpPopTokenAuthorizer{
+		transportProvider: tp,
+		rpcProvider:       rp,
+	}, nil
+}
+
+func (c *CmpPopTokenAuthorizer) WithTransportAuthorization() credentials.TransportCredentials {
+	return c.transportProvider
+}
+
+func (c *CmpPopTokenAuthorizer) WithRPCAuthorization() credentials.PerRPCCredentials {
+	return c.rpcProvider
+}
+
+func (c *CmpPopTokenAuthorizer) GetNodeAgentAuthorizerType() NodeAgentAuthorizerType {
+	return NodeAgentAuthPopToken
+}
+
+// for CMP/Poptoken, Azure Relay is considered a secure connection and thus we are not required to setup a secure communication on top of it.
+// However, gRPC does not allow the transport auth to be disabled entirely for token validation (i.e. InsecureSkipVerify will not work),
+// hence the workaround is to add a custom Transport validaton step that ignores it.
+func DisableTransportAuthorization() (credentials.TransportCredentials, error) {
+	advancedTlsOptions := advancedtls.Options{
+		VerificationType: advancedtls.SkipVerification,
+		// See https://github.com/golang/go/blob/master/src/crypto/tls/handshake_client.go#L1096
+		AdditionalPeerVerification: func(params *advancedtls.HandshakeVerificationInfo) (*advancedtls.PostHandshakeVerificationResults, error) {
+			results := advancedtls.PostHandshakeVerificationResults{}
+			return &results, nil
+		},
+	}
+	creds, err := advancedtls.NewClientCreds(&advancedTlsOptions)
+	if err != nil {
+		return nil, err
+	}
+	return creds, nil
 }
 
 // BearerAuthorizer implements the bearer authorization
@@ -231,6 +304,10 @@ func (ba *BearerAuthorizer) WithRPCAuthorization() credentials.PerRPCCredentials
 
 func (ba *BearerAuthorizer) WithTransportAuthorization() credentials.TransportCredentials {
 	return ba.transportCredentials
+}
+
+func (c *BearerAuthorizer) GetNodeAgentAuthorizerType() NodeAgentAuthorizerType {
+	return NodeAgentAuthCertificate
 }
 
 func NewEmptyBearerAuthorizer() *BearerAuthorizer {

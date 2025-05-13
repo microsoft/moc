@@ -20,6 +20,11 @@ message NodeResponse {
 	string  Error = 3;
 }
 
+enum NodeAgentAuthenticationMode {
+	Certificate = 0;
+	PopToken = 1;
+}
+
 enum NodeState {
 	Unknown = 0;
 	Active = 1;
@@ -39,6 +44,7 @@ message Node {
 	NodeState runningState = 9;
 	moc.common.NodeInfo info = 10;
 	Tags tags = 11;
+	NodeAgentAuthenticationMode nodeagentAuthenticationMode = 12;
 } 
 
 service NodeAgent {
