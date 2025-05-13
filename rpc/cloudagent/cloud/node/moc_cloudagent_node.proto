@@ -20,9 +20,9 @@ message NodeResponse {
 	string  Error = 3;
 }
 
-enum NodeAuthentication {
+enum AuthenticationMode {
 	Certificate = 0;
-	PopToken = 2;
+	PopToken = 1;
 }
 
 enum NodeState {
@@ -44,7 +44,7 @@ message Node {
 	NodeState runningState = 9;
 	moc.common.NodeInfo info = 10;
 	Tags tags = 11;
-	NodeAuthentication nodeAuthentication = 12;
+	AuthenticationMode authenticationMode = 12;
 } 
 
 service NodeAgent {
