@@ -266,6 +266,8 @@ enum ProviderAccessOperation {
 	Key_Sign 						= 506; 
 	Key_Verify 						= 507; 
 	Key_Rotate                      = 508;
+	Key_Import						= 509;
+	Key_Export						= 510;
 
 	VirtualMachine_Create 				= 600; 
 	VirtualMachine_Update 				= 601; 
