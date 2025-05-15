@@ -134,6 +134,7 @@ var (
 	IPOutOfRange                error = NewMocError(moccodes.IPOutOfRange)
 	PreCheckFailed              error = NewMocError(moccodes.PreCheckFailed)
 	ProviderNotReady            error = NewMocError(moccodes.ProviderNotReady)
+	DvdDriveNotFound            error = NewMocError(moccodes.DvdDriveNotFound)
 )
 
 // legacyErrorMessages - map of error codes to their legacy string representation. This is solely for backwards compatibility
@@ -568,6 +569,10 @@ func IsIPOutOfRange(err error) bool {
 
 func IsProviderNotReady(err error) bool {
 	return checkError(err, ProviderNotReady)
+}
+
+func IsDvdDriveNotFound(err error) bool {
+	return checkError(err, DvdDriveNotFound)
 }
 
 // checkError checks if the wrappedError has the same MocCode as the err error according to GetMocErrorCode.
