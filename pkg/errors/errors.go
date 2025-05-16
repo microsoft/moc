@@ -133,6 +133,7 @@ var (
 	QuotaViolation              error = NewMocError(moccodes.QuotaViolation)
 	IPOutOfRange                error = NewMocError(moccodes.IPOutOfRange)
 	PreCheckFailed              error = NewMocError(moccodes.PreCheckFailed)
+	ProviderNotReady            error = NewMocError(moccodes.ProviderNotReady)
 )
 
 // legacyErrorMessages - map of error codes to their legacy string representation. This is solely for backwards compatibility
@@ -563,6 +564,10 @@ func IsQuotaViolation(err error) bool {
 
 func IsIPOutOfRange(err error) bool {
 	return checkError(err, IPOutOfRange)
+}
+
+func IsProviderNotReady(err error) bool {
+	return checkError(err, ProviderNotReady)
 }
 
 // checkError checks if the wrappedError has the same MocCode as the err error according to GetMocErrorCode.
