@@ -113,6 +113,8 @@ func (c MocCode) String() string {
 		return "PreCheckFailed"
 	case ProviderNotReady:
 		return "ProviderNotReady"
+	case InconsistentVersion:
+		return "InconsistentVersion"
 	default:
 		return "MocCode(" + strconv.FormatUint(uint64(c), 10) + ")"
 	}
