@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"io/fs"
 	"io/ioutil"
+	"strings"
 
 	"github.com/microsoft/moc/pkg/config"
 	"github.com/microsoft/moc/pkg/marshal"
@@ -146,6 +147,11 @@ func NewTransportCredentialFromAuthBase64(serverName string, rootCACertsBase64 s
 	return NewTransportCredentialFromAuthFromPem(serverName, caCertPem)
 }
 
+func stripPortFromServerName(serverName string) string {
+	toks := strings.Split(serverName, ":")
+	return toks[0]
+}
+
 func NewTransportCredentialFromAuthFromPem(serverName string, caCertPem []byte) (*TransportCredentialsProvider, error) {
 	certPool := x509.NewCertPool()
 	// Append the client certificates from the CA
@@ -213,8 +219,12 @@ func NewTransportCredentialFromAccessFile(serverName string, accessFile WssdConf
 }
 
 func (transportCredentials *TransportCredentialsProvider) GetTransportCredentials() credentials.TransportCredentials {
+
+	// For TLS handshake, the serverName set must match one of the items in the DNSNames/SNI of the server's certificate.
+	// The server's certificate DNSNames does NOT contain a port, hence if the serverName here has a port the client will
+	// reject the server's certificate
 	creds := &tls.Config{
-		ServerName: transportCredentials.serverName,
+		ServerName: stripPortFromServerName(transportCredentials.serverName),
 	}
 	if len(transportCredentials.certificate) > 0 {
 		creds.Certificates = transportCredentials.certificate
