@@ -67,8 +67,12 @@ const (
 	CertContributorRoleName = "CertificateContributor"
 	// KeyVault Contributor Role - has permissions to run any operation on KeyVaults
 	KeyVaultContributorRoleName = "KeyVaultContributor"
-	// Key Contributor role - has permissions to run any operation on Keys
+	// Key Contributor role - has permissions to run any operation on Keys except for Import and Export
 	KeyContributorRoleName = "KeyContributor"
+	// Key Import Contributor role - has permissions to run import operation on Keys
+	KeyImportContributorRoleName = "KeyImportContributor"
+	// Key Export Contributor role - has permissions to run export operation on Keys
+	KeyExportContributorRoleName = "KeyExportContributor"
 	// Secret Contributor role - has permissions to run any operation on Secrets
 	SecretContributorRoleName = "SecretContributor"
 	// AvailabilitySet Contributor Role - has permissions to run any operations on AvailabilitySets
