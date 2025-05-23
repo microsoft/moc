@@ -36,7 +36,7 @@ type WssdConfig struct {
 type Authorizer interface {
 	WithTransportAuthorization() credentials.TransportCredentials
 	WithRPCAuthorization() credentials.PerRPCCredentials
-	GetAuthorizerType() AuthorizerType
+	GetNodeAgentAuthorizerType() NodeAgentAuthorizerType
 }
 
 type ManagedIdentityConfig struct {
@@ -45,11 +45,11 @@ type ManagedIdentityConfig struct {
 	ServerName      string
 }
 
-type AuthorizerType string
+type NodeAgentAuthorizerType string
 
 const (
-	CertificateAuth AuthorizerType = "CertificateAuth"
-	PopTokenAuth    AuthorizerType = "PopTokenAuth"
+	NodeAgentAuthCertificate NodeAgentAuthorizerType = "NodeAgentAuthCertificate"
+	NodeAgentAuthPopToken    NodeAgentAuthorizerType = "NodeAgentAuthPopToken"
 )
 
 type ClientType string
@@ -269,8 +269,8 @@ func (c *CmpPopTokenAuthorizer) WithRPCAuthorization() credentials.PerRPCCredent
 	return c.rpcProvider
 }
 
-func (c *CmpPopTokenAuthorizer) GetAuthorizerType() AuthorizerType {
-	return PopTokenAuth
+func (c *CmpPopTokenAuthorizer) GetAuthorizerType() NodeAgentAuthorizerType {
+	return NodeAgentAuthPopToken
 }
 
 // for CMP, Azure Relay is considered a secure connection and thus we are not required to setup a secure communication on top of it.
@@ -307,8 +307,8 @@ func (ba *BearerAuthorizer) WithTransportAuthorization() credentials.TransportCr
 	return ba.transportCredentials
 }
 
-func (c *BearerAuthorizer) GetAuthorizerType() AuthorizerType {
-	return CertificateAuth
+func (c *BearerAuthorizer) GetNodeAgentAuthorizerType() NodeAgentAuthorizerType {
+	return NodeAgentAuthCertificate
 }
 
 func NewEmptyBearerAuthorizer() *BearerAuthorizer {
