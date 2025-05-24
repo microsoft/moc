@@ -269,20 +269,19 @@ func (c *CmpPopTokenAuthorizer) WithRPCAuthorization() credentials.PerRPCCredent
 	return c.rpcProvider
 }
 
-func (c *CmpPopTokenAuthorizer) GetAuthorizerType() NodeAgentAuthorizerType {
+func (c *CmpPopTokenAuthorizer) GetNodeAgentAuthorizerType() NodeAgentAuthorizerType {
 	return NodeAgentAuthPopToken
 }
 
-// for CMP, Azure Relay is considered a secure connection and thus we are not required to setup a secure communication on top of it.
-// However, gRPC does not allow the transport auth to be disabled for token validation, hence the workaround is to add a custom Transport
-// validaton step that ignores it.
+// for CMP/Poptoken, Azure Relay is considered a secure connection and thus we are not required to setup a secure communication on top of it.
+// However, gRPC does not allow the transport auth to be disabled entirely for token validation (i.e. InsecureSkipVerify will not work),
+// hence the workaround is to add a custom Transport validaton step that ignores it.
 func DisableTransportAuthorization() (credentials.TransportCredentials, error) {
 	advancedTlsOptions := advancedtls.Options{
 		VerificationType: advancedtls.SkipVerification,
 		// See https://github.com/golang/go/blob/master/src/crypto/tls/handshake_client.go#L1096
 		AdditionalPeerVerification: func(params *advancedtls.HandshakeVerificationInfo) (*advancedtls.PostHandshakeVerificationResults, error) {
 			results := advancedtls.PostHandshakeVerificationResults{}
-			//
 			return &results, nil
 		},
 	}
