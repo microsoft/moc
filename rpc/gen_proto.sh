@@ -85,17 +85,6 @@ protoc -I $Agent/$Module -I ./common $Agent/$Module/moc_baremetalhostagent.proto
 
 #### 
 
-Agent="ipamagent"
-echo "Generating Protoc for $Agent"
-Module="ipaddressmanager"
-echo "Generating $Module protoc"
-protoc -I $Agent/$Module -I ./common $Agent/$Module/moc_ipaddress_${Module}.proto --go_out=plugins=grpc:../bld/gen/
-ChildModule="ipaddress"
-echo "Generating $Module/$ChildModule protoc"
-protoc -I $Agent/$Module -I ./common $Agent/$Module/$ChildModule/moc_ipaddress_${ChildModule}.proto --go_out=plugins=grpc:../bld/gen/
-
-#### 
-
 Agent="mochostagent"
 echo "Generating Protoc for $Agent"
 
@@ -178,13 +167,7 @@ Module="cloud"
 echo "Generating $Agent/$Module protoc"
 protoc -I $Agent/$Module/group -I ./common $Agent/$Module/group/moc_cloudagent_group.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/node -I ./common $Agent/$Module/node/moc_cloudagent_node.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/kubernetes -I ./common $Agent/$Module/kubernetes/moc_cloudagent_kubernetes.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/cluster -I $Agent/$Module/node -I ./common $Agent/$Module/cluster/moc_cloudagent_cluster.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/location -I ./common $Agent/$Module/location/moc_cloudagent_location.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/subscription -I ./common $Agent/$Module/subscription/moc_cloudagent_subscription.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/controlplane -I ./common $Agent/$Module/controlplane/moc_cloudagent_controlplane.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/etcdcluster/etcdserver -I ./common $Agent/$Module/etcdcluster/etcdserver/moc_cloudagent_etcdserver.proto  --go_out=plugins=grpc:../bld/gen/
-protoc -I $Agent/$Module/etcdcluster -I ./common -I $Agent/$Module/etcdcluster/etcdserver $Agent/$Module/etcdcluster/moc_cloudagent_etcdcluster.proto  --go_out=plugins=grpc:../bld/gen/
 protoc -I $Agent/$Module/zone -I ./common -I $Agent/$Module/zone $Agent/$Module/zone/moc_cloudagent_zone.proto  --go_out=plugins=grpc:../bld/gen/
 
 Module="security"
