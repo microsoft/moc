@@ -10,6 +10,7 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 import "moc_common_computecommon.proto";
 import "moc_common_notification.proto";
+import "moc_nodeagent_virtualnetworkinterface.proto";
 
 message VirtualMachineRequest {
 	repeated VirtualMachine VirtualMachineSystems = 1;
@@ -51,7 +52,9 @@ message NetworkInterface {
 }
 
 message NetworkConfiguration {
+	// we can remove interfaces once we are finished with vm changes
 	repeated NetworkInterface interfaces = 1;
+	repeated moc.nodeagent.network.VirtualNetworkInterface vnics = 2;
 }
 
 message UserConfiguration {

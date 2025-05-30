@@ -30,34 +30,29 @@ enum NetworkType {
 message IpConfiguration {
 	string ipaddress = 1 [(sensitive) = true];
 	string prefixlength = 2;
+	// we can remove once we implement logical network, as switchName can be used instead
+	// we are already using switchName for virtual network
 	string subnetid = 3;
-	bool primary = 4;
-	string gateway = 5 [(sensitive) = true];
-	IPAllocationMethod allocation = 6;
-	NetworkType networkType = 7;
-	string switchName = 8;
-	uint32 subnetVlan = 9;
+	string gateway = 4 [(sensitive) = true];
+	IPAllocationMethod allocation = 5;
+	// we can remove once we implement logical network
+	NetworkType networkType = 6;
+	string switchName = 7;
+	uint32 subnetVlan = 8;
 }
 
 message VirtualNetworkInterface {
 	string name = 1;
 	string id = 2;
-	enum NetworkInterfaceType {
-		Local = 0;
-		Remote = 1;
-	}
-	NetworkInterfaceType type = 3;
-	repeated IpConfiguration ipconfigs = 4;
-	string macaddress = 5 [(sensitive) = true];
-	Dns dnsSettings = 6 [(sensitive) = true];
-	string virtualMachineName = 7;
-	Status status = 8;
-	Entity entity = 9;
-	uint32 iovWeight = 10;
-	Tags tags = 11;
+	repeated IpConfiguration ipconfigs = 3;
+	string macaddress = 4 [(sensitive) = true];
+	Dns dnsSettings = 5 [(sensitive) = true];
+	string virtualMachineName = 6;
+	Status status = 7;
+	uint32 iovWeight = 8;
+	Tags tags = 9;
 }
 
 service VirtualNetworkInterfaceAgent {
 	rpc Invoke(VirtualNetworkInterfaceRequest) returns (VirtualNetworkInterfaceResponse) {}
-	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 }
