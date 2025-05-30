@@ -47,10 +47,9 @@ message VirtualNetworkInterface {
 	repeated IpConfiguration ipconfigs = 3;
 	string macaddress = 4 [(sensitive) = true];
 	Dns dnsSettings = 5 [(sensitive) = true];
-	string virtualMachineName = 6;
-	Status status = 7;
-	uint32 iovWeight = 8;
-	Tags tags = 9;
+	Status status = 6;
+	uint32 iovWeight = 7;
+	Tags tags = 8;
 }
 
 service VirtualNetworkInterfaceAgent {
