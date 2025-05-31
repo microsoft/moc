@@ -169,6 +169,18 @@ message VirtualMachinePrecheckRequest {
 	repeated VirtualMachine VirtualMachines = 1;
 }
 
+message VirtualMachineHyperVVmId {
+	string hyperVVmId = 1;
+}
+
+message VirtualMachineHostNodeName {
+	string hostNodeName = 1;
+}
+
+message VirtualMachineHostNodeIpAddress {
+	string hostNodeIpAddress = 1;
+}
+
 message VirtualMachinePrecheckResponse {
 	// The precheck result: true if the precheck criteria is passed; otherwise, false
 	google.protobuf.BoolValue Result = 1;
@@ -185,4 +197,6 @@ service VirtualMachineAgent {
 
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
+	rpc GetHyperVVmId(VirtualMachine) returns (VirtualMachineHyperVVmId) {}
+	rpc GetHostNodeName(VirtualMachine) returns (VirtualMachineHostNodeName) {}
 }
