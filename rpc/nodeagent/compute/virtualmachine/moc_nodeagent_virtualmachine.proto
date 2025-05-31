@@ -142,6 +142,18 @@ message VirtualMachine {
 	Priority priority = 18;
 }
 
+message VirtualMachineHyperVVmId {
+	string hyperVVmId = 1;
+}
+
+message VirtualMachineHostNodeName {
+	string hostNodeName = 1;
+}
+
+message VirtualMachineHostNodeIpAddress {
+	string hostNodeIpAddress = 1;
+}
+
 message VirtualMachineOperationRequest {
 	repeated VirtualMachine VirtualMachines = 1;
 	VirtualMachineOperation OperationType = 2;
@@ -171,5 +183,7 @@ service VirtualMachineAgent {
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
 	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
+	rpc GetHyperVVmId(VirtualMachine) returns (VirtualMachineHyperVVmId) {}
+	rpc GetHostNodeName(VirtualMachine) returns (VirtualMachineHostNodeName) {}
 }
 
