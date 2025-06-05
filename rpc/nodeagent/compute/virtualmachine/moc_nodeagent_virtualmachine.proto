@@ -10,6 +10,7 @@ import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
 import "moc_common_computecommon.proto";
 import "moc_common_notification.proto";
+import "moc_nodeagent_virtualharddisk.proto";
 
 message VirtualMachineRequest {
 	repeated VirtualMachine VirtualMachineSystems = 1;
@@ -28,7 +29,7 @@ message SSHPublicKey {
 
 message Disk {
 	// reference to the virtual hard disk managed by storage
-	string diskname = 1;
+	moc.nodeagent.storage.VirtualHardDisk vhd = 1;
     VirtualMachineManagedDiskParameters managedDisk = 2;
 }
 
