@@ -50,7 +50,7 @@ message VirtualNetworkInterface {
 	Status status = 6;
 	uint32 iovWeight = 7;
 	Tags tags = 8;
-  string vmid = 9;
+	string vmid = 9;
 }
 
 service VirtualNetworkInterfaceAgent {
