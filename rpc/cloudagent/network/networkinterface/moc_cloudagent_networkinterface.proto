@@ -40,7 +40,7 @@ message IpConfiguration {
 	reserved 11; // deprecated string version of networkSecurityGroup
 	string ipaddress = 1 [(sensitive) = true];
 	string prefixlength = 2;
-	string switchName = 3;
+	string subnetid = 3;
 	bool primary = 4;
 	repeated string loadbalanceraddresspool = 5;
 	IPAllocationMethod allocation = 6;
@@ -69,9 +69,8 @@ message NetworkInterface {
 	string locationName = 9;
 	Status status = 10;
 	string virtualMachineName = 11;
-	string virtualMachineId = 12;
-	uint32 iovWeight = 13;
-	Tags tags = 14;
+	uint32 iovWeight = 12;
+	Tags tags = 13;
 }
 
 service NetworkInterfaceAgent {
