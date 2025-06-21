@@ -7,6 +7,8 @@ package moc.nodeagent.compute;
 
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
+import "moc_common_computecommon.proto";
+
 
 message AvailabilitySetRequest {
 	repeated AvailabilitySet AvailabilitySets = 1;
@@ -32,9 +34,22 @@ message AvailabilitySet {
     Tags tags = 4;
     Entity entity = 5;
     int32 platformFaultDomainCount = 6;
-    repeated VirtualMachineReference virtualMachines = 7;
+    repeated VirtualMachineReference virtualMachines = 7; // TODO(pgayam): figure how to mark this field obselete
 }
+
+message AvailabilitySetOperationRequest {
+	string AvailabilitySet = 1;
+    string VirtualMachine = 2;
+	AvailabilitySetOperation OperationType = 3;
+}
+
+message AvailabilitySetOperationResponse {
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
 
 service AvailabilitySetAgent {
 	rpc Invoke(AvailabilitySetRequest) returns (AvailabilitySetResponse) {}
+    rpc Operate(AvailabilitySetOperationRequest) returns (AvailabilitySetOperationResponse) {}
 }
