@@ -200,4 +200,5 @@ service VirtualMachineAgent {
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
 	rpc GetHyperVVmId(VirtualMachine) returns (VirtualMachineHyperVVmId) {}
 	rpc GetHostNodeName(VirtualMachine) returns (VirtualMachineHostNodeName) {}
+	rpc GetHostNodeIpAddress(VirtualMachine) returns (VirtualMachineHostNodeIpAddress) {}
 }
