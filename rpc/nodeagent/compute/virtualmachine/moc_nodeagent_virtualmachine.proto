@@ -184,7 +184,5 @@ service VirtualMachineAgent {
 	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
 	rpc GetHyperVVmId(VirtualMachine) returns (VirtualMachineHyperVVmId) {}
-	rpc GetHostNodeName(VirtualMachine) returns (VirtualMachineHostNodeName) {}
-	rpc GetHostNodeIpAddress(VirtualMachine) returns (VirtualMachineHostNodeIpAddress) {}
 }
 
