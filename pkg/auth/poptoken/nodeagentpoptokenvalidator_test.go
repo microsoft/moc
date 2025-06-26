@@ -49,25 +49,36 @@ func Test_NodeAgentPopTokenValidatorIsTokenExpire(t *testing.T) {
 	tests := []struct {
 		name         string
 		tokenCheckAt time.Time
+		clockSkew    time.Duration
 		shouldPass   bool
 	}{
 		{
 			name: "token valid",
 			// set token evaluation time to be 1 second after token was issued, token is valid.
 			tokenCheckAt: tokenIssuedAt.Add(time.Second * 1),
+			clockSkew:    0,
 			shouldPass:   true,
 		},
 		{
 			name: "token expired",
 			// set token evaluation time to be 10 seconds after max valid period. token has expired.
 			tokenCheckAt: tokenIssuedAt.Add(PopTokenValidInterval).Add(time.Second * 10),
+			clockSkew:    0,
 			shouldPass:   false,
+		},
+		{
+			name: "token pass due to clock skew",
+			// set token evaluation time to be 10 seconds after max valid period. token should have expired
+			// like previous test, but passes thanks to the allowed clock skew of 11 seconds.
+			tokenCheckAt: tokenIssuedAt.Add(PopTokenValidInterval).Add(time.Second * 10),
+			clockSkew:    time.Second * 11,
+			shouldPass:   true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := isTokenExpire(tokenIssuedAtInt, tt.tokenCheckAt)
+			err := isTokenExpire(tokenIssuedAtInt, tt.tokenCheckAt, tt.clockSkew)
 			if tt.shouldPass {
 				assert.Nil(t, err)
 			} else {
@@ -115,6 +126,29 @@ func Test_NodeAgentPopTokenValidatorIsHeaderValid(t *testing.T) {
 			}
 		})
 	}
+}
+
+func Test_NodeAgentPopTokenValidatorIsTokenReused(t *testing.T) {
+	nonceCache := &FakeNonceCache{Exists: false}
+
+	// for this test, we only care about setting the noncecache
+	popTokenValidator, err := NewPopTokenValidator("", "", "", []string{"aud"}, "", "", nil, nonceCache)
+	assert.Nil(t, err)
+
+	// simulate nonce entry does not exists in cache, i.e. we have not seen the token before
+	nonceCache.Exists = false
+	err = popTokenValidator.isTokenReused("myId", time.Now())
+	assert.Nil(t, err)
+
+	// simulate nonce entry exists in cache, i.e. same token is reused, potentially a replay token
+	nonceCache.Exists = true
+	err = popTokenValidator.isTokenReused("myId", time.Now())
+	assert.NotNil(t, err)
+
+	// simulate missing nonce. we will reject token
+	nonceCache.Exists = false
+	err = popTokenValidator.isTokenReused("", time.Now())
+	assert.NotNil(t, err)
 }
 
 func Test_NodeAgentPopTokenValidatorIsSignatureValid(t *testing.T) {
@@ -165,38 +199,55 @@ func Test_NodeAgentPopTokenValidatorbase64ToExponential(t *testing.T) {
 }
 
 func Test_NodeAgentPopTokenValidatorIsCustomClaimsValid(t *testing.T) {
-	expectedResourceId := "myResourceId"
+	expectedNodeId := "myNodeId"
+	expectedGrpcObjectId := "myObjectId"
 
 	tests := []struct {
-		name             string
-		actualResourceId string
-		shouldPass       bool
+		name               string
+		actualNodeId       string
+		actualGrpcObjectId string
+		shouldPass         bool
 	}{
 		{
-			name:             "valid resource Id claim",
-			actualResourceId: expectedResourceId,
-			shouldPass:       true,
+			name:               "valid nodeId and objectId claims",
+			actualNodeId:       expectedNodeId,
+			actualGrpcObjectId: expectedGrpcObjectId,
+			shouldPass:         true,
 		},
 		{
-			name:             "invalid resourceId claim",
-			actualResourceId: "somethingelse",
-			shouldPass:       false,
+			name:               "invalid nodeId claim",
+			actualNodeId:       "somethingelse",
+			actualGrpcObjectId: expectedGrpcObjectId,
+			shouldPass:         false,
 		},
 		{
-			name:             "missing resourceId claim",
-			actualResourceId: "",
-			shouldPass:       false,
+			name:               "missing nodeId claim",
+			actualNodeId:       "",
+			actualGrpcObjectId: expectedGrpcObjectId,
+			shouldPass:         false,
+		},
+		{
+			name:               "invalid grpcObjectId claim",
+			actualNodeId:       expectedNodeId,
+			actualGrpcObjectId: "somethingelse",
+			shouldPass:         false,
+		},
+		{
+			name:               "missing grpcObjectId claim",
+			actualNodeId:       expectedNodeId,
+			actualGrpcObjectId: "",
+			shouldPass:         false,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 
-			// for this test, we only care about setting the targetResourceId
-			popTokenValidator, err := NewPopTokenValidator(expectedResourceId, "", []string{"aud"}, "", "", nil)
+			// for this test, we only care about initializeing the custom claims
+			popTokenValidator, err := NewPopTokenValidator(expectedNodeId, expectedGrpcObjectId, "", []string{"aud"}, "", "", nil, nil)
 			assert.Nil(t, err)
-			// likewise we only set the resourceId in the poptoken body
-			popTokenBody := nodeAgentPopTokenBody{ResourceId: tt.actualResourceId}
+			// likewise we only set the custom claims in the poptoken body
+			popTokenBody := NodeAgentPopTokenBody{NodeId: tt.actualNodeId, GrpcObjectId: tt.actualGrpcObjectId}
 
 			err = popTokenValidator.isCustomClaimsValid(&popTokenBody)
 			if tt.shouldPass {
@@ -219,7 +270,7 @@ func Test_NodeAgentPopTokenValidatorParseAndValidateAccessToken(t *testing.T) {
 
 	defaultPKey, _ := getPrivateKey()
 	defaultJwkMgr := &FakeJwrMgr{PublicKey: &defaultPKey.PublicKey}
-
+	nonceCache := &FakeNonceCache{Exists: false}
 	// By default, the accesstoken and validator will use the same expected values as listed above
 	// hence the access token validation will succeeded.
 
@@ -370,11 +421,13 @@ func Test_NodeAgentPopTokenValidatorParseAndValidateAccessToken(t *testing.T) {
 			// The token validator is set to the expected values, except for invalid jwk
 			tokenValidator, err := NewPopTokenValidator(
 				"notused", // this is not tested here.
+				"notused", // this is not tested here.
 				expectedTenantId,
 				[]string{expectedAudience},
 				expectedClientId,
 				expectedAuthorityUrl,
-				jwkMgr)
+				jwkMgr,
+				nonceCache)
 			assert.Nil(t, err)
 
 			s, err := generateAccessToken(&claims, defaultPKey)
@@ -399,7 +452,8 @@ func Test_NodeAgentPopTokenValidatorParseAndValidateAccessToken(t *testing.T) {
 // this is just a simple test to validate end to end.
 func Test_NodeAgentPopTokenValidatorValidate(t *testing.T) {
 	authorityUrl := "https://login.fake.microsoftonline.com"
-	resourceId := "resourceId"
+	nodeId := "nodeId"
+	grpcObjectId := "objectId"
 	tenantId := "cmpTenantId"
 	clientId := "cmpClientId"
 	audience := "cmpAudience"
@@ -411,6 +465,7 @@ func Test_NodeAgentPopTokenValidatorValidate(t *testing.T) {
 	accessTokenPKey, err := getPrivateKey()
 	assert.Nil(t, err)
 	jwkMgr := &FakeJwrMgr{PublicKey: &accessTokenPKey.PublicKey}
+	nonceCache := &FakeNonceCache{Exists: false}
 
 	rsaKeyPair, err := getKeyPair()
 	assert.Nil(t, err)
@@ -439,17 +494,19 @@ func Test_NodeAgentPopTokenValidatorValidate(t *testing.T) {
 	assert.Nil(t, err)
 
 	// Generate pop token
-	pt, err := popToken.GenerateToken(at, time.Now(), map[string]interface{}{"resourceId": resourceId})
+	pt, err := popToken.GenerateToken(at, time.Now(), map[string]interface{}{"nodeId": nodeId, "p": grpcObjectId, "nonce": "nonceId"})
 	assert.Nil(t, err)
 
 	// validate poptoken
 	tokenValidator, err := NewPopTokenValidator(
-		resourceId,
+		nodeId,
+		grpcObjectId,
 		tenantId,
 		[]string{audience},
 		clientId,
 		authorityUrl,
-		jwkMgr)
+		jwkMgr,
+		nonceCache)
 	assert.Nil(t, err)
 
 	err = tokenValidator.Validate(pt)
@@ -496,6 +553,15 @@ func (j *FakeJwrMgr) GetPublicKey(kid string) (*rsa.PublicKey, error) {
 	}
 }
 
+// fake nonceCache that we can set to return true or false at will.
+type FakeNonceCache struct {
+	Exists bool
+}
+
+func (n *FakeNonceCache) IsNonceExists(nonceId string, now time.Time) bool {
+	return n.Exists
+}
+
 func getPrivateKey() (*rsa.PrivateKey, error) {
 	return rsa.GenerateKey(rand.Reader, RsaSize)
 }
@@ -503,11 +569,9 @@ func getPrivateKey() (*rsa.PrivateKey, error) {
 func publicKeyToCnf(keyPair *RsaKeyPair) *Cnf {
 	return &Cnf{
 		Jwk: Jwk{
-			JwkInner: JwkInner{
-				Kty: keyPair.Kty,
-				E:   exponential2Base64(keyPair.PublicKey.E),
-				N:   base64.URLEncoding.EncodeToString([]byte(keyPair.PublicKey.N.String())),
-			},
+			Kty: keyPair.Kty,
+			E:   exponential2Base64(keyPair.PublicKey.E),
+			N:   base64.RawURLEncoding.EncodeToString([]byte(keyPair.PublicKey.N.Bytes())),
 		},
 	}
 }

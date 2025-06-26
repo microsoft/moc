@@ -16,7 +16,7 @@ const (
 )
 
 // Wrapper around jwk library to retrieve and refresh the jwk endpoints from Entra/AAD
-type JwkManager struct {
+type jwkManager struct {
 	// STS JWK endpoint, e.g. "https://login.microsoftonline.com/common/discovery/keys"
 	jwkEndpoint string
 	ar          *jwk.AutoRefresh
@@ -26,7 +26,7 @@ type JwkInterface interface {
 	GetPublicKey(kid string) (*rsa.PublicKey, error)
 }
 
-func (j *JwkManager) GetPublicKey(kid string) (*rsa.PublicKey, error) {
+func (j *jwkManager) GetPublicKey(kid string) (*rsa.PublicKey, error) {
 	ctx := context.Background()
 	keys, err := j.ar.Fetch(ctx, j.jwkEndpoint)
 	if err != nil {
@@ -46,7 +46,7 @@ func (j *JwkManager) GetPublicKey(kid string) (*rsa.PublicKey, error) {
 	return &pKey, nil
 }
 
-func NewJwkManager(authorityUrl string, refreshInterval time.Duration) (*JwkManager, error) {
+func NewJwkManager(authorityUrl string, refreshInterval time.Duration) (*jwkManager, error) {
 	jwkEndpoint := appendUrl(authorityUrl, IssuerPostfix)
 	ctx, _ := context.WithCancel(context.Background())
 	ar := jwk.NewAutoRefresh(ctx)
@@ -56,5 +56,5 @@ func NewJwkManager(authorityUrl string, refreshInterval time.Duration) (*JwkMana
 		return nil, fmt.Errorf("failed to refresh the jwk endpoint %s", jwkEndpoint)
 	}
 
-	return &JwkManager{jwkEndpoint: jwkEndpoint, ar: ar}, nil
+	return &jwkManager{jwkEndpoint: jwkEndpoint, ar: ar}, nil
 }

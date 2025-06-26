@@ -24,7 +24,7 @@ type ShrPopHeader struct {
 
 // https://datatracker.ietf.org/doc/html/rfc7638#section-3.1
 // contains the metadata use to calculate kid.
-type JwkInner struct {
+type Jwk struct {
 	// Exponent
 	E string `json:"e"`
 	// encryption
@@ -33,16 +33,9 @@ type JwkInner struct {
 	N string `json:"n"`
 }
 
-type Jwk struct {
-	JwkInner
-	// public key kid
-	Kid string `json:"kid"`
-}
-
 // https://datatracker.ietf.org/doc/html/rfc7800#section-3.2
 type Cnf struct {
-	Jwk     Jwk    `json:"jwk"`
-	Xms_ksl string `json:"xms_ksl"`
+	Jwk Jwk `json:"jwk"`
 }
 
 type ReqCnf struct {
@@ -56,32 +49,28 @@ type ShrPopTokenBody struct {
 	Ts int64 `json:"ts"`
 	// access token
 	At string `json:"at"`
-	// random unique value to prevent replay attack. not used
-	NonCe string `json:"nonce"`
 }
 
 // Implements the shr pop token generically. Callers of ths instance can add their own custom claims when generating the token.
-type ShrPopToken struct {
-	Header     ShrPopHeader
-	Body       ShrPopTokenBody
-	ReqCnf     ReqCnf
-	RSAKeyPair *RsaKeyPair
+type shrPopToken struct {
+	Header       ShrPopHeader
+	Body         ShrPopTokenBody
+	refCnfBase64 string
+	RSAKeyPair   *RsaKeyPair
 }
 
 const (
 	TokenType = "pop"
+	//TokenType = "JWT"
 )
 
-func calculatePublicKeyId(jwkInner *JwkInner) (string, error) {
+func calculatePublicKeyId(jwk *Jwk) (string, error) {
 	// - https://tools.ietf.org/html/rfc7638#section-3.1
-	jwkByte, err := json.Marshal(jwkInner)
+	jwkByte, err := json.Marshal(jwk)
 	if err != nil {
 		return "", err
 	}
 	jwk256 := sha256.Sum256(jwkByte)
-	if err != nil {
-		return "", err
-	}
 	return base64.RawURLEncoding.EncodeToString(jwk256[:]), nil
 }
 
@@ -111,12 +100,12 @@ func exponential2Base64(e int) string {
 	binary.BigEndian.PutUint32(bs, uint32(e))
 
 	bs = bs[1:] // drop most significant byte - leaving least-significant 3-bytes
-	ss := base64.URLEncoding.EncodeToString(bs)
+	ss := base64.RawURLEncoding.EncodeToString(bs)
 	return ss
 }
 
 // Append custom claims to the existing ShrPopTokenBody.
-func (pop *ShrPopToken) appendCustomClaimsToBody(customClaims map[string]interface{}) map[string]interface{} {
+func (pop *shrPopToken) appendCustomClaimsToBody(customClaims map[string]interface{}) map[string]interface{} {
 
 	bodyMap := make(map[string]interface{})
 
@@ -137,7 +126,7 @@ func (pop *ShrPopToken) appendCustomClaimsToBody(customClaims map[string]interfa
 }
 
 // Complete the poptoken creation by adding the custom claims and signing it.
-func (pop *ShrPopToken) GenerateToken(token string, now time.Time, customClaims map[string]interface{}) (string, error) {
+func (pop *shrPopToken) GenerateToken(token string, now time.Time, customClaims map[string]interface{}) (string, error) {
 
 	pop.Body.Ts = now.Truncate(time.Second).Unix()
 	pop.Body.At = token
@@ -163,18 +152,14 @@ func (pop *ShrPopToken) GenerateToken(token string, now time.Time, customClaims 
 }
 
 // Generate ReqCnf to be passed to Msal
-func (pop *ShrPopToken) GetReqCnf() (string, error) {
-	refCnfb64, err := jsonToBase64(pop.ReqCnf)
-	if err != nil {
-		return "", err
-	}
-	return refCnfb64, nil
+func (pop *shrPopToken) GetReqCnf() string {
+	return pop.refCnfBase64
 }
 
 // Create a new instance of ShrPopToken. This generate a partial filled, generic shrpoptoken. The custom claims will be
 // added later on in GenerateToken()
-func NewPopToken(keyPair *RsaKeyPair) (*ShrPopToken, error) {
-	pop := ShrPopToken{
+func NewPopToken(keyPair *RsaKeyPair) (*shrPopToken, error) {
+	pop := shrPopToken{
 		Header: ShrPopHeader{
 			Alg: keyPair.Alg,
 			Typ: TokenType,
@@ -182,25 +167,31 @@ func NewPopToken(keyPair *RsaKeyPair) (*ShrPopToken, error) {
 		Body: ShrPopTokenBody{
 			Cnf: Cnf{
 				Jwk: Jwk{
-					JwkInner: JwkInner{
-						Kty: keyPair.Kty,
-						E:   exponential2Base64(keyPair.PublicKey.E),
-						N:   base64.URLEncoding.EncodeToString([]byte(keyPair.PublicKey.N.String())),
-					},
+					Kty: keyPair.Kty,
+					N:   base64.RawURLEncoding.EncodeToString([]byte(keyPair.PublicKey.N.Bytes())),
+					E:   exponential2Base64(keyPair.PublicKey.E),
 				},
 			},
 		},
-		ReqCnf:     ReqCnf{},
 		RSAKeyPair: keyPair,
 	}
 
-	keyId, err := calculatePublicKeyId(&pop.Body.Cnf.Jwk.JwkInner)
+	keyId, err := calculatePublicKeyId(&pop.Body.Cnf.Jwk)
 	if err != nil {
 		return nil, err
 	}
+
 	pop.Header.Kid = keyId
-	pop.ReqCnf.Kid = keyId
-	pop.Body.Cnf.Jwk.Kid = keyId
+	//pop.Body.Cnf.Jwk.Kid = keyId
+
+	refCnfb64, err := jsonToBase64(
+		ReqCnf{
+			Kid: keyId,
+		})
+	if err != nil {
+		return nil, err
+	}
+	pop.refCnfBase64 = refCnfb64
 
 	return &pop, err
 }

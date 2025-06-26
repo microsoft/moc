@@ -7,11 +7,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_RsaKeyPairGetKeyPair(t *testing.T) {
-	rsamgr, err := NewRsaKeyManager(time.Hour * 1)
+const (
+	testRsaValidInterval  = time.Hour * 1
+	testRsaNowDateTimeStr = "2025-12-01T15:00:00Z" //time.Parse(time.RFC3339, "2025-12-01T15:00:00Z")
+)
+
+func Test_RsaKeyManagerGetKeyPair(t *testing.T) {
+	now, _ := time.Parse(time.RFC3339, testNonceNowDateTimeStr)
+	rsamgr, err := NewRsaKeyManager(testRsaValidInterval)
 	assert.Nil(t, err)
 
-	rsa, err := rsamgr.GetKeyPair()
+	rsa, err := rsamgr.GetKeyPair(now)
 	assert.Nil(t, err)
 
 	assert.Equal(t, Alg, rsa.Alg)
@@ -21,53 +27,23 @@ func Test_RsaKeyPairGetKeyPair(t *testing.T) {
 	assert.NotNil(t, rsa.PublicKey)
 
 	// now get the keypair a second time, if it has not refreshed, it will be the same value
-	rsa2, err := rsamgr.GetKeyPair()
-	//validate private key are same
+	rsa2, err := rsamgr.GetKeyPair(now)
+	//validate private key are equal value
 	assert.Equal(t, *rsa.PrivateKey.N, *rsa2.PrivateKey.N)
 }
 
-func Test_RsaKeyPairRefresh(t *testing.T) {
-	rsamgr, err := NewRsaKeyManager(time.Second * 1)
+func Test_RsaKeyManagerGetKeyPairRotated(t *testing.T) {
+	now, _ := time.Parse(time.RFC3339, testNonceNowDateTimeStr)
+	rsamgr, err := NewRsaKeyManager(testRsaValidInterval)
 	assert.Nil(t, err)
 
-	rsa, err := rsamgr.GetKeyPair()
+	rsa, err := rsamgr.GetKeyPair(now)
 	assert.Nil(t, err)
 
-	time.Sleep(time.Second * 2)
+	// now get the keypair a second time past the refresh interval, a new key should be generated.
+	rsa2, err := rsamgr.GetKeyPair(now.Add(testRsaValidInterval * 2))
+	assert.Nil(t, err)
 
-	rsa2, err := rsamgr.GetKeyPair()
-	//validate private key are different the second time we ger it
+	//validate the two keys are now different.
 	assert.NotEqual(t, *rsa.PrivateKey.N, *rsa2.PrivateKey.N)
-}
-
-func Test_RsaKeyPairForceRefresh(t *testing.T) {
-	rsamgr, err := NewRsaKeyManager(time.Hour * 1)
-	assert.Nil(t, err)
-
-	rsa, err := rsamgr.GetKeyPair()
-	assert.Nil(t, err)
-
-	rsamgr.ForceRefresh()
-	// wait for some time for it to respond, note the sleep here is far less than the refesh interval of 1 hour
-	time.Sleep(time.Second * 1)
-
-	rsa2, err := rsamgr.GetKeyPair()
-	//validate private key are different the second time we ger it
-	assert.NotEqual(t, *rsa.PrivateKey.N, *rsa2.PrivateKey.N)
-}
-
-// validate keymanager will not deadlock if refresh happen quicker than get call.
-func Test_RsaKeyPairNoDeadLock(t *testing.T) {
-	rsamgr, err := NewRsaKeyManager(time.Hour * 1)
-	assert.Nil(t, err)
-
-	for i := 0; i < 5; i++ {
-		rsamgr.ForceRefresh()
-		// wait for some time for it to respond
-		time.Sleep(time.Second * 1)
-	}
-
-	rsa2, err := rsamgr.GetKeyPair()
-	assert.Nil(t, err)
-	assert.NotNil(t, rsa2.PrivateKey)
 }

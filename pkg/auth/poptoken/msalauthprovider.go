@@ -3,6 +3,7 @@ package poptoken
 import (
 	"context"
 	"os"
+	"time"
 
 	"github.com/AzureAD/microsoft-authentication-library-for-go/apps/confidential"
 	"github.com/pkg/errors"
@@ -16,7 +17,7 @@ type MsalAuthProvider struct {
 	authorityUrl   string
 	scope          []string
 	clientCertPath string
-	rsaKeyManager  *RsaKeyManager
+	rsaKeyManager  *rsaKeyManager
 }
 
 func (m MsalAuthProvider) refreshConfidentialClient() (*confidential.Client, error) {
@@ -48,7 +49,7 @@ func (m MsalAuthProvider) refreshConfidentialClient() (*confidential.Client, err
 	return &confidentialClient, nil
 }
 
-func (m MsalAuthProvider) GetToken(targetResourceId string) (string, error) {
+func (m MsalAuthProvider) GetToken(targetResourceId string, grpcObjectPath string) (string, error) {
 
 	// TODO: the underlying client certificate will be refreshed, hence we need to also pick up the new certificate
 	// Longer run we can cache the client but for now we will refresh the client for every token call.
@@ -57,12 +58,12 @@ func (m MsalAuthProvider) GetToken(targetResourceId string) (string, error) {
 		return "", err
 	}
 
-	keyPair, err := m.rsaKeyManager.GetKeyPair()
+	keyPair, err := m.rsaKeyManager.GetKeyPair(time.Now())
 	if err != nil {
 		return "", errors.Wrapf(err, "failed to get keypair for pop token")
 	}
 
-	popTokenScheme, err := NewNodeAgentPopTokenAuthScheme(targetResourceId, keyPair)
+	popTokenScheme, err := NewNodeAgentPopTokenAuthScheme(targetResourceId, grpcObjectPath, keyPair)
 	if err != nil {
 		return "", errors.Wrapf(err, "failed to create new pop token scheme")
 	}
@@ -74,7 +75,12 @@ func (m MsalAuthProvider) GetToken(targetResourceId string) (string, error) {
 	return result.AccessToken, nil
 }
 
-func NewMsalClient(clientId string, tenantId, authorityUrl string, clientCertPath string, rsaKeyManager *RsaKeyManager) (*MsalAuthProvider, error) {
+func NewMsalClient(clientId string, tenantId, authorityUrl string, clientCertPath string) (*MsalAuthProvider, error) {
+	rsaKeyManager, err := NewRsaKeyManager(DefaultRefreshInterval)
+	if err != nil {
+		return nil, err
+	}
+
 	m := &MsalAuthProvider{
 		clientId:       clientId,
 		tenantId:       tenantId,
@@ -85,7 +91,7 @@ func NewMsalClient(clientId string, tenantId, authorityUrl string, clientCertPat
 	}
 
 	// sanity check to ensure client is setup correctly
-	_, err := m.refreshConfidentialClient()
+	_, err = m.refreshConfidentialClient()
 	if err != nil {
 		return nil, err
 	}

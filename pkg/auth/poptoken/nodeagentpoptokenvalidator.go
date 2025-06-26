@@ -21,13 +21,18 @@ import (
 const (
 	TokenVersion1         = "1.0"
 	TokenVersion2         = "2.0"
-	PopTokenValidInterval = 1 * time.Hour //TODO: should we make this smaller?
+	PopTokenValidInterval = 5 * time.Minute
+	PopTokenClockSkew     = 1 * time.Minute
 )
 
-type nodeAgentPopTokenBody struct {
+type NodeAgentPopTokenBody struct {
 	ShrPopTokenBody
-	// target resource Id. Expected to match ShrPopTokenValidator.TargetResourceId
-	ResourceId string `json:"resourceid"`
+	// target node Id. this is expected to be the Arc For Server resource Id.
+	NodeId string `json:"nodeid"`
+	// uri to the grpc object targeted
+	GrpcObjectId string `json:"p"`
+	// unique id bound to the token to prevent replay attaches.
+	Nonce string `json:"nonce"`
 }
 
 // contains a subset of custom claims in Entra/AzureAD access tokens we want to validate.
@@ -46,9 +51,11 @@ type AccessTokenCustomClaims struct {
 	jwt.RegisteredClaims
 }
 
-type ShrPopTokenValidator struct {
-	// A4S agent resourceId
-	TargetResourceId string
+type shrPopTokenValidator struct {
+	// id of node which the pop token is bounded to. This is expected to be the  Arc For Server (A4S) agent resourceId
+	NodeId string
+	// pathurl of grpc entity that the pop token is bounded to, e.g. the uri to the storage container entity.
+	GrpcObjectId string
 	// Tenant Id of  CMP 1P
 	TenantId string
 	// The target Id. In this case,  client Id or one of its identifierUri, depending on the token version.
@@ -59,6 +66,8 @@ type ShrPopTokenValidator struct {
 	IssuerUrl string
 	// component use to query Entra JWK endpoint.
 	jwk JwkInterface
+	// component use to cache and check request's nonceCache to prevent replay attack
+	nonceCache NonceCacheInterface
 }
 
 // handle situation where url may or may not have a backslash
@@ -70,22 +79,23 @@ func appendUrl(url string, postfix string) string {
 	return fmt.Sprintf("%s%s%s", url, sep, postfix)
 }
 
-func isTokenExpire(timestamp int64, now time.Time) error {
+func isTokenExpire(timestamp int64, now time.Time, clockSkew time.Duration) error {
 	var issuedTime time.Time
 	convertTime(timestamp, &issuedTime)
 	expireat := issuedTime.Add(PopTokenValidInterval)
-	if expireat.Before(now) {
-		return fmt.Errorf("pop token has expired. Time when validated: %v, issued At: %v, valid duration: %v", now, issuedTime, PopTokenValidInterval)
+	skewedTime := now.Add(-clockSkew)
+	if expireat.Before(skewedTime) {
+		return fmt.Errorf("pop token has expired. currentTimestamp: %v, issuedAt: %v, validDuration: %v", now, issuedTime, PopTokenValidInterval)
 	}
 	return nil
 }
 
 func isHeaderValid(header *ShrPopHeader) error {
 	if header.Typ != TokenType {
-		return fmt.Errorf("expected token type %s, got %s", TokenType, header.Typ)
+		return fmt.Errorf("unsupported token type in pop token header; expected %s, got %s", TokenType, header.Typ)
 	}
 	if header.Alg != Alg {
-		return fmt.Errorf("expected alg %s, got %s", Alg, header.Alg)
+		return fmt.Errorf("unsupported alg in pop token header, expected %s, got %s", Alg, header.Alg)
 	}
 
 	return nil
@@ -104,32 +114,30 @@ func verifyPayload(signingStr *string, sig []byte, pubKey *rsa.PublicKey) error 
 	hash.Write([]byte(*signingStr))
 	err := rsa.VerifyPKCS1v15(pubKey, crypto.SHA256, hash.Sum(nil), sig)
 	if err != nil {
-		return errors.Wrapf(err, "failed to validate signature of poptoken using cnf")
+		return errors.Wrapf(err, "failed to validate signature of pop token")
 	}
 	return nil
 }
 
 func publicRSA256KeyFromCnf(cnf *Cnf) (*rsa.PublicKey, error) {
-	modulus, err := base64.URLEncoding.DecodeString(cnf.Jwk.N)
+	modulus, err := base64.RawURLEncoding.DecodeString(cnf.Jwk.N)
 	if err != nil {
-		err := errors.Wrapf(err, "error while parsing poptoken cnf: failed to decode modulus")
+		err := errors.Wrapf(err, "error while parsing pop token cnf: failed to decode modulus")
 		return nil, err
 	}
-	n := big.NewInt(0)
-	n.SetString(string(modulus), 10)
+	n := new(big.Int).SetBytes(modulus)
 
 	e, err := base64ToExponential(string(cnf.Jwk.E))
 	if err != nil {
-		err := errors.Wrapf(err, "error while parsing poptoken cnf: failed to parse exponent")
+		err := errors.Wrapf(err, "error while parsing pop token cnf: failed to parse exponent")
 		return nil, err
 	}
 	pKey := rsa.PublicKey{N: n, E: int(e)}
-
 	return &pKey, nil
 }
 
 func base64ToExponential(encodedE string) (int, error) {
-	decE, err := base64.URLEncoding.DecodeString(encodedE)
+	decE, err := base64.RawURLEncoding.DecodeString(encodedE)
 	if err != nil {
 		return 0, err
 	}
@@ -180,12 +188,12 @@ func convertTime(i any, tm *time.Time) {
 	}
 }
 
-func (s *ShrPopTokenValidator) parseAndValidateAccessToken(tokenStr string, popTokenKid string) error {
+func (s *shrPopTokenValidator) parseAndValidateAccessToken(tokenStr string, popTokenKid string) error {
 	// ParseWithClaims() will validate the token expiry date and signing.
 	at, err := jwt.ParseWithClaims(tokenStr, &AccessTokenCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		kid, ok := token.Header["kid"].(string)
 		if !ok {
-			return nil, fmt.Errorf("failed to find kid in access token header")
+			return nil, fmt.Errorf("missing metadata 'kid' 'in the header of claim 'at'")
 		}
 
 		pKey, err := s.jwk.GetPublicKey(kid)
@@ -197,48 +205,48 @@ func (s *ShrPopTokenValidator) parseAndValidateAccessToken(tokenStr string, popT
 	}, jwt.WithValidMethods([]string{jwt.SigningMethodRS256.Alg()}))
 
 	if err != nil {
-		return errors.Wrapf(err, "failed to parse access token")
+		return errors.Wrapf(err, "failed to validate claim 'at'")
 	}
 
 	err = s.validateAccessTokenClaims(at, popTokenKid)
 	return err
 }
 
-func (s *ShrPopTokenValidator) validateAccessTokenClaims(token *jwt.Token, popTokenKid string) error {
+func (s *shrPopTokenValidator) validateAccessTokenClaims(token *jwt.Token, popTokenKid string) error {
 	if token == nil {
-		return fmt.Errorf("empty token in validateAccessTokenClaims!")
+		return fmt.Errorf("missing claim 'at' in pop token.")
 	}
 
 	// now read in Entra access token's specific claims and validate them
 	claims, ok := token.Claims.(*AccessTokenCustomClaims)
 	if !ok {
-		return fmt.Errorf("failed to retrieve expected claims in access token")
+		return fmt.Errorf("failed to parse claim 'at' in pop token.")
 	}
 
 	// Handle claims that are specifc to token versions
 	switch claims.TokenVersion {
 	case TokenVersion1:
 		if claims.AppId != s.ClientId {
-			return fmt.Errorf("invalid appId claim")
+			return fmt.Errorf("claim 'at.appId' does not match the expected app Id. token is not from an accepted client")
 		}
 		if claims.Issuer != s.IssuerUrl {
-			return fmt.Errorf("invalid issuer")
+			return fmt.Errorf("claim 'at.iss' points to an invalid issuer for v1 token")
 		}
 	case TokenVersion2:
 		if claims.Azp != s.ClientId {
-			return fmt.Errorf("invalid azp claim")
+			return fmt.Errorf("claim 'at.azp' does not match the expected app Id. token is not from an accepted client")
 		}
 		// for v2, issuer ends with v2.0
 		if claims.Issuer != appendUrl(s.IssuerUrl, "v2.0") {
-			return fmt.Errorf("invalid issuer for v2 token")
+			return fmt.Errorf("claim 'at.iss' points to an invalid issuer for v2 token")
 		}
 
 	default:
-		return fmt.Errorf("unknown token version %s. expected either %sor %s", claims.TokenVersion, TokenVersion1, TokenVersion2)
+		return fmt.Errorf("claim 'at.ver' has an unknown token version %s. expected either %sor %s", claims.TokenVersion, TokenVersion1, TokenVersion2)
 	}
 
 	if claims.ReqCnf.Kid != popTokenKid {
-		return fmt.Errorf("kid in pop token did not match kid in access token. expected kid: %s, got kid: %s", claims.ReqCnf.Kid, popTokenKid)
+		return fmt.Errorf("claim 'kid' in pop token did not match kid in claim 'at.cnf.kid'. pop token may have been signed with an unexpected key.")
 	}
 
 	foundAud := false
@@ -249,24 +257,38 @@ func (s *ShrPopTokenValidator) validateAccessTokenClaims(token *jwt.Token, popTo
 		}
 	}
 	if !foundAud {
-		return fmt.Errorf("aud claim was not expected")
+		return fmt.Errorf("claim 'at.aud' did not match the expected audience")
 	}
 
 	return nil
 }
 
-func (s *ShrPopTokenValidator) isCustomClaimsValid(body *nodeAgentPopTokenBody) error {
-	if body.ResourceId != s.TargetResourceId {
-		return fmt.Errorf("invalid resourceId")
+func (s *shrPopTokenValidator) isCustomClaimsValid(body *NodeAgentPopTokenBody) error {
+	if body.NodeId != s.NodeId {
+		return fmt.Errorf("claim 'nodeid'in pop token does not match the id of the edge node.")
 	}
-
+	if body.GrpcObjectId != s.GrpcObjectId {
+		return fmt.Errorf("claim 'p' in pop token does not match the targeted moc entity")
+	}
 	return nil
 }
 
-func (s *ShrPopTokenValidator) Validate(popToken string) error {
+func (s *shrPopTokenValidator) isTokenReused(nonce string, now time.Time) error {
+	if nonce == "" {
+		return fmt.Errorf("claim 'nonce' in pop token is empty/missing, expected a unique id")
+	}
+
+	ok := s.nonceCache.IsNonceExists(nonce, now)
+	if ok {
+		return fmt.Errorf("claim 'nonce' in pop token has been used before, potentially a replay attack")
+	}
+	return nil
+}
+
+func (s *shrPopTokenValidator) Validate(popToken string) error {
 	toks := strings.Split(popToken, ".")
 	if len(toks) != 3 {
-		return fmt.Errorf("invalid pop tokens expected 3 segments, got %d", len(toks))
+		return fmt.Errorf("invalid pop token; expected 3 segments, got %d", len(toks))
 	}
 
 	header, err := decodeFromBase64[ShrPopHeader](toks[0])
@@ -278,12 +300,16 @@ func (s *ShrPopTokenValidator) Validate(popToken string) error {
 		return err
 	}
 
-	body, err := decodeFromBase64[nodeAgentPopTokenBody](toks[1])
+	body, err := decodeFromBase64[NodeAgentPopTokenBody](toks[1])
 	if err != nil {
 		return err
 	}
 
-	if err := isTokenExpire(body.Ts, time.Now()); err != nil {
+	if err := isTokenExpire(body.Ts, time.Now(), PopTokenClockSkew); err != nil {
+		return err
+	}
+
+	if err := s.isTokenReused(body.Nonce, time.Now()); err != nil {
 		return err
 	}
 
@@ -302,7 +328,7 @@ func (s *ShrPopTokenValidator) Validate(popToken string) error {
 	}
 
 	// now retrieve the inner access token
-	err = s.parseAndValidateAccessToken(body.At, body.Cnf.Jwk.Kid)
+	err = s.parseAndValidateAccessToken(body.At, header.Kid)
 	if err != nil {
 		return err
 	}
@@ -310,18 +336,20 @@ func (s *ShrPopTokenValidator) Validate(popToken string) error {
 	return nil
 }
 
-func NewPopTokenValidator(targetResourceId string, tenantId string, audiences []string, clientId string, authorityUrl string, jwk JwkInterface) (*ShrPopTokenValidator, error) {
+func NewPopTokenValidator(nodeId string, grpcobjectId string, tenantId string, audiences []string, clientId string, authorityUrl string, jwk JwkInterface, nonceChecker NonceCacheInterface) (*shrPopTokenValidator, error) {
 	audienceMap := make(map[string]bool)
 	for _, aud := range audiences {
 		audienceMap[aud] = true
 	}
 
-	return &ShrPopTokenValidator{
-		TargetResourceId: targetResourceId,
-		TenantId:         tenantId,
-		Audience:         audienceMap,
-		ClientId:         clientId,
-		IssuerUrl:        appendUrl(authorityUrl, tenantId),
-		jwk:              jwk,
+	return &shrPopTokenValidator{
+		NodeId:       nodeId,
+		GrpcObjectId: grpcobjectId,
+		TenantId:     tenantId,
+		Audience:     audienceMap,
+		ClientId:     clientId,
+		IssuerUrl:    appendUrl(authorityUrl, tenantId),
+		jwk:          jwk,
+		nonceCache:   nonceChecker,
 	}, nil
 }

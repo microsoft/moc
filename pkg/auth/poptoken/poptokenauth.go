@@ -31,12 +31,12 @@ func NewPopTokenAuth(msalProvider *MsalAuthProvider, targetResourceId string) (*
 }
 
 func (p *PopTokenAuth) GetRequestMetadata(ctx context.Context, uri ...string) (map[string]string, error) {
-	accessToken, err := p.msalauthprovider.GetToken(p.targetResourceId)
+	accessToken, err := p.msalauthprovider.GetToken(p.targetResourceId, uri[0])
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to generate poptoken")
 	}
 
-	return map[string]string{"authorization": accessToken}, nil
+	return map[string]string{"authorization": accessToken, "uri": uri[0]}, nil
 }
 
 func (p *PopTokenAuth) RequireTransportSecurity() bool {
