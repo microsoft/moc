@@ -9,7 +9,7 @@ import (
 )
 
 type TestPopTokenSchemeBody struct {
-	ShrPopTokenBody
+	PopTokenBody
 	NodeId string `json:"nodeid"`
 }
 

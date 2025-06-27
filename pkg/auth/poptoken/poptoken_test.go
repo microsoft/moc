@@ -18,7 +18,7 @@ type testStruct struct {
 }
 
 type TestPopTokenBody struct {
-	ShrPopTokenBody
+	PopTokenBody
 	// target node Id.
 	NodeId string `json:"nodeid"`
 	// uri to the grpc object targeted
@@ -78,7 +78,7 @@ func Test_ShrPopTokenGenerateToken(t *testing.T) {
 	assert.Equal(t, 3, len(toks))
 
 	// validate header.
-	header, err := decodeFromBase64[ShrPopHeader](toks[0])
+	header, err := decodeFromBase64[PopTokenHeader](toks[0])
 	assert.Nil(t, err)
 	assert.Equal(t, Alg, header.Alg)
 	assert.Equal(t, TokenType, header.Typ)

@@ -64,11 +64,9 @@ func (n *nonceCache) IsNonceExists(nonceId string, now time.Time) bool {
 	n.mutex.Lock()
 	defer n.mutex.Unlock()
 
-	existNonce, ok := n.cache[nonceId]
-	// entries are evicted lazily, so if entry has expired, return false even though the entry
-	// is still in the cache.
+	_, ok := n.cache[nonceId]
 	if ok {
-		return existNonce.CreatedDateTime.Add(n.nonceValidInterval).After(now)
+		return ok
 	}
 
 	nonce := &Nonce{

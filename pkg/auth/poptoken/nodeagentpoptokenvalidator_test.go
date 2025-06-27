@@ -91,28 +91,28 @@ func Test_NodeAgentPopTokenValidatorIsTokenExpire(t *testing.T) {
 func Test_NodeAgentPopTokenValidatorIsHeaderValid(t *testing.T) {
 	tests := []struct {
 		name       string
-		header     ShrPopHeader
+		header     PopTokenHeader
 		shouldPass bool
 	}{
 		{
 			name:       "valid header",
 			shouldPass: true,
-			header:     ShrPopHeader{Alg: Alg, Typ: TokenType},
+			header:     PopTokenHeader{Alg: Alg, Typ: TokenType},
 		},
 		{
 			name:       "invalid alg",
 			shouldPass: false,
-			header:     ShrPopHeader{Alg: "RSA123", Typ: TokenType},
+			header:     PopTokenHeader{Alg: "RSA123", Typ: TokenType},
 		},
 		{
 			name:       "invalid typ",
 			shouldPass: false,
-			header:     ShrPopHeader{Alg: Alg, Typ: "jwt"},
+			header:     PopTokenHeader{Alg: Alg, Typ: "jwt"},
 		},
 		{
 			name:       "empty header",
 			shouldPass: false,
-			header:     ShrPopHeader{},
+			header:     PopTokenHeader{},
 		},
 	}
 

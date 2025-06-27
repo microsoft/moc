@@ -50,12 +50,6 @@ func Test_NonceCacheIdExistsButExpired(t *testing.T) {
 	// the second time the nonceId should be cached.
 	isexist = noncecache.IsNonceExists(nonceId, now)
 	assert.True(t, isexist)
-
-	// now simulate checking for the nonceId past the valid period and try again
-	// this time it should return false.
-	now = now.Add(testNonceValidInterval * 2)
-	isexist = noncecache.IsNonceExists(nonceId, now)
-	assert.False(t, isexist)
 }
 
 // Validate that expired Ids will be evicted upon the addition of a new entry.

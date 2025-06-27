@@ -4,7 +4,6 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
-	"sync"
 	"time"
 )
 
@@ -22,7 +21,6 @@ type rsaKeyManager struct {
 	refreshInterval time.Duration
 	createdDateTime time.Time
 	privateKey      *rsa.PrivateKey
-	mutex           sync.Mutex
 }
 
 const (
@@ -38,9 +36,6 @@ func generatePrivateKey() (*rsa.PrivateKey, error) {
 
 // Return a KeyPair. The keypair is its own copy and not a reference.
 func (r *rsaKeyManager) GetKeyPair(now time.Time) (*RsaKeyPair, error) {
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
-
 	if r.createdDateTime.Add(r.refreshInterval).Before(now) {
 		newPKey, err := generatePrivateKey()
 		if err != nil {

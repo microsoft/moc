@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-type ShrPopHeader struct {
+type PopTokenHeader struct {
 	// RSA PS256?
 	Alg string `json:"alg"`
 	// key Id of public key
@@ -43,7 +43,7 @@ type ReqCnf struct {
 }
 
 // https://datatracker.ietf.org/doc/html/draft-ietf-oauth-signed-http-request-03#section-3
-type ShrPopTokenBody struct {
+type PopTokenBody struct {
 	Cnf Cnf `json:"cnf"`
 	// timestamp
 	Ts int64 `json:"ts"`
@@ -52,16 +52,15 @@ type ShrPopTokenBody struct {
 }
 
 // Implements the shr pop token generically. Callers of ths instance can add their own custom claims when generating the token.
-type shrPopToken struct {
-	Header       ShrPopHeader
-	Body         ShrPopTokenBody
+type popToken struct {
+	Header       PopTokenHeader
+	Body         PopTokenBody
 	refCnfBase64 string
 	RSAKeyPair   *RsaKeyPair
 }
 
 const (
 	TokenType = "pop"
-	//TokenType = "JWT"
 )
 
 func calculatePublicKeyId(jwk *Jwk) (string, error) {
@@ -105,7 +104,7 @@ func exponential2Base64(e int) string {
 }
 
 // Append custom claims to the existing ShrPopTokenBody.
-func (pop *shrPopToken) appendCustomClaimsToBody(customClaims map[string]interface{}) map[string]interface{} {
+func (pop *popToken) appendCustomClaimsToBody(customClaims map[string]interface{}) map[string]interface{} {
 
 	bodyMap := make(map[string]interface{})
 
@@ -126,7 +125,7 @@ func (pop *shrPopToken) appendCustomClaimsToBody(customClaims map[string]interfa
 }
 
 // Complete the poptoken creation by adding the custom claims and signing it.
-func (pop *shrPopToken) GenerateToken(token string, now time.Time, customClaims map[string]interface{}) (string, error) {
+func (pop *popToken) GenerateToken(token string, now time.Time, customClaims map[string]interface{}) (string, error) {
 
 	pop.Body.Ts = now.Truncate(time.Second).Unix()
 	pop.Body.At = token
@@ -152,19 +151,19 @@ func (pop *shrPopToken) GenerateToken(token string, now time.Time, customClaims 
 }
 
 // Generate ReqCnf to be passed to Msal
-func (pop *shrPopToken) GetReqCnf() string {
+func (pop *popToken) GetReqCnf() string {
 	return pop.refCnfBase64
 }
 
 // Create a new instance of ShrPopToken. This generate a partial filled, generic shrpoptoken. The custom claims will be
 // added later on in GenerateToken()
-func NewPopToken(keyPair *RsaKeyPair) (*shrPopToken, error) {
-	pop := shrPopToken{
-		Header: ShrPopHeader{
+func NewPopToken(keyPair *RsaKeyPair) (*popToken, error) {
+	pop := popToken{
+		Header: PopTokenHeader{
 			Alg: keyPair.Alg,
 			Typ: TokenType,
 		},
-		Body: ShrPopTokenBody{
+		Body: PopTokenBody{
 			Cnf: Cnf{
 				Jwk: Jwk{
 					Kty: keyPair.Kty,
@@ -182,7 +181,6 @@ func NewPopToken(keyPair *RsaKeyPair) (*shrPopToken, error) {
 	}
 
 	pop.Header.Kid = keyId
-	//pop.Body.Cnf.Jwk.Kid = keyId
 
 	refCnfb64, err := jsonToBase64(
 		ReqCnf{

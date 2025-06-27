@@ -13,7 +13,7 @@ const (
 // Implements the interface for MSAL SDK to callback when creating the poptoken.
 // See AuthenticationScheme interface in https://github.com/AzureAD/microsoft-authentication-library-for-go/blob/main/apps/internal/oauth/ops/authority/authority.go#L146
 type PopTokenAuthScheme struct {
-	shrPopToken               *shrPopToken
+	shrPopToken               *popToken
 	claims                    map[string]interface{}
 	currRsaKeyPair            *RsaKeyPair
 	rsaKeyPairRefreshInterval time.Duration

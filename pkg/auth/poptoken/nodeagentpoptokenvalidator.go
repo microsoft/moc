@@ -26,7 +26,7 @@ const (
 )
 
 type NodeAgentPopTokenBody struct {
-	ShrPopTokenBody
+	PopTokenBody
 	// target node Id. this is expected to be the Arc For Server resource Id.
 	NodeId string `json:"nodeid"`
 	// uri to the grpc object targeted
@@ -90,7 +90,7 @@ func isTokenExpire(timestamp int64, now time.Time, clockSkew time.Duration) erro
 	return nil
 }
 
-func isHeaderValid(header *ShrPopHeader) error {
+func isHeaderValid(header *PopTokenHeader) error {
 	if header.Typ != TokenType {
 		return fmt.Errorf("unsupported token type in pop token header; expected %s, got %s", TokenType, header.Typ)
 	}
@@ -291,7 +291,7 @@ func (s *shrPopTokenValidator) Validate(popToken string) error {
 		return fmt.Errorf("invalid pop token; expected 3 segments, got %d", len(toks))
 	}
 
-	header, err := decodeFromBase64[ShrPopHeader](toks[0])
+	header, err := decodeFromBase64[PopTokenHeader](toks[0])
 	if err != nil {
 		return err
 	}
