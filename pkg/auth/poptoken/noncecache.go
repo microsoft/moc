@@ -6,17 +6,16 @@ import (
 )
 
 const (
-	DefaultNonceCacheSize     = 20
-	DefaultNonceValidInterval = time.Minute * 5
+	DefaultNonceCacheSize = 20
 )
 
 type NonceCacheInterface interface {
-	IsNonceExists(nonceId string, now time.Time) bool
+	IsNonceExists(nonceId string, now time.Time, tokenValidInterval time.Duration) bool
 }
 
 type Nonce struct {
-	Id              string
-	CreatedDateTime time.Time
+	Id               string
+	ExpireAtDateTime time.Time
 }
 
 // Implement a simple LRU cache that evicts older nonce entries.
@@ -47,7 +46,7 @@ func (n *nonceCache) trim(now time.Time) {
 		}
 
 		nonce := n.queue[0]
-		isDelete = nonce.CreatedDateTime.Add(n.nonceValidInterval).Before(now)
+		isDelete = nonce.ExpireAtDateTime.Before(now)
 
 		if !isDelete {
 			isDelete = n.size >= n.maxSize
@@ -60,7 +59,7 @@ func (n *nonceCache) trim(now time.Time) {
 	}
 }
 
-func (n *nonceCache) IsNonceExists(nonceId string, now time.Time) bool {
+func (n *nonceCache) IsNonceExists(nonceId string, now time.Time, tokenValidInterval time.Duration) bool {
 	n.mutex.Lock()
 	defer n.mutex.Unlock()
 
@@ -70,8 +69,8 @@ func (n *nonceCache) IsNonceExists(nonceId string, now time.Time) bool {
 	}
 
 	nonce := &Nonce{
-		Id:              nonceId,
-		CreatedDateTime: now,
+		Id:               nonceId,
+		ExpireAtDateTime: now.Add(tokenValidInterval),
 	}
 	n.append(nonce)
 	n.trim(now)
@@ -84,11 +83,10 @@ func (n *nonceCache) GetCacheSize() int {
 	return n.size
 }
 
-func NewNonceCache(maxSize int, nonceValidPeriod time.Duration) (*nonceCache, error) {
+func NewNonceCache(maxSize int) (*nonceCache, error) {
 	return &nonceCache{
-		cache:              make(map[string]*Nonce),
-		nonceValidInterval: nonceValidPeriod,
-		size:               0,
-		maxSize:            maxSize,
+		cache:   make(map[string]*Nonce),
+		size:    0,
+		maxSize: maxSize,
 	}, nil
 }

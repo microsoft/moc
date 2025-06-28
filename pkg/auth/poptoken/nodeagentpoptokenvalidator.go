@@ -22,7 +22,7 @@ const (
 	TokenVersion1         = "1.0"
 	TokenVersion2         = "2.0"
 	PopTokenValidInterval = 5 * time.Minute
-	PopTokenClockSkew     = 1 * time.Minute
+	PopTokenClockSkew     = 5 * time.Minute
 )
 
 type NodeAgentPopTokenBody struct {
@@ -278,7 +278,7 @@ func (s *shrPopTokenValidator) isTokenReused(nonce string, now time.Time) error 
 		return fmt.Errorf("claim 'nonce' in pop token is empty/missing, expected a unique id")
 	}
 
-	ok := s.nonceCache.IsNonceExists(nonce, now)
+	ok := s.nonceCache.IsNonceExists(nonce, now, PopTokenValidInterval)
 	if ok {
 		return fmt.Errorf("claim 'nonce' in pop token has been used before, potentially a replay attack")
 	}

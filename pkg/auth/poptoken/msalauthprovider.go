@@ -3,7 +3,6 @@ package poptoken
 import (
 	"context"
 	"os"
-	"time"
 
 	"github.com/AzureAD/microsoft-authentication-library-for-go/apps/confidential"
 	"github.com/pkg/errors"
@@ -17,7 +16,6 @@ type MsalAuthProvider struct {
 	authorityUrl   string
 	scope          []string
 	clientCertPath string
-	rsaKeyManager  *rsaKeyManager
 }
 
 func (m MsalAuthProvider) refreshConfidentialClient() (*confidential.Client, error) {
@@ -58,12 +56,7 @@ func (m MsalAuthProvider) GetToken(targetResourceId string, grpcObjectPath strin
 		return "", err
 	}
 
-	keyPair, err := m.rsaKeyManager.GetKeyPair(time.Now())
-	if err != nil {
-		return "", errors.Wrapf(err, "failed to get keypair for pop token")
-	}
-
-	popTokenScheme, err := NewNodeAgentPopTokenAuthScheme(targetResourceId, grpcObjectPath, keyPair)
+	popTokenScheme, err := NewNodeAgentPopTokenAuthScheme(targetResourceId, grpcObjectPath)
 	if err != nil {
 		return "", errors.Wrapf(err, "failed to create new pop token scheme")
 	}
@@ -76,22 +69,16 @@ func (m MsalAuthProvider) GetToken(targetResourceId string, grpcObjectPath strin
 }
 
 func NewMsalClient(clientId string, tenantId, authorityUrl string, clientCertPath string) (*MsalAuthProvider, error) {
-	rsaKeyManager, err := NewRsaKeyManager(DefaultRefreshInterval)
-	if err != nil {
-		return nil, err
-	}
-
 	m := &MsalAuthProvider{
 		clientId:       clientId,
 		tenantId:       tenantId,
 		authorityUrl:   appendUrl(authorityUrl, tenantId),
 		clientCertPath: clientCertPath,
 		scope:          []string{appendUrl(clientId, ".default")}, // intentionally target itself as the pop token custom claim will contain the actual audience.
-		rsaKeyManager:  rsaKeyManager,
 	}
 
 	// sanity check to ensure client is setup correctly
-	_, err = m.refreshConfidentialClient()
+	_, err := m.refreshConfidentialClient()
 	if err != nil {
 		return nil, err
 	}

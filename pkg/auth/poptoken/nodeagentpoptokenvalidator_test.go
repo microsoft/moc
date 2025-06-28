@@ -152,7 +152,7 @@ func Test_NodeAgentPopTokenValidatorIsTokenReused(t *testing.T) {
 }
 
 func Test_NodeAgentPopTokenValidatorIsSignatureValid(t *testing.T) {
-	keypair, err := getKeyPair()
+	keypair, err := generateKeyPair()
 	assert.Nil(t, err)
 
 	payload := []byte("ThisIsPayload")
@@ -182,7 +182,7 @@ func Test_NodeAgentPopTokenValidatorIsSignatureValid(t *testing.T) {
 	assert.NotNil(t, err)
 
 	// simulate wrong public key, expect failure
-	newKeyPair, err := getKeyPair()
+	newKeyPair, err := generateKeyPair()
 	assert.Nil(t, err)
 	misMatachCnf := publicKeyToCnf(newKeyPair)
 
@@ -467,17 +467,17 @@ func Test_NodeAgentPopTokenValidatorValidate(t *testing.T) {
 	jwkMgr := &FakeJwrMgr{PublicKey: &accessTokenPKey.PublicKey}
 	nonceCache := &FakeNonceCache{Exists: false}
 
-	rsaKeyPair, err := getKeyPair()
-	assert.Nil(t, err)
+	//rsaKeyPair, err := generateKeyPair()
+	//assert.Nil(t, err)
 
 	// partial generate pop token, we need to add the popKid into the accesstoken
-	popToken, err := NewPopToken(rsaKeyPair)
+	popToken, err := NewNodeAgentPopTokenAuthScheme(nodeId, grpcObjectId)
 	assert.Nil(t, err)
 
 	// Generate access token
 	claims := AccessTokenCustomClaims{
 		Tid:          tenantId,
-		ReqCnf:       ReqCnf{Kid: popToken.Header.Kid},
+		ReqCnf:       ReqCnf{Kid: popToken.header.Kid},
 		Azp:          clientId,
 		AppId:        clientId,
 		TokenVersion: tokenVersion,
@@ -494,7 +494,7 @@ func Test_NodeAgentPopTokenValidatorValidate(t *testing.T) {
 	assert.Nil(t, err)
 
 	// Generate pop token
-	pt, err := popToken.GenerateToken(at, time.Now(), map[string]interface{}{"nodeId": nodeId, "p": grpcObjectId, "nonce": "nonceId"})
+	pt, err := popToken.FormatAccessToken(at)
 	assert.Nil(t, err)
 
 	// validate poptoken
@@ -558,7 +558,7 @@ type FakeNonceCache struct {
 	Exists bool
 }
 
-func (n *FakeNonceCache) IsNonceExists(nonceId string, now time.Time) bool {
+func (n *FakeNonceCache) IsNonceExists(nonceId string, now time.Time, tokenValidInterval time.Duration) bool {
 	return n.Exists
 }
 
@@ -566,10 +566,10 @@ func getPrivateKey() (*rsa.PrivateKey, error) {
 	return rsa.GenerateKey(rand.Reader, RsaSize)
 }
 
-func publicKeyToCnf(keyPair *RsaKeyPair) *Cnf {
+func publicKeyToCnf(keyPair *rsaKeyPair) *Cnf {
 	return &Cnf{
 		Jwk: Jwk{
-			Kty: keyPair.Kty,
+			Kty: Kty,
 			E:   exponential2Base64(keyPair.PublicKey.E),
 			N:   base64.RawURLEncoding.EncodeToString([]byte(keyPair.PublicKey.N.Bytes())),
 		},

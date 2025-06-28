@@ -3,7 +3,6 @@ package poptoken
 import (
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -14,14 +13,8 @@ func Test_NodeAgentPopTokenScheme(t *testing.T) {
 	expectedNodeId := "mynodeId"
 	expectedGrpcObjectId := "myObjectId"
 
-	kmgr, err := NewRsaKeyManager(time.Hour)
-	assert.Nil(t, err)
-
-	keypair, err := kmgr.GetKeyPair(time.Now())
-	assert.Nil(t, err)
-
 	// Generate nodeagent scheme
-	nodeAgentScheme, err := NewNodeAgentPopTokenAuthScheme(expectedNodeId, expectedGrpcObjectId, keypair)
+	nodeAgentScheme, err := NewNodeAgentPopTokenAuthScheme(expectedNodeId, expectedGrpcObjectId)
 
 	//For nodeagentpoptokenscheme, we just verify that the custom claims were added to the token.
 	popToken, err := nodeAgentScheme.FormatAccessToken("accessToken")
