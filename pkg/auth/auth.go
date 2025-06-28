@@ -14,6 +14,7 @@ import (
 	"io/ioutil"
 	"strings"
 
+	"github.com/microsoft/moc/pkg/auth/poptoken"
 	"github.com/microsoft/moc/pkg/config"
 	"github.com/microsoft/moc/pkg/marshal"
 	"github.com/microsoft/moc/rpc/common"
@@ -258,6 +259,20 @@ func NewPopTokenAuthorizer() (*CmpPopTokenAuthorizer, error) {
 	return &CmpPopTokenAuthorizer{
 		transportProvider: tp,
 		rpcProvider:       rp,
+	}, nil
+}
+
+// TODO wecha: This will the new constructor for the poptoken authorizer and replace existing
+// NewPopTokenAuthorizer(). We can't switch to the new ctor until we update wssdcloud agent.
+func NewPopTokenAuthorizerPopAuth(popTokenAuth *poptoken.PopTokenAuth) (*CmpPopTokenAuthorizer, error) {
+	tp, err := DisableTransportAuthorization()
+	if err != nil {
+		return nil, err
+	}
+
+	return &CmpPopTokenAuthorizer{
+		transportProvider: tp,
+		rpcProvider:       popTokenAuth,
 	}, nil
 }
 
