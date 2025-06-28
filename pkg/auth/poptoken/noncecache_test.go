@@ -10,7 +10,7 @@ import (
 
 const (
 	testNonceCacheSize      = 3
-	testNonceValidInterval  = time.Minute * 1
+	testTokenValidInterval  = time.Minute * 1
 	testNonceNowDateTimeStr = "2025-12-01T15:00:00Z"
 )
 
@@ -22,20 +22,18 @@ func Test_NonceCacheIdExists(t *testing.T) {
 	now, _ := time.Parse(time.RFC3339, testNonceNowDateTimeStr)
 
 	// first time seeing this nodeId, returning false
-	isexist := noncecache.IsNonceExists(nonceId, now, testNonceValidInterval)
+	isexist := noncecache.IsNonceExists(nonceId, now, testTokenValidInterval)
 	assert.False(t, isexist)
 
 	// the second time the nonceId should be cached.
-	isexist = noncecache.IsNonceExists(nonceId, now, testNonceValidInterval)
+	isexist = noncecache.IsNonceExists(nonceId, now, testTokenValidInterval)
 	assert.True(t, isexist)
 
 	// Validate a new entry will return false
-	isexist = noncecache.IsNonceExists("nonceId_2", now, testNonceValidInterval)
+	isexist = noncecache.IsNonceExists("nonceId_2", now, testTokenValidInterval)
 	assert.False(t, isexist)
 }
 
-// expired entries are lazily evicted, so an invalid entry can remain in the cache
-// validate that even the expired entry exists, we will still return false.
 func Test_NonceCacheIdExistsButExpired(t *testing.T) {
 	noncecache, err := NewNonceCache(testNonceCacheSize)
 	assert.Nil(t, err)
@@ -44,11 +42,11 @@ func Test_NonceCacheIdExistsButExpired(t *testing.T) {
 	now, _ := time.Parse(time.RFC3339, testNonceNowDateTimeStr)
 
 	// first time seeing this nodeId, returning false
-	isexist := noncecache.IsNonceExists(nonceId, now, testNonceValidInterval)
+	isexist := noncecache.IsNonceExists(nonceId, now, testTokenValidInterval)
 	assert.False(t, isexist)
 
 	// the second time the nonceId should be cached.
-	isexist = noncecache.IsNonceExists(nonceId, now, testNonceValidInterval)
+	isexist = noncecache.IsNonceExists(nonceId, now, testTokenValidInterval)
 	assert.True(t, isexist)
 }
 
@@ -61,19 +59,19 @@ func Test_NonceCacheEvictExpiredIds(t *testing.T) {
 	for i := 0; i < testNonceCacheSize-1; i++ {
 		id := fmt.Sprintf("%d", i)
 		now = now.Add(time.Second)
-		noncecache.IsNonceExists(id, now, testNonceValidInterval)
+		noncecache.IsNonceExists(id, now, testTokenValidInterval)
 
 		//need to call twice to confirm the nonceId were added, since the first time
 		// it is added, it will not exist
-		isexist := noncecache.IsNonceExists(id, now, testNonceValidInterval)
+		isexist := noncecache.IsNonceExists(id, now, testTokenValidInterval)
 		assert.True(t, isexist)
 	}
 
 	// simulate querying a new nonce Id after time where the previously added ids expired.
 	// adding the new entry will trigger an eviction of the expired entries
 	newId := "new"
-	now = now.Add(testNonceValidInterval * 2)
-	noncecache.IsNonceExists(newId, now, testNonceValidInterval)
+	now = now.Add(testTokenValidInterval * 2)
+	noncecache.IsNonceExists(newId, now, testTokenValidInterval)
 
 	// validate older entry has been evicted; size of cache should be 1
 	// we check the size before checking if the older ids have been evicted as they will get
@@ -83,7 +81,7 @@ func Test_NonceCacheEvictExpiredIds(t *testing.T) {
 	// validate the ids no longer exists in cache
 	for i := 0; i < testNonceCacheSize-1; i++ {
 		id := fmt.Sprintf("%d", i)
-		isexist := noncecache.IsNonceExists(id, now, testNonceValidInterval)
+		isexist := noncecache.IsNonceExists(id, now, testTokenValidInterval)
 		assert.False(t, isexist)
 	}
 
@@ -99,11 +97,11 @@ func Test_NonceCacheEvictOverflowIds(t *testing.T) {
 	for i := 0; i < idsToAddCount; i++ {
 		id := fmt.Sprintf("%d", i)
 		now = now.Add(time.Second)
-		noncecache.IsNonceExists(id, now, testNonceValidInterval)
+		noncecache.IsNonceExists(id, now, testTokenValidInterval)
 
 		//need to call twice to confirm the nonceId were added, since the first time
 		// it is added, it will not exist
-		isexist := noncecache.IsNonceExists(id, now, testNonceValidInterval)
+		isexist := noncecache.IsNonceExists(id, now, testTokenValidInterval)
 		assert.True(t, isexist)
 
 		// validate size of cache does not exceed the max even if more ids were added.
@@ -117,7 +115,7 @@ func Test_NonceCacheEvictOverflowIds(t *testing.T) {
 		id := fmt.Sprintf("%d", i)
 		now = now.Add(time.Second)
 
-		isexist := noncecache.IsNonceExists(id, now, testNonceValidInterval)
+		isexist := noncecache.IsNonceExists(id, now, testTokenValidInterval)
 		if i >= testNonceCacheSize {
 			assert.True(t, isexist)
 		} else {

@@ -84,10 +84,6 @@ type PopTokenAuthScheme struct {
 	keyPair      *rsaKeyPair
 }
 
-func overwriteGlobalRefereshRate(new time.Duration) {
-	globalRefreshInterval = new
-}
-
 // refresh the global rsa keypair once every 8 hours.
 func generateRSAKeyPair(now time.Time) (*rsaKeyPair, error) {
 
