@@ -31,9 +31,8 @@ var (
 )
 
 type rsaKeyPair struct {
-	PrivateKey      *rsa.PrivateKey
-	PublicKey       *rsa.PublicKey
-	CreatedDateTime time.Time
+	PrivateKey *rsa.PrivateKey
+	PublicKey  *rsa.PublicKey
 }
 
 type PopTokenHeader struct {
@@ -93,9 +92,8 @@ func generateRSAKeyPair(now time.Time) (*rsaKeyPair, error) {
 			return nil, err
 		}
 		globalRsaKey = &rsaKeyPair{
-			PrivateKey:      pKey,
-			PublicKey:       pKey.Public().(*rsa.PublicKey),
-			CreatedDateTime: now,
+			PrivateKey: pKey,
+			PublicKey:  pKey.Public().(*rsa.PublicKey),
 		}
 		globalLastRefreshRsaKeyDateTime = now
 	}

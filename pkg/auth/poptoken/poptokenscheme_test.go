@@ -238,8 +238,7 @@ func generateKeyPair() (*rsaKeyPair, error) {
 		return nil, err
 	}
 	return &rsaKeyPair{
-		PrivateKey:      pKey,
-		PublicKey:       pKey.Public().(*rsa.PublicKey),
-		CreatedDateTime: time.Now(),
+		PrivateKey: pKey,
+		PublicKey:  pKey.Public().(*rsa.PublicKey),
 	}, nil
 }

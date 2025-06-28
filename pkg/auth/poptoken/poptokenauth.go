@@ -12,9 +12,9 @@ The setup of the pop token creaton is as follows:
 	|
 	--> MsalAuthProvider (global component that request the token from Entra/AzureAAD via MSAL SDK)
 	    |
-		--> NodeAgentPopTokenAuthScheme (implements callback MSAL requires to generate the pop token)
+		--> NodeAgentPopTokenAuthScheme (wrapper that adds the claims specific to node agent)
 		    |
-			--> ShrPopToken (does most of the heavy lifing in generating the pop token)
+			--> PopTokenAuthScheme(a more generic pop tokens implementation)
 */
 
 // This component integrates the MSAL provider to the grpc credentials.PerRPCCredentials interface
