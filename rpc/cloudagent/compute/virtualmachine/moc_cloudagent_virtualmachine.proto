@@ -189,7 +189,6 @@ message VirtualMachineHostNodeIpAddress {
 	string hostNodeIpAddress = 1;
 }
 
-
 service VirtualMachineAgent {
 	rpc Invoke(VirtualMachineRequest) returns (VirtualMachineResponse) {}
 
