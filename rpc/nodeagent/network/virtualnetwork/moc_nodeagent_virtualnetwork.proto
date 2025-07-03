@@ -45,6 +45,7 @@ message VirtualNetwork {
 	Status status = 8;
 	Entity entity = 9;
 	Tags tags = 10;
+	repeated PortForwardingRule portforwardingrules = 11;
 }
 
 message MacRange {
@@ -66,6 +67,14 @@ message Subnet {
 message Ipam {
 	string type = 1;
 	repeated Subnet subnets = 2;
+}
+
+message PortForwardingRule {
+	string type = 1;
+	string connectaddress = 2;
+	string connectport = 3;
+	string listenaddress = 4;
+	string listenport = 5;
 }
 
 service VirtualNetworkAgent {
