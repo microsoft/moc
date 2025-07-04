@@ -6,6 +6,7 @@ option go_package = "github.com/microsoft/moc/rpc/common";
 
 package moc;
 import "google/protobuf/descriptor.proto";
+import "google/protobuf/timestamp.proto";
 
 enum Operation {
 	GET = 0;
@@ -132,6 +133,21 @@ message UploadStatus {
 	Error lastUploadError = 4;
 }
 
+
+message UpstreamNotification {
+	string message = 1; // Human-readable message
+	string code = 2; // Optional machine-readable code
+	google.protobuf.Timestamp timestamp = 3; // When the notification was generated
+	Severity severity = 4; // Enum for severity level
+}
+
+enum Severity {
+	INFO_MESSAGE = 0;
+	WARNING_MESSAGE = 1;
+	ERROR_MESSAGE = 2;
+	CRITICAL_MESSAGE = 3;
+}
+
 // TODO: Reevaluate the status implementation to avoid displaying irrelevant properties for resources, such as UploadStatus for VirtualMachines.
 message Status {
 	Health health = 1;
@@ -142,6 +158,7 @@ message Status {
 	ValidationStatus validationStatus = 6;
 	PlacementStatus	placementStatus = 7;
 	UploadStatus uploadStatus = 8;
+	repeated UpstreamNotification notifications = 9;
 }
 
 message Entity {
