@@ -167,6 +167,30 @@ func GetStatuses(status *common.Status) map[string]*string {
 		statuses["Error"] = &errorStatusStr
 	}
 
+	// Handle upstream notifications
+	notifications := status.GetNotifications()
+	if len(notifications) > 0 {
+		var notificationsStr string
+		for i, notification := range notifications {
+			if i > 0 {
+				notificationsStr += "\n"
+			}
+			severityStr := common.Severity_name[int32(notification.GetSeverity())]
+			ts := notification.GetTimestamp()
+			timeStr := ""
+			if ts != nil {
+				timeStr = fmt.Sprintf("(%s)", time.Unix(ts.Seconds, int64(ts.Nanos)).Format("2006-01-02 15:04:05"))
+			}
+			notificationsStr += fmt.Sprintf("notification%d: [%s] Code: %s Message: %s %s",
+				i+1,
+				severityStr,
+				notification.GetCode(),
+				notification.GetMessage(),
+				timeStr)
+		}
+		statuses["Notifications"] = &notificationsStr
+	}
+
 	version := status.GetVersion()
 	if version != nil {
 		statuses["Version"] = &version.Number
