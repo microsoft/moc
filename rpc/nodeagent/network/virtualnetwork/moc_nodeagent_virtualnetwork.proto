@@ -70,6 +70,5 @@ message Ipam {
 
 service VirtualNetworkAgent {
 	rpc Invoke(VirtualNetworkRequest) returns (VirtualNetworkResponse) {}
-	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 }
 
