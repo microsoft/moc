@@ -7,6 +7,7 @@ import (
 type fakeTokenProvider struct {
 }
 
+// TODO wecha: temp fake token auth provider. To be replaced with PopTokenAuth
 func NewFakeTokenProvier() (*fakeTokenProvider, error) {
 	return &fakeTokenProvider{}, nil
 }
