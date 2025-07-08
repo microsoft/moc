@@ -41,6 +41,42 @@ func Test_NodeAgentPopTokenValidatorAppendUrl(t *testing.T) {
 	}
 }
 
+func Test_NodeAgentPopTokenValidatorIsKidValid(t *testing.T) {
+
+	newKeyPair, err := generateKeyPair()
+	assert.Nil(t, err)
+	cnf := publicKeyToCnf(newKeyPair)
+	expectedKid, err := calculatePublicKeyId(&cnf.Jwk)
+	assert.Nil(t, err)
+
+	tests := []struct {
+		name        string
+		expectedKid string
+		shouldPass  bool
+	}{
+		{
+			name:        "valid kid",
+			expectedKid: expectedKid,
+			shouldPass:  true,
+		},
+		{
+			name:        "invalid kid",
+			expectedKid: "randomKid",
+			shouldPass:  false,
+		}}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := isKidValid(cnf, tt.expectedKid)
+			if tt.shouldPass {
+				assert.Nil(t, err)
+			} else {
+				assert.NotNil(t, err)
+			}
+		})
+	}
+}
+
 func Test_NodeAgentPopTokenValidatorIsTokenExpire(t *testing.T) {
 	tokenIssuedAt, err := time.Parse(time.RFC3339, "2025-12-01T15:00:00Z")
 	assert.Nil(t, err)

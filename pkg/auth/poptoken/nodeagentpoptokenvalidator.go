@@ -89,6 +89,17 @@ func isTokenExpire(timestamp int64, now time.Time, clockSkew time.Duration) erro
 	}
 	return nil
 }
+func isKidValid(cnf *Cnf, actualKid string) error {
+	expectedKid, err := calculatePublicKeyId(&cnf.Jwk)
+	if err != nil {
+		return errors.Wrapf(err, "failed to generate kid from pop token cnf")
+	}
+	if expectedKid != actualKid {
+		return fmt.Errorf("pop token header kid %s does not match kid %s as generated from 'cnf.jwk'", actualKid, expectedKid)
+	}
+
+	return nil
+}
 
 func isHeaderValid(header *PopTokenHeader) error {
 	if header.Typ != TokenType {
@@ -106,6 +117,7 @@ func isSignatureValid(signingStr *string, signature []byte, cnf *Cnf) error {
 	if err != nil {
 		return err
 	}
+
 	return verifyPayload(signingStr, []byte(signature), publicKey)
 }
 
@@ -310,6 +322,10 @@ func (s *shrPopTokenValidator) Validate(popToken string) error {
 	}
 
 	if err := s.isTokenReused(body.Nonce, time.Now()); err != nil {
+		return err
+	}
+
+	if err := isKidValid(&body.Cnf, header.Kid); err != nil {
 		return err
 	}
 
