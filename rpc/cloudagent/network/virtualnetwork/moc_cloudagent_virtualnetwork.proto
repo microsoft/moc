@@ -60,6 +60,7 @@ message VirtualNetwork {
 	Tags tags = 12;
 	NetworkReference logicalNetwork = 13;
 	repeated string cidr = 14;
+	repeated PortForwardingRule portforwardingrules = 15;
 }
 
 message Subnet {
@@ -78,6 +79,14 @@ message Subnet {
 message Ipam {
 	string type = 1;
 	repeated Subnet subnets = 2;
+}
+
+message PortForwardingRule {
+	string type = 1;
+	string connectaddress = 2;
+	string connectport = 3;
+	string listenaddress = 4;
+	string listenport = 5;
 }
 
 service VirtualNetworkAgent {
