@@ -45,6 +45,7 @@ message Node {
 	moc.common.NodeInfo info = 10;
 	Tags tags = 11;
 	NodeAgentAuthenticationMode nodeagentAuthenticationMode = 12;
+	string TargetHostResourceId = 13;
 } 
 
 service NodeAgent {
