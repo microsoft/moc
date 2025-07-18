@@ -44,7 +44,8 @@ message StorageConfiguration {
 	Disk osdisk = 1;
 	repeated Disk datadisks = 2;
 	string vmConfigContainerName = 3; // Name of the storage container that hosts the VM configuration file
-	repeated SharedFolder sharedFolders = 4;
+	string vmConfigContainerPath = 4; // Path to the storage container that hosts the vm configuraiton file
+	repeated SharedFolder sharedFolders = 5;
 }
 
 message NetworkInterface {
