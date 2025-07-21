@@ -149,6 +149,7 @@ enum VirtualMachineOperation {
 	PAUSE = 4;
 	SAVE = 5;
 	REMOVE_ISO_DISK = 6;
+	GET_OWNER_NODE=7;
 }
 
 enum VirtualMachineRunCommandExecutionState {
