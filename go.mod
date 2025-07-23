@@ -32,6 +32,7 @@ replace (
 	go.opentelemetry.io/proto/otlp => go.opentelemetry.io/proto/otlp v0.19.0
 	golang.org/x/crypto => golang.org/x/crypto v0.32.0
 	golang.org/x/image => golang.org/x/image v0.10.0
+	golang.org/x/net => golang.org/x/net v0.17.0
 	golang.org/x/sys => golang.org/x/sys v0.0.0-20220823224334-20c2bfdbfe24
 	gopkg.in/yaml.v2 => gopkg.in/yaml.v2 v2.2.8
 )
