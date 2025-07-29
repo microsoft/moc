@@ -258,3 +258,8 @@ message ProxyConfiguration {
 	repeated string noProxy = 3;
 	string trustedCa = 4 [(sensitivecompute) = true];
 }
+
+enum AvailabilitySetOperation {
+	ADD_VM = 0;
+	REMOVE_VM = 1;
+}
