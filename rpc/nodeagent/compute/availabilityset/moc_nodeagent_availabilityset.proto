@@ -39,8 +39,9 @@ message AvailabilitySet {
 
 message AvailabilitySetOperationRequest {
 	string AvailabilitySet = 1;
-    string VirtualMachine = 2;
-	AvailabilitySetOperation OperationType = 3;
+    string NodeagentVMName = 2;
+	string PlatformVMName = 3;
+	AvailabilitySetOperation OperationType = 4;
 }
 
 message AvailabilitySetOperationResponse {
