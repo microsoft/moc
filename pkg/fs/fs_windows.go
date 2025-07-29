@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/hectane/go-acl"
+	"github.com/microsoft/moc-pkg/pkg/powershell"
 	"github.com/microsoft/moc/pkg/errors"
 )
 
@@ -31,7 +32,17 @@ func ChmodRecursiveAdmin(path string) error {
 	}
 
 	// Step 2: Grant admin permission to the directory
-	cmd = exec.Command("icacls", path, "/grant", "BUILTIN\\Administrators:(OI)(CI)(F)")
+	getBuiltInAdminGroupName := `function Get-BuiltInAdminName {
+	param()
+	$obj = New-Object System.Security.Principal.SecurityIdentifier("S-1-5-32-544")
+	$name = ($obj.Translate([System.Security.Principal.NTAccount])).Value
+	"$name"
+	}
+`
+	builtInAdminGroupName, err := powershell.ExecutePowershell(getBuiltInAdminGroupName, `Get-BuiltInAdminName`)
+	builtInAdminGroupNamePermissions := strings.TrimSpace(builtInAdminGroupName) + ":(OI)(CI)(F)"
+
+	cmd = exec.Command("icacls", path, "/grant", builtInAdminGroupNamePermissions)
 	_, err = cmd.CombinedOutput()
 	if err != nil {
 		return err
