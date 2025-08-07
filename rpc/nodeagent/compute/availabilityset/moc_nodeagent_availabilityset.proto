@@ -34,7 +34,7 @@ message AvailabilitySet {
     Tags tags = 4;
     Entity entity = 5;
     int32 platformFaultDomainCount = 6;
-    repeated VirtualMachineReference virtualMachines = 7; // TODO(pgayam): figure how to mark this field obselete
+    repeated VirtualMachineReference virtualMachines = 7;
 }
 
 message AvailabilitySetOperationRequest {
