@@ -23,7 +23,6 @@ message VirtualMachineReference {
 	string groupName = 1;
 	string name = 2;
 	string realizedName = 3; // This is nodeagnet vm name
-	string platformVMName = 4;
 }
 
 message AvailabilitySetPrecheckRequest {
