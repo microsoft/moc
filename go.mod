@@ -9,11 +9,11 @@ require (
 	github.com/golang/protobuf v1.5.4
 	github.com/hectane/go-acl v0.0.0-20230122075934-ca0b05cb1adb
 	github.com/jmespath/go-jmespath v0.4.0
-	github.com/microsoft/moc-pkg v0.13.3
+	github.com/microsoft/moc-pkg v1.1.115
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/multierr v1.11.0
-	google.golang.org/grpc v1.59.0
+	google.golang.org/grpc v1.60.1
 	gopkg.in/yaml.v3 v3.0.1
 )
 
