@@ -177,6 +177,18 @@ message VirtualMachinePrecheckResponse {
 	string Error = 2;
 }
 
+message VirtualMachineHyperVVmId {
+	string hyperVVmId = 1;
+}
+
+message VirtualMachineHostNodeName {
+	string hostNodeName = 1;
+}
+
+message VirtualMachineHostNodeIpAddress {
+	string hostNodeIpAddress = 1;
+}
+
 service VirtualMachineAgent {
 	rpc Invoke(VirtualMachineRequest) returns (VirtualMachineResponse) {}
 
@@ -185,4 +197,7 @@ service VirtualMachineAgent {
 
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
+	rpc GetHyperVVmId(VirtualMachine) returns (VirtualMachineHyperVVmId) {}
+	rpc GetHostNodeName(VirtualMachine) returns (VirtualMachineHostNodeName) {}
+	rpc GetHostNodeIpAddress(VirtualMachine) returns (VirtualMachineHostNodeIpAddress) {}
 }
