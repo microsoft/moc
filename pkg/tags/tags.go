@@ -71,10 +71,20 @@ func ProtoToMap(prototags *common.Tags) map[string]*string {
 // MapToProto
 func MapToProto(tags map[string]*string) *common.Tags {
 	prototags := common.Tags{}
+	if tags == nil {
+		return &prototags
+	}
 	for key, value := range tags {
+		var v string
+		if value != nil {
+			v = *value
+		} else {
+			// Guard against nil value pointers produced by unmarshalling; treat as empty string
+			v = ""
+		}
 		tag := common.Tag{
 			Key:   key,
-			Value: *value,
+			Value: v,
 		}
 		prototags.Tags = append(prototags.GetTags(), &tag)
 	}
