@@ -7,6 +7,8 @@ package moc.nodeagent.compute;
 
 import "google/protobuf/wrappers.proto";
 import "moc_common_common.proto";
+import "moc_common_computecommon.proto";
+
 
 message AvailabilitySetRequest {
 	repeated AvailabilitySet AvailabilitySets = 1;
@@ -35,6 +37,19 @@ message AvailabilitySet {
     repeated VirtualMachineReference virtualMachines = 7;
 }
 
+message AvailabilitySetOperationRequest {
+	string AvailabilitySet = 1;
+    string NodeagentVMName = 2;
+	AvailabilitySetOperation OperationType = 3;
+}
+
+message AvailabilitySetOperationResponse {
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
+
 service AvailabilitySetAgent {
 	rpc Invoke(AvailabilitySetRequest) returns (AvailabilitySetResponse) {}
+    rpc Operate(AvailabilitySetOperationRequest) returns (AvailabilitySetOperationResponse) {}
 }
