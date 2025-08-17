@@ -1,0 +1,7 @@
+name: Admin
+token: ***
+certificate: ***
+cloudport: 0
+cloudauthport: 0
+location: ""
+type: CA-Signed
