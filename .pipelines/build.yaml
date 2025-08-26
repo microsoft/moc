@@ -80,15 +80,6 @@ jobs:
     inputs:
       version: '1.24.3'
 
-  - task: InstallSSHKey@0
-    inputs:
-      knownHostsEntry: |
-        $(KNOWN_HOST_GITHUB)
-        $(KNOWN_HOST_GITHUB_ECDSA)
-        $(KNOWN_HOST_GITHUB_Ed25519)
-      sshPublicKey: '$(SSH_PUBLIC_KEY)'
-      sshKeySecureFile: 'azure-pipelines-ssh-key-new'
-
   - script: |
       make golangci-lint
     displayName: 'Run GolangCI-Lint'
