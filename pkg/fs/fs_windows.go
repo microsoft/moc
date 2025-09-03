@@ -3,14 +3,45 @@
 package fs
 
 import (
+	"bytes"
+	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
 
 	"github.com/hectane/go-acl"
-	"github.com/microsoft/moc-pkg/pkg/powershell"
 	"github.com/microsoft/moc/pkg/errors"
 )
+
+func executePowershellCommand(powershellCommand string) (outputJson string, err error) {
+	cmd := exec.Command("powershell.exe", powershellCommand)
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	var errBuf bytes.Buffer
+	cmd.Stderr = &errBuf
+	err = cmd.Run()
+
+	if err != nil {
+		return "", errors.Wrapf(err, "executePowershell failed with error %s", errBuf.String())
+	}
+
+	return out.String(), nil
+}
+
+// Copy of ExecutePowershell function in moc-pkg. This is a temporary workaround till a permanent solution is finalized
+func mocExecutePowershell(script string, command string, args ...interface{}) (outputJson string, err error) {
+	powershellCommand := script
+	powershellCommand += fmt.Sprintf(command, args...)
+	log.Printf("ExecutePowershell [%s]\n", powershellCommand)
+	outputJson, err = executePowershellCommand(powershellCommand)
+	if err != nil {
+		return "", err
+	}
+
+	log.Printf("Result [%s]\n", outputJson)
+	return outputJson, nil
+}
 
 func Chmod(path string, mode os.FileMode) error {
 	return acl.Chmod(path, mode)
@@ -39,7 +70,10 @@ func ChmodRecursiveAdmin(path string) error {
 	"$name"
 	}
 `
-	builtInAdminGroupName, err := powershell.ExecutePowershell(getBuiltInAdminGroupName, `Get-BuiltInAdminName`)
+	builtInAdminGroupName, err := mocExecutePowershell(getBuiltInAdminGroupName, `Get-BuiltInAdminName`)
+	if err != nil {
+		return err
+	}
 	builtInAdminGroupNamePermissions := strings.TrimSpace(builtInAdminGroupName) + ":(OI)(CI)(F)"
 
 	cmd = exec.Command("icacls", path, "/grant", builtInAdminGroupNamePermissions)
