@@ -47,7 +47,7 @@ testArray:
 	tmpData := SampleStruct{}
 	err := LoadYAMLConfig(tmpString, &tmpData)
 	if err != nil {
-		t.Errorf("Failed to load Yaml Config" + err.Error())
+		t.Errorf("Failed to load Yaml Config %s", err.Error())
 	}
 }
 func Test_PrintYAML(t *testing.T) {

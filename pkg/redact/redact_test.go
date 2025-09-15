@@ -188,11 +188,11 @@ func TestRedactErrorJsonSensitiveField(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			val := reflect.ValueOf(tt.inputJson)
-			err := fmt.Errorf(tt.inputError)
+			err := fmt.Errorf("%s", tt.inputError)
 
 			redactErrorJsonSensitiveField(val, &err)
 
-			assert.Equal(t, fmt.Errorf(tt.expectedError), err)
+			assert.Equal(t, fmt.Errorf("%s", tt.expectedError), err)
 		})
 	}
 }
