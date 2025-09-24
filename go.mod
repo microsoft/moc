@@ -30,8 +30,9 @@ replace (
 	github.com/golang/mock => github.com/golang/mock v1.6.0
 	github.com/stretchr/testify => github.com/stretchr/testify v1.8.3
 	go.opentelemetry.io/proto/otlp => go.opentelemetry.io/proto/otlp v0.19.0
-	golang.org/x/crypto => golang.org/x/crypto v0.32.0
+	golang.org/x/crypto => golang.org/x/crypto v0.37.0
 	golang.org/x/image => golang.org/x/image v0.10.0
+	golang.org/x/net => golang.org/x/net v0.17.0
 	golang.org/x/sys => golang.org/x/sys v0.0.0-20220823224334-20c2bfdbfe24
 	gopkg.in/yaml.v2 => gopkg.in/yaml.v2 v2.2.8
 )
