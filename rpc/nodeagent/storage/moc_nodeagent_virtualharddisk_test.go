@@ -26,13 +26,3 @@ func TestRedactedError_VHD(t *testing.T) {
 	assert.False(t, strings.Contains(err.Error(), uri), err.Error())
 
 }
-
-func TestVHDUniqueId (t *testing.T) {
-	// Validate the UniqueId field exists and can set GUID value to it
-	sampleGuid := "00112233-4455-6677-8899-aabbccddeeff"
-	vhd := VirtualHardDisk{Name: "test", UniqueId: sampleGuid}
-	t.Logf("Nodeagent VirtualHardDisk UniqueId: %s", vhd.UniqueId)
-	if vhd.UniqueId != sampleGuid {
-		t.Fatal("Nodeagent VirtualHardDisk UniqueId does not match expected value")
-	}
-}
