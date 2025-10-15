@@ -17,17 +17,18 @@ const (
 
 // GPU Type names for Moc
 const (
-	NvidiaT4Name      = "NVIDIA Tesla T4"
-	NvidiaA2Name      = "NVIDIA A2"
-	NvidiaA16Name     = "NVIDIA A16"
-	NvidiaA30Name     = "NVIDIA A30"
-	NvidiaA100_40Name = "NVIDIA A100 40GB"
-	NvidiaA100_80Name = "NVIDIA A100 80GB"
-	NvidiaH100Name    = "NVIDIA H100"
-	NvidiaL4Name      = "NVIDIA L4"
-	NvidiaL40Name     = "NVIDIA L40"
-	NvidiaL40SName    = "NVIDIA L40S"
-	NvidiaM60Name     = "NVIDIA Tesla M60"
+	NvidiaT4Name         = "NVIDIA Tesla T4"
+	NvidiaA2Name         = "NVIDIA A2"
+	NvidiaA16Name        = "NVIDIA A16"
+	NvidiaA30Name        = "NVIDIA A30"
+	NvidiaA100_40Name    = "NVIDIA A100 40GB"
+	NvidiaA100_80Name    = "NVIDIA A100 80GB"
+	NvidiaRTX6000ProName = "NVIDIA RTX6000Pro"
+	NvidiaH100Name       = "NVIDIA H100"
+	NvidiaL4Name         = "NVIDIA L4"
+	NvidiaL40Name        = "NVIDIA L40"
+	NvidiaL40SName       = "NVIDIA L40S"
+	NvidiaM60Name        = "NVIDIA Tesla M60"
 )
 
 type VmSize struct {
