@@ -23,6 +23,7 @@ const (
 	NvidiaA30Name     = "NVIDIA A30"
 	NvidiaA100_40Name = "NVIDIA A100 40GB"
 	NvidiaA100_80Name = "NVIDIA A100 80GB"
+	NvidiaB40Name     = "NVIDIA B40"
 	NvidiaH100Name    = "NVIDIA H100"
 	NvidiaL4Name      = "NVIDIA L4"
 	NvidiaL40Name     = "NVIDIA L40"
