@@ -59,7 +59,7 @@ message VirtualHardDisk {
 	string sourcePath = 24;
 	ImageSource sourceType = 25;
 	string targetUrl = 26 [(sensitive) = true];
-	string PlatformDiskId = 27;
+	string platformDiskId = 27;
 }
 
 message VirtualHardDiskPrecheckRequest {

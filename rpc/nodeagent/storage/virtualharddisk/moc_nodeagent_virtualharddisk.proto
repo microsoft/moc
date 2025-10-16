@@ -92,7 +92,7 @@ message VirtualHardDisk {
 	CloudInitDataSource cloudInitDataSource = 22;
 	DiskFileFormat diskFileFormat = 23;
 	string TargetUrl = 24 [(sensitive) = true];
-	string PlatformDiskId = 25;
+	string platformDiskId = 25;
 }
 
 message DiskNotificationRequest {
