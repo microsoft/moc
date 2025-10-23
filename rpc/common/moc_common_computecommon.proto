@@ -149,7 +149,7 @@ enum VirtualMachineOperation {
 	PAUSE = 4;
 	SAVE = 5;
 	REMOVE_ISO_DISK = 6;
-	STOP_SKIPSHUTDOWN = 7;
+	STOP_GRACEFUL = 7;
 }
 
 enum VirtualMachineRunCommandExecutionState {
