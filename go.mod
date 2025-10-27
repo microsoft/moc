@@ -14,7 +14,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.3
 	go.uber.org/multierr v1.11.0
-	google.golang.org/grpc v1.76.0
+	google.golang.org/grpc v1.59.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
