@@ -170,11 +170,20 @@ message VirtualMachineHyperVVmId {
 	string hyperVVmId = 1;
 }
 
+message VirtualMachineHyperVVmRequest {
+	string hyperVVmName = 1;
+}
+
+message VirtualMachineHyperVVmResponse {
+	bool exists = 1;
+}
+
 service VirtualMachineAgent {
 	rpc Invoke(VirtualMachineRequest) returns (VirtualMachineResponse) {}
 	rpc Operate(VirtualMachineOperationRequest) returns (VirtualMachineOperationResponse) {}
 	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
 	rpc GetHyperVVmId(VirtualMachine) returns (VirtualMachineHyperVVmId) {}
+	rpc HasHyperVVm(VirtualMachineHyperVVmRequest) returns (VirtualMachineHyperVVmResponse) {}
 }
 
