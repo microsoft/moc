@@ -102,10 +102,6 @@ message ProbeReference {
 	ResourceReference resourceRef = 1;
 }
 
-message ProbeRequestPathReference {
-	ResourceReference resourceRef = 1;
-}
-
 message FrontendIPConfigurationReference {
 	ResourceReference resourceRef = 1;
 }

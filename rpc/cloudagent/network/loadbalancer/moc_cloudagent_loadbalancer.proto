@@ -82,7 +82,7 @@ message Probe {
 	uint32 numberOfProbes = 3;
 	ProbeProtocol protocol = 4;
 	uint32 port = 5;
-	ProbeRequestPathReference requestPath = 6;
+	string requestPath = 6;
 	Tags tags = 7;
 }
 
