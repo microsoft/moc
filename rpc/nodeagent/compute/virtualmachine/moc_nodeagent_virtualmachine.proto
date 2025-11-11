@@ -145,6 +145,7 @@ message VirtualMachine {
 message VirtualMachineOperationRequest {
 	repeated VirtualMachine VirtualMachines = 1;
 	VirtualMachineOperation OperationType = 2;
+	bool SkipShutdown = 3;
 }
 
 message VirtualMachineOperationResponse {

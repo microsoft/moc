@@ -144,6 +144,7 @@ message VirtualMachineOperationRequest {
 	repeated VirtualMachine VirtualMachines = 1;
 	VirtualMachineOperation OBSOLETE_OperationType = 2 [deprecated=true];
 	ProviderAccessOperation OperationType = 3;
+	bool SkipShutdown = 4;
 }
 
 message VirtualMachineOperationResponse {
