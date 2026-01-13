@@ -80,10 +80,30 @@ message Ipam {
 	repeated Subnet subnets = 2;
 }
 
+message NetworkControllerConfigRequest {
+}
+
+message NetworkControllerConfig {
+	bool isSdnEnabled = 1;
+	bool isSdnVnetEnabled = 2;
+	bool isSdnVnetV2Enabled = 3;
+	bool isSdnLBV2Enabled = 4;
+	bool isLegacySdnEnabled = 5;
+}
+
+message NetworkControllerConfigResponse {
+	google.protobuf.BoolValue Result = 1;
+	string Error = 2;
+	NetworkControllerConfig Config = 3;
+}
+
 service VirtualNetworkAgent {
 	rpc Invoke(VirtualNetworkRequest) returns (VirtualNetworkResponse) {}
 
 	// Prechecks whether the system is able to create specified virtual networks (but does not actually create them).
 	rpc Precheck(VirtualNetworkPrecheckRequest) returns (VirtualNetworkPrecheckResponse) {}
+
+	// GetNetworkControllerConfig returns the network controller related configuration
+	rpc GetNetworkControllerConfig(NetworkControllerConfigRequest) returns (NetworkControllerConfigResponse) {}
 }
 
