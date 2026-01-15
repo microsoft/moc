@@ -81,18 +81,6 @@ message Ipam {
 	repeated Subnet subnets = 2;
 }
 
-<<<<<<< Updated upstream
-=======
-message NetworkControllerConfigRequest {
-}
-
-message NetworkControllerConfigResponse {
-	google.protobuf.BoolValue Result = 1;
-	string Error = 2;
-	NetworkControllerConfig Config = 3;
-}
-
->>>>>>> Stashed changes
 service VirtualNetworkAgent {
 	rpc Invoke(VirtualNetworkRequest) returns (VirtualNetworkResponse) {}
 
