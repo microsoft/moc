@@ -15,7 +15,7 @@ export GO111MODULE=on
 #
 PKG := 
 
-all: format test
+all: tidy format test
 
 .PHONY: tidy
 tidy:
@@ -24,7 +24,7 @@ tidy:
 format:
 	gofmt -s -w rpc/ pkg/ 
 
-bootstrap:
+bootstrap: tidy
 	GOOS="linux" go get -u google.golang.org/grpc@v1.59.0
 	GOOS="linux" go install github.com/golang/protobuf/protoc-gen-go@v1.3.2
 
@@ -47,7 +47,7 @@ ifeq ($(MOCKGEN),)
 endif
 	MOCKGEN=$(shell command -v mockgen 2> /dev/null)
 
-mocks:
+mocks: tidy
 	go mod download github.com/golang/mock
 	go get github.com/golang/mock@v1.6.0
 	go generate ./...
