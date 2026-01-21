@@ -30,7 +30,7 @@ bootstrap: tidy
 
 test: unittest
 
-unittest:
+unittest: tidy
 	$(GOTEST) ./pkg/...
 
 generate: bootstrap
