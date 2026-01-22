@@ -331,6 +331,3 @@ ASALocalRun/
 .mfractor/
 
 vendor/
-
-# Go module files - go.sum is generated dynamically by make targets
-go.sum
