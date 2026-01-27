@@ -31,8 +31,8 @@ When creating or working on a pull request, you **MUST** ensure all of the follo
 
 #### 5. Build Verification
 - ✅ The code must build successfully:
-  - `make generate` completes without errors (protobuf generation)
-  - `make all` completes without errors (full build)
+  - `make pipeline` completes without errors (protobuf generation for pipeline)
+  - `make all` completes without errors (format code and run tests)
 - ✅ No compilation errors or warnings that would block the build
 
 ### How to Verify Status
@@ -74,11 +74,14 @@ If a check failure is unrelated to your changes:
 
 ## Build Commands Reference
 
-- `make generate` - Generate protobuf files
-- `make all` - Build all components
+- `make generate` - Generate protobuf files (bootstrap and run gen.sh)
+- `make pipeline` - Generate protobuf for pipeline (bootstrap and run gen.sh -c)
+- `make all` - Format code and run tests
+- `make format` - Format code with gofmt
+- `make test` - Run all tests (calls unittest)
 - `make unittest` - Run unit tests
 - `make golangci-lint` - Run linting checks
-- `make pipeline` - Generate protobuf for pipeline
+- `make tidy` - Tidy go modules
 
 ## Additional Guidelines
 
