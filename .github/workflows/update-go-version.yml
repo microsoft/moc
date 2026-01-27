@@ -50,25 +50,40 @@ jobs:
           # Handles versions with 2 or 3 components (major.minor or major.minor.patch)
           normalize_version() {
             local ver="$1"
-            local major=$(echo "$ver" | cut -d. -f1)
-            local minor=$(echo "$ver" | cut -d. -f2)
-            local patch=$(echo "$ver" | cut -d. -f3)
+            
+            # Split version into components using bash parameter expansion
+            IFS='.' read -ra PARTS <<< "$ver"
+            
+            local major="${PARTS[0]}"
+            local minor="${PARTS[1]}"
+            local patch="${PARTS[2]:-0}"
             
             # Validate that we have at least major and minor versions
             if [ -z "$major" ] || [ -z "$minor" ]; then
-              echo "Invalid version format: $ver" >&2
+              echo "Invalid version format: $ver (missing major or minor)" >&2
               return 1
             fi
             
-            # Default patch to 0 if not present
-            patch=${patch:-0}
+            # Validate that all components are numeric
+            if ! [[ "$major" =~ ^[0-9]+$ ]] || ! [[ "$minor" =~ ^[0-9]+$ ]] || ! [[ "$patch" =~ ^[0-9]+$ ]]; then
+              echo "Invalid version format: $ver (non-numeric components)" >&2
+              return 1
+            fi
             
             # Use larger padding to handle future versions
             printf "%05d%05d%05d" "$major" "$minor" "$patch"
           }
           
           CURRENT_NORMALIZED=$(normalize_version "$CURRENT")
+          CURRENT_EXIT=$?
           LATEST_NORMALIZED=$(normalize_version "$LATEST")
+          LATEST_EXIT=$?
+          
+          # Check if normalization succeeded
+          if [ $CURRENT_EXIT -ne 0 ] || [ $LATEST_EXIT -ne 0 ]; then
+            echo "Error: Failed to normalize versions"
+            exit 1
+          fi
           
           if [ "$CURRENT_NORMALIZED" != "$LATEST_NORMALIZED" ]; then
             echo "Updating Go version from $CURRENT to $LATEST"
