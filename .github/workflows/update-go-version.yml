@@ -26,8 +26,9 @@ jobs:
       - name: Get latest Go version
         id: go-version
         run: |
-          # Get the latest stable Go version
-          LATEST_GO_VERSION=$(go version | awk '{print $3}' | sed 's/go//')
+          # Get the latest stable Go version from the installed Go
+          # go version outputs like "go version go1.21.5 linux/amd64"
+          LATEST_GO_VERSION=$(go version | awk '{print $3}' | sed 's/^go//')
           echo "latest=$LATEST_GO_VERSION" >> $GITHUB_OUTPUT
           echo "Latest Go version: $LATEST_GO_VERSION"
 
@@ -44,7 +45,16 @@ jobs:
           CURRENT="${{ steps.current-version.outputs.current }}"
           LATEST="${{ steps.go-version.outputs.latest }}"
           
-          if [ "$CURRENT" != "$LATEST" ]; then
+          # Normalize versions for comparison (remove any extra components)
+          # Convert versions like "1.21.5" to comparable format
+          normalize_version() {
+            echo "$1" | awk -F. '{printf "%03d%03d%03d", $1, $2, $3}'
+          }
+          
+          CURRENT_NORMALIZED=$(normalize_version "$CURRENT")
+          LATEST_NORMALIZED=$(normalize_version "$LATEST")
+          
+          if [ "$CURRENT_NORMALIZED" != "$LATEST_NORMALIZED" ]; then
             echo "Updating Go version from $CURRENT to $LATEST"
             
             # Update the go version in go.mod
