@@ -35,7 +35,7 @@ jobs:
       - name: Get current Go version from go.mod
         id: current-version
         run: |
-          CURRENT_VERSION=$(grep '^go [0-9]' go.mod | awk '{print $2}')
+          CURRENT_VERSION=$(grep '^go [0-9][0-9.]*' go.mod | awk '{print $2}')
           echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           echo "Current Go version in go.mod: $CURRENT_VERSION"
 
@@ -53,9 +53,18 @@ jobs:
             local major=$(echo "$ver" | cut -d. -f1)
             local minor=$(echo "$ver" | cut -d. -f2)
             local patch=$(echo "$ver" | cut -d. -f3)
+            
+            # Validate that we have at least major and minor versions
+            if [ -z "$major" ] || [ -z "$minor" ]; then
+              echo "Invalid version format: $ver" >&2
+              return 1
+            fi
+            
             # Default patch to 0 if not present
             patch=${patch:-0}
-            printf "%03d%03d%03d" "$major" "$minor" "$patch"
+            
+            # Use larger padding to handle future versions
+            printf "%05d%05d%05d" "$major" "$minor" "$patch"
           }
           
           CURRENT_NORMALIZED=$(normalize_version "$CURRENT")
