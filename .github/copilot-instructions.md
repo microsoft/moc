@@ -74,8 +74,8 @@ If a check failure is unrelated to your changes:
 
 ## Build Commands Reference
 
-- `make generate` - Generate protobuf files (bootstrap and run gen.sh)
-- `make pipeline` - Generate protobuf for pipeline (bootstrap and run gen.sh -c)
+- `make generate` - Generate protobuf files (calls ./gen.sh)
+- `make pipeline` - Generate protobuf for pipeline (calls ./gen.sh -c)
 - `make all` - Format code and run tests
 - `make format` - Format code with gofmt
 - `make test` - Run all tests (calls unittest)
