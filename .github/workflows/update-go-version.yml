@@ -35,7 +35,7 @@ jobs:
       - name: Get current Go version from go.mod
         id: current-version
         run: |
-          CURRENT_VERSION=$(grep '^go ' go.mod | awk '{print $2}')
+          CURRENT_VERSION=$(grep '^go [0-9]' go.mod | awk '{print $2}')
           echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
           echo "Current Go version in go.mod: $CURRENT_VERSION"
 
@@ -45,10 +45,17 @@ jobs:
           CURRENT="${{ steps.current-version.outputs.current }}"
           LATEST="${{ steps.go-version.outputs.latest }}"
           
-          # Normalize versions for comparison (remove any extra components)
-          # Convert versions like "1.21.5" to comparable format
+          # Normalize versions for comparison
+          # Convert versions like "1.21.5" or "1.21" to comparable format
+          # Handles versions with 2 or 3 components (major.minor or major.minor.patch)
           normalize_version() {
-            echo "$1" | awk -F. '{printf "%03d%03d%03d", $1, $2, $3}'
+            local ver="$1"
+            local major=$(echo "$ver" | cut -d. -f1)
+            local minor=$(echo "$ver" | cut -d. -f2)
+            local patch=$(echo "$ver" | cut -d. -f3)
+            # Default patch to 0 if not present
+            patch=${patch:-0}
+            printf "%03d%03d%03d" "$major" "$minor" "$patch"
           }
           
           CURRENT_NORMALIZED=$(normalize_version "$CURRENT")
