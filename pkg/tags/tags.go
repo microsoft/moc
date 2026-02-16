@@ -17,11 +17,17 @@ func InitTag(key, value string) *common.Tag {
 
 // AddTag
 func AddTag(key, value string, tags *common.Tags) {
+	if tags == nil {
+		return
+	}
 	tags.Tags = append(tags.GetTags(), InitTag(key, value))
 }
 
 // DeleteTag
 func DeleteTag(key string, tags *common.Tags) {
+	if tags == nil {
+		return
+	}
 	index := -1
 	tagsList := tags.GetTags()
 	for idx, tag := range tagsList {
@@ -49,6 +55,9 @@ func GetTagValue(key string, tags *common.Tags) (string, error) {
 
 // AddTagValue
 func AddTagValue(key, value string, tags *common.Tags) {
+	if tags == nil {
+		return
+	}
 	for _, tag := range tags.GetTags() {
 		if tag.GetKey() == key {
 			tag.Value = value
