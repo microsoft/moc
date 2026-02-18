@@ -19,7 +19,7 @@ all: format test
 
 .PHONY: tidy
 tidy:
-	go mod tidy
+	-go mod tidy -e
 
 format:
 	gofmt -s -w rpc/ pkg/ 
