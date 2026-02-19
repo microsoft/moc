@@ -60,6 +60,7 @@ message VirtualNetwork {
 	Tags tags = 12;
 	NetworkReference logicalNetwork = 13;
 	repeated string cidr = 14;
+	NetworkControllerConfig networkControllerConfig = 15;
 }
 
 message Subnet {
