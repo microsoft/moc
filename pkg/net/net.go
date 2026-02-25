@@ -22,6 +22,39 @@ func GetIPAddress() (string, error) {
 	return conn.LocalAddr().(*net.UDPAddr).IP.String(), nil
 }
 
+func GetIpAddresses() ([]string, error) {
+	var ipAddresses []string
+
+	interfaces, err := net.Interfaces()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, iface := range interfaces {
+		addrs, err := iface.Addrs()
+		if err != nil {
+			return nil, err
+		}
+
+		for _, addr := range addrs {
+			var ip net.IP
+
+			switch v := addr.(type) {
+			case *net.IPNet:
+				ip = v.IP
+			case *net.IPAddr:
+				ip = v.IP
+			}
+
+			if ip != nil {
+				ipAddresses = append(ipAddresses, ip.String())
+			}
+		}
+	}
+
+	return ipAddresses, nil
+}
+
 func StringToNetIPAddress(ipString string) net.IP {
 	return net.ParseIP(ipString)
 }
