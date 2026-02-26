@@ -97,6 +97,14 @@ message AdvancedNetworkPolicy {
 	bool enabled = 2;
 }
 
+message NetworkControllerConfig {
+	bool isSdnEnabled = 1;
+	bool isSdnVnetEnabled = 2;
+	bool isSdnVnetV2Enabled = 3;
+	bool isSdnLBV2Enabled = 4;
+	bool isLegacySdnEnabled = 5;
+}
+
 
 message ProbeReference {
 	ResourceReference resourceRef = 1;
