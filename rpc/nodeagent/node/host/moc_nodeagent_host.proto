@@ -39,6 +39,14 @@ message Host {
 	Tags tags = 8;
 }
 
+message ManagementIpAddressRequest {
+}
+
+message ManagementIpAddressResponse {
+	string ipAddress = 1;
+}
+
 service MocHostAgent {
 	rpc Invoke(HostRequest) returns (HostResponse) {}
+	rpc GetManagementIpAddress(ManagementIpAddressRequest) returns (ManagementIpAddressResponse) {}
 }
