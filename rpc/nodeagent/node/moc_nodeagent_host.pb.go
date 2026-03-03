@@ -270,11 +270,77 @@ func (m *Host) GetTags() *common.Tags {
 	return nil
 }
 
+type ManagementIpAddressRequest struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ManagementIpAddressRequest) Reset()         { *m = ManagementIpAddressRequest{} }
+func (m *ManagementIpAddressRequest) String() string  { return proto.CompactTextString(m) }
+func (*ManagementIpAddressRequest) ProtoMessage()     {}
+
+func (m *ManagementIpAddressRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ManagementIpAddressRequest.Unmarshal(m, b)
+}
+func (m *ManagementIpAddressRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ManagementIpAddressRequest.Marshal(b, m, deterministic)
+}
+func (m *ManagementIpAddressRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ManagementIpAddressRequest.Merge(m, src)
+}
+func (m *ManagementIpAddressRequest) XXX_Size() int {
+	return xxx_messageInfo_ManagementIpAddressRequest.Size(m)
+}
+func (m *ManagementIpAddressRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ManagementIpAddressRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ManagementIpAddressRequest proto.InternalMessageInfo
+
+type ManagementIpAddressResponse struct {
+	IpAddress            string   `protobuf:"bytes,1,opt,name=ipAddress,proto3" json:"ipAddress,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ManagementIpAddressResponse) Reset()         { *m = ManagementIpAddressResponse{} }
+func (m *ManagementIpAddressResponse) String() string  { return proto.CompactTextString(m) }
+func (*ManagementIpAddressResponse) ProtoMessage()     {}
+
+func (m *ManagementIpAddressResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ManagementIpAddressResponse.Unmarshal(m, b)
+}
+func (m *ManagementIpAddressResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ManagementIpAddressResponse.Marshal(b, m, deterministic)
+}
+func (m *ManagementIpAddressResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ManagementIpAddressResponse.Merge(m, src)
+}
+func (m *ManagementIpAddressResponse) XXX_Size() int {
+	return xxx_messageInfo_ManagementIpAddressResponse.Size(m)
+}
+func (m *ManagementIpAddressResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ManagementIpAddressResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ManagementIpAddressResponse proto.InternalMessageInfo
+
+func (m *ManagementIpAddressResponse) GetIpAddress() string {
+	if m != nil {
+		return m.IpAddress
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterEnum("moc.nodeagent.host.HostState", HostState_name, HostState_value)
 	proto.RegisterType((*HostRequest)(nil), "moc.nodeagent.host.HostRequest")
 	proto.RegisterType((*HostResponse)(nil), "moc.nodeagent.host.HostResponse")
 	proto.RegisterType((*Host)(nil), "moc.nodeagent.host.Host")
+	proto.RegisterType((*ManagementIpAddressRequest)(nil), "moc.nodeagent.host.ManagementIpAddressRequest")
+	proto.RegisterType((*ManagementIpAddressResponse)(nil), "moc.nodeagent.host.ManagementIpAddressResponse")
 }
 
 func init() { proto.RegisterFile("moc_nodeagent_host.proto", fileDescriptor_118548269615dab7) }
@@ -329,6 +395,7 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MocHostAgentClient interface {
 	Invoke(ctx context.Context, in *HostRequest, opts ...grpc.CallOption) (*HostResponse, error)
+	GetManagementIpAddress(ctx context.Context, in *ManagementIpAddressRequest, opts ...grpc.CallOption) (*ManagementIpAddressResponse, error)
 }
 
 type mocHostAgentClient struct {
@@ -348,9 +415,19 @@ func (c *mocHostAgentClient) Invoke(ctx context.Context, in *HostRequest, opts .
 	return out, nil
 }
 
+func (c *mocHostAgentClient) GetManagementIpAddress(ctx context.Context, in *ManagementIpAddressRequest, opts ...grpc.CallOption) (*ManagementIpAddressResponse, error) {
+	out := new(ManagementIpAddressResponse)
+	err := c.cc.Invoke(ctx, "/moc.nodeagent.host.MocHostAgent/GetManagementIpAddress", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MocHostAgentServer is the server API for MocHostAgent service.
 type MocHostAgentServer interface {
 	Invoke(context.Context, *HostRequest) (*HostResponse, error)
+	GetManagementIpAddress(context.Context, *ManagementIpAddressRequest) (*ManagementIpAddressResponse, error)
 }
 
 // UnimplementedMocHostAgentServer can be embedded to have forward compatible implementations.
@@ -359,6 +436,10 @@ type UnimplementedMocHostAgentServer struct {
 
 func (*UnimplementedMocHostAgentServer) Invoke(ctx context.Context, req *HostRequest) (*HostResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Invoke not implemented")
+}
+
+func (*UnimplementedMocHostAgentServer) GetManagementIpAddress(ctx context.Context, req *ManagementIpAddressRequest) (*ManagementIpAddressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetManagementIpAddress not implemented")
 }
 
 func RegisterMocHostAgentServer(s *grpc.Server, srv MocHostAgentServer) {
@@ -383,6 +464,24 @@ func _MocHostAgent_Invoke_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MocHostAgent_GetManagementIpAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ManagementIpAddressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MocHostAgentServer).GetManagementIpAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/moc.nodeagent.host.MocHostAgent/GetManagementIpAddress",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MocHostAgentServer).GetManagementIpAddress(ctx, req.(*ManagementIpAddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _MocHostAgent_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "moc.nodeagent.host.MocHostAgent",
 	HandlerType: (*MocHostAgentServer)(nil),
@@ -390,6 +489,10 @@ var _MocHostAgent_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Invoke",
 			Handler:    _MocHostAgent_Invoke_Handler,
+		},
+		{
+			MethodName: "GetManagementIpAddress",
+			Handler:    _MocHostAgent_GetManagementIpAddress_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
