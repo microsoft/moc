@@ -102,6 +102,32 @@ func TestAddTagValue(t *testing.T) {
 	t.Logf("%s", value)
 }
 
+func TestAddTagNilTags(t *testing.T) {
+	// Verify AddTag does not panic when tags is nil
+	AddTag("testkey", "testvalue", nil)
+}
+
+func TestAddTagValueNilTags(t *testing.T) {
+	// Verify AddTagValue does not panic when tags is nil
+	AddTagValue("testkey", "testvalue", nil)
+}
+
+func TestDeleteTagNilTags(t *testing.T) {
+	// Verify DeleteTag does not panic when tags is nil
+	DeleteTag("testkey", nil)
+}
+
+func TestGetTagValueNilTags(t *testing.T) {
+	// GetTagValue should return NotFound for nil tags
+	_, err := GetTagValue("testkey", nil)
+	if err == nil {
+		t.Errorf("Expected error for nil tags")
+	}
+	if !errors.IsNotFound(err) {
+		t.Errorf("Expected NotFound error for nil tags")
+	}
+}
+
 func TestProtoToMap(t *testing.T) {
 	tags := &common.Tags{}
 	AddTagValue("testkey", "testvalue", tags)
