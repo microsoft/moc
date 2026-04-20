@@ -42,6 +42,7 @@ message LogicalNetwork {
 	string macPoolName = 7 [(sensitive) = true];
 	Tags tags = 8;
 	repeated AdvancedNetworkPolicy advancedPolicies = 9;
+	NetworkControllerConfig networkControllerConfig = 10;
 }
 
 message LogicalSubnet {
