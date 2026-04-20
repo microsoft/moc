@@ -1,0 +1,127 @@
+name: Update Go Version
+
+on:
+  schedule:
+    # Run on the first day of every month at 9:00 AM UTC
+    - cron: '0 9 1 * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  update-go-version:
+    name: Update Go to Latest Version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Get latest Go version
+        id: go-version
+        run: |
+          # Get the latest stable Go version from the installed Go
+          # go version outputs like "go version go1.21.5 linux/amd64"
+          LATEST_GO_VERSION=$(go version | awk '{print $3}' | sed 's/^go//')
+          echo "latest=$LATEST_GO_VERSION" >> $GITHUB_OUTPUT
+          echo "Latest Go version: $LATEST_GO_VERSION"
+
+      - name: Get current Go version from go.mod
+        id: current-version
+        run: |
+          CURRENT_VERSION=$(grep '^go [0-9][0-9.]*' go.mod | awk '{print $2}')
+          echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "Current Go version in go.mod: $CURRENT_VERSION"
+
+      - name: Update go.mod if needed
+        id: update
+        run: |
+          CURRENT="${{ steps.current-version.outputs.current }}"
+          LATEST="${{ steps.go-version.outputs.latest }}"
+          
+          # Normalize versions for comparison
+          # Convert versions like "1.21.5" or "1.21" to comparable format
+          # Handles versions with 2 or 3 components (major.minor or major.minor.patch)
+          normalize_version() {
+            local ver="$1"
+            
+            # Split version into components using bash parameter expansion
+            IFS='.' read -ra PARTS <<< "$ver"
+            
+            local major="${PARTS[0]}"
+            local minor="${PARTS[1]}"
+            local patch="${PARTS[2]:-0}"
+            
+            # Validate that we have at least major and minor versions
+            if [ -z "$major" ] || [ -z "$minor" ]; then
+              echo "Invalid version format: $ver (missing major or minor)" >&2
+              return 1
+            fi
+            
+            # Validate that all components are numeric
+            if ! [[ "$major" =~ ^[0-9]+$ ]] || ! [[ "$minor" =~ ^[0-9]+$ ]] || ! [[ "$patch" =~ ^[0-9]+$ ]]; then
+              echo "Invalid version format: $ver (non-numeric components)" >&2
+              return 1
+            fi
+            
+            # Use larger padding to handle future versions
+            printf "%05d%05d%05d" "$major" "$minor" "$patch"
+          }
+          
+          CURRENT_NORMALIZED=$(normalize_version "$CURRENT")
+          CURRENT_EXIT=$?
+          LATEST_NORMALIZED=$(normalize_version "$LATEST")
+          LATEST_EXIT=$?
+          
+          # Check if normalization succeeded
+          if [ $CURRENT_EXIT -ne 0 ] || [ $LATEST_EXIT -ne 0 ]; then
+            echo "Error: Failed to normalize versions"
+            exit 1
+          fi
+          
+          if [ "$CURRENT_NORMALIZED" != "$LATEST_NORMALIZED" ]; then
+            echo "Updating Go version from $CURRENT to $LATEST"
+            
+            # Update the go version in go.mod
+            sed -i "s/^go .*/go $LATEST/" go.mod
+            
+            # Run go mod tidy to update dependencies
+            go mod tidy
+            
+            echo "updated=true" >> $GITHUB_OUTPUT
+            echo "version=$LATEST" >> $GITHUB_OUTPUT
+          else
+            echo "Go version is already up to date ($CURRENT)"
+            echo "updated=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.update.outputs.updated == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'Update Go version to ${{ steps.update.outputs.version }}'
+          title: 'Update Go version to ${{ steps.update.outputs.version }}'
+          body: |
+            This automated PR updates the Go version to the latest stable release: `${{ steps.update.outputs.version }}`
+            
+            ## Changes
+            - Updated `go.mod` to use Go ${{ steps.update.outputs.version }}
+            - Ran `go mod tidy` to update dependencies
+            
+            ## Testing
+            Please review the changes and ensure all tests pass before merging.
+            
+            ---
+            This PR was automatically created by the [Update Go Version workflow](.github/workflows/update-go-version.yml).
+          branch: update-go-version-${{ steps.update.outputs.version }}
+          delete-branch: true
+          labels: |
+            dependencies
+            automated
