@@ -1,22 +1,29 @@
-
+version: "2"
 run:
-  timeout: 15m
-  tests: false  # Exclude test files from linting
-
-# Linter options and descriptions: https://golangci-lint.run/usage/linters/
+  tests: false
 linters:
-  enable:
-    - errcheck
-    - govet
-    - ineffassign
-    - staticcheck
   disable:
-    # Disabling these two default linters for now as their checks are not a priority
-    - gosimple
     - unused
-
-linters-settings:
-  staticcheck:
-    checks:
-      - all
-      - -SA1019 # Ignore pkg deprecation warnings from staticcheck
+  settings:
+    staticcheck:
+      checks:
+        - all
+        - -SA1019
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
