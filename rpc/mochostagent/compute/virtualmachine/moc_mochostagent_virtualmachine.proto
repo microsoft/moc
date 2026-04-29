@@ -79,6 +79,19 @@ message VirtualMachineRepairGuestAgentResponse {
 	string Error = 2;
 }
 
+message VirtualMachineCopyVmcFilesRequest {
+	VirtualMachine VirtualMachine = 1;
+	bytes VmcBinary = 2;
+	bytes PublicCertificate = 3;
+	bytes InstallScript = 4;
+	string VmcVersion = 5;
+}
+
+message VirtualMachineCopyVmcFilesResponse {
+	google.protobuf.BoolValue Result = 1;
+	string Error = 2;
+}
+
 service VirtualMachineAgent {
 	rpc Get(VirtualMachine) returns (GetVirtualMachineResponse) {}
 	rpc RegisterVirtualMachine(RegisterVirtualMachineRequest) returns (RegisterVirtualMachineResponse) {}
@@ -86,4 +99,5 @@ service VirtualMachineAgent {
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
 	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 	rpc RepairGuestAgent(VirtualMachineRepairGuestAgentRequest) returns (VirtualMachineRepairGuestAgentResponse) {}
+	rpc CopyVmcFiles(VirtualMachineCopyVmcFilesRequest) returns (VirtualMachineCopyVmcFilesResponse) {}
 }
