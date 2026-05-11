@@ -7,6 +7,7 @@ package moc.common;
 
 import "moc_common_common.proto";
 import "moc_common_computecommon.proto";
+import "google/protobuf/wrappers.proto";
 
 enum OsRegistrationState {
 	notRegistered = 0;
@@ -56,6 +57,7 @@ message NodeInfo {
 	Status status = 7;
 	int64 uptime = 8;
 	OperatingSystem osInfo = 9;
+	google.protobuf.BoolValue vmProviderReady = 10;
 }
 
 message Resources {

@@ -38,9 +38,22 @@ message UpdateAgentResponse {
 	string Error = 2;
 }
 
+message CopyVmcFilesRequest {
+	bytes VmcBinary = 1;
+	bytes PublicCertificate = 2;
+	bytes InstallScript = 3;
+	string VmcVersion = 4;
+}
+
+message CopyVmcFilesResponse {
+	google.protobuf.BoolValue Result = 1;
+	string Error = 2;
+}
+
 service VirtualMachineAgent {
 	rpc CheckNotification(google.protobuf.Empty) returns (NotificationResponse) {}
 	rpc RunCommand(VirtualMachineRunCommandRequest) returns (VirtualMachineRunCommandResponse) {}
 	rpc GetCommandResult(VirtualMachineCommandResultRequest) returns (VirtualMachineRunCommandResponse) {}
 	rpc UpdateAgent(UpdateAgentRequest) returns (UpdateAgentResponse) {}
+	rpc CopyVmcFiles(CopyVmcFilesRequest) returns (CopyVmcFilesResponse) {}
 }
