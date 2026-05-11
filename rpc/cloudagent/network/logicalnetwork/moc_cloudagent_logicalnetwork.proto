@@ -63,5 +63,43 @@ service LogicalNetworkAgent {
 	
 	// Prechecks whether the system is able to create specified logical networks (but does not actually create them).
 	rpc Precheck(LogicalNetworkPrecheckRequest) returns (LogicalNetworkPrecheckResponse) {}
+
+	// Replaces the registeredIPAddresses list on each referenced subnet
+	// (subnet-scoped full-replace) and applies the resulting add / remove
+	// delta to the IPAM bitmap.
+	//
+	// This RPC is independent of spec Update: it does not run Validate or
+	// validateUpdate, does not touch ProvisionState, and does not fan out
+	// to nodeagents.
+	rpc UpdateRegisteredIPs(LogicalNetworkIPUpdateRequest) returns (LogicalNetworkIPUpdateResponse) {}
+}
+
+message LogicalNetworkIPUpdateRequest {
+	// Identifies the target LNET.
+	string LocationName = 1;
+	string Name = 2;
+
+	// Desired registered-IP list for each subnet. Each list replaces
+	// the stored list across every pool in that subnet. MOC routes each
+	// IP to the correct pool by range internally.
+	repeated LogicalSubnetIPUpdate IPUpdates = 3;
+}
+
+message LogicalSubnetIPUpdate {
+	string SubnetName = 1;
+	repeated string RegisteredIPAddresses = 2;
+}
+
+message LogicalNetworkIPUpdateResponse {
+	// One list of persisted IPs for each subnet (full-replace semantics).
+	// Only trustworthy when the gRPC status is OK.
+	repeated LogicalSubnetIPUpdate PersistedIPs = 1;
+
+	// IP-level failures. May be non-empty even when the gRPC status is OK
+	// (partial success).
+	repeated IPAddressUpdateFailure Failures = 2;
+
+	// Overall error summary. Empty when the gRPC status is OK.
+	string Error = 3;
 }
 

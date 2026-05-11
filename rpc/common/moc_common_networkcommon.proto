@@ -56,6 +56,43 @@ message IPPool {
 	string end = 4;
 	IPPoolInfo info = 5;
 	Tags tags = 6;
+	repeated string registeredIPAddresses = 7;
+}
+
+// IPAddressUpdateFailure is the single-IP failure record returned by
+// UpdateRegisteredIPs. Shared between the LogicalNetwork and VirtualNetwork
+// flows.
+message IPAddressUpdateFailure {
+	string SubnetName = 1;
+	string IPAddress = 2;
+	IPUpdateErrorCode Code = 3;
+	string Error = 4;
+}
+
+enum IPUpdateErrorCode {
+	IP_UPDATE_UNKNOWN = 0;
+
+	// Malformed IP literal (parse failure).
+	IP_UPDATE_INVALID_FORMAT = 1;
+
+	// IP does not fall within any pool's [Start, End] range on this subnet.
+	IP_UPDATE_OUT_OF_RANGE = 2;
+
+	// Subnet name in the request is not present on the stored network spec.
+	IP_UPDATE_SUBNET_NOT_FOUND = 3;
+
+	// The IPAM bitmap bit is already set by another owner - a NIC, a
+	// LoadBalancer, or a system reservation (gateway / network /
+	// broadcast / DNS) - and the IP is not currently in the registered
+	// list. Registering it would create two owners for one bitmap bit;
+	// a later release would then clear the bit out from under the real
+	// owner.
+	IP_UPDATE_ALREADY_ALLOCATED = 4;
+
+	// Subnet exists in the network spec but declares no IPPools.
+	// registeredIPAddresses needs at least one pool to route each IP into,
+	// and without pools there is no IPAM bitmap to reserve against.
+	IP_UPDATE_NO_POOLS_IN_SUBNET = 5;
 }
 
 message Route {

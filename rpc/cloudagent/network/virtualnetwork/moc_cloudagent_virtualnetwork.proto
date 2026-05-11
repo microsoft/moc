@@ -85,5 +85,43 @@ service VirtualNetworkAgent {
 
 	// Prechecks whether the system is able to create specified virtual networks (but does not actually create them).
 	rpc Precheck(VirtualNetworkPrecheckRequest) returns (VirtualNetworkPrecheckResponse) {}
+
+	// Replaces the registeredIPAddresses list on each referenced subnet
+	// (subnet-scoped full-replace) and applies the resulting add / remove
+	// delta to the IPAM bitmap.
+	//
+	// This RPC is independent of spec Update: it does not run Validate or
+	// validateUpdate, does not touch ProvisionState, and does not fan out
+	// to nodeagents.
+	rpc UpdateRegisteredIPs(VirtualNetworkIPUpdateRequest) returns (VirtualNetworkIPUpdateResponse) {}
+}
+
+message VirtualNetworkIPUpdateRequest {
+	// Identifies the target VNET.
+	string GroupName = 1;
+	string Name = 2;
+
+	// Desired registered-IP list for each subnet. Each list replaces
+	// the stored list across every pool in that subnet. MOC routes each
+	// IP to the correct pool by range internally.
+	repeated VirtualSubnetIPUpdate IPUpdates = 3;
+}
+
+message VirtualSubnetIPUpdate {
+	string SubnetName = 1;
+	repeated string RegisteredIPAddresses = 2;
+}
+
+message VirtualNetworkIPUpdateResponse {
+	// One list of persisted IPs for each subnet (full-replace semantics).
+	// Only trustworthy when the gRPC status is OK.
+	repeated VirtualSubnetIPUpdate PersistedIPs = 1;
+
+	// IP-level failures. May be non-empty even when the gRPC status is OK
+	// (partial success).
+	repeated IPAddressUpdateFailure Failures = 2;
+
+	// Overall error summary. Empty when the gRPC status is OK.
+	string Error = 3;
 }
 
