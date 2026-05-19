@@ -105,6 +105,14 @@ message VirtualNetworkIPUpdateRequest {
 	// the stored list across every pool in that subnet. MOC routes each
 	// IP to the correct pool by range internally.
 	repeated VirtualSubnetIPUpdate IPUpdates = 3;
+
+	// Wire API version. nil/v1 follows the cluster-wide migration
+	// shim (see shouldRouteVnetToLnet). Setting Major>=2 opts the
+	// caller out of the LNET migration shim, so registered-IP writes
+	// land on the VNET provider even when the cluster has
+	// disableLogicalNetworkMigration=false. Mirrors the Version field
+	// on VirtualNetworkRequest.
+	ApiVersion version = 4;
 }
 
 message VirtualSubnetIPUpdate {
@@ -117,11 +125,12 @@ message VirtualNetworkIPUpdateResponse {
 	// Only trustworthy when the gRPC status is OK.
 	repeated VirtualSubnetIPUpdate PersistedIPs = 1;
 
-	// IP-level failures. May be non-empty even when the gRPC status is OK
-	// (partial success).
+	// IP-level failures. Per-IP validation/allocation failures (e.g., IP
+	// already taken, IP outside CIDR). These are returned alongside
+	// PersistedIPs as normal "partial success" outcomes; the gRPC status
+	// is still OK in this case. Whole-batch / infrastructure failures
+	// (e.g. store persistence) are reported via the gRPC status code
+	// instead and do not populate this list.
 	repeated IPAddressUpdateFailure Failures = 2;
-
-	// Overall error summary. Empty when the gRPC status is OK.
-	string Error = 3;
 }
 

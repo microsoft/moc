@@ -5,9 +5,8 @@ package common
 
 import (
 	fmt "fmt"
-	math "math"
-
 	proto "github.com/golang/protobuf/proto"
+	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -164,15 +163,23 @@ func (IPVersion) EnumDescriptor() ([]byte, []int) {
 type IPUpdateErrorCode int32
 
 const (
-	IPUpdateErrorCode_IP_UPDATE_UNKNOWN           IPUpdateErrorCode = 0
-	IPUpdateErrorCode_IP_UPDATE_INVALID_FORMAT    IPUpdateErrorCode = 1
-	IPUpdateErrorCode_IP_UPDATE_OUT_OF_RANGE      IPUpdateErrorCode = 2
-	IPUpdateErrorCode_IP_UPDATE_SUBNET_NOT_FOUND  IPUpdateErrorCode = 3
+	IPUpdateErrorCode_IP_UPDATE_UNKNOWN IPUpdateErrorCode = 0
+	// Malformed IP literal (parse failure).
+	IPUpdateErrorCode_IP_UPDATE_INVALID_FORMAT IPUpdateErrorCode = 1
+	// IP does not fall within any pool's [Start, End] range on this subnet.
+	IPUpdateErrorCode_IP_UPDATE_OUT_OF_RANGE IPUpdateErrorCode = 2
+	// Subnet name in the request is not present on the stored network spec.
+	IPUpdateErrorCode_IP_UPDATE_SUBNET_NOT_FOUND IPUpdateErrorCode = 3
+	// The IPAM bitmap bit is already set by another owner - a NIC, a
+	// LoadBalancer, or a system reservation (gateway / network /
+	// broadcast / DNS) - and the IP is not currently in the registered
+	// list. Registering it would create two owners for one bitmap bit;
+	// a later release would then clear the bit out from under the real
+	// owner.
 	IPUpdateErrorCode_IP_UPDATE_ALREADY_ALLOCATED IPUpdateErrorCode = 4
-	// LoadBalancer, or system reservation (gateway / network /
-	// broadcast / DNS) and is not currently in the registered
-	// list - registering it would create a single-bit bitmap
-	// co-occupancy that breaks refcount on later release.
+	// Subnet exists in the network spec but declares no IPPools.
+	// registeredIPAddresses needs at least one pool to route each IP into,
+	// and without pools there is no IPAM bitmap to reserve against.
 	IPUpdateErrorCode_IP_UPDATE_NO_POOLS_IN_SUBNET IPUpdateErrorCode = 5
 )
 
@@ -339,24 +346,16 @@ func (m *IPPoolInfo) GetAvailable() string {
 }
 
 type IPPool struct {
-	Name  string      `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Type  IPPoolType  `protobuf:"varint,2,opt,name=type,proto3,enum=moc.IPPoolType" json:"type,omitempty"`
-	Start string      `protobuf:"bytes,3,opt,name=start,proto3" json:"start,omitempty"`
-	End   string      `protobuf:"bytes,4,opt,name=end,proto3" json:"end,omitempty"`
-	Info  *IPPoolInfo `protobuf:"bytes,5,opt,name=info,proto3" json:"info,omitempty"`
-	Tags  *Tags       `protobuf:"bytes,6,opt,name=tags,proto3" json:"tags,omitempty"`
-	// IPs explicitly registered as allocated outside of MOC (e.g., by the
-	// IPAM operator). Reserved in the IPAM bitmap during
-	// InitSubnet and on UpdateRegisteredIPs runtime updates so MOC will not
-	// hand them out to AKS workloads. Field is IPAM-layer only and never
-	// fanned out to nodeagents.
-	// Stored on each pool internally but exposed at the subnet level in the
-	// UpdateRegisteredIPs API - MOC routes each IP to the correct pool
-	// by range.
-	RegisteredIPAddresses []string `protobuf:"bytes,7,rep,name=registeredIPAddresses,proto3" json:"registeredIPAddresses,omitempty"`
-	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
-	XXX_unrecognized      []byte   `json:"-"`
-	XXX_sizecache         int32    `json:"-"`
+	Name                  string      `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Type                  IPPoolType  `protobuf:"varint,2,opt,name=type,proto3,enum=moc.IPPoolType" json:"type,omitempty"`
+	Start                 string      `protobuf:"bytes,3,opt,name=start,proto3" json:"start,omitempty"`
+	End                   string      `protobuf:"bytes,4,opt,name=end,proto3" json:"end,omitempty"`
+	Info                  *IPPoolInfo `protobuf:"bytes,5,opt,name=info,proto3" json:"info,omitempty"`
+	Tags                  *Tags       `protobuf:"bytes,6,opt,name=tags,proto3" json:"tags,omitempty"`
+	RegisteredIPAddresses []string    `protobuf:"bytes,7,rep,name=registeredIPAddresses,proto3" json:"registeredIPAddresses,omitempty"`
+	XXX_NoUnkeyedLiteral  struct{}    `json:"-"`
+	XXX_unrecognized      []byte      `json:"-"`
+	XXX_sizecache         int32       `json:"-"`
 }
 
 func (m *IPPool) Reset()         { *m = IPPool{} }
@@ -434,7 +433,8 @@ func (m *IPPool) GetRegisteredIPAddresses() []string {
 }
 
 // IPAddressUpdateFailure is the single-IP failure record returned by
-// UpdateRegisteredIPs RPCs. Shared between Logical and Virtual Network flows.
+// UpdateRegisteredIPs. Shared between the LogicalNetwork and VirtualNetwork
+// flows.
 type IPAddressUpdateFailure struct {
 	SubnetName           string            `protobuf:"bytes,1,opt,name=SubnetName,proto3" json:"SubnetName,omitempty"`
 	IPAddress            string            `protobuf:"bytes,2,opt,name=IPAddress,proto3" json:"IPAddress,omitempty"`

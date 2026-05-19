@@ -95,11 +95,12 @@ message LogicalNetworkIPUpdateResponse {
 	// Only trustworthy when the gRPC status is OK.
 	repeated LogicalSubnetIPUpdate PersistedIPs = 1;
 
-	// IP-level failures. May be non-empty even when the gRPC status is OK
-	// (partial success).
+	// IP-level failures. Per-IP validation/allocation failures (e.g., IP
+	// already taken, IP outside CIDR). These are returned alongside
+	// PersistedIPs as normal "partial success" outcomes; the gRPC status
+	// is still OK in this case. Whole-batch / infrastructure failures
+	// (e.g. store persistence) are reported via the gRPC status code
+	// instead and do not populate this list.
 	repeated IPAddressUpdateFailure Failures = 2;
-
-	// Overall error summary. Empty when the gRPC status is OK.
-	string Error = 3;
 }
 
