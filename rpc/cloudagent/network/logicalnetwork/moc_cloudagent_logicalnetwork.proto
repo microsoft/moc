@@ -87,7 +87,7 @@ message LogicalNetworkIPUpdateRequest {
 
 message LogicalSubnetIPUpdate {
 	string SubnetName = 1;
-	repeated string RegisteredIPAddresses = 2;
+	repeated string RegisteredIPAddresses = 2 [(sensitive) = true];
 }
 
 message LogicalNetworkIPUpdateResponse {

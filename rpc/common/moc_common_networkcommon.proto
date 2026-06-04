@@ -56,7 +56,7 @@ message IPPool {
 	string end = 4;
 	IPPoolInfo info = 5;
 	Tags tags = 6;
-	repeated string registeredIPAddresses = 7;
+	repeated string registeredIPAddresses = 7 [(sensitive) = true];
 }
 
 // IPAddressUpdateFailure is the single-IP failure record returned by
@@ -64,7 +64,7 @@ message IPPool {
 // flows.
 message IPAddressUpdateFailure {
 	string SubnetName = 1;
-	string IPAddress = 2;
+	string IPAddress = 2 [(sensitive) = true];
 	IPUpdateErrorCode Code = 3;
 	string Error = 4;
 }
