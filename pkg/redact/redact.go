@@ -152,7 +152,7 @@ func redactJsonSensitiveField(val reflect.Value) {
 		return
 	}
 
-	sensitiveKeys := [...]string{"private-key", "sasURI"}
+	sensitiveKeys := [...]string{"private-key", "sasURI", "endpoint"}
 
 	for _, sensitiveKey := range sensitiveKeys {
 		if _, ok := jsonData[sensitiveKey]; ok {
@@ -256,7 +256,7 @@ func redactErrorJsonSensitiveField(val reflect.Value, errMessage *error) {
 	if err := json.Unmarshal([]byte(val.String()), &jsonData); err != nil {
 		return
 	}
-	sensitiveKeys := [...]string{"private-key", "sasURI"}
+	sensitiveKeys := [...]string{"private-key", "sasURI", "endpoint"}
 
 	for _, sensitiveKey := range sensitiveKeys {
 		if strVal, ok := jsonData[sensitiveKey].(string); ok && errMessage != nil && *errMessage != nil && strVal != "" {

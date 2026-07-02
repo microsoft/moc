@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	wssdcloudcompute "github.com/microsoft/moc/rpc/cloudagent/compute"
 	"github.com/microsoft/moc/pkg/redact"
+	wssdcloudcompute "github.com/microsoft/moc/rpc/cloudagent/compute"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -28,6 +28,29 @@ func TestRedactedError_VHD(t *testing.T) {
 	redact.RedactError(&vhd, &err)
 	assert.False(t, strings.Contains(err.Error(), uri), err.Error())
 
+}
+
+func TestRedactedError_VHD_BlobEndpoint(t *testing.T) {
+	endpoint := "https://mystorage.blob.core.windows.net"
+	blobProps := AzureBlobImageProperties{
+		Cloud:    "AzureCloud",
+		Endpoint: endpoint,
+	}
+	propertiesJson, err := json.Marshal(blobProps)
+	require.NoError(t, err)
+
+	vhd := VirtualHardDisk{Name: "test-blob", Source: string(propertiesJson)}
+	dlErr := errors.New(endpoint + " : connection refused")
+	redact.RedactError(&vhd, &dlErr)
+
+	// endpoint must be scrubbed from the error message
+	assert.False(t, strings.Contains(dlErr.Error(), endpoint),
+		"endpoint should be redacted from error, got: %s", dlErr.Error())
+
+	// Redact() scrubs the struct fields (used before logging/returning the message)
+	redact.Redact(&vhd, reflect.ValueOf(&vhd))
+	assert.False(t, strings.Contains(vhd.Source, endpoint),
+		"endpoint should be redacted from VHD.Source, got: %s", vhd.Source)
 }
 
 // TestAzureBlobImageProperties_JSONKeys locks the exact JSON keys produced by
