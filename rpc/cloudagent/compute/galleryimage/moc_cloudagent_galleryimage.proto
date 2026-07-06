@@ -58,6 +58,15 @@ message AzureGalleryImageProperties {
 	string sasURI = 1 [(sensitive) = true];
 	string version = 2;
 }
+message AzureBlobImageProperties {
+	string catalogName = 1;
+	string audience = 2;
+	string version = 3;
+	string releaseName = 4;
+	uint32 parts = 5;
+	string cloud = 6;
+	string endpoint = 7;
+}
 
 message GalleryImage {
 	string name = 1;

@@ -252,3 +252,19 @@ func TestRedactErrorURL(t *testing.T) {
 		})
 	}
 }
+
+func TestRedactJsonSensitiveField_Endpoint(t *testing.T) {
+	endpoint := "https://mystorage.blob.core.windows.net"
+	jsonStr := fmt.Sprintf(`{"cloud":"AzureCloud","endpoint":"%s","catalogName":"cat"}`, endpoint)
+
+	val := reflect.ValueOf(&jsonStr).Elem()
+	redactJsonSensitiveField(val)
+
+	assert.False(t, strings.Contains(val.String(), endpoint),
+		"endpoint should be redacted, got: %s", val.String())
+	assert.True(t, strings.Contains(val.String(), RedactedString),
+		"redacted value should contain placeholder, got: %s", val.String())
+	// Other fields should remain intact
+	assert.True(t, strings.Contains(val.String(), "AzureCloud"),
+		"non-sensitive fields should be preserved, got: %s", val.String())
+}
