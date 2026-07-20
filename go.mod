@@ -19,8 +19,8 @@ require (
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/net v0.48.0 // indirect
-	golang.org/x/sys v0.39.0 // indirect
+	golang.org/x/net v0.54.0 // indirect
+	golang.org/x/sys v0.45.0 // indirect
 	golang.org/x/text v0.37.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260511170946-3700d4141b60 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
@@ -30,10 +30,10 @@ replace (
 	github.com/golang/mock => github.com/golang/mock v1.6.0
 	github.com/stretchr/testify => github.com/stretchr/testify v1.8.3
 	go.opentelemetry.io/proto/otlp => go.opentelemetry.io/proto/otlp v0.19.0
-	golang.org/x/crypto => golang.org/x/crypto v0.37.0
+	golang.org/x/crypto => golang.org/x/crypto v0.52.0
 	golang.org/x/image => golang.org/x/image v0.10.0
-	golang.org/x/net => golang.org/x/net v0.48.0
-	golang.org/x/sys => golang.org/x/sys v0.39.0
+	golang.org/x/net => golang.org/x/net v0.54.0
+	golang.org/x/sys => golang.org/x/sys v0.45.0
 	gopkg.in/yaml.v2 => gopkg.in/yaml.v2 v2.2.8
 )
 
