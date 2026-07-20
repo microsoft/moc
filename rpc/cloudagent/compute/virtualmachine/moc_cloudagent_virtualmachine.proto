@@ -189,6 +189,23 @@ message VirtualMachineHostNodeIpAddress {
 	string hostNodeIpAddress = 1;
 }
 
+// VirtualMachineDiskRequest targets a single, existing virtual machine and the
+// specific disks to attach or detach. Unlike Invoke/CreateOrUpdate, it carries
+// only the disks being acted on (not the VM's full storage configuration), so
+// the agent operates on exactly the passed disks.
+message VirtualMachineDiskRequest {
+	string groupName = 1;
+	string vmName = 2;
+	string locationName = 3;
+	repeated Disk disks = 4;
+}
+
+message VirtualMachineDiskResponse {
+	VirtualMachine virtualMachine = 1;
+	google.protobuf.BoolValue Result = 2;
+	string  Error = 3;
+}
+
 service VirtualMachineAgent {
 	rpc Invoke(VirtualMachineRequest) returns (VirtualMachineResponse) {}
 
@@ -200,4 +217,14 @@ service VirtualMachineAgent {
 	rpc GetHyperVVmId(VirtualMachine) returns (VirtualMachineHyperVVmId) {}
 	rpc GetHostNodeName(VirtualMachine) returns (VirtualMachineHostNodeName) {}
 	rpc GetHostNodeIpAddress(VirtualMachine) returns (VirtualMachineHostNodeIpAddress) {}
+
+	// AttachDisk attaches the specified disks to an existing virtual machine.
+	// The agent must verify the VM exists before proceeding; it must not create
+	// the VM. Only the disks in the request are attached.
+	rpc AttachDisk(VirtualMachineDiskRequest) returns (VirtualMachineDiskResponse) {}
+
+	// DetachDisk detaches the specified disks from an existing virtual machine.
+	// The agent must verify the VM exists before proceeding. Only the disks in
+	// the request are detached.
+	rpc DetachDisk(VirtualMachineDiskRequest) returns (VirtualMachineDiskResponse) {}
 }
