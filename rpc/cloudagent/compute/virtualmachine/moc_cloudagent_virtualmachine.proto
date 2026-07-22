@@ -189,15 +189,27 @@ message VirtualMachineHostNodeIpAddress {
 	string hostNodeIpAddress = 1;
 }
 
+// VirtualMachineDiskOperation selects whether the disks in a
+// VirtualMachineDiskRequest are attached to or detached from the target VM.
+// UNSPECIFIED is the proto3 default and must be rejected by the agent so a
+// caller that omits the field can never trigger a silent attach or detach.
+enum VirtualMachineDiskOperation {
+	VIRTUAL_MACHINE_DISK_OPERATION_UNSPECIFIED = 0;
+	VIRTUAL_MACHINE_DISK_OPERATION_ATTACH = 1;
+	VIRTUAL_MACHINE_DISK_OPERATION_DETACH = 2;
+}
+
 // VirtualMachineDiskRequest targets a single, existing virtual machine and the
 // specific disks to attach or detach. Unlike Invoke/CreateOrUpdate, it carries
 // only the disks being acted on (not the VM's full storage configuration), so
-// the agent operates on exactly the passed disks.
+// the agent operates on exactly the passed disks. The operation field selects
+// the direction (attach or detach) for all disks in the request.
 message VirtualMachineDiskRequest {
 	string groupName = 1;
 	string vmName = 2;
 	string locationName = 3;
 	repeated Disk disks = 4;
+	VirtualMachineDiskOperation operation = 5;
 }
 
 message VirtualMachineDiskResponse {
@@ -218,13 +230,9 @@ service VirtualMachineAgent {
 	rpc GetHostNodeName(VirtualMachine) returns (VirtualMachineHostNodeName) {}
 	rpc GetHostNodeIpAddress(VirtualMachine) returns (VirtualMachineHostNodeIpAddress) {}
 
-	// AttachDisk attaches the specified disks to an existing virtual machine.
-	// The agent must verify the VM exists before proceeding; it must not create
-	// the VM. Only the disks in the request are attached.
-	rpc AttachDisk(VirtualMachineDiskRequest) returns (VirtualMachineDiskResponse) {}
-
-	// DetachDisk detaches the specified disks from an existing virtual machine.
-	// The agent must verify the VM exists before proceeding. Only the disks in
-	// the request are detached.
-	rpc DetachDisk(VirtualMachineDiskRequest) returns (VirtualMachineDiskResponse) {}
+	// UpdateDisks attaches or detaches the specified disks on an existing
+	// virtual machine, based on the request's operation field. The agent must
+	// verify the VM exists before proceeding; it must not create the VM. Only
+	// the disks in the request are acted on.
+	rpc UpdateDisks(VirtualMachineDiskRequest) returns (VirtualMachineDiskResponse) {}
 }
