@@ -31,7 +31,7 @@ func Test_ValidateProxyURL(t *testing.T) {
 func Test_TestProxyUrlConnection(t *testing.T) {
 	caCert, _, err := certs.GenerateClientCertificate("ValidCertificate")
 	if err != nil {
-		t.Fatalf(err.Error())
+		t.Fatalf("%s", err.Error())
 	}
 	certBytes := certs.EncodeCertPEM(caCert)
 	caCertString := string(certBytes)

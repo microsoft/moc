@@ -584,7 +584,7 @@ func Test_CACertsRenewVerifySameKey(t *testing.T) {
 
 	clientCerts = [][]byte{certClient1.Raw}
 	if err := caAuth.VerifyClientCertificate(clientCerts); err != nil {
-		t.Errorf("failed to verify certificate: " + err.Error())
+		t.Errorf("failed to verify certificate: %s", err.Error())
 	}
 	if _, err = tls.X509KeyPair(EncodeCertPEM(certClient1), EncodePrivateKeyPEM(keyClient)); err != nil {
 		t.Errorf("Error Verifying key and cert: %s", err.Error())
@@ -640,7 +640,7 @@ func Test_CACertsRenewVerifySameKey(t *testing.T) {
 
 	clientCerts = [][]byte{certClient2.Raw}
 	if err := caAuth.VerifyClientCertificate(clientCerts); err != nil {
-		t.Errorf("failed to verify certificate: " + err.Error())
+		t.Errorf("failed to verify certificate: %s", err.Error())
 	}
 	if _, err = tls.X509KeyPair(EncodeCertPEM(certClient2), EncodePrivateKeyPEM(keyClient)); err != nil {
 		t.Errorf("Error Verifying key and cert: %s", err.Error())
