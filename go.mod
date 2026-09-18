@@ -7,7 +7,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/golang/mock v1.6.0
 	github.com/golang/protobuf v1.5.4
-	github.com/hectane/go-acl v0.0.0-20230122075934-ca0b05cb1adb
+	github.com/hectane/go-acl v1.0.0
 	github.com/jmespath/go-jmespath v0.4.0
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.3
