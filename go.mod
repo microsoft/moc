@@ -1,28 +1,28 @@
 module github.com/microsoft/moc
 
-go 1.26
+go 1.26.10
 
 require (
 	github.com/go-logr/logr v1.4.4
 	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/golang/mock v1.6.0
 	github.com/golang/protobuf v1.5.4
-	github.com/hectane/go-acl v0.0.0-20230122075934-ca0b05cb1adb
+	github.com/hectane/go-acl v1.0.0
 	github.com/jmespath/go-jmespath v0.4.0
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.3
 	go.uber.org/multierr v1.11.0
-	google.golang.org/grpc v1.82.1
+	google.golang.org/grpc v1.84.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/net v0.54.0 // indirect
-	golang.org/x/sys v0.45.0 // indirect
-	golang.org/x/text v0.37.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260511170946-3700d4141b60 // indirect
+	golang.org/x/net v0.58.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/text v0.41.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260706201446-f0a921348800 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 )
 
@@ -30,10 +30,10 @@ replace (
 	github.com/golang/mock => github.com/golang/mock v1.6.0
 	github.com/stretchr/testify => github.com/stretchr/testify v1.8.3
 	go.opentelemetry.io/proto/otlp => go.opentelemetry.io/proto/otlp v0.19.0
-	golang.org/x/crypto => golang.org/x/crypto v0.52.0
+	golang.org/x/crypto => golang.org/x/crypto v0.55.0
 	golang.org/x/image => golang.org/x/image v0.10.0
-	golang.org/x/net => golang.org/x/net v0.54.0
-	golang.org/x/sys => golang.org/x/sys v0.45.0
+	golang.org/x/net => golang.org/x/net v0.58.0
+	golang.org/x/sys => golang.org/x/sys v0.47.0
 	gopkg.in/yaml.v2 => gopkg.in/yaml.v2 v2.2.8
 )
 
