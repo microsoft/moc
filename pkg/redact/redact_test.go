@@ -12,6 +12,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/microsoft/moc/rpc/cloudagent/security"
+	"github.com/microsoft/moc/rpc/cloudagent/storage"
 	"github.com/microsoft/moc/rpc/common"
 	"github.com/stretchr/testify/assert"
 )
@@ -79,6 +80,26 @@ func Test_RedactedMessage(t *testing.T) {
 	if !proto.Equal(proto.Message(expect), redacted) {
 		t.Errorf("Redacted AuthenticationRequest: {%v} does not match expected: {%v}", redacted, expectedAuthenticationRequest)
 	}
+}
+
+func TestRedactedVirtualHardDiskSourcePath(t *testing.T) {
+	const sasURI = "https://images.blob.core.windows.net/vhds/image.vhdx?sig=secret"
+	response := &storage.VirtualHardDiskResponse{
+		VirtualHardDisks: []*storage.VirtualHardDisk{
+			{
+				Name:       "test-vhd",
+				SourcePath: fmt.Sprintf(`{"sasURI":%q,"imageName":"test-image"}`, sasURI),
+			},
+		},
+	}
+
+	redacted := RedactedMessage(response).(*storage.VirtualHardDiskResponse)
+	sourcePath := redacted.VirtualHardDisks[0].SourcePath
+
+	assert.NotContains(t, sourcePath, sasURI)
+	assert.Contains(t, sourcePath, RedactedString)
+	assert.Contains(t, sourcePath, "test-image")
+	assert.Contains(t, response.VirtualHardDisks[0].SourcePath, sasURI)
 }
 
 func TestRedactedError(t *testing.T) {
